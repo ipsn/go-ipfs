@@ -83,8 +83,8 @@
 		{
 			"checksumSHA1": "QZfnlRAzbAeEB+KWFs113QJNTYw=",
 			"path": "golang.org/x/sys/unix",
-			"revision": "9b006099084093fa764af5878f937ff7dafc6051",
-			"revisionTime": "2018-04-18T17:57:21Z"
+			"revision": "3ccc7e5779793fd54564baf60c51bf017955e0ba",
+			"revisionTime": "2018-04-18T21:22:14Z"
 		}
 	],
 	"rootPath": "github.com/ipsn/go-ipfs"
