@@ -12,7 +12,6 @@ import (
 	core "github.com/ipsn/go-ipfs/core"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 	corerepo "github.com/ipsn/go-ipfs/core/corerepo"
-	offline "github.com/ipsn/go-ipfs/exchange/offline"
 	dag "github.com/ipsn/go-ipfs/merkledag"
 	path "github.com/ipsn/go-ipfs/path"
 	resolver "github.com/ipsn/go-ipfs/path/resolver"
@@ -21,6 +20,7 @@ import (
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
+	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
@@ -305,9 +305,9 @@ Example:
 		var keys map[string]RefKeyObject
 
 		if len(req.Arguments()) > 0 {
-			keys, err = pinLsKeys(req.Arguments(), typeStr, req.Context(), n)
+			keys, err = pinLsKeys(req.Context(), req.Arguments(), typeStr, n)
 		} else {
-			keys, err = pinLsAll(typeStr, req.Context(), n)
+			keys, err = pinLsAll(req.Context(), typeStr, n)
 		}
 
 		if err != nil {
@@ -492,7 +492,7 @@ type RefKeyList struct {
 	Keys map[string]RefKeyObject
 }
 
-func pinLsKeys(args []string, typeStr string, ctx context.Context, n *core.IpfsNode) (map[string]RefKeyObject, error) {
+func pinLsKeys(ctx context.Context, args []string, typeStr string, n *core.IpfsNode) (map[string]RefKeyObject, error) {
 
 	mode, ok := pin.StringToMode(typeStr)
 	if !ok {
@@ -539,7 +539,7 @@ func pinLsKeys(args []string, typeStr string, ctx context.Context, n *core.IpfsN
 	return keys, nil
 }
 
-func pinLsAll(typeStr string, ctx context.Context, n *core.IpfsNode) (map[string]RefKeyObject, error) {
+func pinLsAll(ctx context.Context, typeStr string, n *core.IpfsNode) (map[string]RefKeyObject, error) {
 
 	keys := make(map[string]RefKeyObject)
 
@@ -557,7 +557,7 @@ func pinLsAll(typeStr string, ctx context.Context, n *core.IpfsNode) (map[string
 	if typeStr == "indirect" || typeStr == "all" {
 		set := cid.NewSet()
 		for _, k := range n.Pinning.RecursiveKeys() {
-			err := dag.EnumerateChildren(n.Context(), dag.GetLinksWithDAG(n.DAG), k, set.Visit)
+			err := dag.EnumerateChildren(ctx, dag.GetLinksWithDAG(n.DAG), k, set.Visit)
 			if err != nil {
 				return nil, err
 			}

@@ -9,12 +9,12 @@ import (
 	"fmt"
 	"io"
 
-	exchange "github.com/ipsn/go-ipfs/exchange"
 	"github.com/ipsn/go-ipfs/thirdparty/verifcid"
 
 	logging "github.com/ipsn/go-ipfs/gxlibs/ipfs/QmRb5jh8z2E8hMGN2tkvs1yHynUanqnZ3UeKwgN1i9P1F8/go-log"
 	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	exchange "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-interface"
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 )
 
@@ -251,15 +251,22 @@ func (s *blockService) GetBlocks(ctx context.Context, ks []*cid.Cid) <-chan bloc
 
 func getBlocks(ctx context.Context, ks []*cid.Cid, bs blockstore.Blockstore, f exchange.Fetcher) <-chan blocks.Block {
 	out := make(chan blocks.Block)
-	for _, c := range ks {
-		// hash security
-		if err := verifcid.ValidateCid(c); err != nil {
-			log.Errorf("unsafe CID (%s) passed to blockService.GetBlocks: %s", c, err)
-		}
-	}
 
 	go func() {
 		defer close(out)
+
+		k := 0
+		for _, c := range ks {
+			// hash security
+			if err := verifcid.ValidateCid(c); err == nil {
+				ks[k] = c
+				k++
+			} else {
+				log.Errorf("unsafe CID (%s) passed to blockService.GetBlocks: %s", c, err)
+			}
+		}
+		ks = ks[:k]
+
 		var misses []*cid.Cid
 		for _, c := range ks {
 			hit, err := bs.Get(c)

@@ -13,15 +13,12 @@ import (
 	path "github.com/ipsn/go-ipfs/path"
 	pin "github.com/ipsn/go-ipfs/pin"
 
-	logging "github.com/ipsn/go-ipfs/gxlibs/ipfs/QmRb5jh8z2E8hMGN2tkvs1yHynUanqnZ3UeKwgN1i9P1F8/go-log"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit/files"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
-
-var log = logging.Logger("cmds/files")
 
 var DagCmd = &cmds.Command{
 	Helptext: cmdkit.HelpText{
@@ -185,7 +182,7 @@ var DagGetCmd = &cmds.Command{
 	Helptext: cmdkit.HelpText{
 		Tagline: "Get a dag node from ipfs.",
 		ShortDescription: `
-'ipfs dag get' fetches a dag node from ipfs and prints it out in the specifed
+'ipfs dag get' fetches a dag node from ipfs and prints it out in the specified
 format.
 `,
 	},

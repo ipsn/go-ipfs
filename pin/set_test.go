@@ -6,9 +6,9 @@ import (
 	"testing"
 
 	bserv "github.com/ipsn/go-ipfs/blockservice"
-	offline "github.com/ipsn/go-ipfs/exchange/offline"
 	dag "github.com/ipsn/go-ipfs/merkledag"
 
+	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	dsq "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/query"
 	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"

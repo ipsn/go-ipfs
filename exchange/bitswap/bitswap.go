@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 	"time"
 
-	exchange "github.com/ipsn/go-ipfs/exchange"
 	decision "github.com/ipsn/go-ipfs/exchange/bitswap/decision"
 	bsmsg "github.com/ipsn/go-ipfs/exchange/bitswap/message"
 	bsnet "github.com/ipsn/go-ipfs/exchange/bitswap/network"
@@ -25,6 +24,7 @@ import (
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	exchange "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-interface"
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 )
 
@@ -66,8 +66,8 @@ var rebroadcastDelay = delay.Fixed(time.Minute)
 // BitSwapNetwork. This function registers the returned instance as the network
 // delegate.
 // Runs until context is cancelled.
-func New(parent context.Context, p peer.ID, network bsnet.BitSwapNetwork,
-	bstore blockstore.Blockstore, nice bool) exchange.Interface {
+func New(parent context.Context, network bsnet.BitSwapNetwork,
+	bstore blockstore.Blockstore) exchange.Interface {
 
 	// important to use provided parent context (since it may include important
 	// loggable data). It's probably not a good idea to allow bitswap to be
@@ -295,7 +295,7 @@ func (bs *Bitswap) CancelWants(cids []*cid.Cid, ses uint64) {
 	bs.wm.CancelWants(context.Background(), cids, nil, ses)
 }
 
-// HasBlock announces the existance of a block to this bitswap service. The
+// HasBlock announces the existence of a block to this bitswap service. The
 // service will potentially notify its peers.
 func (bs *Bitswap) HasBlock(blk blocks.Block) error {
 	return bs.receiveBlockFrom(blk, "")

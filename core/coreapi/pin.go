@@ -8,10 +8,10 @@ import (
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
 	caopts "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 	corerepo "github.com/ipsn/go-ipfs/core/corerepo"
-	offline "github.com/ipsn/go-ipfs/exchange/offline"
 	merkledag "github.com/ipsn/go-ipfs/merkledag"
 	pin "github.com/ipsn/go-ipfs/pin"
 
+	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )

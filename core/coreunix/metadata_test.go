@@ -8,13 +8,13 @@ import (
 
 	bserv "github.com/ipsn/go-ipfs/blockservice"
 	core "github.com/ipsn/go-ipfs/core"
-	offline "github.com/ipsn/go-ipfs/exchange/offline"
 	importer "github.com/ipsn/go-ipfs/importer"
 	merkledag "github.com/ipsn/go-ipfs/merkledag"
 	ft "github.com/ipsn/go-ipfs/unixfs"
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
+	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	dssync "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"

@@ -22,7 +22,6 @@ import (
 	"time"
 
 	bserv "github.com/ipsn/go-ipfs/blockservice"
-	exchange "github.com/ipsn/go-ipfs/exchange"
 	bitswap "github.com/ipsn/go-ipfs/exchange/bitswap"
 	bsnet "github.com/ipsn/go-ipfs/exchange/bitswap/network"
 	rp "github.com/ipsn/go-ipfs/exchange/reprovide"
@@ -71,6 +70,7 @@ import (
 	ifconnmgr "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-interface-connmgr"
 	mplex "github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/go-smux-multiplex"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	exchange "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-interface"
 	metrics "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-metrics"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	pnet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-pnet"
@@ -245,7 +245,7 @@ func (n *IpfsNode) startOnlineServices(ctx context.Context, routingOption Routin
 	}
 
 	// Ok, now we're ready to listen.
-	if err := startListening(ctx, n.PeerHost, cfg); err != nil {
+	if err := startListening(n.PeerHost, cfg); err != nil {
 		return err
 	}
 
@@ -452,9 +452,8 @@ func (n *IpfsNode) startOnlineServicesWithHost(ctx context.Context, host p2phost
 	n.PeerHost = rhost.Wrap(host, n.Routing)
 
 	// setup exchange service
-	const alwaysSendToPeer = true // use YesManStrategy
 	bitswapNetwork := bsnet.NewFromIpfsHost(n.PeerHost, n.Routing)
-	n.Exchange = bitswap.New(ctx, n.Identity, bitswapNetwork, n.Blockstore, alwaysSendToPeer)
+	n.Exchange = bitswap.New(ctx, bitswapNetwork, n.Blockstore)
 
 	size, err := n.getCacheSize()
 	if err != nil {
@@ -919,7 +918,7 @@ func composeAddrsFactory(f, g p2pbhost.AddrsFactory) p2pbhost.AddrsFactory {
 }
 
 // startListening on the network addresses
-func startListening(ctx context.Context, host p2phost.Host, cfg *config.Config) error {
+func startListening(host p2phost.Host, cfg *config.Config) error {
 	listenAddrs, err := listenAddresses(cfg)
 	if err != nil {
 		return err

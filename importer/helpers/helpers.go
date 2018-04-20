@@ -7,8 +7,8 @@ import (
 
 	dag "github.com/ipsn/go-ipfs/merkledag"
 	ft "github.com/ipsn/go-ipfs/unixfs"
-	pi "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-posinfo"
 
+	pi "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-posinfo"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
@@ -32,7 +32,7 @@ var roughLinkSize = 34 + 8 + 5   // sha256 multihash + size + no name + protobuf
 //   var DefaultLinksPerBlock = (roughLinkBlockSize / roughLinkSize)
 //
 // See calc_test.go
-var DefaultLinksPerBlock = (roughLinkBlockSize / roughLinkSize)
+var DefaultLinksPerBlock = roughLinkBlockSize / roughLinkSize
 
 // ErrSizeLimitExceeded signals that a block is larger than BlockSizeLimit.
 var ErrSizeLimitExceeded = fmt.Errorf("object size limit exceeded")

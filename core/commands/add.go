@@ -10,12 +10,12 @@ import (
 	blockservice "github.com/ipsn/go-ipfs/blockservice"
 	core "github.com/ipsn/go-ipfs/core"
 	"github.com/ipsn/go-ipfs/core/coreunix"
-	offline "github.com/ipsn/go-ipfs/exchange/offline"
 	dag "github.com/ipsn/go-ipfs/merkledag"
 	dagtest "github.com/ipsn/go-ipfs/merkledag/test"
 	mfs "github.com/ipsn/go-ipfs/mfs"
 	ft "github.com/ipsn/go-ipfs/unixfs"
 
+	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
 	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
@@ -24,7 +24,7 @@ import (
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 )
 
-// ErrDepthLimitExceeded indicates that the max depth has been exceded.
+// ErrDepthLimitExceeded indicates that the max depth has been exceeded.
 var ErrDepthLimitExceeded = fmt.Errorf("depth limit exceeded")
 
 const (

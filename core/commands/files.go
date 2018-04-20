@@ -15,7 +15,6 @@ import (
 	lgc "github.com/ipsn/go-ipfs/commands/legacy"
 	core "github.com/ipsn/go-ipfs/core"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
-	"github.com/ipsn/go-ipfs/exchange/offline"
 	dag "github.com/ipsn/go-ipfs/merkledag"
 	mfs "github.com/ipsn/go-ipfs/mfs"
 	path "github.com/ipsn/go-ipfs/path"
@@ -25,6 +24,7 @@ import (
 
 	humanize "github.com/dustin/go-humanize"
 	logging "github.com/ipsn/go-ipfs/gxlibs/ipfs/QmRb5jh8z2E8hMGN2tkvs1yHynUanqnZ3UeKwgN1i9P1F8/go-log"
+	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"

@@ -3,13 +3,12 @@ package blockservice
 import (
 	"testing"
 
-	butil "github.com/ipsn/go-ipfs/blocks/blocksutil"
-	offline "github.com/ipsn/go-ipfs/exchange/offline"
-
+	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	dssync "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
 	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
+	butil "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blocksutil"
 )
 
 func TestWriteThroughWorks(t *testing.T) {

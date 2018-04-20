@@ -7,11 +7,11 @@ import (
 	"os"
 
 	oldCmds "github.com/ipsn/go-ipfs/commands"
+	lgc "github.com/ipsn/go-ipfs/commands/legacy"
 	"github.com/ipsn/go-ipfs/core"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 	"github.com/ipsn/go-ipfs/filestore"
 
-	lgc "github.com/ipsn/go-ipfs/commands/legacy"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
@@ -26,11 +26,6 @@ var FileStoreCmd = &cmds.Command{
 		"verify": lgc.NewCommand(verifyFileStore),
 		"dups":   lgc.NewCommand(dupsFileStore),
 	},
-}
-
-type lsEncoder struct {
-	errors bool
-	w      io.Writer
 }
 
 var lsFileStore = &cmds.Command{

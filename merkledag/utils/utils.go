@@ -5,10 +5,10 @@ import (
 	"errors"
 
 	bserv "github.com/ipsn/go-ipfs/blockservice"
-	offline "github.com/ipsn/go-ipfs/exchange/offline"
 	dag "github.com/ipsn/go-ipfs/merkledag"
 	path "github.com/ipsn/go-ipfs/path"
 
+	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	syncds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
 	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"

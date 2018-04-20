@@ -10,7 +10,6 @@ import (
 	cmds "github.com/ipsn/go-ipfs/commands"
 	core "github.com/ipsn/go-ipfs/core"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
-	offline "github.com/ipsn/go-ipfs/exchange/offline"
 	merkledag "github.com/ipsn/go-ipfs/merkledag"
 	path "github.com/ipsn/go-ipfs/path"
 	resolver "github.com/ipsn/go-ipfs/path/resolver"
@@ -18,6 +17,7 @@ import (
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
 	unixfspb "github.com/ipsn/go-ipfs/unixfs/pb"
 
+	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"

@@ -8,12 +8,12 @@ import (
 	"strings"
 
 	bserv "github.com/ipsn/go-ipfs/blockservice"
-	offline "github.com/ipsn/go-ipfs/exchange/offline"
 	dag "github.com/ipsn/go-ipfs/merkledag"
 	pin "github.com/ipsn/go-ipfs/pin"
 	"github.com/ipsn/go-ipfs/thirdparty/verifcid"
 
 	logging "github.com/ipsn/go-ipfs/gxlibs/ipfs/QmRb5jh8z2E8hMGN2tkvs1yHynUanqnZ3UeKwgN1i9P1F8/go-log"
+	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	dstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"

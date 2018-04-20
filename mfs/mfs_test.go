@@ -15,7 +15,6 @@ import (
 	"time"
 
 	bserv "github.com/ipsn/go-ipfs/blockservice"
-	offline "github.com/ipsn/go-ipfs/exchange/offline"
 	importer "github.com/ipsn/go-ipfs/importer"
 	dag "github.com/ipsn/go-ipfs/merkledag"
 	"github.com/ipsn/go-ipfs/path"
@@ -23,6 +22,7 @@ import (
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
+	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	dssync "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"

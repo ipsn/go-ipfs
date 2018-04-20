@@ -7,8 +7,6 @@ import (
 	"fmt"
 	"io"
 	"math/rand"
-	"net"
-	"net/url"
 	"os"
 	"os/signal"
 	"path/filepath"
@@ -48,18 +46,6 @@ const (
 	cpuProfile         = "ipfs.cpuprof"
 	heapProfile        = "ipfs.memprof"
 )
-
-type cmdInvocation struct {
-	req  *cmds.Request
-	node *core.IpfsNode
-	ctx  *oldcmds.Context
-}
-
-type exitErr int
-
-func (e exitErr) Error() string {
-	return fmt.Sprint("exit code", int(e))
-}
 
 // main roadmap:
 // - parse the commandline to get a cmdInvocation
@@ -101,7 +87,7 @@ func mainRet() int {
 		}
 	}
 
-	// output depends on excecutable name passed in os.Args
+	// output depends on executable name passed in os.Args
 	// so we need to make sure it's stable
 	os.Args[0] = "ipfs"
 
@@ -171,7 +157,7 @@ func makeExecutor(req *cmds.Request, env interface{}) (cmds.Executor, error) {
 		return nil, err
 	}
 
-	client, err := commandShouldRunOnDaemon(*details, req, Root, env.(*oldcmds.Context))
+	client, err := commandShouldRunOnDaemon(*details, req, env.(*oldcmds.Context))
 	if err != nil {
 		return nil, err
 	}
@@ -235,13 +221,13 @@ func commandDetails(path []string, root *cmds.Command) (*cmdDetails, error) {
 	return &details, nil
 }
 
-// commandShouldRunOnDaemon determines, from commmand details, whether a
+// commandShouldRunOnDaemon determines, from command details, whether a
 // command ought to be executed on an ipfs daemon.
 //
 // It returns a client if the command should be executed on a daemon and nil if
 // it should be executed on a client. It returns an error if the command must
 // NOT be executed on either.
-func commandShouldRunOnDaemon(details cmdDetails, req *cmds.Request, root *cmds.Command, cctx *oldcmds.Context) (http.Client, error) {
+func commandShouldRunOnDaemon(details cmdDetails, req *cmds.Request, cctx *oldcmds.Context) (http.Client, error) {
 	path := req.Path
 	// root command.
 	if len(path) < 1 {
@@ -257,7 +243,7 @@ func commandShouldRunOnDaemon(details cmdDetails, req *cmds.Request, root *cmds.
 	}
 
 	// at this point need to know whether api is running. we defer
-	// to this point so that we dont check unnecessarily
+	// to this point so that we don't check unnecessarily
 
 	// did user specify an api to use for this command?
 	apiAddrStr, _ := req.Options[coreCmds.ApiOption].(string)
@@ -477,25 +463,4 @@ func apiClientForAddr(addr ma.Multiaddr) (http.Client, error) {
 	}
 
 	return http.NewClient(host, http.ClientWithAPIPrefix(corehttp.APIPath)), nil
-}
-
-func isConnRefused(err error) bool {
-	// unwrap url errors from http calls
-	if urlerr, ok := err.(*url.Error); ok {
-		err = urlerr.Err
-	}
-
-	netoperr, ok := err.(*net.OpError)
-	if !ok {
-		return false
-	}
-
-	return netoperr.Op == "dial"
-}
-
-func wrapContextCanceled(err error) error {
-	if strings.Contains(err.Error(), "request canceled") {
-		err = errRequestCanceled
-	}
-	return err
 }
