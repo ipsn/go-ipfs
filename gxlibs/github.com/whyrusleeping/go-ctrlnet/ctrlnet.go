@@ -8,10 +8,17 @@ import (
 )
 
 type LinkSettings struct {
-	Latency    int
-	Jitter     int
-	Bandwidth  int
-	PacketLoss int
+	// Latency between links (in milliseconds)
+	Latency uint
+
+	// Jitter in latency values (in milliseconds)
+	Jitter uint
+
+	// Bandwidth of link (in bits per second)
+	Bandwidth uint
+
+	// PacketLoss percentage on the links (in whole percentage points)
+	PacketLoss uint8
 }
 
 func (ls *LinkSettings) cmd(iface string, init bool) []string {
@@ -24,15 +31,15 @@ func (ls *LinkSettings) cmd(iface string, init bool) []string {
 
 	// even if latency is zero, put it on so the command never fails
 	base = append(base, "delay", fmt.Sprintf("%dms", ls.Latency))
-	if ls.Jitter > 0 {
+	if ls.Jitter != 0 {
 		base = append(base, fmt.Sprintf("%dms", ls.Jitter), "distribution", "normal")
 	}
 
-	if ls.Bandwidth > 0 {
+	if ls.Bandwidth != 0 {
 		base = append(base, "rate", fmt.Sprint(ls.Bandwidth))
 	}
 
-	if ls.PacketLoss > 0 {
+	if ls.PacketLoss != 0 {
 		base = append(base, "loss", fmt.Sprintf("%d%%", ls.PacketLoss))
 	}
 

@@ -9,8 +9,9 @@ import (
 	"strconv"
 	"strings"
 
+	util "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/iptb/util"
+
 	cli "github.com/codegangsta/cli"
-	util "github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/iptb/util"
 )
 
 func parseRange(s string) ([]int, error) {
@@ -345,15 +346,23 @@ var connectCmd = cli.Command{
 			return fmt.Errorf("failed to parse: %s", err)
 		}
 
+		timeout := c.String("timeout")
+
 		for _, f := range from {
 			for _, t := range to {
-				err = util.ConnectNodes(nodes[f], nodes[t])
+				err = util.ConnectNodes(nodes[f], nodes[t], timeout)
 				if err != nil {
 					return fmt.Errorf("failed to connect: %s", err)
 				}
 			}
 		}
 		return nil
+	},
+	Flags: []cli.Flag{
+		cli.StringFlag{
+			Name:  "timeout",
+			Usage: "timeout on the command",
+		},
 	},
 }
 
@@ -422,7 +431,7 @@ var setCmd = cli.Command{
 				}
 			}
 		default:
-			fmt.Fprintln(os.Stderr, "'iptb set' accepts exactly 2 arguments")
+			fmt.Fprintln(os.Stderr, "'iptb set' accepts exactly 3 arguments")
 			os.Exit(1)
 		}
 		return nil
