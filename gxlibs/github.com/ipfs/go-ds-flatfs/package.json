@@ -14,12 +14,6 @@
     },
     {
       "author": "jbenet",
-      "hash": "QmaeRR9SpXumU5tYLRkq6x6pfMe8qKzxn4ujBpsTJ2zQG7",
-      "name": "go-os-rename",
-      "version": "0.0.0"
-    },
-    {
-      "author": "jbenet",
       "hash": "QmXRKBQA4wXP7xWbFiZsR1GP4HV6wMDQ1aWFxZZ4uBcPX9",
       "name": "go-datastore",
       "version": "2.4.0"
@@ -30,6 +24,6 @@
   "license": "",
   "name": "go-ds-flatfs",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "1.1.8"
+  "version": "1.1.9"
 }
 

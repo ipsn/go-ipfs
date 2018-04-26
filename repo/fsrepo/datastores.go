@@ -12,10 +12,10 @@ import (
 
 	badgerds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ds-badger"
 	humanize "github.com/dustin/go-humanize"
-	flatfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ds-flatfs"
 	levelds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ds-leveldb"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	mount "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/mount"
+	flatfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ds-flatfs"
 	ldbopts "github.com/syndtr/goleveldb/leveldb/opt"
 	measure "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ds-measure"
 )

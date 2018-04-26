@@ -14,7 +14,6 @@ import (
 
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/query"
-	"github.com/jbenet/go-os-rename"
 
 	logging "github.com/ipfs/go-log"
 )
@@ -219,7 +218,7 @@ func (fs *Datastore) doPut(key datastore.Key, val []byte) error {
 	}
 	closed = true
 
-	err = osrename.Rename(tmp.Name(), path)
+	err = os.Rename(tmp.Name(), path)
 	if err != nil {
 		return err
 	}
@@ -294,7 +293,7 @@ func (fs *Datastore) putMany(data map[datastore.Key]interface{}) error {
 
 	// move files to their proper places
 	for fi, path := range files {
-		if err := osrename.Rename(fi.Name(), path); err != nil {
+		if err := os.Rename(fi.Name(), path); err != nil {
 			return err
 		}
 
