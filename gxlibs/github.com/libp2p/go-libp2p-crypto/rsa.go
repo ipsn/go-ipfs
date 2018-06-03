@@ -4,12 +4,13 @@ import (
 	"crypto"
 	"crypto/rand"
 	"crypto/rsa"
-	"crypto/sha256"
 	"crypto/x509"
 	"errors"
 
-	proto "github.com/gogo/protobuf/proto"
 	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto/pb"
+
+	proto "github.com/gogo/protobuf/proto"
+	sha256 "github.com/minio/sha256-simd"
 )
 
 type RsaPrivateKey struct {
@@ -82,7 +83,7 @@ func (sk *RsaPrivateKey) Equals(k Key) bool {
 	return KeyEqual(sk, k)
 }
 
-func UnmarshalRsaPrivateKey(b []byte) (*RsaPrivateKey, error) {
+func UnmarshalRsaPrivateKey(b []byte) (PrivKey, error) {
 	sk, err := x509.ParsePKCS1PrivateKey(b)
 	if err != nil {
 		return nil, err
@@ -94,7 +95,7 @@ func MarshalRsaPrivateKey(k *RsaPrivateKey) []byte {
 	return x509.MarshalPKCS1PrivateKey(k.sk)
 }
 
-func UnmarshalRsaPublicKey(b []byte) (*RsaPublicKey, error) {
+func UnmarshalRsaPublicKey(b []byte) (PubKey, error) {
 	pub, err := x509.ParsePKIXPublicKey(b)
 	if err != nil {
 		return nil, err

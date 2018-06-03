@@ -8,9 +8,9 @@
   },
   "gxDependencies": [
     {
-      "hash": "QmRb5jh8z2E8hMGN2tkvs1yHynUanqnZ3UeKwgN1i9P1F8",
+      "hash": "QmTG23dvpBCBjqQwyDxV8CQT6jmS4PSftNr1VqHhE3MLy7",
       "name": "go-log",
-      "version": "1.4.0"
+      "version": "1.4.1"
     },
     {
       "author": "jbenet",
@@ -26,9 +26,9 @@
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmepzWZwZK23YHYVjhKBEvJnNTgsg71bWetZU9bEsP4qqf",
+      "hash": "QmU6Yf4jad9eAv9FmCqcYU2S7iN7aQwY2erG376ZDs1j7a",
       "name": "go-ws-transport",
-      "version": "1.6.5"
+      "version": "1.6.6"
     },
     {
       "author": "multiformats",
@@ -42,6 +42,6 @@
   "license": "MIT",
   "name": "go-addr-util",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "1.2.6"
+  "version": "1.2.7"
 }
 

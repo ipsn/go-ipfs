@@ -8,15 +8,15 @@
   },
   "gxDependencies": [
     {
-      "hash": "QmRb5jh8z2E8hMGN2tkvs1yHynUanqnZ3UeKwgN1i9P1F8",
+      "hash": "QmTG23dvpBCBjqQwyDxV8CQT6jmS4PSftNr1VqHhE3MLy7",
       "name": "go-log",
-      "version": "1.4.0"
+      "version": "1.4.1"
     },
     {
       "author": "jbenet",
-      "hash": "QmXRKBQA4wXP7xWbFiZsR1GP4HV6wMDQ1aWFxZZ4uBcPX9",
+      "hash": "QmeiCcJfDW1GJnWUArudsv5rQsihpi4oyddPhdqo3CfX6i",
       "name": "go-datastore",
-      "version": "2.4.0"
+      "version": "2.4.1"
     }
   ],
   "gxVersion": "0.8.0",
@@ -24,6 +24,6 @@
   "license": "",
   "name": "go-ds-flatfs",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "1.1.9"
+  "version": "1.2.4"
 }
 

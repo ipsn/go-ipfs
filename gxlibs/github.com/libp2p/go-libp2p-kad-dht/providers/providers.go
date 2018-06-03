@@ -12,7 +12,7 @@ import (
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	autobatch "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/autobatch"
 	dsq "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/query"
-	logging "github.com/ipfs/go-log"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	goprocess "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
 	goprocessctx "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess/context"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
@@ -214,7 +214,7 @@ func (pm *ProviderManager) deleteProvSet(k *cid.Cid) error {
 
 func (pm *ProviderManager) getProvKeys() (func() (*cid.Cid, bool), error) {
 	res, err := pm.dstore.Query(dsq.Query{
-		KeysOnly: false,
+		KeysOnly: true,
 		Prefix:   providersKeyPrefix,
 	})
 	if err != nil {

@@ -10,21 +10,23 @@ import (
 	path "github.com/ipsn/go-ipfs/path"
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
-	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
-	record "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record"
-	recordpb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record/pb"
-	testutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
-	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
-	dssync "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
-	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	mockrouting "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/mock"
+	record "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record"
+	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
+	ropts "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing/options"
+	testutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
 	proto "github.com/gogo/protobuf/proto"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
+	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
+	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
+	dssync "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
 )
 
-func testValidatorCase(t *testing.T, priv ci.PrivKey, kbook pstore.KeyBook, ns string, key string, val []byte, eol time.Time, exp error) {
-	validChecker := NewIpnsRecordValidator(kbook)
+func testValidatorCase(t *testing.T, priv ci.PrivKey, kbook pstore.KeyBook, key string, val []byte, eol time.Time, exp error) {
+	t.Helper()
+
+	validator := IpnsValidator{kbook}
 
 	p := path.Path("/ipfs/QmfM2r8seH2GiRaC4esTjeraXEachRt8ZsSeGaWTPLyMoG")
 	entry, err := CreateRoutingEntryData(priv, p, 1, eol)
@@ -39,15 +41,9 @@ func testValidatorCase(t *testing.T, priv ci.PrivKey, kbook pstore.KeyBook, ns s
 			t.Fatal(err)
 		}
 	}
-	rec := &record.ValidationRecord{
-		Namespace: ns,
-		Key:       key,
-		Value:     data,
-	}
-
-	err = validChecker.Func(rec)
+	err = validator.Validate(key, data)
 	if err != exp {
-		params := fmt.Sprintf("namespace: %s\nkey: %s\neol: %s\n", ns, key, eol)
+		params := fmt.Sprintf("key: %s\neol: %s\n", key, eol)
 		if exp == nil {
 			t.Fatalf("Unexpected error %s for params %s", err, params)
 		} else if err == nil {
@@ -67,15 +63,15 @@ func TestValidator(t *testing.T) {
 	kbook.AddPubKey(id, priv.GetPublic())
 	emptyKbook := pstore.NewPeerstore()
 
-	testValidatorCase(t, priv, kbook, "ipns", string(id), nil, ts.Add(time.Hour), nil)
-	testValidatorCase(t, priv, kbook, "ipns", string(id), nil, ts.Add(time.Hour*-1), ErrExpiredRecord)
-	testValidatorCase(t, priv, kbook, "ipns", string(id), []byte("bad data"), ts.Add(time.Hour), ErrBadRecord)
-	testValidatorCase(t, priv, kbook, "ipns", "bad key", nil, ts.Add(time.Hour), ErrKeyFormat)
-	testValidatorCase(t, priv, emptyKbook, "ipns", string(id), nil, ts.Add(time.Hour), ErrPublicKeyNotFound)
-	testValidatorCase(t, priv2, kbook, "ipns", string(id2), nil, ts.Add(time.Hour), ErrPublicKeyNotFound)
-	testValidatorCase(t, priv2, kbook, "ipns", string(id), nil, ts.Add(time.Hour), ErrSignature)
-	testValidatorCase(t, priv, kbook, "", string(id), nil, ts.Add(time.Hour), ErrInvalidPath)
-	testValidatorCase(t, priv, kbook, "wrong", string(id), nil, ts.Add(time.Hour), ErrInvalidPath)
+	testValidatorCase(t, priv, kbook, "/ipns/"+string(id), nil, ts.Add(time.Hour), nil)
+	testValidatorCase(t, priv, kbook, "/ipns/"+string(id), nil, ts.Add(time.Hour*-1), ErrExpiredRecord)
+	testValidatorCase(t, priv, kbook, "/ipns/"+string(id), []byte("bad data"), ts.Add(time.Hour), ErrBadRecord)
+	testValidatorCase(t, priv, kbook, "/ipns/"+"bad key", nil, ts.Add(time.Hour), ErrKeyFormat)
+	testValidatorCase(t, priv, emptyKbook, "/ipns/"+string(id), nil, ts.Add(time.Hour), ErrPublicKeyNotFound)
+	testValidatorCase(t, priv2, kbook, "/ipns/"+string(id2), nil, ts.Add(time.Hour), ErrPublicKeyNotFound)
+	testValidatorCase(t, priv2, kbook, "/ipns/"+string(id), nil, ts.Add(time.Hour), ErrSignature)
+	testValidatorCase(t, priv, kbook, "//"+string(id), nil, ts.Add(time.Hour), ErrInvalidPath)
+	testValidatorCase(t, priv, kbook, "/wrong/"+string(id), nil, ts.Add(time.Hour), ErrInvalidPath)
 }
 
 func TestResolverValidation(t *testing.T) {
@@ -85,14 +81,7 @@ func TestResolverValidation(t *testing.T) {
 	peerstore := pstore.NewPeerstore()
 
 	vstore := newMockValueStore(rid, dstore, peerstore)
-	vstore.Validator["ipns"] = NewIpnsRecordValidator(peerstore)
-	vstore.Validator["pk"] = &record.ValidChecker{
-		Func: func(r *record.ValidationRecord) error {
-			return nil
-		},
-		Sign: false,
-	}
-	resolver := NewRoutingResolver(vstore, 0)
+	resolver := NewIpnsResolver(vstore)
 
 	// Create entry with expiry in one hour
 	priv, id, _, ipnsDHTPath := genKeys(t)
@@ -116,7 +105,7 @@ func TestResolverValidation(t *testing.T) {
 	}
 
 	// Resolve entry
-	resp, err := resolver.resolveOnce(ctx, id.Pretty(), opts.DefaultResolveOpts())
+	resp, _, err := resolver.resolveOnce(ctx, id.Pretty(), opts.DefaultResolveOpts())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -137,7 +126,7 @@ func TestResolverValidation(t *testing.T) {
 	}
 
 	// Record should fail validation because entry is expired
-	_, err = resolver.resolveOnce(ctx, id.Pretty(), opts.DefaultResolveOpts())
+	_, _, err = resolver.resolveOnce(ctx, id.Pretty(), opts.DefaultResolveOpts())
 	if err == nil {
 		t.Fatal("ValidateIpnsRecord should have returned error")
 	}
@@ -159,7 +148,7 @@ func TestResolverValidation(t *testing.T) {
 
 	// Record should fail validation because public key defined by
 	// ipns path doesn't match record signature
-	_, err = resolver.resolveOnce(ctx, id2.Pretty(), opts.DefaultResolveOpts())
+	_, _, err = resolver.resolveOnce(ctx, id2.Pretty(), opts.DefaultResolveOpts())
 	if err == nil {
 		t.Fatal("ValidateIpnsRecord should have failed signature verification")
 	}
@@ -177,7 +166,7 @@ func TestResolverValidation(t *testing.T) {
 
 	// Record should fail validation because public key is not available
 	// in peer store or on network
-	_, err = resolver.resolveOnce(ctx, id3.Pretty(), opts.DefaultResolveOpts())
+	_, _, err = resolver.resolveOnce(ctx, id3.Pretty(), opts.DefaultResolveOpts())
 	if err == nil {
 		t.Fatal("ValidateIpnsRecord should have failed because public key was not found")
 	}
@@ -192,7 +181,7 @@ func TestResolverValidation(t *testing.T) {
 	// public key is available in the peer store by looking it up in
 	// the DHT, which causes the DHT to fetch it and cache it in the
 	// peer store
-	_, err = resolver.resolveOnce(ctx, id3.Pretty(), opts.DefaultResolveOpts())
+	_, _, err = resolver.resolveOnce(ctx, id3.Pretty(), opts.DefaultResolveOpts())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -224,19 +213,19 @@ type mockValueStore struct {
 func newMockValueStore(id testutil.Identity, dstore ds.Datastore, kbook pstore.KeyBook) *mockValueStore {
 	serv := mockrouting.NewServer()
 	r := serv.ClientWithDatastore(context.Background(), id, dstore)
-	return &mockValueStore{r, kbook, make(record.Validator)}
+	return &mockValueStore{r, kbook, record.NamespacedValidator{
+		"ipns": IpnsValidator{kbook},
+		"pk":   record.PublicKeyValidator{},
+	}}
 }
 
-func (m *mockValueStore) GetValue(ctx context.Context, k string) ([]byte, error) {
-	data, err := m.r.GetValue(ctx, k)
+func (m *mockValueStore) GetValue(ctx context.Context, k string, opts ...ropts.Option) ([]byte, error) {
+	data, err := m.r.GetValue(ctx, k, opts...)
 	if err != nil {
 		return data, err
 	}
 
-	rec := new(recordpb.Record)
-	rec.Key = proto.String(k)
-	rec.Value = data
-	if err = m.Validator.VerifyRecord(rec); err != nil {
+	if err = m.Validator.Validate(k, data); err != nil {
 		return nil, err
 	}
 
@@ -263,23 +252,6 @@ func (m *mockValueStore) GetPublicKey(ctx context.Context, p peer.ID) (ci.PubKey
 	return pk, m.kbook.AddPubKey(p, pk)
 }
 
-func (m *mockValueStore) GetValues(ctx context.Context, k string, count int) ([]routing.RecvdVal, error) {
-	vals, err := m.r.GetValues(ctx, k, count)
-	if err != nil {
-		return nil, err
-	}
-	valid := make([]routing.RecvdVal, 0, len(vals))
-	for _, v := range vals {
-		rec := new(recordpb.Record)
-		rec.Key = proto.String(k)
-		rec.Value = v.Val
-		if err = m.Validator.VerifyRecord(rec); err == nil {
-			valid = append(valid, v)
-		}
-	}
-	return valid, nil
-}
-
-func (m *mockValueStore) PutValue(ctx context.Context, k string, d []byte) error {
-	return m.r.PutValue(ctx, k, d)
+func (m *mockValueStore) PutValue(ctx context.Context, k string, d []byte, opts ...ropts.Option) error {
+	return m.r.PutValue(ctx, k, d, opts...)
 }

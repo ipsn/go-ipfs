@@ -14,8 +14,8 @@ import (
 	ft "github.com/ipsn/go-ipfs/unixfs"
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
 
-	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
 	proto "github.com/gogo/protobuf/proto"
+	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )

@@ -8,15 +8,15 @@
   },
   "gxDependencies": [
     {
-      "hash": "QmSpJByNKFX1sCsHBEp3R73FL4NF6FnQTEGyNAXHm2GS52",
+      "hash": "QmTG23dvpBCBjqQwyDxV8CQT6jmS4PSftNr1VqHhE3MLy7",
       "name": "go-log",
-      "version": "1.2.0"
+      "version": "1.4.1"
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmWBEjwiGM7mzpa2zkaen5PhxwRS4LrVRWAagBaPJio8eY",
+      "hash": "QmReJHiSNCL7heqC4rccNLxTsNtRKufw7qYt9VhABJv54f",
       "name": "go-sockaddr",
-      "version": "1.0.1"
+      "version": "1.0.2"
     },
     {
       "author": "whyrusleeping",
@@ -42,6 +42,6 @@
   "license": "",
   "name": "go-reuseport",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.1.10"
+  "version": "0.1.13"
 }
 

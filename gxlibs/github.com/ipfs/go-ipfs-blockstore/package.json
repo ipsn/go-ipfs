@@ -15,9 +15,9 @@
     },
     {
       "author": "jbenet",
-      "hash": "QmXRKBQA4wXP7xWbFiZsR1GP4HV6wMDQ1aWFxZZ4uBcPX9",
+      "hash": "QmeiCcJfDW1GJnWUArudsv5rQsihpi4oyddPhdqo3CfX6i",
       "name": "go-datastore",
-      "version": "2.4.0"
+      "version": "2.4.1"
     },
     {
       "author": "ipfs",
@@ -39,9 +39,9 @@
     },
     {
       "author": "hector",
-      "hash": "QmTmqJGRQfuH8eKWD1FjThwPRipt1QhqJQNZ8MpzmfAAxo",
+      "hash": "QmYJgz1Z5PbBGP7n2XA8uv5sF1EKLfYUjL7kFemVAjMNqC",
       "name": "go-ipfs-ds-help",
-      "version": "0.0.2"
+      "version": "0.0.3"
     },
     {
       "author": "kubuxu",
@@ -50,9 +50,9 @@
       "version": "0.1.1"
     },
     {
-      "hash": "QmRb5jh8z2E8hMGN2tkvs1yHynUanqnZ3UeKwgN1i9P1F8",
+      "hash": "QmTG23dvpBCBjqQwyDxV8CQT6jmS4PSftNr1VqHhE3MLy7",
       "name": "go-log",
-      "version": "1.4.0"
+      "version": "1.4.1"
     }
   ],
   "gxVersion": "0.12.1",
@@ -60,6 +60,6 @@
   "license": "MIT",
   "name": "go-ipfs-blockstore",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.0.2"
+  "version": "0.0.4"
 }
 

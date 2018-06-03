@@ -1,7 +1,9 @@
 package dht
 
 import (
+	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"math/rand"
 	"sort"
@@ -9,17 +11,17 @@ import (
 	"testing"
 	"time"
 
+	opts "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kad-dht/opts"
 	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kad-dht/pb"
 
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
-	dssync "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	kb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kbucket"
 	netutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-netutil"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	record "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record"
+	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
 	bhost "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/host/basic"
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil/ci"
 	travisci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil/ci/travis"
@@ -38,24 +40,47 @@ func init() {
 	}
 }
 
+type blankValidator struct{}
+
+func (blankValidator) Validate(_ string, _ []byte) error        { return nil }
+func (blankValidator) Select(_ string, _ [][]byte) (int, error) { return 0, nil }
+
+type testValidator struct{}
+
+func (testValidator) Select(_ string, bs [][]byte) (int, error) {
+	index := -1
+	for i, b := range bs {
+		if bytes.Compare(b, []byte("newer")) == 0 {
+			index = i
+		} else if bytes.Compare(b, []byte("valid")) == 0 {
+			if index == -1 {
+				index = i
+			}
+		}
+	}
+	if index == -1 {
+		return -1, errors.New("no rec found")
+	}
+	return index, nil
+}
+func (testValidator) Validate(_ string, b []byte) error {
+	if bytes.Compare(b, []byte("expired")) == 0 {
+		return errors.New("expired")
+	}
+	return nil
+}
+
 func setupDHT(ctx context.Context, t *testing.T, client bool) *IpfsDHT {
-	h := bhost.New(netutil.GenSwarmNetwork(t, ctx))
+	d, err := New(
+		ctx,
+		bhost.New(netutil.GenSwarmNetwork(t, ctx)),
+		opts.Client(client),
+		opts.NamespacedValidator("v", blankValidator{}),
+	)
 
-	dss := dssync.MutexWrap(ds.NewMapDatastore())
-	var d *IpfsDHT
-	if client {
-		d = NewDHTClient(ctx, h, dss)
-	} else {
-		d = NewDHT(ctx, h, dss)
+	if err != nil {
+		t.Fatal(err)
 	}
-
-	d.Validator["v"] = &record.ValidChecker{
-		Func: func(*record.ValidationRecord) error {
-			return nil
-		},
-		Sign: false,
-	}
-	d.Selector["v"] = func(_ string, bs [][]byte) (int, error) { return 0, nil }
 	return d
 }
 
@@ -118,6 +143,8 @@ func connect(t *testing.T, ctx context.Context, a, b *IpfsDHT) {
 func bootstrap(t *testing.T, ctx context.Context, dhts []*IpfsDHT) {
 
 	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
 	log.Debugf("Bootstrapping DHTs...")
 
 	// tried async. sequential fares much better. compare:
@@ -134,7 +161,6 @@ func bootstrap(t *testing.T, ctx context.Context, dhts []*IpfsDHT) {
 		dht := dhts[(start+i)%len(dhts)]
 		dht.runBootstrap(ctx, cfg)
 	}
-	cancel()
 }
 
 func TestValueGetSet(t *testing.T) {
@@ -149,20 +175,9 @@ func TestValueGetSet(t *testing.T) {
 	defer dhtA.host.Close()
 	defer dhtB.host.Close()
 
-	vf := &record.ValidChecker{
-		Func: func(*record.ValidationRecord) error { return nil },
-		Sign: false,
-	}
-	nulsel := func(_ string, bs [][]byte) (int, error) { return 0, nil }
-
-	dhtA.Validator["v"] = vf
-	dhtB.Validator["v"] = vf
-	dhtA.Selector["v"] = nulsel
-	dhtB.Selector["v"] = nulsel
-
 	connect(t, ctx, dhtA, dhtB)
 
-	log.Error("adding value on: ", dhtA.self)
+	log.Debug("adding value on: ", dhtA.self)
 	ctxT, cancel := context.WithTimeout(ctx, time.Second)
 	defer cancel()
 	err := dhtA.PutValue(ctxT, "/v/hello", []byte("world"))
@@ -182,7 +197,7 @@ func TestValueGetSet(t *testing.T) {
 		}
 	*/
 
-	log.Error("requesting value on dht: ", dhtB.self)
+	log.Debug("requesting value on dht: ", dhtB.self)
 	ctxT, cancel = context.WithTimeout(ctx, time.Second*2)
 	defer cancel()
 	valb, err := dhtB.GetValue(ctxT, "/v/hello")
@@ -195,9 +210,61 @@ func TestValueGetSet(t *testing.T) {
 	}
 }
 
+func TestValueSetInvalid(t *testing.T) {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	dhtA := setupDHT(ctx, t, false)
+	dhtB := setupDHT(ctx, t, false)
+
+	defer dhtA.Close()
+	defer dhtB.Close()
+	defer dhtA.host.Close()
+	defer dhtB.host.Close()
+
+	dhtA.Validator.(record.NamespacedValidator)["v"] = testValidator{}
+	dhtB.Validator.(record.NamespacedValidator)["v"] = testValidator{}
+
+	connect(t, ctx, dhtA, dhtB)
+
+	testSetGet := func(val string, exp string, experr error) {
+		ctxT, cancel := context.WithTimeout(ctx, time.Second)
+		defer cancel()
+		err := dhtA.PutValue(ctxT, "/v/hello", []byte(val))
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		ctxT, cancel = context.WithTimeout(ctx, time.Second*2)
+		defer cancel()
+		valb, err := dhtB.GetValue(ctxT, "/v/hello")
+		if err != experr {
+			t.Fatalf("Set/Get %v: Expected %v error but got %v", val, experr, err)
+		}
+		if err == nil {
+			if string(valb) != exp {
+				t.Fatalf("Expected '%v' got '%s'", exp, string(valb))
+			}
+		}
+	}
+
+	// Expired records should not be returned
+	testSetGet("expired", "", routing.ErrNotFound)
+	// Valid record should be returned
+	testSetGet("valid", "valid", nil)
+	// Newer record should supersede previous record
+	testSetGet("newer", "newer", nil)
+	// Attempt to set older record again should be ignored
+	testSetGet("valid", "newer", nil)
+}
+
 func TestInvalidMessageSenderTracking(t *testing.T) {
-	ctx := context.Background()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
 	dht := setupDHT(ctx, t, false)
+	defer dht.Close()
+
 	foo := peer.ID("asdasd")
 	_, err := dht.messageSenderForPeer(foo)
 	if err == nil {
@@ -205,15 +272,18 @@ func TestInvalidMessageSenderTracking(t *testing.T) {
 	}
 
 	dht.smlk.Lock()
-	defer dht.smlk.Unlock()
-	if len(dht.strmap) > 0 {
+	mscnt := len(dht.strmap)
+	dht.smlk.Unlock()
+
+	if mscnt > 0 {
 		t.Fatal("should have no message senders in map")
 	}
 }
 
 func TestProvides(t *testing.T) {
 	// t.Skip("skipping test to debug another")
-	ctx := context.Background()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
 	_, _, dhts := setupDHTS(ctx, 4, t)
 	defer func() {
@@ -262,7 +332,8 @@ func TestProvides(t *testing.T) {
 
 func TestLocalProvides(t *testing.T) {
 	// t.Skip("skipping test to debug another")
-	ctx := context.Background()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
 	_, _, dhts := setupDHTS(ctx, 4, t)
 	defer func() {
@@ -348,7 +419,8 @@ func TestBootstrap(t *testing.T) {
 		t.SkipNow()
 	}
 
-	ctx := context.Background()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
 	nDHTs := 30
 	_, _, dhts := setupDHTS(ctx, nDHTs, t)
@@ -401,7 +473,8 @@ func TestPeriodicBootstrap(t *testing.T) {
 		t.SkipNow()
 	}
 
-	ctx := context.Background()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
 	nDHTs := 30
 	_, _, dhts := setupDHTS(ctx, nDHTs, t)
@@ -412,20 +485,7 @@ func TestPeriodicBootstrap(t *testing.T) {
 		}
 	}()
 
-	// signal amplifier
-	amplify := func(signal chan time.Time, other []chan time.Time) {
-		for t := range signal {
-			for _, s := range other {
-				s <- t
-			}
-		}
-		for _, s := range other {
-			close(s)
-		}
-	}
-
-	signal := make(chan time.Time)
-	allSignals := []chan time.Time{}
+	signals := []chan time.Time{}
 
 	var cfg BootstrapConfig
 	cfg = DefaultBootstrapConfig
@@ -434,10 +494,13 @@ func TestPeriodicBootstrap(t *testing.T) {
 	// kick off periodic bootstrappers with instrumented signals.
 	for _, dht := range dhts {
 		s := make(chan time.Time)
-		allSignals = append(allSignals, s)
-		dht.BootstrapOnSignal(cfg, s)
+		signals = append(signals, s)
+		proc, err := dht.BootstrapOnSignal(cfg, s)
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer proc.Close()
 	}
-	go amplify(signal, allSignals)
 
 	t.Logf("dhts are not connected. %d", nDHTs)
 	for _, dht := range dhts {
@@ -464,7 +527,10 @@ func TestPeriodicBootstrap(t *testing.T) {
 	}
 
 	t.Logf("bootstrapping them so they find each other. %d", nDHTs)
-	signal <- time.Now()
+	now := time.Now()
+	for _, signal := range signals {
+		go func(s chan time.Time) { s <- now }(signal)
+	}
 
 	// this is async, and we dont know when it's finished with one cycle, so keep checking
 	// until the routing tables look better, or some long timeout for the failure case.
@@ -478,7 +544,8 @@ func TestPeriodicBootstrap(t *testing.T) {
 func TestProvidesMany(t *testing.T) {
 	t.Skip("this test doesn't work")
 	// t.Skip("skipping test to debug another")
-	ctx := context.Background()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
 	nDHTs := 40
 	_, _, dhts := setupDHTS(ctx, nDHTs, t)
@@ -579,7 +646,8 @@ func TestProvidesAsync(t *testing.T) {
 		t.SkipNow()
 	}
 
-	ctx := context.Background()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
 	_, _, dhts := setupDHTS(ctx, 4, t)
 	defer func() {
@@ -660,7 +728,8 @@ func TestFindPeer(t *testing.T) {
 		t.SkipNow()
 	}
 
-	ctx := context.Background()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
 	_, peers, dhts := setupDHTS(ctx, 4, t)
 	defer func() {
@@ -697,7 +766,8 @@ func TestFindPeersConnectedToPeer(t *testing.T) {
 		t.SkipNow()
 	}
 
-	ctx := context.Background()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
 	_, peers, dhts := setupDHTS(ctx, 4, t)
 	defer func() {
@@ -785,7 +855,7 @@ func TestConnectCollision(t *testing.T) {
 	for rtime := 0; rtime < runTimes; rtime++ {
 		log.Info("Running Time: ", rtime)
 
-		ctx := context.Background()
+		ctx, cancel := context.WithCancel(context.Background())
 
 		dhtA := setupDHT(ctx, t, false)
 		dhtB := setupDHT(ctx, t, false)
@@ -832,6 +902,7 @@ func TestConnectCollision(t *testing.T) {
 		dhtB.Close()
 		dhtA.host.Close()
 		dhtB.host.Close()
+		cancel()
 	}
 }
 

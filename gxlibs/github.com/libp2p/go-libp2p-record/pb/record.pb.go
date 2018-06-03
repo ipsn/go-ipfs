@@ -29,10 +29,6 @@ type Record struct {
 	Key *string `protobuf:"bytes,1,opt,name=key" json:"key,omitempty"`
 	// The actual value this record is storing
 	Value []byte `protobuf:"bytes,2,opt,name=value" json:"value,omitempty"`
-	// hash of the authors public key
-	Author *string `protobuf:"bytes,3,opt,name=author" json:"author,omitempty"`
-	// A PKI signature for the key+value+author
-	Signature []byte `protobuf:"bytes,4,opt,name=signature" json:"signature,omitempty"`
 	// Time the record was received, set by receiver
 	TimeReceived     *string `protobuf:"bytes,5,opt,name=timeReceived" json:"timeReceived,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
@@ -52,20 +48,6 @@ func (m *Record) GetKey() string {
 func (m *Record) GetValue() []byte {
 	if m != nil {
 		return m.Value
-	}
-	return nil
-}
-
-func (m *Record) GetAuthor() string {
-	if m != nil && m.Author != nil {
-		return *m.Author
-	}
-	return ""
-}
-
-func (m *Record) GetSignature() []byte {
-	if m != nil {
-		return m.Signature
 	}
 	return nil
 }

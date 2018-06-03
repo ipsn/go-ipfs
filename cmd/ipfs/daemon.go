@@ -22,11 +22,11 @@ import (
 	migrate "github.com/ipsn/go-ipfs/repo/fsrepo/migrations"
 
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
-	mprome "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-metrics-prometheus"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
-	iconn "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-interface-conn"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/gxed/client_golang/prometheus"
+	iconn "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-interface-conn"
+	mprome "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-metrics-prometheus"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 

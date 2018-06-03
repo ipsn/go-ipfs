@@ -68,6 +68,11 @@ func New(prefix string, ds datastore.Datastore) *measure {
 		gcErr: metrics.New(prefix+".gc.errors_total", "Number of errored Datastore.CollectGarbage calls").Counter(),
 		gcLatency: metrics.New(prefix+".gc.latency_seconds",
 			"Latency distribution of Datastore.CollectGarbage calls").Histogram(datastoreLatencyBuckets),
+
+		duNum: metrics.New(prefix+".du_total", "Total number of Datastore.DiskUsage calls").Counter(),
+		duErr: metrics.New(prefix+".du.errors_total", "Number of errored Datastore.DiskUsage calls").Counter(),
+		duLatency: metrics.New(prefix+".du.latency_seconds",
+			"Latency distribution of Datastore.DiskUsage calls").Histogram(datastoreLatencyBuckets),
 	}
 	return m
 }
@@ -108,6 +113,10 @@ type measure struct {
 	gcNum     metrics.Counter
 	gcErr     metrics.Counter
 	gcLatency metrics.Histogram
+
+	duNum     metrics.Counter
+	duErr     metrics.Counter
+	duLatency metrics.Histogram
 }
 
 func recordLatency(h metrics.Histogram, start time.Time) {
@@ -209,6 +218,16 @@ func (m *measure) CollectGarbage() error {
 		return err
 	}
 	return nil
+}
+
+func (m *measure) DiskUsage() (uint64, error) {
+	defer recordLatency(m.duLatency, time.Now())
+	m.duNum.Inc()
+	size, err := datastore.DiskUsage(m.backend)
+	if err != nil {
+		m.duErr.Inc()
+	}
+	return size, err
 }
 
 type measuredBatch struct {

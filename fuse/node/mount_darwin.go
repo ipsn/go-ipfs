@@ -11,7 +11,7 @@ import (
 
 	core "github.com/ipsn/go-ipfs/core"
 
-	unix "github.com/ipsn/go-ipfs/gxlibs/ipfs/QmPXvegq26x982cQjSfbTvSzZXn7GiaMwhhVPHkeTEhrPT/sys/unix"
+	unix "golang.org/x/sys/unix"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/blang/semver"
 )
 

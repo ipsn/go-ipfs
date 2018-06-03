@@ -11,7 +11,7 @@ import (
 	"log"
 	mrand "math/rand"
 
-	golog "github.com/ipfs/go-log"
+	golog "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	libp2p "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p"
 	crypto "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	host "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"

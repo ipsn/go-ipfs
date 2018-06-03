@@ -19,7 +19,7 @@ import (
 	homedir "github.com/ipsn/go-ipfs/Godeps/_workspace/src/github.com/mitchellh/go-homedir"
 
 	process "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
-	fsnotify "gopkg.in/fsnotify.v1"
+	fsnotify "github.com/fsnotify/fsnotify"
 )
 
 var http = flag.Bool("http", false, "expose IPFS HTTP API")

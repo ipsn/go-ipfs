@@ -8,8 +8,10 @@ import (
 	"sync"
 	"time"
 
+	proto "github.com/gogo/protobuf/proto"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	logging "github.com/ipfs/go-log"
+	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kad-dht/pb"
 	kb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kbucket"
 	inet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
@@ -19,6 +21,7 @@ import (
 	record "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record"
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
 	notif "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing/notifications"
+	ropts "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing/options"
 )
 
 // asyncQueryBuffer is the size of buffered channels in async queries. This
@@ -33,7 +36,7 @@ var asyncQueryBuffer = 10
 
 // PutValue adds value corresponding to given Key.
 // This is the top level "Store" operation of the DHT
-func (dht *IpfsDHT) PutValue(ctx context.Context, key string, value []byte) (err error) {
+func (dht *IpfsDHT) PutValue(ctx context.Context, key string, value []byte, opts ...ropts.Option) (err error) {
 	eip := log.EventBegin(ctx, "PutValue")
 	defer func() {
 		eip.Append(loggableKey(key))
@@ -43,22 +46,9 @@ func (dht *IpfsDHT) PutValue(ctx context.Context, key string, value []byte) (err
 		eip.Done()
 	}()
 	log.Debugf("PutValue %s", key)
-	sk, err := dht.getOwnPrivateKey()
-	if err != nil {
-		return err
-	}
 
-	sign, err := dht.Validator.IsSigned(key)
-	if err != nil {
-		return err
-	}
-
-	rec, err := record.MakePutRecord(sk, key, value, sign)
-	if err != nil {
-		log.Debug("creation of record failed!")
-		return err
-	}
-
+	rec := record.MakePutRecord(key, value)
+	rec.TimeReceived = proto.String(u.FormatRFC3339(time.Now()))
 	err = dht.putLocal(key, rec)
 	if err != nil {
 		return err
@@ -91,8 +81,14 @@ func (dht *IpfsDHT) PutValue(ctx context.Context, key string, value []byte) (err
 	return nil
 }
 
+// RecvdVal stores a value and the peer from which we got the value.
+type RecvdVal struct {
+	Val  []byte
+	From peer.ID
+}
+
 // GetValue searches for the value corresponding to given Key.
-func (dht *IpfsDHT) GetValue(ctx context.Context, key string) (_ []byte, err error) {
+func (dht *IpfsDHT) GetValue(ctx context.Context, key string, opts ...ropts.Option) (_ []byte, err error) {
 	eip := log.EventBegin(ctx, "GetValue")
 	defer func() {
 		eip.Append(loggableKey(key))
@@ -104,7 +100,17 @@ func (dht *IpfsDHT) GetValue(ctx context.Context, key string) (_ []byte, err err
 	ctx, cancel := context.WithTimeout(ctx, time.Minute)
 	defer cancel()
 
-	vals, err := dht.GetValues(ctx, key, 16)
+	var cfg ropts.Options
+	if err := cfg.Apply(opts...); err != nil {
+		return nil, err
+	}
+
+	responsesNeeded := 0
+	if !cfg.Offline {
+		responsesNeeded = getQuorum(&cfg)
+	}
+
+	vals, err := dht.GetValues(ctx, key, responsesNeeded)
 	if err != nil {
 		return nil, err
 	}
@@ -115,8 +121,11 @@ func (dht *IpfsDHT) GetValue(ctx context.Context, key string) (_ []byte, err err
 			recs = append(recs, v.Val)
 		}
 	}
+	if len(recs) == 0 {
+		return nil, routing.ErrNotFound
+	}
 
-	i, err := dht.Selector.BestRecord(key, recs)
+	i, err := dht.Validator.Select(key, recs)
 	if err != nil {
 		return nil, err
 	}
@@ -128,17 +137,11 @@ func (dht *IpfsDHT) GetValue(ctx context.Context, key string) (_ []byte, err err
 		return nil, routing.ErrNotFound
 	}
 
-	fixupRec, err := record.MakePutRecord(dht.peerstore.PrivKey(dht.self), key, best, true)
-	if err != nil {
-		// probably shouldnt actually 'error' here as we have found a value we like,
-		// but this call failing probably isnt something we want to ignore
-		return nil, err
-	}
-
+	fixupRec := record.MakePutRecord(key, best)
 	for _, v := range vals {
 		// if someone sent us a different 'less-valid' record, lets correct them
 		if !bytes.Equal(v.Val, best) {
-			go func(v routing.RecvdVal) {
+			go func(v RecvdVal) {
 				if v.From == dht.self {
 					err := dht.putLocal(key, fixupRec)
 					if err != nil {
@@ -159,7 +162,8 @@ func (dht *IpfsDHT) GetValue(ctx context.Context, key string) (_ []byte, err err
 	return best, nil
 }
 
-func (dht *IpfsDHT) GetValues(ctx context.Context, key string, nvals int) (_ []routing.RecvdVal, err error) {
+// GetValues gets nvals values corresponding to the given key.
+func (dht *IpfsDHT) GetValues(ctx context.Context, key string, nvals int) (_ []RecvdVal, err error) {
 	eip := log.EventBegin(ctx, "GetValues")
 	defer func() {
 		eip.Append(loggableKey(key))
@@ -168,16 +172,16 @@ func (dht *IpfsDHT) GetValues(ctx context.Context, key string, nvals int) (_ []r
 		}
 		eip.Done()
 	}()
-	vals := make([]routing.RecvdVal, 0, nvals)
+	vals := make([]RecvdVal, 0, nvals)
 	var valslock sync.Mutex
 
-	// If we have it local, dont bother doing an RPC!
+	// If we have it local, don't bother doing an RPC!
 	lrec, err := dht.getLocal(key)
 	if err == nil {
-		// TODO: this is tricky, we dont always want to trust our own value
+		// TODO: this is tricky, we don't always want to trust our own value
 		// what if the authoritative source updated it?
 		log.Debug("have it locally")
-		vals = append(vals, routing.RecvdVal{
+		vals = append(vals, RecvdVal{
 			Val:  lrec.GetValue(),
 			From: dht.self,
 		})
@@ -226,14 +230,14 @@ func (dht *IpfsDHT) GetValues(ctx context.Context, key string, nvals int) (_ []r
 		res := &dhtQueryResult{closerPeers: peers}
 
 		if rec.GetValue() != nil || err == errInvalidRecord {
-			rv := routing.RecvdVal{
+			rv := RecvdVal{
 				Val:  rec.GetValue(),
 				From: p,
 			}
 			valslock.Lock()
 			vals = append(vals, rv)
 
-			// If weve collected enough records, we're done
+			// If we have collected enough records, we're done
 			if len(vals) >= nvals {
 				res.success = true
 			}
@@ -260,8 +264,9 @@ func (dht *IpfsDHT) GetValues(ctx context.Context, key string, nvals int) (_ []r
 	return vals, nil
 }
 
-// Value provider layer of indirection.
-// This is what DSHTs (Coral and MainlineDHT) do to store large values in a DHT.
+// Provider abstraction for indirect stores.
+// Some DHTs store values directly, while an indirect store stores pointers to
+// locations of the value, similarly to Coral and Mainline DHT.
 
 // Provide makes this node announce that it can provide a value for the given key
 func (dht *IpfsDHT) Provide(ctx context.Context, key *cid.Cid, brdcst bool) (err error) {
@@ -357,7 +362,7 @@ func (dht *IpfsDHT) findProvidersAsyncRoutine(ctx context.Context, key *cid.Cid,
 			}
 		}
 
-		// If we have enough peers locally, dont bother with remote RPC
+		// If we have enough peers locally, don't bother with remote RPC
 		// TODO: is this a DOS vector?
 		if ps.Size() >= count {
 			return
@@ -517,6 +522,7 @@ func (dht *IpfsDHT) FindPeersConnectedToPeer(ctx context.Context, id peer.ID) (<
 
 	peerchan := make(chan *pstore.PeerInfo, asyncQueryBuffer)
 	peersSeen := make(map[peer.ID]struct{})
+	var peersSeenMx sync.Mutex
 
 	peers := dht.routingTable.NearestPeers(kb.ConvertPeerID(id), AlphaValue)
 	if len(peers) == 0 {
@@ -537,10 +543,13 @@ func (dht *IpfsDHT) FindPeersConnectedToPeer(ctx context.Context, id peer.ID) (<
 			pi := pb.PBPeerToPeerInfo(pbp)
 
 			// skip peers already seen
+			peersSeenMx.Lock()
 			if _, found := peersSeen[pi.ID]; found {
+				peersSeenMx.Unlock()
 				continue
 			}
 			peersSeen[pi.ID] = struct{}{}
+			peersSeenMx.Unlock()
 
 			// if peer is connected, send it to our client.
 			if pb.Connectedness(*pbp.Connection) == inet.Connected {

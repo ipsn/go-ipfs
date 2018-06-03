@@ -43,13 +43,10 @@ func (c *pskConn) Read(out []byte) (int, error) {
 
 	in = in[:maxn]            // truncate to required length
 	n, err := c.Conn.Read(in) // read to in
-	if err != nil {
-		return 0, err
+	if n > 0 {
+		c.readS20.XORKeyStream(out[:n], in[:n]) // decrypt to out buffer
 	}
-
-	c.readS20.XORKeyStream(out[:n], in[:n]) // decrypt to out buffer
-
-	return n, nil
+	return n, err
 }
 
 func (c *pskConn) Write(in []byte) (int, error) {

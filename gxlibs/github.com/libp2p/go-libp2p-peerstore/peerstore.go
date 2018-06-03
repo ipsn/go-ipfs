@@ -11,7 +11,7 @@ import (
 
 	//ds "github.com/jbenet/go-datastore"
 	//dssync "github.com/jbenet/go-datastore/sync"
-	logging "github.com/ipfs/go-log"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 )
@@ -127,6 +127,15 @@ func (kb *keybook) PubKey(p peer.ID) ic.PubKey {
 	kb.RLock()
 	pk := kb.pks[p]
 	kb.RUnlock()
+	if pk != nil {
+		return pk
+	}
+	pk, err := p.ExtractPublicKey()
+	if err == nil && pk != nil {
+		kb.Lock()
+		kb.pks[p] = pk
+		kb.Unlock()
+	}
 	return pk
 }
 

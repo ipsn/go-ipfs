@@ -8,14 +8,14 @@ import (
 
 	path "github.com/ipsn/go-ipfs/path"
 
-	dshelp "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-ds-help"
+	mockrouting "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/mock"
 	testutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
-	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
-	dssync "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
-	mockrouting "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/mock"
+	dshelp "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-ds-help"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
+	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
+	dssync "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
 )
 
 type identity struct {
@@ -49,14 +49,7 @@ func testNamekeyPublisher(t *testing.T, keyType int, expectedErr error, expected
 	}
 
 	// ID
-	var id peer.ID
-	switch keyType {
-	case ci.Ed25519:
-		id, err = peer.IDFromEd25519PublicKey(pubKey)
-	default:
-		id, err = peer.IDFromPublicKey(pubKey)
-	}
-
+	id, err := peer.IDFromPublicKey(pubKey)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -82,7 +75,12 @@ func testNamekeyPublisher(t *testing.T, keyType int, expectedErr error, expected
 	serv := mockrouting.NewServer()
 	r := serv.ClientWithDatastore(context.Background(), &identity{p}, dstore)
 
-	err = PutRecordToRouting(ctx, privKey, value, seqnum, eol, r, id)
+	entry, err := CreateRoutingEntryData(privKey, value, seqnum, eol)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = PutRecordToRouting(ctx, r, pubKey, entry)
 	if err != nil {
 		t.Fatal(err)
 	}

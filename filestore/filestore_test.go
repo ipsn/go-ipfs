@@ -9,10 +9,10 @@ import (
 
 	dag "github.com/ipsn/go-ipfs/merkledag"
 
-	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	posinfo "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-posinfo"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 )
 
 func newTestFilestore(t *testing.T) (string, *Filestore) {

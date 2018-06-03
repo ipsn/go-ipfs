@@ -12,8 +12,8 @@ import (
 	. "github.com/ipsn/go-ipfs/namesys/republisher"
 	path "github.com/ipsn/go-ipfs/path"
 
-	mocknet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/net/mock"
 	goprocess "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
+	mocknet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/net/mock"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 )
 
@@ -58,7 +58,7 @@ func TestRepublish(t *testing.T) {
 	// have one node publish a record that is valid for 1 second
 	publisher := nodes[3]
 	p := path.FromString("/ipfs/QmUNLLsPACCz1vLxQVkXqqLX5R1X345qqfHbsf67hvA3Nn") // does not need to be valid
-	rp := namesys.NewRoutingPublisher(publisher.Routing, publisher.Repo.Datastore())
+	rp := namesys.NewIpnsPublisher(publisher.Routing, publisher.Repo.Datastore())
 	err := rp.PublishWithEOL(ctx, publisher.PrivateKey, p, time.Now().Add(time.Second))
 	if err != nil {
 		t.Fatal(err)
@@ -78,7 +78,7 @@ func TestRepublish(t *testing.T) {
 	// The republishers that are contained within the nodes have their timeout set
 	// to 12 hours. Instead of trying to tweak those, we're just going to pretend
 	// they dont exist and make our own.
-	repub := NewRepublisher(publisher.Routing, publisher.Repo.Datastore(), publisher.PrivateKey, publisher.Repo.Keystore())
+	repub := NewRepublisher(rp, publisher.Repo.Datastore(), publisher.PrivateKey, publisher.Repo.Keystore())
 	repub.Interval = time.Second
 	repub.RecordLifetime = time.Second * 5
 

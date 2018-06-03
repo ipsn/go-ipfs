@@ -1,4 +1,4 @@
-// package crypto implements various cryptographic utilities used by ipfs.
+// Package crypto implements various cryptographic utilities used by ipfs.
 // This includes a Public and Private key interface and an RSA key implementation
 // that satisfies it.
 package crypto
@@ -15,13 +15,13 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/sha1"
-	"crypto/sha256"
 	"crypto/sha512"
 	"hash"
 
 	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto/pb"
 
-	proto "github.com/gogo/protobuf/proto"
+	"github.com/gogo/protobuf/proto"
+	sha256 "github.com/minio/sha256-simd"
 )
 
 var ErrBadKeyType = errors.New("invalid or unsupported key type")
@@ -31,6 +31,30 @@ const (
 	Ed25519
 	Secp256k1
 )
+
+var KeyTypes = []int{
+	RSA,
+	Ed25519,
+	Secp256k1,
+}
+
+// PubKeyUnmarshaller is a func that creates a PubKey from a given slice of bytes
+type PubKeyUnmarshaller func(data []byte) (PubKey, error)
+
+// PrivKeyUnmarshaller is a func that creates a PrivKey from a given slice of bytes
+type PrivKeyUnmarshaller func(data []byte) (PrivKey, error)
+
+var PubKeyUnmarshallers = map[pb.KeyType]PubKeyUnmarshaller{
+	pb.KeyType_RSA:       UnmarshalRsaPublicKey,
+	pb.KeyType_Ed25519:   UnmarshalEd25519PublicKey,
+	pb.KeyType_Secp256k1: UnmarshalSecp256k1PublicKey,
+}
+
+var PrivKeyUnmarshallers = map[pb.KeyType]PrivKeyUnmarshaller{
+	pb.KeyType_RSA:       UnmarshalRsaPrivateKey,
+	pb.KeyType_Ed25519:   UnmarshalEd25519PrivateKey,
+	pb.KeyType_Secp256k1: UnmarshalSecp256k1PrivateKey,
+}
 
 // Key represents a crypto key that can be compared to another key
 type Key interface {
@@ -226,18 +250,12 @@ func UnmarshalPublicKey(data []byte) (PubKey, error) {
 		return nil, err
 	}
 
-	switch pmes.GetType() {
-	case pb.KeyType_RSA:
-		return UnmarshalRsaPublicKey(pmes.GetData())
-	case pb.KeyType_Ed25519:
-		var pubk [32]byte
-		copy(pubk[:], pmes.Data)
-		return &Ed25519PublicKey{&pubk}, nil
-	case pb.KeyType_Secp256k1:
-		return UnmarshalSecp256k1PublicKey(pmes.GetData())
-	default:
+	um, ok := PubKeyUnmarshallers[pmes.GetType()]
+	if !ok {
 		return nil, ErrBadKeyType
 	}
+
+	return um(pmes.GetData())
 }
 
 // MarshalPublicKey converts a public key object into a protobuf serialized
@@ -255,16 +273,12 @@ func UnmarshalPrivateKey(data []byte) (PrivKey, error) {
 		return nil, err
 	}
 
-	switch pmes.GetType() {
-	case pb.KeyType_RSA:
-		return UnmarshalRsaPrivateKey(pmes.GetData())
-	case pb.KeyType_Ed25519:
-		return UnmarshalEd25519PrivateKey(pmes.GetData())
-	case pb.KeyType_Secp256k1:
-		return UnmarshalSecp256k1PrivateKey(pmes.GetData())
-	default:
+	um, ok := PrivKeyUnmarshallers[pmes.GetType()]
+	if !ok {
 		return nil, ErrBadKeyType
 	}
+
+	return um(pmes.GetData())
 }
 
 // MarshalPrivateKey converts a key object into its protobuf serialized form.
@@ -274,6 +288,8 @@ func MarshalPrivateKey(k PrivKey) ([]byte, error) {
 	case *Ed25519PrivateKey:
 		return k.Bytes()
 	case *RsaPrivateKey:
+		return k.Bytes()
+	case *Secp256k1PrivateKey:
 		return k.Bytes()
 	default:
 		return nil, ErrBadKeyType

@@ -20,10 +20,10 @@ import (
 	unixfs "github.com/ipsn/go-ipfs/unixfs"
 
 	cbor "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-cbor"
-	datastore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
-	syncds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
+	datastore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
+	syncds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
 )
 
 const testPeerID = "QmTFauExutTsy4XP6JbMFcw2Wa9645HJt2bTqL6qYDCKfe"

@@ -83,13 +83,13 @@ func TestMoveRestart(t *testing.T) {
 	// try the move it should fail partly through
 	err = flatfs.Move(v1dir, v2dir, nil)
 	if err == nil {
-		t.Fatalf("Move should have failed.", err)
+		t.Fatal("Move should have failed.", err)
 	}
 
 	// okay try to undo should be okay
 	err = flatfs.Move(v2dir, v1dir, nil)
 	if err != nil {
-		t.Fatalf("Could not undo the move.", err)
+		t.Fatal("Could not undo the move.", err)
 	}
 	checkKeys(t, v1dir, keys, blocks)
 
@@ -100,7 +100,7 @@ func TestMoveRestart(t *testing.T) {
 	createDatastore(t, v2dir, flatfs.NextToLast(2))
 	err = flatfs.Move(v1dir, v2dir, nil)
 	if err == nil {
-		t.Fatalf("Move should have failed.", err)
+		t.Fatal("Move should have failed.", err)
 	}
 
 	// fix the permission problem
@@ -150,7 +150,7 @@ func TestUpgradeDownload(t *testing.T) {
 
 	_, err = os.Stat(filepath.Join(tempdir, flatfs.SHARDING_FN))
 	if err == nil {
-		t.Fatalf("%v not in v0 format, SHARDING FILE exists")
+		t.Fatalf("%v not in v0 format, SHARDING FILE exists", tempdir)
 	} else if !os.IsNotExist(err) {
 		t.Fatalf("Stat fail: %v\n", err)
 	}
@@ -172,7 +172,7 @@ func TestDownloadNonPrefix(t *testing.T) {
 
 	err := flatfs.DowngradeV1toV0(tempdir)
 	if err == nil {
-		t.Fatalf("DowngradeV1toV0 should have failed", err)
+		t.Fatal("DowngradeV1toV0 should have failed", err)
 	}
 }
 
@@ -195,6 +195,7 @@ func populateDatastore(t *testing.T, dir string) ([]datastore.Key, [][]byte) {
 	if err != nil {
 		t.Fatalf("Open fail: %v\n", err)
 	}
+	defer ds.Close()
 
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	var blocks [][]byte
@@ -220,6 +221,7 @@ func checkKeys(t *testing.T, dir string, keys []datastore.Key, blocks [][]byte) 
 	if err != nil {
 		t.Fatalf("Open fail: %v\n", err)
 	}
+	defer ds.Close()
 
 	for i, key := range keys {
 		data, err := ds.Get(key)

@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	pro "github.com/ipsn/go-ipfs/gxlibs/github.com/gxed/client_golang/prometheus"
-	logging "github.com/ipfs/go-log"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	metrics "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-metrics-interface"
 )
 

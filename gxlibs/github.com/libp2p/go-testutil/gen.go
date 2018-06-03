@@ -8,7 +8,6 @@ import (
 	"sync"
 	"testing"
 
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	ptest "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer/test"
@@ -47,12 +46,6 @@ func RandPeerID() (peer.ID, error) {
 	rand.Read(buf)
 	h, _ := mh.Sum(buf, mh.SHA2_256, -1)
 	return peer.ID(h), nil
-}
-
-func RandCidV0() (*cid.Cid, error) {
-	buf := make([]byte, 16)
-	rand.Read(buf)
-	return cid.NewCidV0(buf), nil
 }
 
 func RandPeerIDFatal(t testing.TB) peer.ID {

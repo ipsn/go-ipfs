@@ -8,8 +8,6 @@ import (
 	"time"
 
 	ggio "github.com/gogo/protobuf/io"
-	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
-	dssync "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kad-dht/pb"
 	inet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
@@ -31,8 +29,10 @@ func TestGetFailures(t *testing.T) {
 	}
 	hosts := mn.Hosts()
 
-	tsds := dssync.MutexWrap(ds.NewMapDatastore())
-	d := NewDHT(ctx, hosts[0], tsds)
+	d, err := New(ctx, hosts[0])
+	if err != nil {
+		t.Fatal(err)
+	}
 	d.Update(ctx, hosts[1].ID())
 
 	// Reply with failures to every message
@@ -103,15 +103,7 @@ func TestGetFailures(t *testing.T) {
 		typ := pb.Message_GET_VALUE
 		str := "hello"
 
-		sk, err := d.getOwnPrivateKey()
-		if err != nil {
-			t.Fatal(err)
-		}
-
-		rec, err := record.MakePutRecord(sk, str, []byte("blah"), true)
-		if err != nil {
-			t.Fatal(err)
-		}
+		rec := record.MakePutRecord(str, []byte("blah"))
 		req := pb.Message{
 			Type:   &typ,
 			Key:    &str,
@@ -156,8 +148,10 @@ func TestNotFound(t *testing.T) {
 		t.Fatal(err)
 	}
 	hosts := mn.Hosts()
-	tsds := dssync.MutexWrap(ds.NewMapDatastore())
-	d := NewDHT(ctx, hosts[0], tsds)
+	d, err := New(ctx, hosts[0])
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	for _, p := range hosts {
 		d.Update(ctx, p.ID())
@@ -233,8 +227,10 @@ func TestLessThanKResponses(t *testing.T) {
 	}
 	hosts := mn.Hosts()
 
-	tsds := dssync.MutexWrap(ds.NewMapDatastore())
-	d := NewDHT(ctx, hosts[0], tsds)
+	d, err := New(ctx, hosts[0])
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	for i := 1; i < 5; i++ {
 		d.Update(ctx, hosts[i].ID())
@@ -300,8 +296,10 @@ func TestMultipleQueries(t *testing.T) {
 		t.Fatal(err)
 	}
 	hosts := mn.Hosts()
-	tsds := dssync.MutexWrap(ds.NewMapDatastore())
-	d := NewDHT(ctx, hosts[0], tsds)
+	d, err := New(ctx, hosts[0])
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	d.Update(ctx, hosts[1].ID())
 

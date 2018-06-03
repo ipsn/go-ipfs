@@ -17,6 +17,7 @@ import (
 	record "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record"
 	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record/pb"
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
+	ropts "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing/options"
 )
 
 // ErrOffline is returned when trying to perform operations that
@@ -41,11 +42,8 @@ type offlineRouting struct {
 	sk        ci.PrivKey
 }
 
-func (c *offlineRouting) PutValue(ctx context.Context, key string, val []byte) error {
-	rec, err := record.MakePutRecord(c.sk, key, val, false)
-	if err != nil {
-		return err
-	}
+func (c *offlineRouting) PutValue(ctx context.Context, key string, val []byte, _ ...ropts.Option) error {
+	rec := record.MakePutRecord(key, val)
 	data, err := proto.Marshal(rec)
 	if err != nil {
 		return err
@@ -54,7 +52,7 @@ func (c *offlineRouting) PutValue(ctx context.Context, key string, val []byte) e
 	return c.datastore.Put(dshelp.NewKeyFromBinary([]byte(key)), data)
 }
 
-func (c *offlineRouting) GetValue(ctx context.Context, key string) ([]byte, error) {
+func (c *offlineRouting) GetValue(ctx context.Context, key string, _ ...ropts.Option) ([]byte, error) {
 	v, err := c.datastore.Get(dshelp.NewKeyFromBinary([]byte(key)))
 	if err != nil {
 		return nil, err
@@ -71,27 +69,6 @@ func (c *offlineRouting) GetValue(ctx context.Context, key string) ([]byte, erro
 	}
 
 	return rec.GetValue(), nil
-}
-
-func (c *offlineRouting) GetValues(ctx context.Context, key string, _ int) ([]routing.RecvdVal, error) {
-	v, err := c.datastore.Get(dshelp.NewKeyFromBinary([]byte(key)))
-	if err != nil {
-		return nil, err
-	}
-
-	byt, ok := v.([]byte)
-	if !ok {
-		return nil, errors.New("value stored in datastore not []byte")
-	}
-	rec := new(pb.Record)
-	err = proto.Unmarshal(byt, rec)
-	if err != nil {
-		return nil, err
-	}
-
-	return []routing.RecvdVal{
-		{Val: rec.GetValue()},
-	}, nil
 }
 
 func (c *offlineRouting) FindPeer(ctx context.Context, pid peer.ID) (pstore.PeerInfo, error) {

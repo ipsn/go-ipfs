@@ -9,7 +9,7 @@ import (
 
 	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-floodsub/pb"
 
-	logging "github.com/ipfs/go-log"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	host "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
 	inet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
@@ -65,6 +65,9 @@ type PubSub struct {
 
 	// addVal handles validator registration requests
 	addVal chan *addValReq
+
+	// rmVal handles validator unregistration requests
+	rmVal chan *rmValReq
 
 	// topicVals tracks per topic validators
 	topicVals map[string]*topicVal
@@ -124,6 +127,7 @@ func NewPubSub(ctx context.Context, h host.Host, rt PubSubRouter, opts ...Option
 		getTopics:        make(chan *topicReq),
 		sendMsg:          make(chan *sendReq, 32),
 		addVal:           make(chan *addValReq),
+		rmVal:            make(chan *rmValReq),
 		validateThrottle: make(chan struct{}, defaultValidateThrottle),
 		myTopics:         make(map[string]map[*Subscription]struct{}),
 		topics:           make(map[string]map[peer.ID]struct{}),
@@ -240,6 +244,9 @@ func (p *PubSub) processLoop(ctx context.Context) {
 		case req := <-p.addVal:
 			p.addValidator(req)
 
+		case req := <-p.rmVal:
+			p.rmValidator(req)
+
 		case <-ctx.Done():
 			log.Info("pubsub processloop shutting down")
 			return
@@ -319,7 +326,11 @@ func (p *PubSub) notifySubs(msg *pb.Message) {
 	for _, topic := range msg.GetTopicIDs() {
 		subs := p.myTopics[topic]
 		for f := range subs {
-			f.ch <- &Message{msg}
+			select {
+			case f.ch <- &Message{msg}:
+			default:
+				log.Infof("Can't deliver message to subscription for topic %s; subscriber too slow", topic)
+			}
 		}
 	}
 }
@@ -586,6 +597,11 @@ type addValReq struct {
 	resp     chan error
 }
 
+type rmValReq struct {
+	topic string
+	resp  chan error
+}
+
 type topicVal struct {
 	topic            string
 	validate         Validator
@@ -660,6 +676,30 @@ func (ps *PubSub) addValidator(req *addValReq) {
 
 	ps.topicVals[topic] = val
 	req.resp <- nil
+}
+
+// UnregisterTopicValidator removes a validator from a topic
+// returns an error if there was no validator registered with the topic
+func (p *PubSub) UnregisterTopicValidator(topic string) error {
+	rmVal := &rmValReq{
+		topic: topic,
+		resp:  make(chan error, 1),
+	}
+
+	p.rmVal <- rmVal
+	return <-rmVal.resp
+}
+
+func (ps *PubSub) rmValidator(req *rmValReq) {
+	topic := req.topic
+
+	_, ok := ps.topicVals[topic]
+	if ok {
+		delete(ps.topicVals, topic)
+		req.resp <- nil
+	} else {
+		req.resp <- fmt.Errorf("No validator for topic %s", topic)
+	}
 }
 
 func (val *topicVal) validateMsg(ctx context.Context, msg *Message) bool {

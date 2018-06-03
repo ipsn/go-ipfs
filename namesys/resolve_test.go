@@ -8,11 +8,11 @@ import (
 
 	path "github.com/ipsn/go-ipfs/path"
 
+	mockrouting "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/mock"
 	testutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	dssync "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
-	mockrouting "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/mock"
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 )
 
 func TestRoutingResolve(t *testing.T) {
@@ -21,8 +21,8 @@ func TestRoutingResolve(t *testing.T) {
 	id := testutil.RandIdentityOrFatal(t)
 	d := serv.ClientWithDatastore(context.Background(), id, dstore)
 
-	resolver := NewRoutingResolver(d, 0)
-	publisher := NewRoutingPublisher(d, dstore)
+	resolver := NewIpnsResolver(d)
+	publisher := NewIpnsPublisher(d, dstore)
 
 	privk, pubk, err := testutil.RandTestKeyPair(512)
 	if err != nil {
@@ -54,8 +54,8 @@ func TestPrexistingExpiredRecord(t *testing.T) {
 	dstore := dssync.MutexWrap(ds.NewMapDatastore())
 	d := mockrouting.NewServer().ClientWithDatastore(context.Background(), testutil.RandIdentityOrFatal(t), dstore)
 
-	resolver := NewRoutingResolver(d, 0)
-	publisher := NewRoutingPublisher(d, dstore)
+	resolver := NewIpnsResolver(d)
+	publisher := NewIpnsPublisher(d, dstore)
 
 	privk, pubk, err := testutil.RandTestKeyPair(512)
 	if err != nil {
@@ -70,7 +70,12 @@ func TestPrexistingExpiredRecord(t *testing.T) {
 	// Make an expired record and put it in the datastore
 	h := path.FromString("/ipfs/QmZULkCELmmk5XNfCgTnCyFgAVxBRBXyDHGGMVoLFLiXEN")
 	eol := time.Now().Add(time.Hour * -1)
-	err = PutRecordToRouting(context.Background(), privk, h, 0, eol, d, id)
+
+	entry, err := CreateRoutingEntryData(privk, h, 0, eol)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = PutRecordToRouting(context.Background(), d, pubk, entry)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -91,8 +96,8 @@ func TestPrexistingRecord(t *testing.T) {
 	dstore := dssync.MutexWrap(ds.NewMapDatastore())
 	d := mockrouting.NewServer().ClientWithDatastore(context.Background(), testutil.RandIdentityOrFatal(t), dstore)
 
-	resolver := NewRoutingResolver(d, 0)
-	publisher := NewRoutingPublisher(d, dstore)
+	resolver := NewIpnsResolver(d)
+	publisher := NewIpnsPublisher(d, dstore)
 
 	privk, pubk, err := testutil.RandTestKeyPair(512)
 	if err != nil {
@@ -107,7 +112,11 @@ func TestPrexistingRecord(t *testing.T) {
 	// Make a good record and put it in the datastore
 	h := path.FromString("/ipfs/QmZULkCELmmk5XNfCgTnCyFgAVxBRBXyDHGGMVoLFLiXEN")
 	eol := time.Now().Add(time.Hour)
-	err = PutRecordToRouting(context.Background(), privk, h, 0, eol, d, id)
+	entry, err := CreateRoutingEntryData(privk, h, 0, eol)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = PutRecordToRouting(context.Background(), d, pubk, entry)
 	if err != nil {
 		t.Fatal(err)
 	}
