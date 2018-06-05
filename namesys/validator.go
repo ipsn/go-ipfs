@@ -3,11 +3,13 @@ package namesys
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"time"
 
 	pb "github.com/ipsn/go-ipfs/namesys/pb"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
+	ic "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	record "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record"
@@ -42,6 +44,8 @@ var ErrKeyFormat = errors.New("record key could not be parsed into peer ID")
 // from the peer store
 var ErrPublicKeyNotFound = errors.New("public key not found in peer store")
 
+var ErrPublicKeyMismatch = errors.New("public key in record did not match expected pubkey")
+
 type IpnsValidator struct {
 	KeyBook pstore.KeyBook
 }
@@ -65,10 +69,10 @@ func (v IpnsValidator) Validate(key string, value []byte) error {
 		log.Debugf("failed to parse ipns record key %s into peer ID", pidString)
 		return ErrKeyFormat
 	}
-	pubk := v.KeyBook.PubKey(pid)
-	if pubk == nil {
-		log.Debugf("public key with hash %s not found in peer store", pid)
-		return ErrPublicKeyNotFound
+
+	pubk, err := v.getPublicKey(pid, entry)
+	if err != nil {
+		return err
 	}
 
 	// Check the ipns record signature with the public key
@@ -92,6 +96,34 @@ func (v IpnsValidator) Validate(key string, value []byte) error {
 		return ErrUnrecognizedValidity
 	}
 	return nil
+}
+
+func (v IpnsValidator) getPublicKey(pid peer.ID, entry *pb.IpnsEntry) (ic.PubKey, error) {
+	if entry.PubKey != nil {
+		pk, err := ic.UnmarshalPublicKey(entry.PubKey)
+		if err != nil {
+			log.Debugf("public key in ipns record failed to parse: ", err)
+			return nil, fmt.Errorf("unmarshaling pubkey in record: %s", err)
+		}
+
+		expPid, err := peer.IDFromPublicKey(pk)
+		if err != nil {
+			return nil, fmt.Errorf("could not regenerate peerID from pubkey: %s", err)
+		}
+
+		if pid != expPid {
+			return nil, ErrPublicKeyMismatch
+		}
+
+		return pk, nil
+	}
+
+	pubk := v.KeyBook.PubKey(pid)
+	if pubk == nil {
+		log.Debugf("public key with hash %s not found in peer store", pid)
+		return nil, ErrPublicKeyNotFound
+	}
+	return pubk, nil
 }
 
 // IpnsSelectorFunc selects the best record by checking which has the highest
