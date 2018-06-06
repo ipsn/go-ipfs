@@ -8,6 +8,7 @@ import (
 )
 
 func newMultiaddr(t *testing.T, s string) ma.Multiaddr {
+	t.Helper()
 	maddr, err := ma.NewMultiaddr(s)
 	if err != nil {
 		t.Fatal(err)
@@ -18,39 +19,24 @@ func newMultiaddr(t *testing.T, s string) ma.Multiaddr {
 func TestFilterAddrs(t *testing.T) {
 
 	bad := []ma.Multiaddr{
-		newMultiaddr(t, "/ip4/1.2.3.4/udp/1234"),           // unreliable
-		newMultiaddr(t, "/ip4/1.2.3.4/udp/1234/sctp/1234"), // not in manet
-		newMultiaddr(t, "/ip4/1.2.3.4/udp/1234/udt"),       // udt is broken on arm
-		newMultiaddr(t, "/ip6/fe80::1/tcp/1234"),           // link local
-		newMultiaddr(t, "/ip6/fe80::100/tcp/1234"),         // link local
+		newMultiaddr(t, "/ip6/fe80::1/tcp/1234"),   // link local
+		newMultiaddr(t, "/ip6/fe80::100/tcp/1234"), // link local
 	}
 
 	good := []ma.Multiaddr{
 		newMultiaddr(t, "/ip4/127.0.0.1/tcp/1234"),
 		newMultiaddr(t, "/ip6/::1/tcp/1234"),
 		newMultiaddr(t, "/ip4/1.2.3.4/udp/1234/utp"),
-		newMultiaddr(t, "/ip4/1.2.3.4/tcp/1234/ws"),
 	}
 
 	goodAndBad := append(good, bad...)
 
 	// test filters
+	filter := AddrOverNonLocalIP
 
-	for _, a := range bad {
-		if AddrUsable(a, false) {
-			t.Errorf("addr %s should be unusable", a)
-		}
-	}
-
-	for _, a := range good {
-		if !AddrUsable(a, false) {
-			t.Errorf("addr %s should be usable", a)
-		}
-	}
-
-	subtestAddrsEqual(t, FilterUsableAddrs(bad), []ma.Multiaddr{})
-	subtestAddrsEqual(t, FilterUsableAddrs(good), good)
-	subtestAddrsEqual(t, FilterUsableAddrs(goodAndBad), good)
+	subtestAddrsEqual(t, FilterAddrs(bad, filter), []ma.Multiaddr{})
+	subtestAddrsEqual(t, FilterAddrs(good, filter), good)
+	subtestAddrsEqual(t, FilterAddrs(goodAndBad, filter), good)
 }
 
 func subtestAddrsEqual(t *testing.T, a, b []ma.Multiaddr) {

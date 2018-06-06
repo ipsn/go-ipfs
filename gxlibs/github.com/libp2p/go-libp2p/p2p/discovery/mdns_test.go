@@ -8,7 +8,7 @@ import (
 	bhost "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/host/basic"
 
 	host "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
-	netutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-netutil"
+	swarmt "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-swarm/testing"
 
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 )
@@ -28,8 +28,8 @@ func TestMdnsDiscovery(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	a := bhost.New(netutil.GenSwarmNetwork(t, ctx))
-	b := bhost.New(netutil.GenSwarmNetwork(t, ctx))
+	a := bhost.New(swarmt.GenSwarm(t, ctx))
+	b := bhost.New(swarmt.GenSwarm(t, ctx))
 
 	sa, err := NewMdnsService(ctx, a, time.Second, "someTag")
 	if err != nil {

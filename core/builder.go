@@ -20,11 +20,13 @@ import (
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
 
 	metrics "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-metrics-interface"
+	libp2p "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p"
 	goprocessctx "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess/context"
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
+	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
-	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
+	p2phost "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	retry "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/retrystore"
@@ -41,6 +43,10 @@ type BuildCfg struct {
 	// If permanent then node should run more expensive processes
 	// that will improve performance in long run
 	Permanent bool
+
+	// DisableEncryptedConnections disables connection encryption *entirely*.
+	// DO NOT SET THIS UNLESS YOU'RE TESTING.
+	DisableEncryptedConnections bool
 
 	// If NilRepo is set, a repo backed by a nil datastore will be constructed
 	NilRepo bool
@@ -126,6 +132,7 @@ func NewNode(ctx context.Context, cfg *BuildCfg) (*IpfsNode, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	ctx = metrics.CtxScope(ctx, "ipfs")
 
 	n := &IpfsNode{
@@ -214,9 +221,19 @@ func setupNode(ctx context.Context, n *IpfsNode, cfg *BuildCfg) error {
 		bs.HashOnRead(true)
 	}
 
+	hostOption := cfg.Host
+	if cfg.DisableEncryptedConnections {
+		innerHostOption := hostOption
+		hostOption = func(ctx context.Context, id peer.ID, ps pstore.Peerstore, options ...libp2p.Option) (p2phost.Host, error) {
+			return innerHostOption(ctx, id, ps, append(options, libp2p.NoSecurity)...)
+		}
+		log.Warningf(`Your IPFS node has been configured to run WITHOUT ENCRYPTED CONNECTIONS.
+		You will not be able to connect to any nodes configured to use encrypted connections`)
+	}
+
 	if cfg.Online {
 		do := setupDiscoveryOption(rcfg.Discovery)
-		if err := n.startOnlineServices(ctx, cfg.Routing, cfg.Host, do, cfg.getOpt("pubsub"), cfg.getOpt("ipnsps"), cfg.getOpt("mplex")); err != nil {
+		if err := n.startOnlineServices(ctx, cfg.Routing, hostOption, do, cfg.getOpt("pubsub"), cfg.getOpt("ipnsps"), cfg.getOpt("mplex")); err != nil {
 			return err
 		}
 	} else {

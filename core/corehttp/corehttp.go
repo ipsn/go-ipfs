@@ -11,10 +11,10 @@ import (
 	"time"
 
 	core "github.com/ipsn/go-ipfs/core"
-	manet "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
+	manet "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
 )
 
 var log = logging.Logger("core/server")
@@ -61,7 +61,7 @@ func ListenAndServe(n *core.IpfsNode, listeningMultiAddr string, options ...Serv
 	addr = list.Multiaddr()
 	fmt.Printf("API server listening on %s\n", addr)
 
-	return Serve(n, list.NetListener(), options...)
+	return Serve(n, manet.NetListener(list), options...)
 }
 
 func Serve(node *core.IpfsNode, lis net.Listener, options ...ServeOption) error {

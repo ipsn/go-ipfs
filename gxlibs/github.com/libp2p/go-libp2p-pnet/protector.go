@@ -1,10 +1,11 @@
 package pnet
 
 import (
+	"fmt"
 	"io"
+	"net"
 
 	ipnet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-interface-pnet"
-	tconn "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-transport"
 )
 
 var _ ipnet.Protector = (*protector)(nil)
@@ -14,7 +15,7 @@ var _ ipnet.Protector = (*protector)(nil)
 func NewProtector(input io.Reader) (ipnet.Protector, error) {
 	psk, err := decodeV1PSK(input)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("malformed private network key: %s", err)
 	}
 	return NewV1ProtectorFromBytes(psk)
 }
@@ -32,7 +33,7 @@ type protector struct {
 	fingerprint []byte
 }
 
-func (p protector) Protect(in tconn.Conn) (tconn.Conn, error) {
+func (p protector) Protect(in net.Conn) (net.Conn, error) {
 	return newPSKConn(p.psk, in)
 }
 func (p protector) Fingerprint() []byte {

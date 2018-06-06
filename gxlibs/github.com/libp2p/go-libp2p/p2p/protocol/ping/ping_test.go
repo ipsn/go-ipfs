@@ -5,17 +5,17 @@ import (
 	"testing"
 	"time"
 
-	netutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-netutil"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
+	swarmt "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-swarm/testing"
 	bhost "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/host/basic"
 )
 
 func TestPing(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	h1 := bhost.New(netutil.GenSwarmNetwork(t, ctx))
-	h2 := bhost.New(netutil.GenSwarmNetwork(t, ctx))
+	h1 := bhost.New(swarmt.GenSwarm(t, ctx))
+	h2 := bhost.New(swarmt.GenSwarm(t, ctx))
 
 	err := h1.Connect(ctx, pstore.PeerInfo{
 		ID:    h2.ID(),

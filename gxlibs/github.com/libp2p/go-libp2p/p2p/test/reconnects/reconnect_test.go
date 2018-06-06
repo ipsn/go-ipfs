@@ -14,16 +14,9 @@ import (
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	host "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
 	inet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
-	testutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-netutil"
 	protocol "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-protocol"
-	swarm "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-swarm"
-	ps "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-peerstream"
+	swarmt "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-swarm/testing"
 )
-
-func init() {
-	// change the garbage collect timeout for testing.
-	ps.GarbageCollectTimeout = 10 * time.Millisecond
-}
 
 var log = logging.Logger("reconnect")
 
@@ -109,8 +102,8 @@ func newSender() (chan sendChans, func(s inet.Stream)) {
 // TestReconnect tests whether hosts are able to disconnect and reconnect.
 func TestReconnect2(t *testing.T) {
 	ctx := context.Background()
-	h1 := bhost.New(testutil.GenSwarmNetwork(t, ctx))
-	h2 := bhost.New(testutil.GenSwarmNetwork(t, ctx))
+	h1 := bhost.New(swarmt.GenSwarm(t, ctx))
+	h2 := bhost.New(swarmt.GenSwarm(t, ctx))
 	hosts := []host.Host{h1, h2}
 
 	h1.SetStreamHandler(protocol.TestingID, EchoStreamHandler)
@@ -129,11 +122,11 @@ func TestReconnect2(t *testing.T) {
 // TestReconnect tests whether hosts are able to disconnect and reconnect.
 func TestReconnect5(t *testing.T) {
 	ctx := context.Background()
-	h1 := bhost.New(testutil.GenSwarmNetwork(t, ctx))
-	h2 := bhost.New(testutil.GenSwarmNetwork(t, ctx))
-	h3 := bhost.New(testutil.GenSwarmNetwork(t, ctx))
-	h4 := bhost.New(testutil.GenSwarmNetwork(t, ctx))
-	h5 := bhost.New(testutil.GenSwarmNetwork(t, ctx))
+	h1 := bhost.New(swarmt.GenSwarm(t, ctx))
+	h2 := bhost.New(swarmt.GenSwarm(t, ctx))
+	h3 := bhost.New(swarmt.GenSwarm(t, ctx))
+	h4 := bhost.New(swarmt.GenSwarm(t, ctx))
+	h5 := bhost.New(swarmt.GenSwarm(t, ctx))
 	hosts := []host.Host{h1, h2, h3, h4, h5}
 
 	h1.SetStreamHandler(protocol.TestingID, EchoStreamHandler)
@@ -219,13 +212,11 @@ func SubtestConnSendDisc(t *testing.T, hosts []host.Host) {
 		// close connection
 		cs := h1.Network().Conns()
 		for _, c := range cs {
-			sc := c.(*swarm.Conn)
-			if sc.LocalPeer() > sc.RemotePeer() {
-				continue // only close it on one side.
+			if c.LocalPeer() > c.RemotePeer() {
+				continue
 			}
-
-			log.Debugf("closing: %s", sc.RawConn())
-			sc.Close()
+			log.Debugf("closing: %s", c)
+			c.Close()
 		}
 	}
 

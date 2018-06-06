@@ -6,9 +6,9 @@ import (
 	"time"
 
 	ic "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
-	testutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-netutil"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
+	swarmt "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-swarm/testing"
 	identify "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/protocol/identify"
 
 	blhost "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-blankhost"
@@ -20,8 +20,8 @@ func subtestIDService(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	h1 := blhost.NewBlankHost(testutil.GenSwarmNetwork(t, ctx))
-	h2 := blhost.NewBlankHost(testutil.GenSwarmNetwork(t, ctx))
+	h1 := blhost.NewBlankHost(swarmt.GenSwarm(t, ctx))
+	h2 := blhost.NewBlankHost(swarmt.GenSwarm(t, ctx))
 
 	h1p := h1.ID()
 	h2p := h2.ID()
@@ -65,7 +65,7 @@ func subtestIDService(t *testing.T) {
 	ids2.IdentifyConn(c[0])
 
 	addrs := h1.Peerstore().Addrs(h1p)
-	addrs = append(addrs, c[0].RemoteMultiaddr(), forgetMe)
+	addrs = append(addrs, forgetMe)
 
 	// and the protocol versions.
 	t.Log("test peer2 has peer1 addrs correctly")

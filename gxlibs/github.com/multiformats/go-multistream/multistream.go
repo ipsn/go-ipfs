@@ -1,3 +1,6 @@
+// Package multistream implements a simple stream router for the
+// multistream-select protocoli. The protocol is defined at
+// https://github.com/multiformats/multistream-select
 package multistream
 
 import (
@@ -9,23 +12,34 @@ import (
 	"sync"
 )
 
+// ErrTooLarge is an error to signal that an incoming message was too large
 var ErrTooLarge = errors.New("incoming message was too large")
 
+// ProtocolID identifies the multistream protocol itself and makes sure
+// the multistream muxers on both sides of a channel can work with each other.
 const ProtocolID = "/multistream/1.0.0"
 
-type HandlerFunc func(string, io.ReadWriteCloser) error
+// HandlerFunc is a user-provided function used by the MultistreamMuxer to
+// handle a protocol/stream.
+type HandlerFunc func(protocol string, rwc io.ReadWriteCloser) error
 
+// Handler is a wrapper to HandlerFunc which attaches a name (protocol) and a
+// match function which can optionally be used to select a handler by other
+// means than the name.
 type Handler struct {
 	MatchFunc func(string) bool
 	Handle    HandlerFunc
 	AddName   string
 }
 
+// MultistreamMuxer is a muxer for multistream. Depending on the stream
+// protocol tag it will select the right handler and hand the stream off to it.
 type MultistreamMuxer struct {
 	handlerlock sync.Mutex
 	handlers    []Handler
 }
 
+// NewMultistreamMuxer creates a muxer.
 func NewMultistreamMuxer() *MultistreamMuxer {
 	return new(MultistreamMuxer)
 }
@@ -68,6 +82,8 @@ func delimWrite(w io.Writer, mes []byte) error {
 	return nil
 }
 
+// Ls is a Multistream muxer command which returns the list of handler names
+// available on a muxer.
 func Ls(rw io.ReadWriter) ([]string, error) {
 	err := delimWriteBuffered(rw, []byte("ls"))
 	if err != nil {
@@ -97,21 +113,26 @@ func fulltextMatch(s string) func(string) bool {
 	}
 }
 
+// AddHandler attaches a new protocol handler to the muxer.
 func (msm *MultistreamMuxer) AddHandler(protocol string, handler HandlerFunc) {
 	msm.AddHandlerWithFunc(protocol, fulltextMatch(protocol), handler)
 }
 
+// AddHandlerWithFunc attaches a new protocol handler to the muxer with a match.
+// If the match function returns true for a given protocol tag, the protocol
+// will be selected even if the handler name and protocol tags are different.
 func (msm *MultistreamMuxer) AddHandlerWithFunc(protocol string, match func(string) bool, handler HandlerFunc) {
 	msm.handlerlock.Lock()
 	msm.removeHandler(protocol)
 	msm.handlers = append(msm.handlers, Handler{
-		MatchFunc: fulltextMatch(protocol),
+		MatchFunc: match,
 		Handle:    handler,
 		AddName:   protocol,
 	})
 	msm.handlerlock.Unlock()
 }
 
+// RemoveHandler removes the handler with the given name from the muxer.
 func (msm *MultistreamMuxer) RemoveHandler(protocol string) {
 	msm.handlerlock.Lock()
 	defer msm.handlerlock.Unlock()
@@ -128,6 +149,7 @@ func (msm *MultistreamMuxer) removeHandler(protocol string) {
 	}
 }
 
+// Protocols returns the list of handler-names added to this this muxer.
 func (msm *MultistreamMuxer) Protocols() []string {
 	var out []string
 	msm.handlerlock.Lock()
@@ -138,6 +160,8 @@ func (msm *MultistreamMuxer) Protocols() []string {
 	return out
 }
 
+// ErrIncorrectVersion is an error reported when the muxer protocol negotiation
+// fails because of a ProtocolID mismatch.
 var ErrIncorrectVersion = errors.New("client connected with incorrect version")
 
 func (msm *MultistreamMuxer) findHandler(proto string) *Handler {
@@ -153,25 +177,24 @@ func (msm *MultistreamMuxer) findHandler(proto string) *Handler {
 	return nil
 }
 
+// NegotiateLazy performs protocol selection and returns
+// a multistream, the protocol used, the handler and an error. It is lazy
+// because the write-handshake is performed on a subroutine, allowing this
+// to return before that handshake is completed.
 func (msm *MultistreamMuxer) NegotiateLazy(rwc io.ReadWriteCloser) (Multistream, string, HandlerFunc, error) {
 	pval := make(chan string, 1)
 	writeErr := make(chan error, 1)
 	defer close(pval)
 
-	lzc := &lazyConn{
-		con:        rwc,
-		rhandshake: true,
-		rhsync:     true,
+	lzc := &lazyServerConn{
+		con: rwc,
 	}
 
-	// take lock here to prevent a race condition where the reads below from
-	// finishing and taking the write lock before this goroutine can
-	lzc.whlock.Lock()
+	started := make(chan struct{})
+	go lzc.waitForHandshake.Do(func() {
+		close(started)
 
-	go func() {
 		defer close(writeErr)
-		defer lzc.whlock.Unlock()
-		lzc.whsync = true
 
 		if err := delimWriteBuffered(rwc, []byte(ProtocolID)); err != nil {
 			lzc.werr = err
@@ -186,8 +209,8 @@ func (msm *MultistreamMuxer) NegotiateLazy(rwc io.ReadWriteCloser) (Multistream,
 				return
 			}
 		}
-		lzc.whandshake = true
-	}()
+	})
+	<-started
 
 	line, err := ReadNextToken(rwc)
 	if err != nil {
@@ -204,6 +227,7 @@ loop:
 		// Now read and respond to commands until they send a valid protocol id
 		tok, err := ReadNextToken(rwc)
 		if err != nil {
+			rwc.Close()
 			return nil, "", nil, err
 		}
 
@@ -212,6 +236,7 @@ loop:
 			select {
 			case pval <- "ls":
 			case err := <-writeErr:
+				rwc.Close()
 				return nil, "", nil, err
 			}
 		default:
@@ -220,6 +245,7 @@ loop:
 				select {
 				case pval <- "na":
 				case err := <-writeErr:
+					rwc.Close()
 					return nil, "", nil, err
 				}
 				continue loop
@@ -239,6 +265,8 @@ loop:
 	}
 }
 
+// Negotiate performs protocol selection and returns the protocol name and
+// the matching handler function for it (or an error).
 func (msm *MultistreamMuxer) Negotiate(rwc io.ReadWriteCloser) (string, HandlerFunc, error) {
 	// Send our protocol ID
 	err := delimWriteBuffered(rwc, []byte(ProtocolID))
@@ -292,6 +320,8 @@ loop:
 
 }
 
+// Ls implements the "ls" command which writes the list of
+// supported protocols to the given Writer.
 func (msm *MultistreamMuxer) Ls(w io.Writer) error {
 	buf := new(bytes.Buffer)
 	msm.handlerlock.Lock()
@@ -317,6 +347,9 @@ func (msm *MultistreamMuxer) Ls(w io.Writer) error {
 	return err
 }
 
+// Handle performs protocol negotiation on a ReadWriteCloser
+// (i.e. a connection). It will find a matching handler for the
+// incoming protocol and pass the ReadWriteCloser to it.
 func (msm *MultistreamMuxer) Handle(rwc io.ReadWriteCloser) error {
 	p, h, err := msm.Negotiate(rwc)
 	if err != nil {
@@ -325,6 +358,8 @@ func (msm *MultistreamMuxer) Handle(rwc io.ReadWriteCloser) error {
 	return h(p, rwc)
 }
 
+// ReadNextToken extracts a token from a ReadWriter. It is used during
+// protocol negotiation and returns a string.
 func ReadNextToken(rw io.ReadWriter) (string, error) {
 	tok, err := ReadNextTokenBytes(rw)
 	if err != nil {
@@ -334,6 +369,8 @@ func ReadNextToken(rw io.ReadWriter) (string, error) {
 	return string(tok), nil
 }
 
+// ReadNextTokenBytes extracts a token from a ReadWriter. It is used
+// during protocol negotiation and returns a byte slice.
 func ReadNextTokenBytes(rw io.ReadWriter) ([]byte, error) {
 	data, err := lpReadBuf(rw)
 	switch err {
@@ -351,10 +388,8 @@ func ReadNextTokenBytes(rw io.ReadWriter) ([]byte, error) {
 }
 
 func lpReadBuf(r io.Reader) ([]byte, error) {
-	var br byteReaderIface
-	if mbr, ok := r.(byteReaderIface); ok {
-		br = mbr
-	} else {
+	br, ok := r.(io.ByteReader)
+	if !ok {
 		br = &byteReader{r}
 	}
 
@@ -368,7 +403,7 @@ func lpReadBuf(r io.Reader) ([]byte, error) {
 	}
 
 	buf := make([]byte, length)
-	_, err = io.ReadFull(br, buf)
+	_, err = io.ReadFull(r, buf)
 	if err != nil {
 		return nil, err
 	}
@@ -384,11 +419,6 @@ func lpReadBuf(r io.Reader) ([]byte, error) {
 
 }
 
-type byteReaderIface interface {
-	Read([]byte) (int, error)
-	ReadByte() (byte, error)
-}
-
 // byteReader implements the ByteReader interface that ReadUVarint requires
 type byteReader struct {
 	io.Reader
@@ -396,10 +426,15 @@ type byteReader struct {
 
 func (br *byteReader) ReadByte() (byte, error) {
 	var b [1]byte
-	_, err := br.Read(b[:])
-
-	if err != nil {
-		return 0, err
+	n, err := br.Read(b[:])
+	if n == 1 {
+		return b[0], nil
 	}
-	return b[0], nil
+	if err == nil {
+		if n != 0 {
+			panic("read more bytes than buffer size")
+		}
+		err = io.ErrNoProgress
+	}
+	return 0, err
 }

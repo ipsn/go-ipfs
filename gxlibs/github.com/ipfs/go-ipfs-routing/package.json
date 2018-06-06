@@ -9,20 +9,20 @@
   "gxDependencies": [
     {
       "author": "whyrusleeping",
-      "hash": "QmfZTdmunzKzAGJrSvXXQbQ5kLLUiEMX5vdwux7iXkdk7D",
+      "hash": "QmdHyfNVTZ5VtUx4Xz23z8wtnioSrFQ28XSfpVkdhQBkGA",
       "name": "go-libp2p-host",
-      "version": "2.1.7"
+      "version": "3.0.0"
     },
     {
-      "hash": "QmUHRKTeaoASDvDj7cTAXsmjAY7KQ13ErtzkQHZQq6uFUz",
+      "hash": "QmXijJ3T9MjB2v8xpFDoEX6FqR9u8PkJkzu49TgwJ8Ndr5",
       "name": "go-libp2p-routing",
-      "version": "2.3.0"
+      "version": "2.4.0"
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmdeiKhUy1TVGBaKxt7y1QmBDLBdisSrLJ1x58Eoj4PXUh",
+      "hash": "QmZb7hAgQEhW9dBbzBudU39gCeD4zbe6xafD52LUuF4cUN",
       "name": "go-libp2p-peerstore",
-      "version": "1.4.17"
+      "version": "1.4.18"
     },
     {
       "author": "whyrusleeping",
@@ -64,6 +64,41 @@
       "hash": "QmYJgz1Z5PbBGP7n2XA8uv5sF1EKLfYUjL7kFemVAjMNqC",
       "name": "go-ipfs-ds-help",
       "version": "0.0.3"
+    },
+    {
+      "author": "whyrusleeping",
+      "hash": "QmNiJuT8Ja3hMVpBHXv3Q6dwmperaQ6JjLtpMQgMCD7xvx",
+      "name": "go-ipfs-util",
+      "version": "1.2.7"
+    },
+    {
+      "hash": "QmTG23dvpBCBjqQwyDxV8CQT6jmS4PSftNr1VqHhE3MLy7",
+      "name": "go-log",
+      "version": "1.4.1"
+    },
+    {
+      "author": "multiformats",
+      "hash": "QmWWQ2Txc2c6tqjsBpzg5Ar652cHPGNsQQp2SejkNmkUMb",
+      "name": "go-multiaddr",
+      "version": "1.2.6"
+    },
+    {
+      "author": "whyrusleeping",
+      "hash": "QmZ4Qi3GaRbjcx28Sme5eMH7RQjGkt8wHxt2a65oLaeFEV",
+      "name": "gogo-protobuf",
+      "version": "0.0.0"
+    },
+    {
+      "author": "multiformats",
+      "hash": "QmZyZDi491cCNTLfAhwcaDii2Kg4pwKRkhqQzURGDvY6ua",
+      "name": "go-multihash",
+      "version": "1.0.7"
+    },
+    {
+      "author": "whyrusleeping",
+      "hash": "Qme1knMqwt1hKZbc1BmQFmnm9f36nyQGwXxPGVpVJ9rMK5",
+      "name": "go-libp2p-crypto",
+      "version": "1.6.2"
     }
   ],
   "gxVersion": "0.12.1",
@@ -71,6 +106,6 @@
   "license": "MIT",
   "name": "go-ipfs-routing",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.0.7"
+  "version": "0.0.9"
 }
 

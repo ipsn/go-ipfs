@@ -14,21 +14,15 @@
     },
     {
       "author": "jbenet",
-      "hash": "QmRK2LxanhK2gZq6k6R7vk5ZoYZk8ULSSTB7FzDsMUX6CB",
+      "hash": "QmcGXGdw9BWDysPJQHxJinjGHha3eEg4vzFETre4woNwcX",
       "name": "go-multiaddr-net",
-      "version": "1.5.7"
+      "version": "1.6.0"
     },
     {
       "author": "whyrusleeping",
       "hash": "QmTy17Jm1foTnvUS9JXRhLbRQ3XuC64jPTjUfpB4mHz2QM",
       "name": "mafmt",
       "version": "1.2.5"
-    },
-    {
-      "author": "whyrusleeping",
-      "hash": "QmU6Yf4jad9eAv9FmCqcYU2S7iN7aQwY2erG376ZDs1j7a",
-      "name": "go-ws-transport",
-      "version": "1.6.6"
     },
     {
       "author": "multiformats",
@@ -42,6 +36,6 @@
   "license": "MIT",
   "name": "go-addr-util",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "1.2.7"
+  "version": "2.0.0"
 }
 

@@ -4,19 +4,14 @@ import (
 	"bytes"
 	"context"
 	"math/rand"
+	"net"
 	"testing"
-
-	dconn "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-dummy-conn"
-	tconn "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-transport"
 )
 
 var testPSK = [32]byte{} // null bytes are as good test key as any other key
 
-func setupPSKConns(ctx context.Context, t *testing.T) (tconn.Conn, tconn.Conn) {
-	conn1, conn2, err := dconn.NewDummyConnPair()
-	if err != nil {
-		t.Fatal(err)
-	}
+func setupPSKConns(ctx context.Context, t *testing.T) (net.Conn, net.Conn) {
+	conn1, conn2 := net.Pipe()
 
 	psk1, err := newPSKConn(&testPSK, conn1)
 	if err != nil {
@@ -37,14 +32,21 @@ func TestPSKSimpelMessges(t *testing.T) {
 	msg1 := []byte("hello world")
 	out1 := make([]byte, len(msg1))
 
-	_, err := psk1.Write(msg1)
-	if err != nil {
-		t.Fatal(err)
-	}
+	wch := make(chan error)
+	go func() {
+		_, err := psk1.Write(msg1)
+		wch <- err
+	}()
 	n, err := psk2.Read(out1)
 	if err != nil {
 		t.Fatal(err)
 	}
+
+	err = <-wch
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	if n != len(out1) {
 		t.Fatalf("expected to read %d bytes, read: %d", len(out1), n)
 	}
@@ -68,10 +70,11 @@ func TestPSKFragmentation(t *testing.T) {
 
 	out := make([]byte, 100)
 
-	_, err = psk1.Write(in)
-	if err != nil {
-		t.Fatal(err)
-	}
+	wch := make(chan error)
+	go func() {
+		_, err := psk1.Write(in)
+		wch <- err
+	}()
 
 	for i := 0; i < 10; i++ {
 		_, err = psk2.Read(out)
@@ -79,5 +82,10 @@ func TestPSKFragmentation(t *testing.T) {
 			t.Fatalf("input and output are not the same")
 		}
 		in = in[100:]
+	}
+
+	err = <-wch
+	if err != nil {
+		t.Fatal(err)
 	}
 }

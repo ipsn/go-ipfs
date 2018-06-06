@@ -9,14 +9,14 @@ import (
 	bsmsg "github.com/ipsn/go-ipfs/exchange/bitswap/message"
 
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
-	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
+	ifconnmgr "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-interface-connmgr"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
+	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
 	inet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
 	ggio "github.com/gogo/protobuf/io"
+	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
-	ifconnmgr "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-interface-connmgr"
 	host "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
 )
 
@@ -54,7 +54,7 @@ type streamMessageSender struct {
 }
 
 func (s *streamMessageSender) Close() error {
-	return s.s.Close()
+	return inet.FullClose(s.s)
 }
 
 func (s *streamMessageSender) Reset() error {
@@ -119,13 +119,13 @@ func (bsnet *impl) SendMessage(
 		return err
 	}
 
-	err = msgToStream(ctx, s, outgoing)
-	if err != nil {
+	if err = msgToStream(ctx, s, outgoing); err != nil {
 		s.Reset()
-	} else {
-		s.Close()
+		return err
 	}
-	return err
+	// Yes, return this error. We have no reason to believe that the block
+	// was actually *sent* unless we see the EOF.
+	return inet.FullClose(s)
 }
 
 func (bsnet *impl) SetDelegate(r Receiver) {

@@ -9,33 +9,15 @@
   "gxDependencies": [
     {
       "author": "whyrusleeping",
-      "hash": "QmXoz9o2PT3tEzf7hicegwex5UgVP54n3k82K7jrWFyN86",
-      "name": "go-libp2p-net",
-      "version": "2.0.7"
-    },
-    {
-      "author": "whyrusleeping",
-      "hash": "QmUJzxQQ2kzwQubsMqBTr1NGDpLfh7pGA2E1oaJULcKDPq",
-      "name": "go-testutil",
-      "version": "1.2.1"
-    },
-    {
-      "author": "whyrusleeping",
-      "hash": "QmRqfgh56f8CrqpwH7D2s6t8zQRsvPoftT3sp5Y6SUhNA3",
-      "name": "go-libp2p-swarm",
-      "version": "2.1.7"
-    },
-    {
-      "author": "whyrusleeping",
       "hash": "Qme1knMqwt1hKZbc1BmQFmnm9f36nyQGwXxPGVpVJ9rMK5",
       "name": "go-libp2p-crypto",
       "version": "1.6.2"
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmdeiKhUy1TVGBaKxt7y1QmBDLBdisSrLJ1x58Eoj4PXUh",
+      "hash": "QmZb7hAgQEhW9dBbzBudU39gCeD4zbe6xafD52LUuF4cUN",
       "name": "go-libp2p-peerstore",
-      "version": "1.4.17"
+      "version": "1.4.18"
     },
     {
       "hash": "QmTG23dvpBCBjqQwyDxV8CQT6jmS4PSftNr1VqHhE3MLy7",
@@ -53,6 +35,12 @@
       "hash": "QmcJukH2sAFjY3HdBKq35WDzWoL3UUu2gt9wdfqZTUyM74",
       "name": "go-libp2p-peer",
       "version": "2.3.2"
+    },
+    {
+      "author": "whyrusleeping",
+      "hash": "QmUJzxQQ2kzwQubsMqBTr1NGDpLfh7pGA2E1oaJULcKDPq",
+      "name": "go-testutil",
+      "version": "1.2.1"
     }
   ],
   "gxVersion": "0.10.0",
@@ -60,6 +48,6 @@
   "license": "",
   "name": "go-libp2p-netutil",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.3.11"
+  "version": "0.4.0"
 }
 

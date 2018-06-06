@@ -9,14 +9,14 @@ import (
 	floodsub "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-floodsub"
 	bhost "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-blankhost"
 	p2phost "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
-	netutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-netutil"
 	record "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record"
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
 	rhelper "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing-helpers"
+	swarmt "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-swarm/testing"
 )
 
 func newNetHost(ctx context.Context, t *testing.T) p2phost.Host {
-	netw := netutil.GenSwarmNetwork(t, ctx)
+	netw := swarmt.GenSwarm(t, ctx)
 	return bhost.NewBlankHost(netw)
 }
 
