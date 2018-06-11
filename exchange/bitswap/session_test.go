@@ -7,9 +7,9 @@ import (
 	"time"
 
 	tu "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 	blocksutil "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blocksutil"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 )
 
 func TestBasicSessions(t *testing.T) {

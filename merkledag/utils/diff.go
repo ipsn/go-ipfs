@@ -7,8 +7,8 @@ import (
 
 	dag "github.com/ipsn/go-ipfs/merkledag"
 
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 )
 
 // These constants define the changes that can be applied to a DAG.

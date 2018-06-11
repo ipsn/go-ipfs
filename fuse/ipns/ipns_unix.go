@@ -18,12 +18,12 @@ import (
 	path "github.com/ipsn/go-ipfs/path"
 	ft "github.com/ipsn/go-ipfs/unixfs"
 
-	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	fuse "bazil.org/fuse"
 	fs "bazil.org/fuse/fs"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 )
 
 func init() {

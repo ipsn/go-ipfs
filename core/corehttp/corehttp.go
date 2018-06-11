@@ -11,10 +11,10 @@ import (
 	"time"
 
 	core "github.com/ipsn/go-ipfs/core"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
-	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
-	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	manet "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
+	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 )
 
 var log = logging.Logger("core/server")

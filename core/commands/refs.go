@@ -12,9 +12,9 @@ import (
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 	path "github.com/ipsn/go-ipfs/path"
 
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
 
 // KeyList is a general type for outputting lists of keys

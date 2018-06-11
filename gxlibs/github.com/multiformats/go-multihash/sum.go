@@ -6,12 +6,12 @@ import (
 	"errors"
 	"fmt"
 
+	keccak "github.com/gxed/hashland/keccakpg"
 	blake2b "github.com/minio/blake2b-simd"
 	sha256 "github.com/minio/sha256-simd"
 	murmur3 "github.com/spaolacci/murmur3"
 	blake2s "golang.org/x/crypto/blake2s"
 	sha3 "golang.org/x/crypto/sha3"
-	keccak "github.com/ipsn/go-ipfs/gxlibs/leb.io/hashland/keccakpg"
 )
 
 // ErrSumNotSupported is returned when the Sum function code is not implemented
@@ -47,21 +47,12 @@ func Sum(data []byte, code uint64, length int) (Multihash, error) {
 			return nil, fmt.Errorf("unsupported length for blake2s: %d", olen)
 		}
 	case isBlake2b(code):
-		olen := code - BLAKE2B_MIN + 1
-		switch olen {
-		case 32:
-			d = sumBlake2b256(data)
-		case 48:
-			d = sumBlake2b384(data)
-		case 64:
-			d = sumBlake2b512(data)
-		default:
-			return nil, fmt.Errorf("unsupported length for blake2b: %d", olen)
-		}
+		olen := uint8(code - BLAKE2B_MIN + 1)
+		d = sumBlake2b(olen, data)
 	default:
 		switch code {
 		case ID:
-			d = sumID(data)
+			d, err = sumID(data, length)
 		case SHA1:
 			d = sumSHA1(data)
 		case SHA2_256:
@@ -112,32 +103,26 @@ func isBlake2b(code uint64) bool {
 	return code >= BLAKE2B_MIN && code <= BLAKE2B_MAX
 }
 
-func sumBlake2b256(data []byte) []byte {
-	out := blake2b.Sum256(data)
-	return out[:]
-}
-
-var blake2b384Config = &blake2b.Config{Size: 384 / 8}
-
-func sumBlake2b384(data []byte) []byte {
-	hasher, err := blake2b.New(blake2b384Config)
+func sumBlake2b(size uint8, data []byte) []byte {
+	hasher, err := blake2b.New(&blake2b.Config{Size: size})
 	if err != nil {
 		panic(err)
 	}
+
 	if _, err := hasher.Write(data); err != nil {
 		panic(err)
 	}
-	return hasher.Sum(nil)
 
+	return hasher.Sum(nil)[:]
 }
 
-func sumBlake2b512(data []byte) []byte {
-	out := blake2b.Sum512(data)
-	return out[:]
-}
+func sumID(data []byte, length int) ([]byte, error) {
+	if length >= 0 && length != len(data) {
+		return nil, fmt.Errorf("the length of the identity hash (%d) must be equal to the length of the data (%d)",
+			length, len(data))
 
-func sumID(data []byte) []byte {
-	return data
+	}
+	return data, nil
 }
 
 func sumSHA1(data []byte) []byte {

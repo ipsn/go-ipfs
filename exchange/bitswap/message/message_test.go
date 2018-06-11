@@ -7,9 +7,9 @@ import (
 	pb "github.com/ipsn/go-ipfs/exchange/bitswap/message/pb"
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
+	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 	proto "github.com/gogo/protobuf/proto"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 )
 
 func mkFakeCid(s string) *cid.Cid {

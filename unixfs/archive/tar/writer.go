@@ -15,8 +15,8 @@ import (
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
 	upb "github.com/ipsn/go-ipfs/unixfs/pb"
 
-	proto "github.com/gogo/protobuf/proto"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	proto "github.com/gogo/protobuf/proto"
 )
 
 // Writer is a utility structure that helps to write

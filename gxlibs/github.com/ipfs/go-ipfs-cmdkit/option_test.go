@@ -75,7 +75,7 @@ func TestParse(t *testing.T) {
 		{opt: IntOption("int1"), str: "42", v: 42},
 		{opt: IntOption("int1"), str: "fourtytwo", err: `strconv.ParseInt: parsing "fourtytwo": invalid syntax`},
 		{opt: IntOption("int2"), str: "-42", v: -42},
-		{opt: UintOption("uint1"), str: "23", v: 23},
+		{opt: UintOption("uint1"), str: "23", v: uint(23)},
 		{opt: UintOption("uint2"), str: "-23", err: `strconv.ParseUint: parsing "-23": invalid syntax`},
 		{opt: BoolOption("true"), str: "true", v: true},
 		{opt: BoolOption("true"), str: "", v: true},
@@ -88,11 +88,11 @@ func TestParse(t *testing.T) {
 		if err != nil && err.Error() != tc.err {
 			t.Errorf("unexpected error: %s", err)
 		} else if err == nil && tc.err != "" {
-			t.Errorf("expected error %q but got nil")
+			t.Errorf("expected error %q but got nil", tc.err)
 		}
 
 		if v != tc.v {
-			t.Error("expected %v but got %v", tc.v, v)
+			t.Errorf("expected %v but got %v", tc.v, v)
 		}
 	}
 }

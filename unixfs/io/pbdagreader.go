@@ -10,9 +10,9 @@ import (
 	ft "github.com/ipsn/go-ipfs/unixfs"
 	ftpb "github.com/ipsn/go-ipfs/unixfs/pb"
 
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	proto "github.com/gogo/protobuf/proto"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
 
 // PBDagReader provides a way to easily read the data contained in a dag.

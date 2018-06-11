@@ -7,6 +7,7 @@ import (
 	cmds "github.com/ipsn/go-ipfs/commands"
 
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	lwriter "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log/writer"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
@@ -105,7 +106,7 @@ Outputs event log messages (not other log messages) as they are generated.
 			defer w.Close()
 			<-ctx.Done()
 		}()
-		logging.WriterGroup.AddWriter(w)
+		lwriter.WriterGroup.AddWriter(w)
 		res.SetOutput(r)
 	},
 }

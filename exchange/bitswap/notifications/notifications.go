@@ -4,9 +4,9 @@ import (
 	"context"
 	"sync"
 
+	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	pubsub "github.com/ipsn/go-ipfs/gxlibs/github.com/gxed/pubsub"
-	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 )
 
 const bufferSize = 16

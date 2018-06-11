@@ -30,9 +30,9 @@ import (
 	upb "github.com/ipsn/go-ipfs/unixfs/pb"
 
 	bitfield "github.com/ipsn/go-ipfs/gxlibs/github.com/Stebalien/go-bitfield"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	proto "github.com/gogo/protobuf/proto"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	"github.com/spaolacci/murmur3"
 )
 

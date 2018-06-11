@@ -93,7 +93,7 @@ var converters = map[reflect.Kind]converter{
 		if err != nil {
 			return nil, err
 		}
-		return int(val), err
+		return uint(val), err
 	},
 	Float: func(v string) (interface{}, error) {
 		return strconv.ParseFloat(v, 64)
@@ -106,7 +106,7 @@ var converters = map[reflect.Kind]converter{
 func (o *option) Parse(v string) (interface{}, error) {
 	conv, ok := converters[o.Type()]
 	if !ok {
-		return nil, fmt.Errorf("option %q takes %s arguments, but was passed %q", o, o.Type, v)
+		return nil, fmt.Errorf("option %q takes %s arguments, but was passed %q", o.Name(), o.Type(), v)
 	}
 
 	return conv(v)

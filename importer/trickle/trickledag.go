@@ -24,8 +24,8 @@ import (
 	dag "github.com/ipsn/go-ipfs/merkledag"
 	ft "github.com/ipsn/go-ipfs/unixfs"
 
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 )
 
 // layerRepeat specifies how many times to append a child tree of a

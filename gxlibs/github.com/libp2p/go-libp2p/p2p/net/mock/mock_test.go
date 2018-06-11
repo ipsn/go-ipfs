@@ -582,3 +582,57 @@ func TestLimitedStreams(t *testing.T) {
 		t.Fatal("Expected 2ish seconds but got ", time.Since(before))
 	}
 }
+
+func TestStreamsWithLatency(t *testing.T) {
+	latency := time.Millisecond * 500
+
+	mn, err := WithNPeers(context.Background(), 2)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// configure the Mocknet with some latency and link/connect its peers
+	mn.SetLinkDefaults(LinkOptions{Latency: latency})
+	mn.LinkAll()
+	mn.ConnectAllButSelf()
+
+	msg := []byte("ping")
+	mln := len(msg)
+
+	var wg sync.WaitGroup
+
+	// we'll write once to a single stream
+	wg.Add(1)
+
+	handler := func(s inet.Stream) {
+		b := make([]byte, mln)
+
+		if _, err := io.ReadFull(s, b); err != nil {
+			t.Fatal(err)
+		}
+
+		wg.Done()
+		s.Close()
+	}
+
+	mn.Hosts()[0].SetStreamHandler(protocol.TestingID, handler)
+	mn.Hosts()[1].SetStreamHandler(protocol.TestingID, handler)
+
+	s, err := mn.Hosts()[0].NewStream(context.Background(), mn.Hosts()[1].ID(), protocol.TestingID)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// writing to the stream will be subject to our configured latency
+	checkpoint := time.Now()
+	if _, err := s.Write(msg); err != nil {
+		t.Fatal(err)
+	}
+	wg.Wait()
+
+	delta := time.Since(checkpoint)
+	tolerance := time.Millisecond * 100
+	if !within(delta, latency, tolerance) {
+		t.Fatalf("Expected write to take ~%s (+/- %s), but took %s", latency.String(), tolerance.String(), delta.String())
+	}
+}
