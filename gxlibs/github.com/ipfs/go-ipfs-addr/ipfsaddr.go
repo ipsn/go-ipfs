@@ -104,8 +104,8 @@ func ParseMultiaddr(m ma.Multiaddr) (a IPFSAddr, err error) {
 	return ipfsAddr{ma: m, id: id}, nil
 }
 
-func Transport(iaddr IPFSAddr) (maddr ma.Multiaddr) {
-	maddr = iaddr.Multiaddr()
+func Transport(iaddr IPFSAddr) ma.Multiaddr {
+	maddr := iaddr.Multiaddr()
 
 	// /ipfs/QmId is part of the transport address for p2p-circuit
 	// TODO clean up the special case
@@ -117,6 +117,8 @@ func Transport(iaddr IPFSAddr) (maddr ma.Multiaddr) {
 	}
 
 	split := ma.Split(maddr)
-	maddr = ma.Join(split[:len(split)-1]...)
-	return
+	if len(split) == 1 {
+		return nil
+	}
+	return ma.Join(split[:len(split)-1]...)
 }

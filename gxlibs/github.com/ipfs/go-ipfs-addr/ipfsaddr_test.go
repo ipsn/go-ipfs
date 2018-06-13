@@ -126,12 +126,18 @@ func TestTransport(t *testing.T) {
 
 		m := newMultiaddr(t, g)
 		split := ma.Split(m)
-		m = ma.Join(split[:len(split)-1]...)
-		if a.Multiaddr().Equal(m) {
-			t.Error("should not be equal", a.Multiaddr(), m)
-		}
-		if !Transport(a).Equal(m) {
-			t.Error("should be equal", Transport(a), m)
+		if len(split) <= 1 {
+			if Transport(a) != nil {
+				t.Error("should not have a transport")
+			}
+		} else {
+			m = ma.Join(split[:len(split)-1]...)
+			if a.Multiaddr().Equal(m) {
+				t.Error("should not be equal", a.Multiaddr(), m)
+			}
+			if !Transport(a).Equal(m) {
+				t.Error("should be equal", Transport(a), m)
+			}
 		}
 	}
 }
