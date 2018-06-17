@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	logging "github.com/ipfs/go-log"
 	addrutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-addr-util"
 	lgbl "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-loggables"
 	inet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"

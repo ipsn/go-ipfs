@@ -3,7 +3,7 @@ package tcp
 import (
 	"context"
 
-	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	logging "github.com/ipfs/go-log"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	tpt "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-transport"
 	tptu "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-transport-upgrader"

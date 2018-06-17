@@ -6,17 +6,17 @@ import (
 	"time"
 
 	opts "github.com/ipsn/go-ipfs/namesys/opts"
-	pb "github.com/ipsn/go-ipfs/namesys/pb"
 	path "github.com/ipsn/go-ipfs/path"
 
-	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
+	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
+	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns/pb"
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	proto "github.com/gogo/protobuf/proto"
 	dht "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kad-dht"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	logging "github.com/ipsn/go-ipfs/gxlibs/ipfs/Qmbi1CTJsbnBZjCEgc2otwu8cUFPsGpzWXG7edVCLZ7Gvk/go-log"
 )
 
 var log = logging.Logger("namesys")
@@ -82,7 +82,7 @@ func (r *IpnsResolver) resolveOnce(ctx context.Context, name string, options *op
 	// Use the routing system to get the name.
 	// Note that the DHT will call the ipns validator when retrieving
 	// the value, which in turn verifies the ipns record signature
-	_, ipnsKey := IpnsKeysForID(pid)
+	ipnsKey := ipns.RecordKey(pid)
 	val, err := r.routing.GetValue(ctx, ipnsKey, dht.Quorum(int(options.DhtRecordCount)))
 	if err != nil {
 		log.Debugf("RoutingResolver: dht get for name %s failed: %s", name, err)
@@ -114,7 +114,10 @@ func (r *IpnsResolver) resolveOnce(ctx context.Context, name string, options *op
 	if entry.Ttl != nil {
 		ttl = time.Duration(*entry.Ttl)
 	}
-	if eol, ok := checkEOL(entry); ok {
+	switch eol, err := ipns.GetEOL(entry); err {
+	case ipns.ErrUnrecognizedValidity:
+		// No EOL.
+	case nil:
 		ttEol := eol.Sub(time.Now())
 		if ttEol < 0 {
 			// It *was* valid when we first resolved it.
@@ -122,18 +125,10 @@ func (r *IpnsResolver) resolveOnce(ctx context.Context, name string, options *op
 		} else if ttEol < ttl {
 			ttl = ttEol
 		}
+	default:
+		log.Errorf("encountered error when parsing EOL: %s", err)
+		return "", 0, err
 	}
 
 	return p, ttl, nil
-}
-
-func checkEOL(e *pb.IpnsEntry) (time.Time, bool) {
-	if e.GetValidityType() == pb.IpnsEntry_EOL {
-		eol, err := u.ParseRFC3339(string(e.GetValidity()))
-		if err != nil {
-			return time.Time{}, false
-		}
-		return eol, true
-	}
-	return time.Time{}, false
 }

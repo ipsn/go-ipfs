@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	logging "github.com/ipfs/go-log"
 	tec "github.com/jbenet/go-temp-err-catcher"
 	transport "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-transport"
 	manet "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log" // ID represents the identity of a peer.
+	logging "github.com/ipfs/go-log" // ID represents the identity of a peer.
 	ic "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	b58 "github.com/mr-tron/base58/base58"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"

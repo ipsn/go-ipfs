@@ -6,10 +6,9 @@ import (
 	"testing"
 	"time"
 
-	path "github.com/ipsn/go-ipfs/path"
-
 	dshelp "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-ds-help"
 	testutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
+	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	mockrouting "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/mock"
@@ -55,7 +54,7 @@ func testNamekeyPublisher(t *testing.T, keyType int, expectedErr error, expected
 	}
 
 	// Value
-	value := path.Path("ipfs/TESTING")
+	value := []byte("ipfs/TESTING")
 
 	// Seqnum
 	seqnum := uint64(0)
@@ -75,7 +74,7 @@ func testNamekeyPublisher(t *testing.T, keyType int, expectedErr error, expected
 	serv := mockrouting.NewServer()
 	r := serv.ClientWithDatastore(context.Background(), &identity{p}, dstore)
 
-	entry, err := CreateRoutingEntryData(privKey, value, seqnum, eol)
+	entry, err := ipns.Create(privKey, value, seqnum, eol)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -86,7 +85,7 @@ func testNamekeyPublisher(t *testing.T, keyType int, expectedErr error, expected
 	}
 
 	// Check for namekey existence in value store
-	namekey, _ := IpnsKeysForID(id)
+	namekey := PkKeyForID(id)
 	_, err = r.GetValue(ctx, namekey)
 	if err != expectedErr {
 		t.Fatal(err)

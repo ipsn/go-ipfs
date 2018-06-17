@@ -4,12 +4,15 @@ import (
 	"testing"
 
 	"github.com/ipsn/go-ipfs/namesys"
+
 	tu "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
+	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
 )
 
 func TestKeyTranslation(t *testing.T) {
 	pid := tu.RandPeerIDFatal(t)
-	a, b := namesys.IpnsKeysForID(pid)
+	pkname := namesys.PkKeyForID(pid)
+	ipnsname := ipns.RecordKey(pid)
 
 	pkk, err := escapeDhtKey("/pk/" + pid.Pretty())
 	if err != nil {
@@ -21,11 +24,11 @@ func TestKeyTranslation(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if pkk != a {
+	if pkk != pkname {
 		t.Fatal("keys didnt match!")
 	}
 
-	if ipnsk != b {
+	if ipnsk != ipnsname {
 		t.Fatal("keys didnt match!")
 	}
 }
