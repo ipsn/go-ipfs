@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	tracer "github.com/ipfs/go-log/tracer"
+	tracer "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log/tracer"
 
 	colorable "github.com/mattn/go-colorable"
 	opentrace "github.com/opentracing/opentracing-go"
@@ -121,6 +121,7 @@ func GetSubsystems() []string {
 
 func getLogger(name string) *logging.Logger {
 	log := logging.MustGetLogger(name)
+	log.ExtraCalldepth = 1
 	loggers[name] = log
 	return log
 }

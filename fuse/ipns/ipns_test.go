@@ -17,8 +17,8 @@ import (
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil/ci"
-	fstest "bazil.org/fuse/fs/fstestutil"
 	offroute "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
+	fstest "bazil.org/fuse/fs/fstestutil"
 	racedet "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-detect-race"
 )
 
@@ -122,7 +122,7 @@ func setupIpnsTest(t *testing.T, node *core.IpfsNode) (*core.IpfsNode, *mountWra
 			t.Fatal(err)
 		}
 
-		node.Routing = offroute.NewOfflineRouter(node.Repo.Datastore(), node.PrivateKey)
+		node.Routing = offroute.NewOfflineRouter(node.Repo.Datastore(), node.RecordValidator)
 		node.Namesys = namesys.NewNameSystem(node.Routing, node.Repo.Datastore(), 0)
 
 		err = InitializeKeyspace(node, node.PrivateKey)

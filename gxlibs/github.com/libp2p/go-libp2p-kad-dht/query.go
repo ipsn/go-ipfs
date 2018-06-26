@@ -10,7 +10,7 @@ import (
 	"sync"
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
-	logging "github.com/ipfs/go-log"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	todoctr "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-todocounter"
 	process "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
 	ctxproc "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess/context"

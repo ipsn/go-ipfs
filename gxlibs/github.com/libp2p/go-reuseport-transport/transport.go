@@ -4,7 +4,7 @@ import (
 	"errors"
 	"sync"
 
-	logging "github.com/ipfs/go-log"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 )
 
 var log = logging.Logger("reuseport-transport")

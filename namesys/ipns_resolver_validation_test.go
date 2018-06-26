@@ -11,12 +11,13 @@ import (
 	record "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record"
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	testutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
-	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
+	mockrouting "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/mock"
+	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
 	ropts "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing/options"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
-	mockrouting "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/mock"
+	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	dssync "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
@@ -30,6 +31,8 @@ func TestResolverValidation(t *testing.T) {
 
 	vstore := newMockValueStore(rid, dstore, peerstore)
 	resolver := NewIpnsResolver(vstore)
+
+	nvVstore := offline.NewOfflineRouter(dstore, mockrouting.MockValidator{})
 
 	// Create entry with expiry in one hour
 	priv, id, _, ipnsDHTPath := genKeys(t)
@@ -68,7 +71,7 @@ func TestResolverValidation(t *testing.T) {
 	}
 
 	// Publish entry
-	err = PublishEntry(ctx, vstore, ipnsDHTPath, expiredEntry)
+	err = PublishEntry(ctx, nvVstore, ipnsDHTPath, expiredEntry)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -89,7 +92,7 @@ func TestResolverValidation(t *testing.T) {
 	}
 
 	// Publish entry
-	err = PublishEntry(ctx, vstore, ipnsDHTPath2, entry)
+	err = PublishEntry(ctx, nvVstore, ipnsDHTPath2, entry)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -107,7 +110,7 @@ func TestResolverValidation(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = PublishEntry(ctx, vstore, ipnsDHTPath3, entry3)
+	err = PublishEntry(ctx, nvVstore, ipnsDHTPath3, entry3)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -152,31 +155,22 @@ func genKeys(t *testing.T) (ci.PrivKey, peer.ID, string, string) {
 }
 
 type mockValueStore struct {
-	r         routing.ValueStore
-	kbook     pstore.KeyBook
-	Validator record.Validator
+	r     routing.ValueStore
+	kbook pstore.KeyBook
 }
 
 func newMockValueStore(id testutil.Identity, dstore ds.Datastore, kbook pstore.KeyBook) *mockValueStore {
-	serv := mockrouting.NewServer()
-	r := serv.ClientWithDatastore(context.Background(), id, dstore)
-	return &mockValueStore{r, kbook, record.NamespacedValidator{
-		"ipns": ipns.Validator{KeyBook: kbook},
-		"pk":   record.PublicKeyValidator{},
-	}}
+	return &mockValueStore{
+		r: offline.NewOfflineRouter(dstore, record.NamespacedValidator{
+			"ipns": ipns.Validator{KeyBook: kbook},
+			"pk":   record.PublicKeyValidator{},
+		}),
+		kbook: kbook,
+	}
 }
 
 func (m *mockValueStore) GetValue(ctx context.Context, k string, opts ...ropts.Option) ([]byte, error) {
-	data, err := m.r.GetValue(ctx, k, opts...)
-	if err != nil {
-		return data, err
-	}
-
-	if err = m.Validator.Validate(k, data); err != nil {
-		return nil, err
-	}
-
-	return data, err
+	return m.r.GetValue(ctx, k, opts...)
 }
 
 func (m *mockValueStore) GetPublicKey(ctx context.Context, p peer.ID) (ci.PubKey, error) {

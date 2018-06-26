@@ -9,7 +9,7 @@ import (
 	"time"
 
 	nat "github.com/fd/go-nat"
-	logging "github.com/ipfs/go-log"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	goprocess "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
 	periodic "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess/periodic"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"

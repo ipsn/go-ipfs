@@ -3,7 +3,7 @@ package loggabletracer
 import (
 	"time"
 
-	writer "github.com/ipfs/go-log/writer"
+	writer "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log/writer"
 	opentracing "github.com/opentracing/opentracing-go"
 )
 

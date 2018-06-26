@@ -6,8 +6,8 @@ import (
 
 	cmds "github.com/ipsn/go-ipfs/commands"
 
-	logging "github.com/ipsn/go-ipfs/gxlibs/ipfs/Qmbi1CTJsbnBZjCEgc2otwu8cUFPsGpzWXG7edVCLZ7Gvk/go-log"
-	lwriter "github.com/ipsn/go-ipfs/gxlibs/ipfs/Qmbi1CTJsbnBZjCEgc2otwu8cUFPsGpzWXG7edVCLZ7Gvk/go-log/writer"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	lwriter "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log/writer"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 

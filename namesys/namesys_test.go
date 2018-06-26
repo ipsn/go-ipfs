@@ -11,6 +11,9 @@ import (
 	"github.com/ipsn/go-ipfs/unixfs"
 
 	offroute "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
+	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
+	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	dssync "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
@@ -83,7 +86,17 @@ func TestPublishWithCache0(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	routing := offroute.NewOfflineRouter(dst, priv)
+	ps := pstore.NewPeerstore()
+	pid, err := peer.IDFromPrivateKey(priv)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = ps.AddPrivKey(pid, priv)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	routing := offroute.NewOfflineRouter(dst, ipns.Validator{KeyBook: ps})
 
 	nsys := NewNameSystem(routing, dst, 0)
 	p, err := path.ParsePath(unixfs.EmptyDirNode().Cid().String())

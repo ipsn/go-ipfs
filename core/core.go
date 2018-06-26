@@ -42,7 +42,8 @@ import (
 	circuit "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-circuit"
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	p2phost "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
-	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
+	nilrouting "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/none"
+	offroute "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
 	floodsub "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-floodsub"
 	pnet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-pnet"
 	goprocess "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
@@ -67,10 +68,8 @@ import (
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	rhelpers "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing-helpers"
 	ifconnmgr "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-interface-connmgr"
-	nilrouting "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/none"
-	offroute "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
 	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
-	logging "github.com/ipsn/go-ipfs/gxlibs/ipfs/Qmbi1CTJsbnBZjCEgc2otwu8cUFPsGpzWXG7edVCLZ7Gvk/go-log"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	yamux "github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/go-smux-yamux"
 	ic "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	metrics "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-metrics"
@@ -113,17 +112,18 @@ type IpfsNode struct {
 	PNetFingerprint []byte     // fingerprint of private network
 
 	// Services
-	Peerstore  pstore.Peerstore     // storage for other Peer instances
-	Blockstore bstore.GCBlockstore  // the block store (lower level)
-	Filestore  *filestore.Filestore // the filestore blockstore
-	BaseBlocks bstore.Blockstore    // the raw blockstore, no filestore wrapping
-	GCLocker   bstore.GCLocker      // the locker used to protect the blockstore during gc
-	Blocks     bserv.BlockService   // the block service, get/add blocks.
-	DAG        ipld.DAGService      // the merkle dag service, get/add objects.
-	Resolver   *resolver.Resolver   // the path resolution system
-	Reporter   metrics.Reporter
-	Discovery  discovery.Service
-	FilesRoot  *mfs.Root
+	Peerstore       pstore.Peerstore     // storage for other Peer instances
+	Blockstore      bstore.GCBlockstore  // the block store (lower level)
+	Filestore       *filestore.Filestore // the filestore blockstore
+	BaseBlocks      bstore.Blockstore    // the raw blockstore, no filestore wrapping
+	GCLocker        bstore.GCLocker      // the locker used to protect the blockstore during gc
+	Blocks          bserv.BlockService   // the block service, get/add blocks.
+	DAG             ipld.DAGService      // the merkle dag service, get/add objects.
+	Resolver        *resolver.Resolver   // the path resolution system
+	Reporter        metrics.Reporter
+	Discovery       discovery.Service
+	FilesRoot       *mfs.Root
+	RecordValidator record.Validator
 
 	// Online
 	PeerHost     p2phost.Host        // the network host (server+client)
@@ -458,13 +458,8 @@ func (n *IpfsNode) startOnlineServicesWithHost(ctx context.Context, host p2phost
 		n.Floodsub = service
 	}
 
-	validator := record.NamespacedValidator{
-		"pk":   record.PublicKeyValidator{},
-		"ipns": ipns.Validator{KeyBook: host.Peerstore()},
-	}
-
 	// setup routing service
-	r, err := routingOption(ctx, host, n.Repo.Datastore(), validator)
+	r, err := routingOption(ctx, host, n.Repo.Datastore(), n.RecordValidator)
 	if err != nil {
 		return err
 	}
@@ -476,7 +471,7 @@ func (n *IpfsNode) startOnlineServicesWithHost(ctx context.Context, host p2phost
 			host,
 			n.Routing,
 			n.Floodsub,
-			validator,
+			n.RecordValidator,
 		)
 		n.Routing = rhelpers.Tiered{
 			// Always check pubsub first.
@@ -808,20 +803,21 @@ func (n *IpfsNode) loadFilesRoot() error {
 	return nil
 }
 
-// SetupOfflineRouting loads the local nodes private key and
-// uses it to instantiate a routing system in offline mode.
-// This is primarily used for offline ipns modifications.
+// SetupOfflineRouting instantiates a routing system in offline mode. This is
+// primarily used for offline ipns modifications.
 func (n *IpfsNode) SetupOfflineRouting() error {
 	if n.Routing != nil {
 		// Routing was already set up
 		return nil
 	}
+
+	// TODO: move this somewhere else.
 	err := n.LoadPrivateKey()
 	if err != nil {
 		return err
 	}
 
-	n.Routing = offroute.NewOfflineRouter(n.Repo.Datastore(), n.PrivateKey)
+	n.Routing = offroute.NewOfflineRouter(n.Repo.Datastore(), n.RecordValidator)
 
 	size, err := n.getCacheSize()
 	if err != nil {

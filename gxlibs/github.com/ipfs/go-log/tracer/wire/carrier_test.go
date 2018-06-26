@@ -3,8 +3,8 @@ package wire_test
 import (
 	"testing"
 
-	tracer "github.com/ipfs/go-log/tracer"
-	"github.com/ipfs/go-log/tracer/wire"
+	tracer "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log/tracer"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log/tracer/wire"
 )
 
 func TestProtobufCarrier(t *testing.T) {

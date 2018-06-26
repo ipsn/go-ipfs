@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/ipfs/go-log/tracer/wire"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log/tracer/wire"
 	opentracing "github.com/opentracing/opentracing-go"
 )
 

@@ -19,6 +19,7 @@ import (
 	"github.com/ipsn/go-ipfs/thirdparty/verifbs"
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
 
+	record "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record"
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	p2phost "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
 	metrics "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-metrics-interface"
@@ -26,6 +27,7 @@ import (
 	libp2p "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
+	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
 	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
@@ -141,6 +143,12 @@ func NewNode(ctx context.Context, cfg *BuildCfg) (*IpfsNode, error) {
 		ctx:       ctx,
 		Peerstore: pstore.NewPeerstore(),
 	}
+
+	n.RecordValidator = record.NamespacedValidator{
+		"pk":   record.PublicKeyValidator{},
+		"ipns": ipns.Validator{KeyBook: n.Peerstore},
+	}
+
 	if cfg.Online {
 		n.mode = onlineMode
 	}

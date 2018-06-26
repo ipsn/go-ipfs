@@ -10,7 +10,7 @@ import (
 	"time"
 
 	proto "github.com/gogo/protobuf/proto"
-	logging "github.com/ipfs/go-log"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	cs "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-conn-security"
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"

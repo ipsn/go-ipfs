@@ -5,6 +5,9 @@ import (
 	"fmt"
 
 	iaddr "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-addr"
+	// Needs to be imported so that users can import this package directly
+	// and still parse the bootstrap addresses.
+	_ "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-dns"
 )
 
 // DefaultBootstrapAddresses are the hardcoded bootstrap addresses

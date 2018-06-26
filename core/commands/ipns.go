@@ -89,7 +89,7 @@ Resolve the value of a dnslink:
 		}
 
 		if local {
-			offroute := offline.NewOfflineRouter(n.Repo.Datastore(), n.PrivateKey)
+			offroute := offline.NewOfflineRouter(n.Repo.Datastore(), n.RecordValidator)
 			resolver = namesys.NewIpnsResolver(offroute)
 		}
 

@@ -52,7 +52,7 @@ func TestExternalUnmount(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	node.Routing = offroute.NewOfflineRouter(node.Repo.Datastore(), node.PrivateKey)
+	node.Routing = offroute.NewOfflineRouter(node.Repo.Datastore(), node.RecordValidator)
 	node.Namesys = namesys.NewNameSystem(node.Routing, node.Repo.Datastore(), 0)
 
 	err = ipns.InitializeKeyspace(node, node.PrivateKey)
