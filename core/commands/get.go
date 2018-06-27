@@ -15,9 +15,9 @@ import (
 	path "github.com/ipsn/go-ipfs/path"
 	uarchive "github.com/ipsn/go-ipfs/unixfs/archive"
 
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	"github.com/cheggaaa/pb"
 	tar "github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/tar-utils"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 

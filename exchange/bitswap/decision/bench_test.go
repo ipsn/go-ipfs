@@ -7,9 +7,9 @@ import (
 
 	"github.com/ipsn/go-ipfs/exchange/bitswap/wantlist"
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 )
 
 // FWIW: At the time of this commit, including a timestamp in task increases

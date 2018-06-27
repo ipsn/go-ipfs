@@ -11,15 +11,15 @@ import (
 	decision "github.com/ipsn/go-ipfs/exchange/bitswap/decision"
 	tn "github.com/ipsn/go-ipfs/exchange/bitswap/testnet"
 
-	tu "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
-	travis "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil/ci/travis"
-	mockrouting "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/mock"
 	delay "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-delay"
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
+	mockrouting "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/mock"
 	blocksutil "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blocksutil"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
+	tu "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
+	travis "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil/ci/travis"
 	p2ptestutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-netutil"
+	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	detectrace "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-detect-race"
 )
 

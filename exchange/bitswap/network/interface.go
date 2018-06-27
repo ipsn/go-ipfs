@@ -5,10 +5,10 @@ import (
 
 	bsmsg "github.com/ipsn/go-ipfs/exchange/bitswap/message"
 
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
+	ifconnmgr "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-interface-connmgr"
 	protocol "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-protocol"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	ifconnmgr "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-interface-connmgr"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 )
 
 var (

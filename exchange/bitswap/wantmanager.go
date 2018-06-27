@@ -11,8 +11,8 @@ import (
 	wantlist "github.com/ipsn/go-ipfs/exchange/bitswap/wantlist"
 
 	metrics "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-metrics-interface"
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 )
 
 type WantManager struct {

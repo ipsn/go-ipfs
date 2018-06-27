@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"io"
 
+	net "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
 	manet "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
-	net "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
 )
 
 // ListenerInfo holds information on a p2p listener.

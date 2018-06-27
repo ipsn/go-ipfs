@@ -8,8 +8,8 @@ import (
 	dag "github.com/ipsn/go-ipfs/merkledag"
 	ft "github.com/ipsn/go-ipfs/unixfs"
 
-	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit/files"
 )

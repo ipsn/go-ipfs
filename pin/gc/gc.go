@@ -15,8 +15,8 @@ import (
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	dstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 )
 

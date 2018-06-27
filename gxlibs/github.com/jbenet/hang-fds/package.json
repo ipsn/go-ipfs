@@ -9,9 +9,9 @@
   "gxDependencies": [
     {
       "author": "jbenet",
-      "hash": "QmNqRnejxJxjRroz7buhrjfU8i3yNBLa81hFtmf2pXEffN",
+      "hash": "QmV6FjemM1K8oXjrvuq3wuVWWoU2TLDPmNnKrxHzY3v6Ai",
       "name": "go-multiaddr-net",
-      "version": "1.6.1"
+      "version": "1.6.3"
     }
   ],
   "gxVersion": "0.8.0",
@@ -19,6 +19,6 @@
   "license": "",
   "name": "hang-fds",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.0.11"
+  "version": "0.0.12"
 }
 

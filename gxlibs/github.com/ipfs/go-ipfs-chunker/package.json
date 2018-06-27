@@ -8,9 +8,9 @@
   },
   "gxDependencies": [
     {
-      "hash": "Qmbi1CTJsbnBZjCEgc2otwu8cUFPsGpzWXG7edVCLZ7Gvk",
+      "hash": "QmcVVHfdyv15GVPk7NrxdWjh2hLVccXnoD8j2tyQShiXJb",
       "name": "go-log",
-      "version": "1.5.2"
+      "version": "1.5.3"
     },
     {
       "author": "jbenet",
@@ -42,6 +42,6 @@
   "license": "MIT",
   "name": "go-ipfs-chunker",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.0.5"
+  "version": "0.0.6"
 }
 

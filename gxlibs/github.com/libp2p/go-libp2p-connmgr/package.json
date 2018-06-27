@@ -8,33 +8,39 @@
   },
   "gxDependencies": [
     {
-      "hash": "Qmbi1CTJsbnBZjCEgc2otwu8cUFPsGpzWXG7edVCLZ7Gvk",
+      "hash": "QmcVVHfdyv15GVPk7NrxdWjh2hLVccXnoD8j2tyQShiXJb",
       "name": "go-log",
-      "version": "1.5.2"
+      "version": "1.5.3"
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmXdgNhVEgjLxjUoMs5ViQL7pboAt3Y7V7eGHRiE4qrmTE",
+      "hash": "QmPjvxTpVH8qJyQDnxnsxF9kv9jezKD1kozz1hs3fCGsNh",
       "name": "go-libp2p-net",
-      "version": "3.0.2"
+      "version": "3.0.5"
     },
     {
       "author": "multiformats",
-      "hash": "QmUxSEGbv2nmYNnfXi7839wwQqTN3kwQeUxe8dTjZWZs7J",
+      "hash": "QmYmsdtJ3HsodkePE3eU3TsCaP2YvPZJ4LoXnNkDE5Tpt7",
       "name": "go-multiaddr",
-      "version": "1.2.7"
+      "version": "1.3.0"
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmPdxCaVp4jZ9RbxqZADvKH6kiCR5jHvdR5f2ycjAY6T2a",
+      "hash": "QmcW4FGAt24fdK1jBgWQn3yP4R9ZLyWQqjozv9QK7epRhL",
       "name": "go-testutil",
-      "version": "1.2.3"
+      "version": "1.2.5"
     },
     {
       "author": "why",
-      "hash": "Qmav3fJzdn43FDvHyGkPdbQ5JVqqiDPmNdnuGa3vatpmwj",
+      "hash": "QmXuucFcuvAWYAJfhHV2h4BYreHEAsLSsiquosiXeuduTN",
       "name": "go-libp2p-interface-connmgr",
-      "version": "0.0.9"
+      "version": "0.0.11"
+    },
+    {
+      "author": "whyrusleeping",
+      "hash": "QmdVrMn1LhB4ybb8hMVaMLXnA8XRSewMnK6YqXKXoTcRvN",
+      "name": "go-libp2p-peer",
+      "version": "2.3.5"
     }
   ],
   "gxVersion": "0.11.0",
@@ -42,6 +48,6 @@
   "license": "MIT",
   "name": "go-libp2p-connmgr",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.3.12"
+  "version": "0.3.14"
 }
 

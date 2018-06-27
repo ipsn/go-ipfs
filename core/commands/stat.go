@@ -7,12 +7,12 @@ import (
 	"os"
 	"time"
 
-	humanize "github.com/dustin/go-humanize"
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
-	protocol "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-protocol"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
-	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	humanize "github.com/dustin/go-humanize"
+	protocol "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-protocol"
 	metrics "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-metrics"
+	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 )
 
 var StatsCmd = &cmds.Command{

@@ -12,6 +12,7 @@ import (
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kad-dht/pb"
 	lgbl "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-loggables"
+	inet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	recpb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record/pb"
@@ -217,20 +218,22 @@ func (dht *IpfsDHT) handlePutValue(ctx context.Context, p peer.ID, pmes *pb.Mess
 	return pmes, err
 }
 
+// returns nil, nil when either nothing is found or the value found doesn't properly validate.
+// returns nil, some_error when there's a *datastore* error (i.e., something goes very wrong)
 func (dht *IpfsDHT) getRecordFromDatastore(dskey ds.Key) (*recpb.Record, error) {
 	reci, err := dht.datastore.Get(dskey)
 	if err == ds.ErrNotFound {
 		return nil, nil
 	}
 	if err != nil {
-		log.Warningf("Got error retrieving record with key %s from datastore: %s", dskey, err)
+		log.Errorf("Got error retrieving record with key %s from datastore: %s", dskey, err)
 		return nil, err
 	}
 
 	byt, ok := reci.([]byte)
 	if !ok {
 		// Bad data in datastore, log it but don't return an error, we'll just overwrite it
-		log.Warningf("Value stored in datastore with key %s is not []byte", dskey)
+		log.Errorf("Value stored in datastore with key %s is not []byte", dskey)
 		return nil, nil
 	}
 
@@ -238,7 +241,7 @@ func (dht *IpfsDHT) getRecordFromDatastore(dskey ds.Key) (*recpb.Record, error) 
 	err = proto.Unmarshal(byt, rec)
 	if err != nil {
 		// Bad data in datastore, log it but don't return an error, we'll just overwrite it
-		log.Warningf("Bad record data stored in datastore with key %s: could not unmarshal record", dskey)
+		log.Errorf("Bad record data stored in datastore with key %s: could not unmarshal record", dskey)
 		return nil, nil
 	}
 
@@ -264,10 +267,28 @@ func (dht *IpfsDHT) handleFindPeer(ctx context.Context, p peer.ID, pmes *pb.Mess
 	var closest []peer.ID
 
 	// if looking for self... special case where we send it on CloserPeers.
-	if peer.ID(pmes.GetKey()) == dht.self {
+	targetPid := peer.ID(pmes.GetKey())
+	if targetPid == dht.self {
 		closest = []peer.ID{dht.self}
 	} else {
 		closest = dht.betterPeersToQuery(pmes, p, CloserPeerCount)
+
+		// Never tell a peer about itself.
+		if targetPid != p {
+			// If we're connected to the target peer, report their
+			// peer info. This makes FindPeer work even if the
+			// target peer isn't in our routing table.
+			//
+			// Alternatively, we could just check our peerstore.
+			// However, we don't want to return out of date
+			// information. We can change this in the future when we
+			// add a progressive, asynchronous `SearchPeer` function
+			// and improve peer routing in the host.
+			switch dht.host.Network().Connectedness(targetPid) {
+			case inet.Connected, inet.CanConnect:
+				closest = append(closest, targetPid)
+			}
+		}
 	}
 
 	if closest == nil {

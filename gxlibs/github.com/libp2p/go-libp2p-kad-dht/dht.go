@@ -23,6 +23,7 @@ import (
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	host "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
 	kb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kbucket"
+	inet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	protocol "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-protocol"
@@ -228,29 +229,17 @@ func (dht *IpfsDHT) getValueSingle(ctx context.Context, p peer.ID, key string) (
 // getLocal attempts to retrieve the value from the datastore
 func (dht *IpfsDHT) getLocal(key string) (*recpb.Record, error) {
 	log.Debugf("getLocal %s", key)
-
-	v, err := dht.datastore.Get(mkDsKey(key))
-	if err != nil {
-		return nil, err
-	}
-	log.Debugf("found %s in local datastore")
-
-	byt, ok := v.([]byte)
-	if !ok {
-		return nil, errors.New("value stored in datastore not []byte")
-	}
-	rec := new(recpb.Record)
-	err = proto.Unmarshal(byt, rec)
+	rec, err := dht.getRecordFromDatastore(mkDsKey(key))
 	if err != nil {
 		return nil, err
 	}
 
-	err = dht.Validator.Validate(rec.GetKey(), rec.GetValue())
-	if err != nil {
-		log.Debugf("local record verify failed: %s (discarded)", err)
-		return nil, err
-	}
+	// Double check the key. Can't hurt.
+	if rec != nil && rec.GetKey() != key {
+		log.Errorf("BUG: found a DHT record that didn't match it's key: %s != %s", rec.GetKey(), key)
+		return nil, nil
 
+	}
 	return rec, nil
 }
 
@@ -284,11 +273,12 @@ func (dht *IpfsDHT) Update(ctx context.Context, p peer.ID) {
 
 // FindLocal looks for a peer with a given ID connected to this dht and returns the peer and the table it was found in.
 func (dht *IpfsDHT) FindLocal(id peer.ID) pstore.PeerInfo {
-	p := dht.routingTable.Find(id)
-	if p != "" {
-		return dht.peerstore.PeerInfo(p)
+	switch dht.host.Network().Connectedness(id) {
+	case inet.Connected, inet.CanConnect:
+		return dht.peerstore.PeerInfo(id)
+	default:
+		return pstore.PeerInfo{}
 	}
-	return pstore.PeerInfo{}
 }
 
 // findPeerSingle asks peer 'p' if they know where the peer with id 'id' is

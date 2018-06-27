@@ -13,11 +13,11 @@ import (
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 
 	identify "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/protocol/identify"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
-	kb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kbucket"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	ic "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
+	kb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kbucket"
 )
 
 const offlineIdErrorMessage = `'ipfs id' currently cannot query information on remote

@@ -10,8 +10,8 @@ import (
 
 	"github.com/ipsn/go-ipfs/exchange/bitswap/wantlist"
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
 )
 
 func TestPushPop(t *testing.T) {

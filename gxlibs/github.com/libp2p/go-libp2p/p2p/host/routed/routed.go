@@ -47,7 +47,7 @@ func Wrap(h host.Host, r Routing) *RoutedHost {
 // given peer, it will use its routing system to try to find some.
 func (rh *RoutedHost) Connect(ctx context.Context, pi pstore.PeerInfo) error {
 	// first, check if we're already connected.
-	if len(rh.Network().ConnsToPeer(pi.ID)) > 0 {
+	if rh.Network().Connectedness(pi.ID) == inet.Connected {
 		return nil
 	}
 

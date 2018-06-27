@@ -7,12 +7,12 @@ import (
 
 	notifications "github.com/ipsn/go-ipfs/exchange/bitswap/notifications"
 
+	loggables "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-loggables"
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 	lru "github.com/hashicorp/golang-lru"
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
-	loggables "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-loggables"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 )
 
 const activeWantsLimit = 16

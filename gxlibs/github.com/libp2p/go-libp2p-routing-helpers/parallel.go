@@ -385,19 +385,9 @@ func fewProviders(ctx context.Context, out chan<- pstore.PeerInfo, in []<-chan p
 }
 
 func (r Parallel) Bootstrap(ctx context.Context) error {
-	var wg sync.WaitGroup
-	errs := make([]error, len(r))
-	wg.Add(len(r))
-	for i, b := range r {
-		go func(b routing.IpfsRouting, i int) {
-			errs[i] = b.Bootstrap(ctx)
-			wg.Done()
-		}(b, i)
-	}
-	wg.Wait()
 	var me multierror.Error
-	for _, err := range errs {
-		if err != nil {
+	for _, b := range r {
+		if err := b.Bootstrap(ctx); err != nil {
 			me.Errors = append(me.Errors, err)
 		}
 	}

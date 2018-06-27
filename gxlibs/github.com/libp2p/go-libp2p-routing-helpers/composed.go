@@ -2,7 +2,6 @@ package routinghelpers
 
 import (
 	"context"
-	"sync"
 
 	multierror "github.com/hashicorp/go-multierror"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
@@ -84,6 +83,9 @@ func (cr *Compose) GetPublicKey(ctx context.Context, p peer.ID) (ci.PubKey, erro
 
 // Bootstrap the router.
 func (cr *Compose) Bootstrap(ctx context.Context) error {
+	// Deduplicate. Technically, calling bootstrap multiple times shouldn't
+	// be an issue but using the same router for multiple fields of Compose
+	// is common.
 	routers := make(map[Bootstrap]struct{}, 3)
 	for _, value := range [...]interface{}{
 		cr.ValueStore,
@@ -98,32 +100,9 @@ func (cr *Compose) Bootstrap(ctx context.Context) error {
 		}
 	}
 
-	switch len(routers) {
-	case 0:
-		return nil
-	case 1:
-		// Optimize slightly for a common "only one" case.
-		var b Bootstrap
-		for b = range routers {
-		}
-		return b.Bootstrap(ctx)
-	}
-
-	var wg sync.WaitGroup
-	errs := make([]error, len(routers))
-	wg.Add(len(routers))
-	i := 0
-	for b := range routers {
-		go func(b Bootstrap, i int) {
-			errs[i] = b.Bootstrap(ctx)
-			wg.Done()
-		}(b, i)
-		i++
-	}
-	wg.Wait()
 	var me multierror.Error
-	for _, err := range errs {
-		if err != nil {
+	for b := range routers {
+		if err := b.Bootstrap(ctx); err != nil {
 			me.Errors = append(me.Errors, err)
 		}
 	}

@@ -12,8 +12,8 @@ import (
 	ft "github.com/ipsn/go-ipfs/unixfs"
 
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	proto "github.com/gogo/protobuf/proto"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
 	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns/pb"
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"

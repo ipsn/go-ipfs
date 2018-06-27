@@ -10,9 +10,9 @@ import (
 
 	process "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
 	procctx "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess/context"
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 )
 
 var TaskWorkerCount = 8

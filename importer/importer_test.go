@@ -11,8 +11,8 @@ import (
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
-	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
 )
 
 func getBalancedDag(t testing.TB, size int64, blksize int64) (ipld.Node, ipld.DAGService) {

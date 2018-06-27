@@ -16,12 +16,12 @@ import (
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
 	ftpb "github.com/ipsn/go-ipfs/unixfs/pb"
 
+	lgbl "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-loggables"
 	fuse "bazil.org/fuse"
 	fs "bazil.org/fuse/fs"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	proto "github.com/gogo/protobuf/proto"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
-	lgbl "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-loggables"
 )
 
 var log = logging.Logger("fuse/ipfs")

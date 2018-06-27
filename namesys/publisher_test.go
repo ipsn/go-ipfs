@@ -7,9 +7,9 @@ import (
 	"time"
 
 	dshelp "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-ds-help"
-	testutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
 	mockrouting "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/mock"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
+	testutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"

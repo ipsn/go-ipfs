@@ -22,10 +22,10 @@ import (
 	procctx "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess/context"
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 	exchange "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-interface"
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
+	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 )
 
 var log = logging.Logger("bitswap")

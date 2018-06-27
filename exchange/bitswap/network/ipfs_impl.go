@@ -8,16 +8,16 @@ import (
 
 	bsmsg "github.com/ipsn/go-ipfs/exchange/bitswap/message"
 
-	host "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
-	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
-	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	inet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
+	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
+	ifconnmgr "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-interface-connmgr"
+	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	ggio "github.com/gogo/protobuf/io"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	ifconnmgr "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-interface-connmgr"
+	host "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 )
 
 var log = logging.Logger("bitswap_network")

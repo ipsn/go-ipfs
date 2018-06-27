@@ -8,15 +8,15 @@ import (
 	opts "github.com/ipsn/go-ipfs/namesys/opts"
 	path "github.com/ipsn/go-ipfs/path"
 
+	dht "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kad-dht"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	proto "github.com/gogo/protobuf/proto"
-	dht "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kad-dht"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
 	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns/pb"
-	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 )
 
 var log = logging.Logger("namesys")

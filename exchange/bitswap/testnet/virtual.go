@@ -9,14 +9,14 @@ import (
 	bsmsg "github.com/ipsn/go-ipfs/exchange/bitswap/message"
 	bsnet "github.com/ipsn/go-ipfs/exchange/bitswap/network"
 
-	testutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
-	mockrouting "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/mock"
-	delay "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-delay"
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	delay "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-delay"
+	mockrouting "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/mock"
 	ifconnmgr "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-interface-connmgr"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	testutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 )
 
 var log = logging.Logger("bstestnet")

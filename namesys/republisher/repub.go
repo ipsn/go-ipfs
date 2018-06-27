@@ -11,10 +11,10 @@ import (
 
 	goprocess "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
 	gpctx "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess/context"
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	proto "github.com/gogo/protobuf/proto"
-	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns/pb"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
+	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns/pb"
 	ic "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 )

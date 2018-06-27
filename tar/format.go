@@ -14,8 +14,8 @@ import (
 	path "github.com/ipsn/go-ipfs/path"
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
 
-	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 )
 
