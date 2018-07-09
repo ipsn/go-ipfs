@@ -185,6 +185,7 @@ func TestParallelFindProviders(t *testing.T) {
 			},
 		},
 		Parallel{
+			Null{},
 			&Compose{
 				ContentRouting: dummyProvider{
 					cid1.KeyString(): []peer.ID{

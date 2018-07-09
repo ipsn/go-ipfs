@@ -269,7 +269,7 @@ func (r Parallel) FindProvidersAsync(ctx context.Context, c *cid.Cid, count int)
 		close(ch)
 		return ch
 	case 1:
-		return r[0].FindProvidersAsync(ctx, c, count)
+		return routers[0].FindProvidersAsync(ctx, c, count)
 	}
 
 	out := make(chan pstore.PeerInfo)
