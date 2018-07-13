@@ -5,12 +5,12 @@ import (
 	"strings"
 
 	oldcmds "github.com/ipsn/go-ipfs/commands"
+	lgc "github.com/ipsn/go-ipfs/commands/legacy"
 	dag "github.com/ipsn/go-ipfs/core/commands/dag"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 	ocmd "github.com/ipsn/go-ipfs/core/commands/object"
 	unixfs "github.com/ipsn/go-ipfs/core/commands/unixfs"
 
-	lgc "github.com/ipsn/go-ipfs/commands/legacy"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
@@ -136,6 +136,7 @@ var rootSubcommands = map[string]*cmds.Command{
 	"tar":       lgc.NewCommand(TarCmd),
 	"file":      lgc.NewCommand(unixfs.UnixFSCmd),
 	"update":    lgc.NewCommand(ExternalBinary()),
+	"urlstore":  lgc.NewCommand(urlStoreCmd),
 	"version":   lgc.NewCommand(VersionCmd),
 	"shutdown":  lgc.NewCommand(daemonShutdownCmd),
 }

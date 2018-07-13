@@ -9,6 +9,7 @@ package filestore
 
 import (
 	"context"
+	"errors"
 
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 	posinfo "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-posinfo"
@@ -19,6 +20,9 @@ import (
 )
 
 var log = logging.Logger("filestore")
+
+var ErrFilestoreNotEnabled = errors.New("filestore is not enabled, see https://git.io/vNItf")
+var ErrUrlstoreNotEnabled = errors.New("urlstore is not enabled")
 
 // Filestore implements a Blockstore by combining a standard Blockstore
 // to store regular blocks and a special Blockstore called

@@ -10,6 +10,7 @@ import (
 	blockservice "github.com/ipsn/go-ipfs/blockservice"
 	core "github.com/ipsn/go-ipfs/core"
 	"github.com/ipsn/go-ipfs/core/coreunix"
+	filestore "github.com/ipsn/go-ipfs/filestore"
 	dag "github.com/ipsn/go-ipfs/merkledag"
 	dagtest "github.com/ipsn/go-ipfs/merkledag/test"
 	mfs "github.com/ipsn/go-ipfs/mfs"
@@ -183,8 +184,7 @@ You can now check what blocks have been created by:
 
 		// nocopy -> filestoreEnabled
 		if nocopy && !cfg.Experimental.FilestoreEnabled {
-			res.SetError(errors.New("filestore is not enabled, see https://git.io/vNItf"),
-				cmdkit.ErrClient)
+			res.SetError(filestore.ErrFilestoreNotEnabled, cmdkit.ErrClient)
 			return
 		}
 
