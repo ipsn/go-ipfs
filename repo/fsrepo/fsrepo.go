@@ -27,6 +27,7 @@ import (
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	lockfile "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-fs-lock"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 )
 
 // LockFile is the filename of the repo lock, relative to config dir
@@ -674,29 +675,7 @@ func (r *FSRepo) Datastore() repo.Datastore {
 
 // GetStorageUsage computes the storage space taken by the repo in bytes
 func (r *FSRepo) GetStorageUsage() (uint64, error) {
-	pth, err := config.PathRoot()
-	if err != nil {
-		return 0, err
-	}
-
-	pth, err = filepath.EvalSymlinks(pth)
-	if err != nil {
-		log.Debugf("filepath.EvalSymlinks error: %s", err)
-		return 0, err
-	}
-
-	var du uint64
-	err = filepath.Walk(pth, func(p string, f os.FileInfo, err error) error {
-		if err != nil {
-			log.Debugf("filepath.Walk error: %s", err)
-			return nil
-		}
-		if f != nil {
-			du += uint64(f.Size())
-		}
-		return nil
-	})
-	return du, err
+	return ds.DiskUsage(r.Datastore())
 }
 
 func (r *FSRepo) SwarmKey() ([]byte, error) {

@@ -11,7 +11,6 @@ import (
 	ftpb "github.com/ipsn/go-ipfs/unixfs/pb"
 
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
-	proto "github.com/gogo/protobuf/proto"
 )
 
 // Common errors
@@ -27,7 +26,6 @@ type DagReader interface {
 	ReadSeekCloser
 	Size() uint64
 	CtxReadFull(context.Context, []byte) (int, error)
-	Offset() int64
 }
 
 // A ReadSeekCloser implements interfaces to read, copy, seek and close.
@@ -45,17 +43,17 @@ func NewDagReader(ctx context.Context, n ipld.Node, serv ipld.NodeGetter) (DagRe
 	case *mdag.RawNode:
 		return NewBufDagReader(n.RawData()), nil
 	case *mdag.ProtoNode:
-		pb := new(ftpb.Data)
-		if err := proto.Unmarshal(n.Data(), pb); err != nil {
+		fsNode, err := ft.FSNodeFromBytes(n.Data())
+		if err != nil {
 			return nil, err
 		}
 
-		switch pb.GetType() {
+		switch fsNode.Type() {
 		case ftpb.Data_Directory, ftpb.Data_HAMTShard:
 			// Dont allow reading directories
 			return nil, ErrIsDir
 		case ftpb.Data_File, ftpb.Data_Raw:
-			return NewPBFileReader(ctx, n, pb, serv), nil
+			return NewPBFileReader(ctx, n, fsNode, serv), nil
 		case ftpb.Data_Metadata:
 			if len(n.Links()) == 0 {
 				return nil, errors.New("incorrectly formatted metadata object")
