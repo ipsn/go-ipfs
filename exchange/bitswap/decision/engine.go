@@ -9,10 +9,10 @@ import (
 	bsmsg "github.com/ipsn/go-ipfs/exchange/bitswap/message"
 	wl "github.com/ipsn/go-ipfs/exchange/bitswap/wantlist"
 
+	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
-	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 )
 
 // TODO consider taking responsibility for other types of requests. For

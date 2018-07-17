@@ -9,9 +9,9 @@
   "gxDependencies": [
     {
       "author": "whyrusleeping",
-      "hash": "QmapdYm1b22Frv3k17fqrBYTFRxwiaVJkB299Mfn33edeB",
+      "hash": "QmYVNvtQkeZ6AKSwDrjQTs432QtL6umrrK41EBq3cu7iSP",
       "name": "go-cid",
-      "version": "0.7.21"
+      "version": "0.7.22"
     },
     {
       "author": "whyrusleeping",
@@ -38,9 +38,9 @@
       "version": "1.4.22"
     },
     {
-      "hash": "QmPpdpS9fknTBM3qHDcpayU6nYPZQeVjia2fbNrD8YWDe6",
+      "hash": "QmZ383TySJVeZWzGnWui6pRcKyYZk9VkKTuW7tmKRWk5au",
       "name": "go-libp2p-routing",
-      "version": "2.4.4"
+      "version": "2.4.5"
     },
     {
       "author": "hashicorp",
@@ -60,6 +60,6 @@
   "license": "MIT",
   "name": "go-libp2p-routing-helpers",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.2.5"
+  "version": "0.2.6"
 }
 

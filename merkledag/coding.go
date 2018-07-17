@@ -9,8 +9,8 @@ import (
 
 	pb "github.com/ipsn/go-ipfs/merkledag/pb"
 
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
 
 // for now, we use a PBNode intermediate thing.

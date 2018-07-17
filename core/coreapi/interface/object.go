@@ -6,8 +6,8 @@ import (
 
 	options "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
 
 // ObjectStat provides information about dag nodes

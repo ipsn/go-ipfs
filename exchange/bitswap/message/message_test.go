@@ -8,8 +8,8 @@ import (
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
-	proto "github.com/gogo/protobuf/proto"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	proto "github.com/gogo/protobuf/proto"
 )
 
 func mkFakeCid(s string) *cid.Cid {

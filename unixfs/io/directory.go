@@ -9,8 +9,8 @@ import (
 	format "github.com/ipsn/go-ipfs/unixfs"
 	hamt "github.com/ipsn/go-ipfs/unixfs/hamt"
 
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
 
 // UseHAMTSharding is a global flag that signifies whether or not to use the

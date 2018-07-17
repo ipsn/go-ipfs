@@ -6,8 +6,8 @@ import (
 
 	wantlist "github.com/ipsn/go-ipfs/exchange/bitswap/wantlist"
 
-	pq "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-pq"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	pq "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-pq"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 )
 

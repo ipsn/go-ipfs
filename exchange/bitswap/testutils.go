@@ -7,10 +7,10 @@ import (
 	tn "github.com/ipsn/go-ipfs/exchange/bitswap/testnet"
 
 	delay "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-delay"
+	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	testutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
 	p2ptestutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-netutil"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
-	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	delayed "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/delayed"
 	ds_sync "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
