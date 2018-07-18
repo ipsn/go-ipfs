@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"strings"
 
-	cmds "github.com/ipsn/go-ipfs/commands"
 	filestore "github.com/ipsn/go-ipfs/filestore"
 	balanced "github.com/ipsn/go-ipfs/importer/balanced"
 	ihelper "github.com/ipsn/go-ipfs/importer/helpers"
+	trickle "github.com/ipsn/go-ipfs/importer/trickle"
 
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
 	chunk "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
@@ -18,7 +18,6 @@ import (
 )
 
 var urlStoreCmd = &cmds.Command{
-
 	Subcommands: map[string]*cmds.Command{
 		"add": urlAdd,
 	},
@@ -44,14 +43,17 @@ found.  It may disappear or the semantics can change at any
 time.
 `,
 	},
+	Options: []cmdkit.Option{
+		cmdkit.BoolOption(trickleOptionName, "t", "Use trickle-dag format for dag generation."),
+	},
 	Arguments: []cmdkit.Argument{
 		cmdkit.StringArg("url", true, false, "URL to add to IPFS"),
 	},
 	Type: BlockStat{},
 
-	Run: func(req cmds.Request, res cmds.Response) {
-		url := req.Arguments()[0]
-		n, err := req.InvocContext().GetNode()
+	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) {
+		url := req.Arguments[0]
+		n, err := GetNode(env)
 		if err != nil {
 			res.SetError(err, cmdkit.ErrNormal)
 			return
@@ -72,6 +74,8 @@ time.
 			res.SetError(filestore.ErrUrlstoreNotEnabled, cmdkit.ErrNormal)
 			return
 		}
+
+		useTrickledag, _ := req.Options[trickleOptionName].(bool)
 
 		hreq, err := http.NewRequest("GET", url, nil)
 		if err != nil {
@@ -100,23 +104,25 @@ time.
 			URL:       url,
 		}
 
-		blc, err := balanced.Layout(dbp.New(chk))
+		layout := balanced.Layout
+		if useTrickledag {
+			layout = trickle.Layout
+		}
+		root, err := layout(dbp.New(chk))
 		if err != nil {
 			res.SetError(err, cmdkit.ErrNormal)
 			return
 		}
 
-		res.SetOutput(BlockStat{
-			Key:  blc.Cid().String(),
+		cmds.EmitOnce(res, BlockStat{
+			Key:  root.Cid().String(),
 			Size: int(hres.ContentLength),
 		})
 	},
-	Marshalers: cmds.MarshalerMap{
-		cmds.Text: func(res cmds.Response) (io.Reader, error) {
-			ch := res.Output().(<-chan interface{})
-			bs0 := <-ch
-			bs := bs0.(*BlockStat)
-			return strings.NewReader(bs.Key + "\n"), nil
-		},
+	Encoders: cmds.EncoderMap{
+		cmds.Text: cmds.MakeTypedEncoder(func(req *cmds.Request, w io.Writer, bs *BlockStat) error {
+			_, err := fmt.Fprintln(w, bs.Key)
+			return err
+		}),
 	},
 }

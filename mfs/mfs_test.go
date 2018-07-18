@@ -1111,3 +1111,68 @@ func TestFileDescriptors(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestTruncateAtSize(t *testing.T) {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	ds, rt := setupRoot(ctx, t)
+
+	dir := rt.GetDirectory()
+
+	nd := dag.NodeWithData(ft.FilePBData(nil, 0))
+	fi, err := NewFile("test", nd, dir, ds)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	fd, err := fi.Open(OpenReadWrite, true)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer fd.Close()
+	_, err = fd.Write([]byte("test"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	fd.Truncate(4)
+}
+
+func TestTruncateAndWrite(t *testing.T) {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	ds, rt := setupRoot(ctx, t)
+
+	dir := rt.GetDirectory()
+
+	nd := dag.NodeWithData(ft.FilePBData(nil, 0))
+	fi, err := NewFile("test", nd, dir, ds)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	fd, err := fi.Open(OpenReadWrite, true)
+	defer fd.Close()
+	if err != nil {
+		t.Fatal(err)
+	}
+	for i := 0; i < 200; i++ {
+		err = fd.Truncate(0)
+		if err != nil {
+			t.Fatal(err)
+		}
+		l, err := fd.Write([]byte("test"))
+		if err != nil {
+			t.Fatal(err)
+		}
+		if l != len("test") {
+			t.Fatal("incorrect write length")
+		}
+		data, err := ioutil.ReadAll(fd)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if string(data) != "test" {
+			t.Errorf("read error at read %d, read: %v", i, data)
+		}
+	}
+}

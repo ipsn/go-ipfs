@@ -6,11 +6,10 @@ import (
 	"strings"
 	"testing"
 
-	coreapi "github.com/ipsn/go-ipfs/core/coreapi"
+	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
+	opt "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
-
-	opt "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 )
 
 var (
@@ -74,7 +73,7 @@ func TestPath(t *testing.T) {
 		t.Error(err)
 	}
 
-	p, err := coreapi.ParsePath(path.Join(res.Cid().String(), "lnk"))
+	p, err := coreiface.ParsePath(path.Join(res.Cid().String(), "lnk"))
 	if err != nil {
 		t.Error(err)
 	}

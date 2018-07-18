@@ -25,7 +25,6 @@ const (
 // Common errors
 var (
 	ErrMalformedFileFormat = errors.New("malformed data in file format")
-	ErrInvalidDirLocation  = errors.New("found directory node in unexpected place")
 	ErrUnrecognizedType    = errors.New("unrecognized node type")
 )
 
@@ -199,6 +198,12 @@ func (n *FSNode) RemoveBlockSize(i int) {
 // TODO: Evaluate if this function should be bounds checking.
 func (n *FSNode) BlockSize(i int) uint64 {
 	return n.format.Blocksizes[i]
+}
+
+// RemoveAllBlockSizes removes all the child block sizes of this node.
+func (n *FSNode) RemoveAllBlockSizes() {
+	n.format.Blocksizes = []uint64{}
+	n.format.Filesize = proto.Uint64(uint64(len(n.Data())))
 }
 
 // GetBytes marshals this node as a protobuf message.
