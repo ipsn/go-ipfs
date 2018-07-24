@@ -5,7 +5,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	bloom "github.com/ipsn/go-ipfs/gxlibs/github.com/gxed/bbloom"
+	bloom "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/bbloom"
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	metrics "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-metrics-interface"

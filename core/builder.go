@@ -19,13 +19,12 @@ import (
 	"github.com/ipsn/go-ipfs/thirdparty/verifbs"
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
 
-	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
-	metrics "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-metrics-interface"
-	goprocessctx "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess/context"
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
+	goprocessctx "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess/context"
 	record "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record"
 	libp2p "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
+	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	p2phost "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
@@ -33,6 +32,7 @@ import (
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	retry "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/retrystore"
 	dsync "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
+	metrics "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-metrics-interface"
 )
 
 type BuildCfg struct {

@@ -10,8 +10,8 @@ import (
 
 	repo "github.com/ipsn/go-ipfs/repo"
 
-	humanize "github.com/dustin/go-humanize"
 	measure "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ds-measure"
+	humanize "github.com/dustin/go-humanize"
 	badgerds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ds-badger"
 	levelds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ds-leveldb"
 	ldbopts "github.com/syndtr/goleveldb/leveldb/opt"

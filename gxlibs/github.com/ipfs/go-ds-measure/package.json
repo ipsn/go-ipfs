@@ -9,9 +9,9 @@
   "gxDependencies": [
     {
       "author": "ipfs",
-      "hash": "QmRg1gKTHzc3CZXSKzem8aR4E3TubFhbgXwfVuWnSK5CC5",
+      "hash": "QmekzFM3hPZjTjUFGTABdQkEnQ3PTiMstY198PwSFr5w1Q",
       "name": "go-metrics-interface",
-      "version": "0.1.2"
+      "version": "0.2.0"
     },
     {
       "author": "jbenet",
@@ -25,6 +25,6 @@
   "license": "",
   "name": "go-ds-measure",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "1.3.2"
+  "version": "1.3.3"
 }
 

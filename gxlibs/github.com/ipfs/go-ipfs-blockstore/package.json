@@ -21,9 +21,9 @@
     },
     {
       "author": "ipfs",
-      "hash": "QmRg1gKTHzc3CZXSKzem8aR4E3TubFhbgXwfVuWnSK5CC5",
+      "hash": "QmekzFM3hPZjTjUFGTABdQkEnQ3PTiMstY198PwSFr5w1Q",
       "name": "go-metrics-interface",
-      "version": "0.1.2"
+      "version": "0.2.0"
     },
     {
       "author": "hashicorp",
@@ -45,9 +45,9 @@
     },
     {
       "author": "kubuxu",
-      "hash": "QmXqKGu7QzfRzFC4yd5aL9sThYx22vY163VGwmxfp5qGHk",
+      "hash": "QmWaLViWQF8jgyoLLqqcSrnp6dJpHESiJfzor1vrfDyTZf",
       "name": "bbloom",
-      "version": "0.1.1"
+      "version": "0.1.2"
     },
     {
       "hash": "QmcVVHfdyv15GVPk7NrxdWjh2hLVccXnoD8j2tyQShiXJb",
@@ -60,6 +60,6 @@
   "license": "MIT",
   "name": "go-ipfs-blockstore",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.0.9"
+  "version": "0.0.11"
 }
 

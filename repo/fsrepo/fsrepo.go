@@ -22,8 +22,8 @@ import (
 
 	"github.com/ipsn/go-ipfs/Godeps/_workspace/src/github.com/mitchellh/go-homedir"
 
-	util "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	measure "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ds-measure"
+	util "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	lockfile "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-fs-lock"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"

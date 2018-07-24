@@ -6,7 +6,6 @@ import (
 
 // Increment only metric
 type Counter interface {
-	Set(float64) // Introduced discontinuity
 	Inc()
 	Add(float64) // Only positive
 }

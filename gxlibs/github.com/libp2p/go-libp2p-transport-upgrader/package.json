@@ -80,15 +80,15 @@
     },
     {
       "author": "onsi",
-      "hash": "QmPWdUPQGR7djd2UCwnAkNaRMZ8pfTiBa35Kj7Lmky1QLX",
+      "hash": "QmNuLxhqRhfimRZeLttPe6Sa44MNwuHAdaFFa9TDuNZUmf",
       "name": "ginkgo",
-      "version": "1.0.0"
+      "version": "1.1.0"
     },
     {
       "author": "onsi",
-      "hash": "QmY2RG1xye7iWhBNa9VzxYHnnSRuBMajAEU2AarMSZ9iLe",
+      "hash": "QmUWtNQd8JdEiYiDqNYTUcaqyteJZ2rTNQLiw3dauLPccy",
       "name": "gomega",
-      "version": "1.0.0"
+      "version": "1.1.0"
     }
   ],
   "gxVersion": "0.12.1",
@@ -96,6 +96,6 @@
   "license": "",
   "name": "go-libp2p-transport-upgrader",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.1.4"
+  "version": "0.1.5"
 }
 

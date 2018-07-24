@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	osh "github.com/ipsn/go-ipfs/gxlibs/github.com/Kubuxu/go-os-helper"
 	badger "github.com/dgraph-io/badger"
 
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
@@ -43,6 +44,10 @@ func NewDatastore(path string, options *Options) (*datastore, error) {
 	} else {
 		opt = options.Options
 		gcDiscardRatio = options.gcDiscardRatio
+	}
+
+	if osh.IsWindows() && opt.SyncWrites {
+		opt.Truncate = true
 	}
 
 	opt.Dir = path
@@ -256,12 +261,7 @@ func (b *badgerBatch) Commit() error {
 }
 
 func (d *datastore) CollectGarbage() error {
-	err := d.DB.PurgeOlderVersions()
-	if err != nil {
-		return err
-	}
-
-	err = d.DB.RunValueLogGC(d.gcDiscardRatio)
+	err := d.DB.RunValueLogGC(d.gcDiscardRatio)
 	if err == badger.ErrNoRewrite {
 		err = nil
 	}

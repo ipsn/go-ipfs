@@ -12,10 +12,10 @@ import (
 	pin "github.com/ipsn/go-ipfs/pin"
 	"github.com/ipsn/go-ipfs/thirdparty/verifcid"
 
-	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	dstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 )

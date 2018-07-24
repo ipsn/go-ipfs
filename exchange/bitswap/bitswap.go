@@ -17,15 +17,15 @@ import (
 
 	delay "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-delay"
 	flags "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-flags"
-	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
-	metrics "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-metrics-interface"
 	process "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
 	procctx "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess/context"
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	exchange "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-interface"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
+	metrics "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-metrics-interface"
 )
 
 var log = logging.Logger("bitswap")
