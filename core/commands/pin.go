@@ -7,7 +7,6 @@ import (
 	"io"
 	"time"
 
-	bserv "github.com/ipsn/go-ipfs/blockservice"
 	cmds "github.com/ipsn/go-ipfs/commands"
 	core "github.com/ipsn/go-ipfs/core"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
@@ -16,10 +15,11 @@ import (
 	path "github.com/ipsn/go-ipfs/path"
 	resolver "github.com/ipsn/go-ipfs/path/resolver"
 	pin "github.com/ipsn/go-ipfs/pin"
-	"github.com/ipsn/go-ipfs/thirdparty/verifcid"
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
+	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-verifcid"
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"

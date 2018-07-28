@@ -9,7 +9,6 @@ import (
 	"syscall"
 	"time"
 
-	bserv "github.com/ipsn/go-ipfs/blockservice"
 	filestore "github.com/ipsn/go-ipfs/filestore"
 	dag "github.com/ipsn/go-ipfs/merkledag"
 	resolver "github.com/ipsn/go-ipfs/path/resolver"
@@ -18,6 +17,7 @@ import (
 	cfg "github.com/ipsn/go-ipfs/repo/config"
 	"github.com/ipsn/go-ipfs/thirdparty/verifbs"
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
+	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	goprocessctx "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess/context"

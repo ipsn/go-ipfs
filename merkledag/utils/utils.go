@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 
-	bserv "github.com/ipsn/go-ipfs/blockservice"
 	dag "github.com/ipsn/go-ipfs/merkledag"
 	path "github.com/ipsn/go-ipfs/path"
+	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"

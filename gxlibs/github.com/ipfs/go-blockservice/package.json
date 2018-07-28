@@ -1,0 +1,54 @@
+{
+  "author": "why",
+  "bugs": {
+    "url": "https://github.com/ipfs/go-blockservice"
+  },
+  "gx": {
+    "dvcsimport": "github.com/ipfs/go-blockservice"
+  },
+  "gxDependencies": [
+    {
+      "author": "why",
+      "hash": "QmSLYFS88MpPsszqWdhGSxvHyoTnmaU4A74SD6KGib6Z3m",
+      "name": "go-bitswap",
+      "version": "1.0.0"
+    },
+    {
+      "author": "hsanjuan",
+      "hash": "QmS6mo1dPpHdYsVkm27BRZDLxpKBCiJKUH8fHX15XFfMez",
+      "name": "go-ipfs-exchange-offline",
+      "version": "0.0.9"
+    },
+    {
+      "author": "jbenet",
+      "hash": "QmeiCcJfDW1GJnWUArudsv5rQsihpi4oyddPhdqo3CfX6i",
+      "name": "go-datastore",
+      "version": "2.4.1"
+    },
+    {
+      "author": "hsanjuan",
+      "hash": "QmadMhXJLHMFjpRmh85XjpmVDkEtQpNYEZNRpWRvYVLrvb",
+      "name": "go-ipfs-blockstore",
+      "version": "0.0.11"
+    },
+    {
+      "author": "stebalien",
+      "hash": "QmVzK524a2VWLqyvtBeiHKsUAWYgeAk4DBeZoY7vpNPNRx",
+      "name": "go-block-format",
+      "version": "0.1.8"
+    },
+    {
+      "author": "why",
+      "hash": "QmQwgv79RHrRnoXmhnpC1BPtY55HHeneGMpPwmmBU1fUAG",
+      "name": "go-verifcid",
+      "version": "0.0.1"
+    }
+  ],
+  "gxVersion": "0.12.1",
+  "language": "go",
+  "license": "",
+  "name": "go-blockservice",
+  "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
+  "version": "1.0.1"
+}
+

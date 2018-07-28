@@ -6,7 +6,6 @@ import (
 	"io"
 	"text/tabwriter"
 
-	blockservice "github.com/ipsn/go-ipfs/blockservice"
 	cmds "github.com/ipsn/go-ipfs/commands"
 	core "github.com/ipsn/go-ipfs/core"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
@@ -16,6 +15,7 @@ import (
 	unixfs "github.com/ipsn/go-ipfs/unixfs"
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
 	unixfspb "github.com/ipsn/go-ipfs/unixfs/pb"
+	blockservice "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"

@@ -11,7 +11,6 @@ import (
 	"sort"
 	"strings"
 
-	bservice "github.com/ipsn/go-ipfs/blockservice"
 	oldcmds "github.com/ipsn/go-ipfs/commands"
 	lgc "github.com/ipsn/go-ipfs/commands/legacy"
 	core "github.com/ipsn/go-ipfs/core"
@@ -22,6 +21,7 @@ import (
 	resolver "github.com/ipsn/go-ipfs/path/resolver"
 	ft "github.com/ipsn/go-ipfs/unixfs"
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
+	bservice "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	humanize "github.com/dustin/go-humanize"

@@ -7,7 +7,6 @@ import (
 	"os"
 	"strings"
 
-	blockservice "github.com/ipsn/go-ipfs/blockservice"
 	core "github.com/ipsn/go-ipfs/core"
 	"github.com/ipsn/go-ipfs/core/coreunix"
 	filestore "github.com/ipsn/go-ipfs/filestore"
@@ -15,6 +14,7 @@ import (
 	dagtest "github.com/ipsn/go-ipfs/merkledag/test"
 	mfs "github.com/ipsn/go-ipfs/mfs"
 	ft "github.com/ipsn/go-ipfs/unixfs"
+	blockservice "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"

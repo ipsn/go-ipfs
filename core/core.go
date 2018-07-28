@@ -20,9 +20,6 @@ import (
 	"strings"
 	"time"
 
-	bserv "github.com/ipsn/go-ipfs/blockservice"
-	bitswap "github.com/ipsn/go-ipfs/exchange/bitswap"
-	bsnet "github.com/ipsn/go-ipfs/exchange/bitswap/network"
 	rp "github.com/ipsn/go-ipfs/exchange/reprovide"
 	filestore "github.com/ipsn/go-ipfs/filestore"
 	mount "github.com/ipsn/go-ipfs/fuse/mount"
@@ -36,6 +33,9 @@ import (
 	repo "github.com/ipsn/go-ipfs/repo"
 	config "github.com/ipsn/go-ipfs/repo/config"
 	ft "github.com/ipsn/go-ipfs/unixfs"
+	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
+	bitswap "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap"
+	bsnet "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/network"
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	rhelpers "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing-helpers"

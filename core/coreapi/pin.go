@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 
-	bserv "github.com/ipsn/go-ipfs/blockservice"
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
 	caopts "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 	corerepo "github.com/ipsn/go-ipfs/core/corerepo"
 	merkledag "github.com/ipsn/go-ipfs/merkledag"
+	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
