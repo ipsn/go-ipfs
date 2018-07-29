@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"strings"
 
-	dag "github.com/ipsn/go-ipfs/merkledag"
 	pin "github.com/ipsn/go-ipfs/pin"
 	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-verifcid"
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"

@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"math"
 
-	"github.com/ipsn/go-ipfs/merkledag"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
 	block "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"

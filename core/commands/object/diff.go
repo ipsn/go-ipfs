@@ -8,7 +8,7 @@ import (
 	cmds "github.com/ipsn/go-ipfs/commands"
 	core "github.com/ipsn/go-ipfs/core"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
-	dagutils "github.com/ipsn/go-ipfs/merkledag/utils"
+	"github.com/ipsn/go-ipfs/dagutils"
 	path "github.com/ipsn/go-ipfs/path"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )

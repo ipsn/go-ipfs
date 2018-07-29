@@ -3,9 +3,9 @@ package reprovide
 import (
 	"context"
 
-	merkledag "github.com/ipsn/go-ipfs/merkledag"
 	pin "github.com/ipsn/go-ipfs/pin"
 
+	merkledag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"

@@ -12,11 +12,11 @@ import (
 	"os"
 
 	core "github.com/ipsn/go-ipfs/core"
-	dag "github.com/ipsn/go-ipfs/merkledag"
 	mfs "github.com/ipsn/go-ipfs/mfs"
 	namesys "github.com/ipsn/go-ipfs/namesys"
 	path "github.com/ipsn/go-ipfs/path"
 	ft "github.com/ipsn/go-ipfs/unixfs"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
 	fuse "bazil.org/fuse"
 	fs "bazil.org/fuse/fs"

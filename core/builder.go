@@ -10,7 +10,6 @@ import (
 	"time"
 
 	filestore "github.com/ipsn/go-ipfs/filestore"
-	dag "github.com/ipsn/go-ipfs/merkledag"
 	resolver "github.com/ipsn/go-ipfs/path/resolver"
 	pin "github.com/ipsn/go-ipfs/pin"
 	repo "github.com/ipsn/go-ipfs/repo"
@@ -18,6 +17,7 @@ import (
 	"github.com/ipsn/go-ipfs/thirdparty/verifbs"
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
 	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	goprocessctx "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess/context"

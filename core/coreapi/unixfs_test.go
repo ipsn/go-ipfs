@@ -15,10 +15,10 @@ import (
 	options "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 	coreunix "github.com/ipsn/go-ipfs/core/coreunix"
 	keystore "github.com/ipsn/go-ipfs/keystore"
-	mdag "github.com/ipsn/go-ipfs/merkledag"
 	repo "github.com/ipsn/go-ipfs/repo"
 	config "github.com/ipsn/go-ipfs/repo/config"
 	unixfs "github.com/ipsn/go-ipfs/unixfs"
+	mdag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
 	cbor "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-cbor"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"

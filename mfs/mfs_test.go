@@ -15,11 +15,11 @@ import (
 	"time"
 
 	importer "github.com/ipsn/go-ipfs/importer"
-	dag "github.com/ipsn/go-ipfs/merkledag"
 	"github.com/ipsn/go-ipfs/path"
 	ft "github.com/ipsn/go-ipfs/unixfs"
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
 	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"

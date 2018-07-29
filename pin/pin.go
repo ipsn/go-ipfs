@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	mdag "github.com/ipsn/go-ipfs/merkledag"
-	dutils "github.com/ipsn/go-ipfs/merkledag/utils"
+	"github.com/ipsn/go-ipfs/dagutils"
+	mdag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
@@ -518,7 +518,7 @@ func (p *pinner) Update(ctx context.Context, from, to *cid.Cid, unpin bool) erro
 		return fmt.Errorf("'from' cid was not recursively pinned already")
 	}
 
-	err := dutils.DiffEnumerate(ctx, p.dserv, from, to)
+	err := dagutils.DiffEnumerate(ctx, p.dserv, from, to)
 	if err != nil {
 		return err
 	}

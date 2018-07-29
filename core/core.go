@@ -23,7 +23,6 @@ import (
 	rp "github.com/ipsn/go-ipfs/exchange/reprovide"
 	filestore "github.com/ipsn/go-ipfs/filestore"
 	mount "github.com/ipsn/go-ipfs/fuse/mount"
-	merkledag "github.com/ipsn/go-ipfs/merkledag"
 	mfs "github.com/ipsn/go-ipfs/mfs"
 	namesys "github.com/ipsn/go-ipfs/namesys"
 	ipnsrp "github.com/ipsn/go-ipfs/namesys/republisher"
@@ -34,6 +33,7 @@ import (
 	config "github.com/ipsn/go-ipfs/repo/config"
 	ft "github.com/ipsn/go-ipfs/unixfs"
 	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
+	merkledag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	bitswap "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap"
 	bsnet "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/network"
 

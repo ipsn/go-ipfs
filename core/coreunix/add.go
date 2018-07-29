@@ -14,10 +14,10 @@ import (
 	balanced "github.com/ipsn/go-ipfs/importer/balanced"
 	ihelper "github.com/ipsn/go-ipfs/importer/helpers"
 	trickle "github.com/ipsn/go-ipfs/importer/trickle"
-	dag "github.com/ipsn/go-ipfs/merkledag"
 	mfs "github.com/ipsn/go-ipfs/mfs"
 	"github.com/ipsn/go-ipfs/pin"
 	unixfs "github.com/ipsn/go-ipfs/unixfs"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
 	posinfo "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-posinfo"
 	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"

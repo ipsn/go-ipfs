@@ -10,8 +10,8 @@ import (
 
 	cmds "github.com/ipsn/go-ipfs/commands"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
-	dag "github.com/ipsn/go-ipfs/merkledag"
 	path "github.com/ipsn/go-ipfs/path"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
 	b58 "github.com/mr-tron/base58/base58"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"

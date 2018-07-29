@@ -10,9 +10,9 @@ import (
 
 	h "github.com/ipsn/go-ipfs/importer/helpers"
 	trickle "github.com/ipsn/go-ipfs/importer/trickle"
-	mdag "github.com/ipsn/go-ipfs/merkledag"
-	mdagmock "github.com/ipsn/go-ipfs/merkledag/test"
 	ft "github.com/ipsn/go-ipfs/unixfs"
+	mdag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	mdagmock "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag/test"
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"

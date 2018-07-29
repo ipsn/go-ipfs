@@ -14,13 +14,13 @@ import (
 
 	core "github.com/ipsn/go-ipfs/core"
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
+	"github.com/ipsn/go-ipfs/dagutils"
 	"github.com/ipsn/go-ipfs/importer"
-	dag "github.com/ipsn/go-ipfs/merkledag"
-	dagutils "github.com/ipsn/go-ipfs/merkledag/utils"
 	path "github.com/ipsn/go-ipfs/path"
 	resolver "github.com/ipsn/go-ipfs/path/resolver"
 	ft "github.com/ipsn/go-ipfs/unixfs"
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
 	humanize "github.com/dustin/go-humanize"
 	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"

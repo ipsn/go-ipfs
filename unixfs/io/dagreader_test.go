@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	mdag "github.com/ipsn/go-ipfs/merkledag"
 	"github.com/ipsn/go-ipfs/unixfs"
+	mdag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
 	context "context"
 

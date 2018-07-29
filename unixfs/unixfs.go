@@ -8,8 +8,8 @@ import (
 
 	proto "github.com/gogo/protobuf/proto"
 
-	dag "github.com/ipsn/go-ipfs/merkledag"
 	pb "github.com/ipsn/go-ipfs/unixfs/pb"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 )
 
 // Shorthands for protobuffer types

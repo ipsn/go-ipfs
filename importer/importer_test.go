@@ -7,8 +7,8 @@ import (
 	"io/ioutil"
 	"testing"
 
-	mdtest "github.com/ipsn/go-ipfs/merkledag/test"
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
+	mdtest "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag/test"
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"

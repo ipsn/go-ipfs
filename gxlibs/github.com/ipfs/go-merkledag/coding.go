@@ -7,7 +7,7 @@ import (
 
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 
-	pb "github.com/ipsn/go-ipfs/merkledag/pb"
+	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag/pb"
 
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"

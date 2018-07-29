@@ -10,9 +10,9 @@ import (
 	"testing"
 
 	h "github.com/ipsn/go-ipfs/importer/helpers"
-	dag "github.com/ipsn/go-ipfs/merkledag"
-	mdtest "github.com/ipsn/go-ipfs/merkledag/test"
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	mdtest "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag/test"
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"

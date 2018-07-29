@@ -13,16 +13,16 @@ import (
 	"testing"
 	"time"
 
-	. "github.com/ipsn/go-ipfs/merkledag"
-	mdpb "github.com/ipsn/go-ipfs/merkledag/pb"
-	dstest "github.com/ipsn/go-ipfs/merkledag/test"
+	. "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	mdpb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag/pb"
+	dstest "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag/test"
+
+	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 	bstest "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice/test"
-
-	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
-	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
-	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
+	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
 

@@ -3,9 +3,9 @@ package io
 import (
 	"context"
 
-	dag "github.com/ipsn/go-ipfs/merkledag"
 	ft "github.com/ipsn/go-ipfs/unixfs"
 	hamt "github.com/ipsn/go-ipfs/unixfs/hamt"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )

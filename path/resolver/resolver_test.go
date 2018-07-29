@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"testing"
 
-	merkledag "github.com/ipsn/go-ipfs/merkledag"
-	dagmock "github.com/ipsn/go-ipfs/merkledag/test"
 	path "github.com/ipsn/go-ipfs/path"
 	"github.com/ipsn/go-ipfs/path/resolver"
+	merkledag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	dagmock "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag/test"
 
 	util "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
