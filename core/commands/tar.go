@@ -8,9 +8,9 @@ import (
 	core "github.com/ipsn/go-ipfs/core"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 	"github.com/ipsn/go-ipfs/core/coreunix"
-	path "github.com/ipsn/go-ipfs/path"
 	tar "github.com/ipsn/go-ipfs/tar"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )

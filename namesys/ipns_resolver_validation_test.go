@@ -6,7 +6,7 @@ import (
 	"time"
 
 	opts "github.com/ipsn/go-ipfs/namesys/opts"
-	path "github.com/ipsn/go-ipfs/path"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	record "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record"

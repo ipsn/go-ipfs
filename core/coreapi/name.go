@@ -13,7 +13,7 @@ import (
 	keystore "github.com/ipsn/go-ipfs/keystore"
 	namesys "github.com/ipsn/go-ipfs/namesys"
 	nsopts "github.com/ipsn/go-ipfs/namesys/opts"
-	ipath "github.com/ipsn/go-ipfs/path"
+	ipath "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"

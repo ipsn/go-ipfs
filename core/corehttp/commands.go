@@ -12,8 +12,8 @@ import (
 	oldcmds "github.com/ipsn/go-ipfs/commands"
 	core "github.com/ipsn/go-ipfs/core"
 	corecommands "github.com/ipsn/go-ipfs/core/commands"
-	path "github.com/ipsn/go-ipfs/path"
 	config "github.com/ipsn/go-ipfs/repo/config"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	cmdsHttp "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds/http"

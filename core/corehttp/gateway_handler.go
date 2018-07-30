@@ -16,11 +16,11 @@ import (
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
 	"github.com/ipsn/go-ipfs/dagutils"
 	"github.com/ipsn/go-ipfs/importer"
-	path "github.com/ipsn/go-ipfs/path"
-	resolver "github.com/ipsn/go-ipfs/path/resolver"
 	ft "github.com/ipsn/go-ipfs/unixfs"
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	resolver "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
 
 	humanize "github.com/dustin/go-humanize"
 	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"

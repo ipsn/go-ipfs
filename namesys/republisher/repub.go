@@ -7,7 +7,7 @@ import (
 
 	keystore "github.com/ipsn/go-ipfs/keystore"
 	namesys "github.com/ipsn/go-ipfs/namesys"
-	path "github.com/ipsn/go-ipfs/path"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
 	goprocess "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
 	gpctx "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess/context"

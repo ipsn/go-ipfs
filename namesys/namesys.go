@@ -6,7 +6,7 @@ import (
 	"time"
 
 	opts "github.com/ipsn/go-ipfs/namesys/opts"
-	path "github.com/ipsn/go-ipfs/path"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
 	lru "github.com/hashicorp/golang-lru"

@@ -8,9 +8,9 @@ import (
 	core "github.com/ipsn/go-ipfs/core"
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
 	namesys "github.com/ipsn/go-ipfs/namesys"
-	ipfspath "github.com/ipsn/go-ipfs/path"
-	resolver "github.com/ipsn/go-ipfs/path/resolver"
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
+	ipfspath "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	resolver "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
 
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"

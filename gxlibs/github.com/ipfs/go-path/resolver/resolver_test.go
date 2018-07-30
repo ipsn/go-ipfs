@@ -3,21 +3,23 @@ package resolver_test
 import (
 	"context"
 	"fmt"
+	"math/rand"
 	"testing"
+	"time"
 
-	path "github.com/ipsn/go-ipfs/path"
-	"github.com/ipsn/go-ipfs/path/resolver"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
+
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	merkledag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	dagmock "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag/test"
-
-	util "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
 
 func randNode() *merkledag.ProtoNode {
 	node := new(merkledag.ProtoNode)
 	node.SetData(make([]byte, 32))
-	util.NewTimeSeededRand().Read(node.Data())
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	r.Read(node.Data())
 	return node
 }
 

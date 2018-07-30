@@ -18,9 +18,9 @@ import (
 	"fmt"
 
 	"github.com/ipsn/go-ipfs/core"
-	path "github.com/ipsn/go-ipfs/path"
-	resolver "github.com/ipsn/go-ipfs/path/resolver"
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	resolver "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
 
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 )

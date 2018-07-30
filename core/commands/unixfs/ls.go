@@ -12,12 +12,12 @@ import (
 	cmds "github.com/ipsn/go-ipfs/commands"
 	core "github.com/ipsn/go-ipfs/core"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
-	path "github.com/ipsn/go-ipfs/path"
-	resolver "github.com/ipsn/go-ipfs/path/resolver"
 	unixfs "github.com/ipsn/go-ipfs/unixfs"
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
 	unixfspb "github.com/ipsn/go-ipfs/unixfs/pb"
 	merkledag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	resolver "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
 )
 
 type LsLink struct {

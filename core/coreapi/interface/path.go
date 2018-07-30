@@ -1,7 +1,7 @@
 package iface
 
 import (
-	ipfspath "github.com/ipsn/go-ipfs/path"
+	ipfspath "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 )

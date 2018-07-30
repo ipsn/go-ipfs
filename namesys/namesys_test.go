@@ -7,8 +7,8 @@ import (
 	"time"
 
 	opts "github.com/ipsn/go-ipfs/namesys/opts"
-	path "github.com/ipsn/go-ipfs/path"
 	"github.com/ipsn/go-ipfs/unixfs"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	offroute "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"

@@ -11,7 +11,7 @@ import (
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 	ns "github.com/ipsn/go-ipfs/namesys"
 	nsopts "github.com/ipsn/go-ipfs/namesys/opts"
-	path "github.com/ipsn/go-ipfs/path"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )

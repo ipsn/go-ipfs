@@ -10,9 +10,9 @@ import (
 
 	"github.com/ipsn/go-ipfs/dagutils"
 	importer "github.com/ipsn/go-ipfs/importer"
-	path "github.com/ipsn/go-ipfs/path"
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
 	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"

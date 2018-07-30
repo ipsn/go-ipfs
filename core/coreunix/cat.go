@@ -4,9 +4,9 @@ import (
 	"context"
 
 	core "github.com/ipsn/go-ipfs/core"
-	path "github.com/ipsn/go-ipfs/path"
-	resolver "github.com/ipsn/go-ipfs/path/resolver"
 	uio "github.com/ipsn/go-ipfs/unixfs/io"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	resolver "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
 )
 
 func Cat(ctx context.Context, n *core.IpfsNode, pstr string) (uio.DagReader, error) {

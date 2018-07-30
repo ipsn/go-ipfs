@@ -27,7 +27,6 @@ import (
 	namesys "github.com/ipsn/go-ipfs/namesys"
 	ipnsrp "github.com/ipsn/go-ipfs/namesys/republisher"
 	p2p "github.com/ipsn/go-ipfs/p2p"
-	"github.com/ipsn/go-ipfs/path/resolver"
 	pin "github.com/ipsn/go-ipfs/pin"
 	repo "github.com/ipsn/go-ipfs/repo"
 	config "github.com/ipsn/go-ipfs/repo/config"
@@ -36,6 +35,7 @@ import (
 	merkledag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	bitswap "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap"
 	bsnet "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/network"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	rhelpers "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing-helpers"
