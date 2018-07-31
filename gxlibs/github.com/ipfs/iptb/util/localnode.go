@@ -14,19 +14,22 @@ import (
 	"syscall"
 	"time"
 
-	config "github.com/ipsn/go-ipfs/repo/config"
-	serial "github.com/ipsn/go-ipfs/repo/fsrepo/serialize"
-
+	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
+	serial "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config/serialize"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	manet "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
 )
 
 var ErrTimeout = errors.New("timeout")
 
+// LocalNode is a machine-local IPFS node controlled by IPTB
 type LocalNode struct {
 	Dir    string
 	PeerID string
 }
+
+// assert LocalNode satisfies the IpfsNode interface
+var _ IpfsNode = (*LocalNode)(nil)
 
 func (n *LocalNode) Init() error {
 	err := os.MkdirAll(n.Dir, 0777)

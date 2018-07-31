@@ -1,9 +1,11 @@
 package iptbutil
 
 import (
-	"github.com/ipsn/go-ipfs/repo/config"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 )
 
+// IpfsNode defines the interface iptb requires to work
+// with an IPFS node
 type IpfsNode interface {
 	Init() error
 	Kill() error

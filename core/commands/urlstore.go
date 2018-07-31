@@ -6,9 +6,9 @@ import (
 	"net/http"
 
 	filestore "github.com/ipsn/go-ipfs/filestore"
-	balanced "github.com/ipsn/go-ipfs/importer/balanced"
-	ihelper "github.com/ipsn/go-ipfs/importer/helpers"
-	trickle "github.com/ipsn/go-ipfs/importer/trickle"
+	balanced "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer/balanced"
+	ihelper "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer/helpers"
+	trickle "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer/trickle"
 
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"

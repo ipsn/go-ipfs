@@ -12,7 +12,7 @@ import (
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 	corerepo "github.com/ipsn/go-ipfs/core/corerepo"
 	pin "github.com/ipsn/go-ipfs/pin"
-	uio "github.com/ipsn/go-ipfs/unixfs/io"
+	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 
 	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-verifcid"

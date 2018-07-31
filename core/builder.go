@@ -14,9 +14,9 @@ import (
 	repo "github.com/ipsn/go-ipfs/repo"
 	cfg "github.com/ipsn/go-ipfs/repo/config"
 	"github.com/ipsn/go-ipfs/thirdparty/verifbs"
-	uio "github.com/ipsn/go-ipfs/unixfs/io"
 	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 	resolver "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
 
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"

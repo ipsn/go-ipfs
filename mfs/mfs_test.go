@@ -14,11 +14,11 @@ import (
 	"testing"
 	"time"
 
-	importer "github.com/ipsn/go-ipfs/importer"
-	ft "github.com/ipsn/go-ipfs/unixfs"
-	uio "github.com/ipsn/go-ipfs/unixfs/io"
 	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
+	importer "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer"
+	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"

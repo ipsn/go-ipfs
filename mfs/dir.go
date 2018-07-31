@@ -9,10 +9,10 @@ import (
 	"sync"
 	"time"
 
-	ft "github.com/ipsn/go-ipfs/unixfs"
-	uio "github.com/ipsn/go-ipfs/unixfs/io"
-	ufspb "github.com/ipsn/go-ipfs/unixfs/pb"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
+	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
+	ufspb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/pb"
 
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"

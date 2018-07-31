@@ -16,9 +16,9 @@ import (
 	core "github.com/ipsn/go-ipfs/core"
 	coreunix "github.com/ipsn/go-ipfs/core/coreunix"
 	coremock "github.com/ipsn/go-ipfs/core/mock"
-	importer "github.com/ipsn/go-ipfs/importer"
-	uio "github.com/ipsn/go-ipfs/unixfs/io"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	importer "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer"
+	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	fstest "bazil.org/fuse/fs/fstestutil"

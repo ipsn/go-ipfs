@@ -11,9 +11,9 @@ import (
 	"syscall"
 
 	core "github.com/ipsn/go-ipfs/core"
-	uio "github.com/ipsn/go-ipfs/unixfs/io"
-	ftpb "github.com/ipsn/go-ipfs/unixfs/pb"
 	mdag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
+	ftpb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/pb"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
 	lgbl "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-loggables"

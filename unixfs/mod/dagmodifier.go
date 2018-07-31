@@ -8,11 +8,11 @@ import (
 	"errors"
 	"io"
 
-	help "github.com/ipsn/go-ipfs/importer/helpers"
-	trickle "github.com/ipsn/go-ipfs/importer/trickle"
-	ft "github.com/ipsn/go-ipfs/unixfs"
-	uio "github.com/ipsn/go-ipfs/unixfs/io"
 	mdag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
+	help "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer/helpers"
+	trickle "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer/trickle"
+	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 
 	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
