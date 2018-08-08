@@ -15,8 +15,8 @@ import (
 	mfs "github.com/ipsn/go-ipfs/mfs"
 	namesys "github.com/ipsn/go-ipfs/namesys"
 	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
-	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
 	fuse "bazil.org/fuse"
 	fs "bazil.org/fuse/fs"

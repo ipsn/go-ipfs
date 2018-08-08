@@ -12,9 +12,9 @@ import (
 	"errors"
 
 	posinfo "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-posinfo"
+	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	dsq "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/query"
 )
@@ -143,15 +143,27 @@ func (f *Filestore) DeleteBlock(c *cid.Cid) error {
 func (f *Filestore) Get(c *cid.Cid) (blocks.Block, error) {
 	blk, err := f.bs.Get(c)
 	switch err {
-	default:
-		return nil, err
 	case nil:
 		return blk, nil
 	case blockstore.ErrNotFound:
-		// try filestore
+		return f.fm.Get(c)
+	default:
+		return nil, err
 	}
+}
 
-	return f.fm.Get(c)
+// GetSize returns the size of the requested block. It may return ErrNotFound
+// when the block is not stored.
+func (f *Filestore) GetSize(c *cid.Cid) (int, error) {
+	size, err := f.bs.GetSize(c)
+	switch err {
+	case nil:
+		return size, nil
+	case blockstore.ErrNotFound:
+		return f.fm.GetSize(c)
+	default:
+		return -1, err
+	}
 }
 
 // Has returns true if the block with the given Cid is

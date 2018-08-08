@@ -9,15 +9,15 @@
   "gxDependencies": [
     {
       "author": "why",
-      "hash": "Qmci3cVjeSogPBpJQyUfqPC8mcz1JMdqNwq3LDhoEH4ehH",
+      "hash": "QmaYxvpkdEd5anuSzWiivJdeZV1W1NYW52xJQB1khSqH1b",
       "name": "go-bitswap",
-      "version": "1.0.2"
+      "version": "1.0.4"
     },
     {
       "author": "hsanjuan",
-      "hash": "QmS6mo1dPpHdYsVkm27BRZDLxpKBCiJKUH8fHX15XFfMez",
+      "hash": "QmP9jV1GQzpEhLScrYZ1YWHnZMfdc7x13TwybM73FcuN8k",
       "name": "go-ipfs-exchange-offline",
-      "version": "0.0.9"
+      "version": "0.0.11"
     },
     {
       "author": "jbenet",
@@ -27,9 +27,9 @@
     },
     {
       "author": "hsanjuan",
-      "hash": "QmadMhXJLHMFjpRmh85XjpmVDkEtQpNYEZNRpWRvYVLrvb",
+      "hash": "QmTCHqj6s51pDu1GaPGyBW2VdmCUvtzLCF6nWykfX9ZYRt",
       "name": "go-ipfs-blockstore",
-      "version": "0.0.11"
+      "version": "0.0.13"
     },
     {
       "author": "stebalien",
@@ -49,6 +49,6 @@
   "license": "",
   "name": "go-blockservice",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "1.0.3"
+  "version": "1.0.5"
 }
 
