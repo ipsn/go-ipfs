@@ -8,9 +8,9 @@
   },
   "gxDependencies": [
     {
-      "hash": "QmcVVHfdyv15GVPk7NrxdWjh2hLVccXnoD8j2tyQShiXJb",
+      "hash": "QmRREK2CAZ5Re2Bd9zZFG6FeYDppUWt5cMgsoUEp3ktgSr",
       "name": "go-log",
-      "version": "1.5.3"
+      "version": "1.5.5"
     },
     {
       "author": "rs",
@@ -30,12 +30,6 @@
       "version": "1.1.1"
     },
     {
-      "author": "whyrusleeping",
-      "hash": "QmRPkGkHLB72caXgdDYnoaWigXNWx95BcYDKV1n3KTEpaG",
-      "name": "go-libp2p-loggables",
-      "version": "1.1.18"
-    },
-    {
       "author": "texttheater",
       "hash": "QmTVvctiHWZzSDZdyU5wdnXh7VF3kprHSyQFwVChos5qKu",
       "name": "golang-levenshtein",
@@ -53,6 +47,6 @@
   "license": "MIT",
   "name": "go-ipfs-cmds",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "1.0.18"
+  "version": "1.0.20"
 }
 

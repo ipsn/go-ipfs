@@ -3,11 +3,13 @@ package libp2p
 import (
 	"context"
 	"fmt"
+	"regexp"
 	"strings"
 	"testing"
 
 	crypto "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	host "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-tcp-transport"
 )
 
 func TestNewHost(t *testing.T) {
@@ -35,6 +37,39 @@ func TestInsecure(t *testing.T) {
 	h, err := New(ctx, NoSecurity)
 	if err != nil {
 		t.Fatal(err)
+	}
+	h.Close()
+}
+
+func TestDefaultListenAddrs(t *testing.T) {
+	ctx := context.Background()
+
+	re := regexp.MustCompile("/(ip)[4|6]/((0.0.0.0)|(::))/tcp/")
+
+	// Test 1: Setting the correct listen addresses if userDefined.Transport == nil && userDefined.ListenAddrs == nil
+	h, err := New(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, addr := range h.Network().ListenAddresses() {
+		if re.FindStringSubmatchIndex(addr.String()) == nil {
+			t.Error("expected ip4 or ip6 interface")
+		}
+	}
+
+	h.Close()
+
+	// Test 2: Listen addr should not set if user defined transport is passed.
+	h, err = New(
+		ctx,
+		Transport(tcp.NewTCPTransport),
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(h.Network().ListenAddresses()) != 0 {
+		t.Error("expected zero listen addrs as none is set with user defined transport")
 	}
 	h.Close()
 }

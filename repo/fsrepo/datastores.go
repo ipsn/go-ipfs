@@ -13,9 +13,9 @@ import (
 	measure "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ds-measure"
 	humanize "github.com/dustin/go-humanize"
 	badgerds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ds-badger"
+	flatfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ds-flatfs"
 	levelds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ds-leveldb"
 	ldbopts "github.com/syndtr/goleveldb/leveldb/opt"
-	flatfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ds-flatfs"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	mount "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/mount"
 )

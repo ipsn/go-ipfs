@@ -8,6 +8,7 @@ import (
 
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	ic "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
+	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto/pb"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	testutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
 
@@ -41,6 +42,17 @@ func (pk TestBogusPublicKey) Equals(k ic.Key) bool {
 	return ic.KeyEqual(pk, k)
 }
 
+// Raw returns the raw bytes of the key (not wrapped in the
+// libp2p-crypto protobuf).
+func (pk TestBogusPublicKey) Raw() ([]byte, error) {
+	return pk, nil
+}
+
+// Type returns the protobof key type.
+func (pk TestBogusPublicKey) Type() pb.KeyType {
+	return pb.KeyType_RSA
+}
+
 func (sk TestBogusPrivateKey) GenSecret() []byte {
 	return []byte(sk)
 }
@@ -66,6 +78,17 @@ func (sk TestBogusPrivateKey) Bytes() ([]byte, error) {
 // Equals checks whether this key is equal to another
 func (sk TestBogusPrivateKey) Equals(k ic.Key) bool {
 	return ic.KeyEqual(sk, k)
+}
+
+// Raw returns the raw bytes of the key (not wrapped in the
+// libp2p-crypto protobuf).
+func (sk TestBogusPrivateKey) Raw() ([]byte, error) {
+	return sk, nil
+}
+
+// Type returns the protobof key type.
+func (pk TestBogusPrivateKey) Type() pb.KeyType {
+	return pb.KeyType_RSA
 }
 
 func RandTestBogusPrivateKey() (TestBogusPrivateKey, error) {

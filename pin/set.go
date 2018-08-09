@@ -13,8 +13,8 @@ import (
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	"github.com/gogo/protobuf/proto"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	"github.com/gogo/protobuf/proto"
 )
 
 const (

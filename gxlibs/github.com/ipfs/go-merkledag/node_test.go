@@ -8,8 +8,26 @@ import (
 	. "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	mdtest "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag/test"
 
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
+
+func TestStableCID(t *testing.T) {
+	nd := &ProtoNode{}
+	nd.SetData([]byte("foobar"))
+	nd.SetLinks([]*ipld.Link{
+		{Name: "a"},
+		{Name: "b"},
+		{Name: "c"},
+	})
+	expected, err := cid.Decode("QmSN3WED2xPLbYvBbfvew2ZLtui8EbFYYcbfkpKH5jwG9C")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !nd.Cid().Equals(expected) {
+		t.Fatalf("Got CID %s, expected CID %s", nd.Cid(), expected)
+	}
+}
 
 func TestRemoveLink(t *testing.T) {
 	nd := &ProtoNode{}

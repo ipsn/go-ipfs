@@ -15,9 +15,9 @@ import (
 	nsopts "github.com/ipsn/go-ipfs/namesys/opts"
 	ipath "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
+	crypto "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
-	crypto "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 )
 
 type NameAPI CoreAPI
