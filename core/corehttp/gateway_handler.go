@@ -17,10 +17,10 @@ import (
 	"github.com/ipsn/go-ipfs/dagutils"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	resolver "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer"
 	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
-	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
 	humanize "github.com/dustin/go-humanize"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"

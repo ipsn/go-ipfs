@@ -6,8 +6,8 @@ import (
 	"github.com/ipsn/go-ipfs/commands"
 	"github.com/ipsn/go-ipfs/core"
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
-	"github.com/ipsn/go-ipfs/repo/config"
 
+	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 )
 

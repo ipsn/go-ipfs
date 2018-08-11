@@ -15,8 +15,8 @@ import (
 	mfs "github.com/ipsn/go-ipfs/mfs"
 	namesys "github.com/ipsn/go-ipfs/namesys"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
-	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"

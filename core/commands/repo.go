@@ -13,13 +13,13 @@ import (
 	lgc "github.com/ipsn/go-ipfs/commands/legacy"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 	corerepo "github.com/ipsn/go-ipfs/core/corerepo"
-	config "github.com/ipsn/go-ipfs/repo/config"
 	fsrepo "github.com/ipsn/go-ipfs/repo/fsrepo"
 
-	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
+	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 )
 
 type RepoVersion struct {

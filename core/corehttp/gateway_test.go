@@ -11,17 +11,18 @@ import (
 	"testing"
 	"time"
 
+	version "github.com/ipfs/go-ipfs"
 	core "github.com/ipsn/go-ipfs/core"
 	coreunix "github.com/ipsn/go-ipfs/core/coreunix"
 	namesys "github.com/ipsn/go-ipfs/namesys"
 	nsopts "github.com/ipsn/go-ipfs/namesys/opts"
 	repo "github.com/ipsn/go-ipfs/repo"
-	config "github.com/ipsn/go-ipfs/repo/config"
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
-	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
+	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	id "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/protocol/identify"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	datastore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	syncds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
 )
@@ -545,7 +546,7 @@ func TestGoGetSupport(t *testing.T) {
 }
 
 func TestVersion(t *testing.T) {
-	config.CurrentCommit = "theshortcommithash"
+	version.CurrentCommit = "theshortcommithash"
 
 	ns := mockNamesys{}
 	ts, _ := newTestServerAndNode(t, ns)

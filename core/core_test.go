@@ -6,8 +6,8 @@ import (
 	context "context"
 
 	"github.com/ipsn/go-ipfs/repo"
-	config "github.com/ipsn/go-ipfs/repo/config"
 
+	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	datastore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	syncds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
 )

@@ -22,17 +22,17 @@ import (
 	corehttp "github.com/ipsn/go-ipfs/core/corehttp"
 	loader "github.com/ipsn/go-ipfs/plugin/loader"
 	repo "github.com/ipsn/go-ipfs/repo"
-	config "github.com/ipsn/go-ipfs/repo/config"
 	fsrepo "github.com/ipsn/go-ipfs/repo/fsrepo"
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
-	manet "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
-	osh "github.com/ipsn/go-ipfs/gxlibs/github.com/Kubuxu/go-os-helper"
-	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds/cli"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds/http"
+	manet "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
+	osh "github.com/ipsn/go-ipfs/gxlibs/github.com/Kubuxu/go-os-helper"
+	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	loggables "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-loggables"
 )
 

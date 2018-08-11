@@ -11,8 +11,8 @@ import (
 	namesys "github.com/ipsn/go-ipfs/namesys"
 	nsopts "github.com/ipsn/go-ipfs/namesys/opts"
 
-	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
 )
 
 var IpnsCmd = &cmds.Command{

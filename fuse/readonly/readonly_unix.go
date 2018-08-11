@@ -12,9 +12,9 @@ import (
 
 	core "github.com/ipsn/go-ipfs/core"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	mdag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 	ftpb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/pb"
-	mdag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	fuse "bazil.org/fuse"

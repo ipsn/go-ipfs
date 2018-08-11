@@ -6,9 +6,9 @@ import (
 	commands "github.com/ipsn/go-ipfs/commands"
 	core "github.com/ipsn/go-ipfs/core"
 	"github.com/ipsn/go-ipfs/repo"
-	config "github.com/ipsn/go-ipfs/repo/config"
 
 	host "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
+	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	libp2p "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p"
 	mocknet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/net/mock"
 	testutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"

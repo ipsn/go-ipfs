@@ -13,19 +13,19 @@ import (
 	core "github.com/ipsn/go-ipfs/core"
 	mfs "github.com/ipsn/go-ipfs/mfs"
 	"github.com/ipsn/go-ipfs/pin"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	unixfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	balanced "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer/balanced"
 	ihelper "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer/helpers"
 	trickle "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer/trickle"
-	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
+	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit/files"
 	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	posinfo "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-posinfo"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
-	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit/files"
 )
 
 var log = logging.Logger("coreunix")

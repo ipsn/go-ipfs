@@ -8,9 +8,9 @@ import (
 	cmds "github.com/ipsn/go-ipfs/commands"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 
+	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	record "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
-	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
 type ipnsPubsubState struct {

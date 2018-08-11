@@ -20,6 +20,7 @@ import (
 	"strings"
 	"time"
 
+	version "github.com/ipfs/go-ipfs"
 	rp "github.com/ipsn/go-ipfs/exchange/reprovide"
 	filestore "github.com/ipsn/go-ipfs/filestore"
 	mount "github.com/ipsn/go-ipfs/fuse/mount"
@@ -29,21 +30,18 @@ import (
 	p2p "github.com/ipsn/go-ipfs/p2p"
 	pin "github.com/ipsn/go-ipfs/pin"
 	repo "github.com/ipsn/go-ipfs/repo"
-	config "github.com/ipsn/go-ipfs/repo/config"
+
 	bitswap "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap"
 	bsnet "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/network"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
-	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
-	merkledag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
-	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
-
 	circuit "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-circuit"
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
 	ic "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	p2phost "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
 	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	floodsub "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-floodsub"
+	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	goprocess "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
 	mamask "github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/multiaddr-filter"
 	mafilter "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-maddr-filter"
@@ -56,6 +54,7 @@ import (
 	record "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record"
 	rhelpers "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing-helpers"
 	metrics "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-metrics"
+	merkledag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	connmgr "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-connmgr"
 	smux "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-stream-muxer"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
@@ -72,7 +71,9 @@ import (
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	yamux "github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/go-smux-yamux"
 	mplex "github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/go-smux-multiplex"
+	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	ifconnmgr "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-interface-connmgr"
+	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
 )
@@ -94,7 +95,7 @@ const (
 )
 
 func init() {
-	identify.ClientVersion = "go-ipfs/" + config.CurrentVersionNumber + "/" + config.CurrentCommit
+	identify.ClientVersion = "go-ipfs/" + version.CurrentVersionNumber + "/" + version.CurrentCommit
 }
 
 // IpfsNode is IPFS Core module. It represents an IPFS instance.

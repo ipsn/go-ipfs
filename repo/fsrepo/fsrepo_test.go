@@ -7,8 +7,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/ipsn/go-ipfs/repo/config"
 	"github.com/ipsn/go-ipfs/thirdparty/assert"
+
+	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	datastore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 )
 

@@ -7,8 +7,8 @@ import (
 	"reflect"
 	"sync"
 
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 
 	oldcmds "github.com/ipsn/go-ipfs/commands"
 )

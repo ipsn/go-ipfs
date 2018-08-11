@@ -12,10 +12,10 @@ import (
 	decision "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/decision"
 
 	"github.com/dustin/go-humanize"
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 )
 
 var BitswapCmd = &cmds.Command{

@@ -13,12 +13,12 @@ import (
 	core "github.com/ipsn/go-ipfs/core"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 
+	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	floodsub "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-floodsub"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
-	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
 var PubsubCmd = &cmds.Command{

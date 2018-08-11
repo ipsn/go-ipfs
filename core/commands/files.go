@@ -18,19 +18,19 @@ import (
 	mfs "github.com/ipsn/go-ipfs/mfs"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	resolver "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
-	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	bservice "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 
 	humanize "github.com/dustin/go-humanize"
+	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
-	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
 var flog = logging.Logger("cmds/files")

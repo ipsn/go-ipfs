@@ -15,9 +15,7 @@ import (
 	keystore "github.com/ipsn/go-ipfs/keystore"
 	repo "github.com/ipsn/go-ipfs/repo"
 	"github.com/ipsn/go-ipfs/repo/common"
-	config "github.com/ipsn/go-ipfs/repo/config"
 	mfsr "github.com/ipsn/go-ipfs/repo/fsrepo/migrations"
-	serialize "github.com/ipsn/go-ipfs/repo/fsrepo/serialize"
 	dir "github.com/ipsn/go-ipfs/thirdparty/dir"
 
 	"github.com/ipsn/go-ipfs/Godeps/_workspace/src/github.com/mitchellh/go-homedir"
@@ -25,6 +23,8 @@ import (
 	measure "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ds-measure"
 	util "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
+	serialize "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config/serialize"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	lockfile "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-fs-lock"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"

@@ -14,13 +14,13 @@ import (
 	pin "github.com/ipsn/go-ipfs/pin"
 	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	resolver "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-verifcid"
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 )
 

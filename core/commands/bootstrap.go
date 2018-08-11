@@ -9,10 +9,10 @@ import (
 	cmds "github.com/ipsn/go-ipfs/commands"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 	repo "github.com/ipsn/go-ipfs/repo"
-	config "github.com/ipsn/go-ipfs/repo/config"
 	"github.com/ipsn/go-ipfs/repo/fsrepo"
 
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 )
 
 type BootstrapOutput struct {

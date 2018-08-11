@@ -16,13 +16,13 @@ import (
 	coreunix "github.com/ipsn/go-ipfs/core/coreunix"
 	keystore "github.com/ipsn/go-ipfs/keystore"
 	repo "github.com/ipsn/go-ipfs/repo"
-	config "github.com/ipsn/go-ipfs/repo/config"
-	unixfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
-	mdag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
+	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	cbor "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-cbor"
+	mdag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
+	unixfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	datastore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	syncds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
 )
