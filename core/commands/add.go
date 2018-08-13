@@ -11,18 +11,18 @@ import (
 	"github.com/ipsn/go-ipfs/core/coreunix"
 	filestore "github.com/ipsn/go-ipfs/filestore"
 	mfs "github.com/ipsn/go-ipfs/mfs"
+	blockservice "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
+	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	dagtest "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag/test"
-	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
-	blockservice "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 
+	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit/files"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
 	pb "github.com/cheggaaa/pb"
-	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
-	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
+	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 )
 
 // ErrDepthLimitExceeded indicates that the max depth has been exceeded.
@@ -279,13 +279,13 @@ You can now check what blocks have been created by:
 		fileAdder.Silent = silent
 		fileAdder.RawLeaves = rawblks
 		fileAdder.NoCopy = nocopy
-		fileAdder.Prefix = &prefix
+		fileAdder.CidBuilder = &prefix
 
 		if hash {
 			md := dagtest.Mock()
 			emptyDirNode := ft.EmptyDirNode()
 			// Use the same prefix for the "empty" MFS root as for the file adder.
-			emptyDirNode.Prefix = *fileAdder.Prefix
+			emptyDirNode.SetCidBuilder(fileAdder.CidBuilder)
 			mr, err := mfs.NewRoot(req.Context, md, emptyDirNode, nil)
 			if err != nil {
 				res.SetError(err, cmdkit.ErrNormal)

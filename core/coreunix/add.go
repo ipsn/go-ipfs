@@ -13,18 +13,18 @@ import (
 	core "github.com/ipsn/go-ipfs/core"
 	mfs "github.com/ipsn/go-ipfs/mfs"
 	"github.com/ipsn/go-ipfs/pin"
-	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	unixfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	balanced "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer/balanced"
 	ihelper "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer/helpers"
 	trickle "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer/trickle"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
 	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit/files"
-	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
-	posinfo "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-posinfo"
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	posinfo "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-posinfo"
+	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
 )
 
@@ -89,7 +89,7 @@ type Adder struct {
 	mroot      *mfs.Root
 	unlocker   bstore.Unlocker
 	tempRoot   *cid.Cid
-	Prefix     *cid.Prefix
+	CidBuilder cid.Builder
 	liveNodes  uint64
 }
 
@@ -98,7 +98,7 @@ func (adder *Adder) mfsRoot() (*mfs.Root, error) {
 		return adder.mroot, nil
 	}
 	rnode := unixfs.EmptyDirNode()
-	rnode.SetPrefix(adder.Prefix)
+	rnode.SetCidBuilder(adder.CidBuilder)
 	mr, err := mfs.NewRoot(adder.ctx, adder.dagService, rnode, nil)
 	if err != nil {
 		return nil, err
@@ -120,11 +120,11 @@ func (adder *Adder) add(reader io.Reader) (ipld.Node, error) {
 	}
 
 	params := ihelper.DagBuilderParams{
-		Dagserv:   adder.dagService,
-		RawLeaves: adder.RawLeaves,
-		Maxlinks:  ihelper.DefaultLinksPerBlock,
-		NoCopy:    adder.NoCopy,
-		Prefix:    adder.Prefix,
+		Dagserv:    adder.dagService,
+		RawLeaves:  adder.RawLeaves,
+		Maxlinks:   ihelper.DefaultLinksPerBlock,
+		NoCopy:     adder.NoCopy,
+		CidBuilder: adder.CidBuilder,
 	}
 
 	if adder.Trickle {
@@ -384,9 +384,9 @@ func (adder *Adder) addNode(node ipld.Node, path string) error {
 	dir := gopath.Dir(path)
 	if dir != "." {
 		opts := mfs.MkdirOpts{
-			Mkparents: true,
-			Flush:     false,
-			Prefix:    adder.Prefix,
+			Mkparents:  true,
+			Flush:      false,
+			CidBuilder: adder.CidBuilder,
 		}
 		if err := mfs.Mkdir(mr, dir, opts); err != nil {
 			return err
@@ -449,7 +449,7 @@ func (adder *Adder) addFile(file files.File) error {
 		}
 
 		dagnode := dag.NodeWithData(sdata)
-		dagnode.SetPrefix(adder.Prefix)
+		dagnode.SetCidBuilder(adder.CidBuilder)
 		err = adder.dagService.Add(adder.ctx, dagnode)
 		if err != nil {
 			return err
@@ -488,9 +488,9 @@ func (adder *Adder) addDir(dir files.File) error {
 		return err
 	}
 	err = mfs.Mkdir(mr, dir.FileName(), mfs.MkdirOpts{
-		Mkparents: true,
-		Flush:     false,
-		Prefix:    adder.Prefix,
+		Mkparents:  true,
+		Flush:      false,
+		CidBuilder: adder.CidBuilder,
 	})
 	if err != nil {
 		return err

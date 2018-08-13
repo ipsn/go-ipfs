@@ -7,9 +7,9 @@
   "gxDependencies": [
     {
       "author": "whyrusleeping",
-      "hash": "QmYVNvtQkeZ6AKSwDrjQTs432QtL6umrrK41EBq3cu7iSP",
+      "hash": "Qmdu2AYUV7yMoVBQPxXNfe7FJcdx16kYtsx6jAPKWQYF1y",
       "name": "go-cid",
-      "version": "0.7.22"
+      "version": "0.7.24"
     },
     {
       "author": "jbenet",
@@ -19,9 +19,9 @@
     },
     {
       "author": "hsanjuan",
-      "hash": "Qmd8UZEDddMaCnQ1G5eSrUhN3coX19V7SyXNQGWnAvUsnT",
+      "hash": "QmWf5idGZ55KWUUo2EKM3BTeunjSiSgWbo4bLpYafENBgp",
       "name": "go-ipfs-ds-help",
-      "version": "0.0.5"
+      "version": "0.0.6"
     },
     {
       "author": "whyrusleeping",
@@ -36,9 +36,9 @@
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmRXefkwjreRT6XfYh3Ag4hsVnWBbpcUicGJPcg8TWbhBK",
+      "hash": "QmWEwoF9gZAGNevKxFo4q216DCo9ieui5ZAe5jSZCdesck",
       "name": "go-libp2p-floodsub",
-      "version": "0.9.23"
+      "version": "0.9.24"
     },
     {
       "author": "whyrusleeping",
@@ -64,15 +64,15 @@
       "version": "4.1.5"
     },
     {
-      "hash": "QmewrvpGvgK9qkCtXsGNwXiQzyux4jcHNjoyVrGdsgtNK5",
+      "hash": "QmfGeECX7CxJAFXwGKx2cn7csnxAtwJw8e3XtoNVf6bqcv",
       "name": "go-libp2p-routing",
-      "version": "2.4.6"
+      "version": "2.4.7"
     },
     {
       "author": "Stebalien",
-      "hash": "QmVgeNSg3ycA5BEKXEx5Pgy73iwVDEa8pQ5GKWrXUr4YED",
+      "hash": "QmSJy8UGqdDU2QaKRYt73MDNqAByYrv1x7G45Qmnmq6zSX",
       "name": "go-libp2p-routing-helpers",
-      "version": "0.2.7"
+      "version": "0.2.8"
     },
     {
       "author": "whyrusleeping",
@@ -86,6 +86,6 @@
   "license": "",
   "name": "go-libp2p-pubsub-router",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.3.9"
+  "version": "0.3.11"
 }
 

@@ -15,9 +15,9 @@
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmexBtiTTEwwn42Yi6ouKt6VqzpA6wjJgiW1oh9VfaRrup",
+      "hash": "QmSbvata2WqNkqGtZNg8MR3SKwnB8iQ7vTPJgWqB8bC5kR",
       "name": "go-multibase",
-      "version": "0.2.6"
+      "version": "0.2.7"
     }
   ],
   "gxVersion": "0.8.0",
@@ -25,6 +25,6 @@
   "license": "MIT",
   "name": "go-cid",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.7.22"
+  "version": "0.7.24"
 }
 

@@ -9,15 +9,15 @@
   "gxDependencies": [
     {
       "author": "why",
-      "hash": "QmNQQEYL3Vpj4beteqyeRpVpivuX1wBP6Q5GZMdBPPTV3S",
+      "hash": "QmSvKH3nHWu3p4E8e1WcZbcFcoJAgEgFaRPCj51LjNP3b3",
       "name": "go-bitswap",
-      "version": "1.0.6"
+      "version": "1.0.7"
     },
     {
       "author": "hsanjuan",
-      "hash": "QmWURzU3XRY4wYBsu2LHukKKHp5skkYB1K357nzpbEvRY4",
+      "hash": "QmNxamk8jB6saNF5G37Tiipf2JEnxt7qvesbngPMe24wMS",
       "name": "go-ipfs-exchange-offline",
-      "version": "0.0.12"
+      "version": "0.0.13"
     },
     {
       "author": "jbenet",
@@ -27,21 +27,21 @@
     },
     {
       "author": "hsanjuan",
-      "hash": "QmRNFh4wm6FgTDrtsWmnvEP9NTuEa3Ykf72y1LXCyevbGW",
+      "hash": "QmYir8arYJK1RMzDBZU1dqscLorWvthWU8aStL4xhxdYeT",
       "name": "go-ipfs-blockstore",
-      "version": "0.0.14"
+      "version": "0.0.15"
     },
     {
       "author": "stebalien",
-      "hash": "QmVzK524a2VWLqyvtBeiHKsUAWYgeAk4DBeZoY7vpNPNRx",
+      "hash": "QmZXvzTJTiN6p469osBUtEwm4WwhXXoWcHC8aTS1cAJkjy",
       "name": "go-block-format",
-      "version": "0.1.8"
+      "version": "0.1.9"
     },
     {
       "author": "why",
-      "hash": "QmQwgv79RHrRnoXmhnpC1BPtY55HHeneGMpPwmmBU1fUAG",
+      "hash": "QmV1pEFHk8ijeessqG52SjHuxuehahbeHrxXk4QEkgfPHj",
       "name": "go-verifcid",
-      "version": "0.0.1"
+      "version": "0.0.2"
     }
   ],
   "gxVersion": "0.12.1",
@@ -49,6 +49,6 @@
   "license": "",
   "name": "go-blockservice",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "1.0.6"
+  "version": "1.0.7"
 }
 

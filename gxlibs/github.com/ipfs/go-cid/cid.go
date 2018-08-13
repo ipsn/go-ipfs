@@ -77,6 +77,8 @@ const (
 	BitcoinTx          = 0xb1
 	ZcashBlock         = 0xc0
 	ZcashTx            = 0xc1
+	DecredBlock        = 0xe0
+	DecredTx           = 0xe1
 )
 
 // Codecs maps the name of a codec to its type
@@ -99,6 +101,8 @@ var Codecs = map[string]uint64{
 	"bitcoin-tx":           BitcoinTx,
 	"zcash-block":          ZcashBlock,
 	"zcash-tx":             ZcashTx,
+	"decred-block":         DecredBlock,
+	"decred-tx":            DecredTx,
 }
 
 // CodecToStr maps the numeric codec to its name
@@ -120,6 +124,8 @@ var CodecToStr = map[uint64]string{
 	BitcoinTx:          "bitcoin-tx",
 	ZcashBlock:         "zcash-block",
 	ZcashTx:            "zcash-tx",
+	DecredBlock:        "decred-block",
+	DecredTx:           "decred-tx",
 }
 
 // NewCidV0 returns a Cid-wrapped multihash.
@@ -141,27 +147,6 @@ func NewCidV1(codecType uint64, mhash mh.Multihash) *Cid {
 		version: 1,
 		codec:   codecType,
 		hash:    mhash,
-	}
-}
-
-// NewPrefixV0 returns a CIDv0 prefix with the specified multihash type.
-func NewPrefixV0(mhType uint64) Prefix {
-	return Prefix{
-		MhType:   mhType,
-		MhLength: mh.DefaultLengths[mhType],
-		Version:  0,
-		Codec:    DagProtobuf,
-	}
-}
-
-// NewPrefixV1 returns a CIDv1 prefix with the specified codec and multihash
-// type.
-func NewPrefixV1(codecType uint64, mhType uint64) Prefix {
-	return Prefix{
-		MhType:   mhType,
-		MhLength: mh.DefaultLengths[mhType],
-		Version:  1,
-		Codec:    codecType,
 	}
 }
 
@@ -226,6 +211,28 @@ func Decode(v string) (*Cid, error) {
 	}
 
 	return Cast(data)
+}
+
+// Extract the encoding from a Cid.  If Decode on the same string did
+// not return an error neither will this function.
+func ExtractEncoding(v string) (mbase.Encoding, error) {
+	if len(v) < 2 {
+		return -1, ErrCidTooShort
+	}
+
+	if len(v) == 46 && v[:2] == "Qm" {
+		return mbase.Base58BTC, nil
+	}
+
+	encoding := mbase.Encoding(v[0])
+
+	// check encoding is valid
+	_, err := mbase.NewEncoder(encoding)
+	if err != nil {
+		return -1, err
+	}
+
+	return encoding, nil
 }
 
 func uvError(read int) error {
@@ -442,6 +449,8 @@ func (c *Cid) Prefix() Prefix {
 // that is, the Version, the Codec, the Multihash type
 // and the Multihash length. It does not contains
 // any actual content information.
+// NOTE: The use -1 in MhLength to mean default length is deprecated,
+//   use the V0Builder or V1Builder structures instead
 type Prefix struct {
 	Version  uint64
 	Codec    uint64

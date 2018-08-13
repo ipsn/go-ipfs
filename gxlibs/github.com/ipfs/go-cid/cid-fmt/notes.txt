@@ -1,0 +1,26 @@
+%B base code
+%b base name
+
+%V base version num
+%v base version string
+
+%c codec string
+%C codec num
+
+%h hash string
+%H hash num
+
+%L hash length
+
+%m hash string and length
+
+%d multihash digest in base given by %b
+%D multihash digest as hex string
+
+%s full multihash string in base %b
+
+
+
+
+
+

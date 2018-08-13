@@ -32,9 +32,9 @@
     },
     {
       "author": "stebalien",
-      "hash": "QmVzK524a2VWLqyvtBeiHKsUAWYgeAk4DBeZoY7vpNPNRx",
+      "hash": "QmZXvzTJTiN6p469osBUtEwm4WwhXXoWcHC8aTS1cAJkjy",
       "name": "go-block-format",
-      "version": "0.1.8"
+      "version": "0.1.9"
     }
   ],
   "gxVersion": "0.12.1",
@@ -42,6 +42,6 @@
   "license": "MIT",
   "name": "go-ipfs-chunker",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.0.8"
+  "version": "0.0.9"
 }
 

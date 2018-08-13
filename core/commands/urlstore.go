@@ -96,12 +96,12 @@ time.
 		chk := chunk.NewSizeSplitter(hres.Body, chunk.DefaultBlockSize)
 		prefix := cid.NewPrefixV1(cid.DagProtobuf, mh.SHA2_256)
 		dbp := &ihelper.DagBuilderParams{
-			Dagserv:   n.DAG,
-			RawLeaves: true,
-			Maxlinks:  ihelper.DefaultLinksPerBlock,
-			NoCopy:    true,
-			Prefix:    &prefix,
-			URL:       url,
+			Dagserv:    n.DAG,
+			RawLeaves:  true,
+			Maxlinks:   ihelper.DefaultLinksPerBlock,
+			NoCopy:     true,
+			CidBuilder: &prefix,
+			URL:        url,
 		}
 
 		layout := balanced.Layout

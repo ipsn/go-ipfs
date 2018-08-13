@@ -9,13 +9,13 @@ import (
 	"sync"
 	"time"
 
-	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 	ufspb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/pb"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 )
 
 var ErrNotYetImplemented = errors.New("not yet implemented")
@@ -63,14 +63,14 @@ func NewDirectory(ctx context.Context, name string, node ipld.Node, parent child
 	}, nil
 }
 
-// GetPrefix gets the CID prefix of the root node
-func (d *Directory) GetPrefix() *cid.Prefix {
-	return d.unixfsDir.GetPrefix()
+// GetCidBuilder gets the CID builder of the root node
+func (d *Directory) GetCidBuilder() cid.Builder {
+	return d.unixfsDir.GetCidBuilder()
 }
 
-// SetPrefix sets the CID prefix
-func (d *Directory) SetPrefix(prefix *cid.Prefix) {
-	d.unixfsDir.SetPrefix(prefix)
+// SetCidBuilder sets the CID builder
+func (d *Directory) SetCidBuilder(b cid.Builder) {
+	d.unixfsDir.SetCidBuilder(b)
 }
 
 // closeChild updates the child by the given name to the dag node 'nd'
@@ -307,7 +307,7 @@ func (d *Directory) Mkdir(name string) (*Directory, error) {
 	}
 
 	ndir := ft.EmptyDirNode()
-	ndir.SetPrefix(d.GetPrefix())
+	ndir.SetCidBuilder(d.GetCidBuilder())
 
 	err = d.dserv.Add(d.ctx, ndir)
 	if err != nil {
