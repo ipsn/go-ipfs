@@ -14,8 +14,8 @@ import (
 
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 )
 
 var log = logging.Logger("pin")
@@ -440,16 +440,11 @@ func cidSetWithValues(cids []*cid.Cid) *cid.Set {
 func LoadPinner(d ds.Datastore, dserv, internal ipld.DAGService) (Pinner, error) {
 	p := new(pinner)
 
-	rootKeyI, err := d.Get(pinDatastoreKey)
+	rootKey, err := d.Get(pinDatastoreKey)
 	if err != nil {
 		return nil, fmt.Errorf("cannot load pin state: %v", err)
 	}
-	rootKeyBytes, ok := rootKeyI.([]byte)
-	if !ok {
-		return nil, fmt.Errorf("cannot load pin state: %s was not bytes", pinDatastoreKey)
-	}
-
-	rootCid, err := cid.Cast(rootKeyBytes)
+	rootCid, err := cid.Cast(rootKey)
 	if err != nil {
 		return nil, err
 	}

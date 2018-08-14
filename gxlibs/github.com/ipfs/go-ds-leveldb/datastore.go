@@ -8,6 +8,7 @@ import (
 	dsq "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/query"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
 	"github.com/syndtr/goleveldb/leveldb"
+	"github.com/syndtr/goleveldb/leveldb/errors"
 	"github.com/syndtr/goleveldb/leveldb/opt"
 	"github.com/syndtr/goleveldb/leveldb/storage"
 	"github.com/syndtr/goleveldb/leveldb/util"
@@ -38,6 +39,9 @@ func NewDatastore(path string, opts *Options) (*datastore, error) {
 		db, err = leveldb.Open(storage.NewMemStorage(), &nopts)
 	} else {
 		db, err = leveldb.OpenFile(path, &nopts)
+		if errors.IsCorrupted(err) && !nopts.GetReadOnly() {
+			db, err = leveldb.RecoverFile(path, &nopts)
+		}
 	}
 
 	if err != nil {
@@ -54,15 +58,11 @@ func NewDatastore(path string, opts *Options) (*datastore, error) {
 //
 // Note: using sync = false.
 // see http://godoc.org/github.com/syndtr/goleveldb/leveldb/opt#WriteOptions
-func (d *datastore) Put(key ds.Key, value interface{}) (err error) {
-	val, ok := value.([]byte)
-	if !ok {
-		return ds.ErrInvalidType
-	}
-	return d.DB.Put(key.Bytes(), val, nil)
+func (d *datastore) Put(key ds.Key, value []byte) (err error) {
+	return d.DB.Put(key.Bytes(), value, nil)
 }
 
-func (d *datastore) Get(key ds.Key) (value interface{}, err error) {
+func (d *datastore) Get(key ds.Key) (value []byte, err error) {
 	val, err := d.DB.Get(key.Bytes(), nil)
 	if err != nil {
 		if err == leveldb.ErrNotFound {
@@ -248,13 +248,8 @@ func (d *datastore) Batch() (ds.Batch, error) {
 	}, nil
 }
 
-func (b *leveldbBatch) Put(key ds.Key, value interface{}) error {
-	val, ok := value.([]byte)
-	if !ok {
-		return ds.ErrInvalidType
-	}
-
-	b.b.Put(key.Bytes(), val)
+func (b *leveldbBatch) Put(key ds.Key, value []byte) error {
+	b.b.Put(key.Bytes(), value)
 	return nil
 }
 

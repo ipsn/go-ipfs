@@ -96,10 +96,8 @@ func TestDatastorePersistsFromRepoToRepo(t *testing.T) {
 
 	r2, err := Open(path)
 	assert.Nil(err, t)
-	v, err := r2.Datastore().Get(datastore.NewKey(k))
+	actual, err := r2.Datastore().Get(datastore.NewKey(k))
 	assert.Nil(err, t, "using second repo, Get should be successful")
-	actual, ok := v.([]byte)
-	assert.True(ok, t, "value should be the []byte from r1's Put")
 	assert.Nil(r2.Close(), t)
 	assert.True(bytes.Equal(expected, actual), t, "data should match")
 }

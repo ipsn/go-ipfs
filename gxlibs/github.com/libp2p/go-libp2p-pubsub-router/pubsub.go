@@ -139,7 +139,7 @@ func (p *PubsubValueStore) Subscribe(key string) error {
 }
 
 func (p *PubsubValueStore) getLocal(key string) ([]byte, error) {
-	dsval, err := p.ds.Get(dshelp.NewKeyFromBinary([]byte(key)))
+	val, err := p.ds.Get(dshelp.NewKeyFromBinary([]byte(key)))
 	if err != nil {
 		// Don't invalidate due to ds errors.
 		if err == ds.ErrNotFound {
@@ -147,7 +147,6 @@ func (p *PubsubValueStore) getLocal(key string) ([]byte, error) {
 		}
 		return nil, err
 	}
-	val := dsval.([]byte)
 
 	// If the old one is invalid, the new one is *always* better.
 	if err := p.Validator.Validate(key, val); err != nil {

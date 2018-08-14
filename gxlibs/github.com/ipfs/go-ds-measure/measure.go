@@ -124,12 +124,10 @@ func recordLatency(h metrics.Histogram, start time.Time) {
 	h.Observe(elapsed.Seconds())
 }
 
-func (m *measure) Put(key datastore.Key, value interface{}) error {
+func (m *measure) Put(key datastore.Key, value []byte) error {
 	defer recordLatency(m.putLatency, time.Now())
 	m.putNum.Inc()
-	if b, ok := value.([]byte); ok {
-		m.putSize.Observe(float64(len(b)))
-	}
+	m.putSize.Observe(float64(len(value)))
 	err := m.backend.Put(key, value)
 	if err != nil {
 		m.putErr.Inc()
@@ -137,16 +135,14 @@ func (m *measure) Put(key datastore.Key, value interface{}) error {
 	return err
 }
 
-func (m *measure) Get(key datastore.Key) (value interface{}, err error) {
+func (m *measure) Get(key datastore.Key) (value []byte, err error) {
 	defer recordLatency(m.getLatency, time.Now())
 	m.getNum.Inc()
 	value, err = m.backend.Get(key)
 	if err != nil {
 		m.getErr.Inc()
 	} else {
-		if b, ok := value.([]byte); ok {
-			m.getSize.Observe(float64(len(b)))
-		}
+		m.getSize.Observe(float64(len(value)))
 	}
 	return value, err
 }
@@ -263,12 +259,9 @@ func (m *measure) Batch() (datastore.Batch, error) {
 	}, nil
 }
 
-func (mt *measuredBatch) Put(key datastore.Key, val interface{}) error {
+func (mt *measuredBatch) Put(key datastore.Key, val []byte) error {
 	mt.puts++
-	valb, ok := val.([]byte)
-	if ok {
-		mt.m.putSize.Observe(float64(len(valb)))
-	}
+	mt.m.putSize.Observe(float64(len(val)))
 	return mt.putts.Put(key, val)
 }
 

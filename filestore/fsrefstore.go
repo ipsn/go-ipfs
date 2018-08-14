@@ -10,15 +10,15 @@ import (
 
 	pb "github.com/ipsn/go-ipfs/filestore/pb"
 
-	dshelp "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-ds-help"
-	posinfo "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-posinfo"
-	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
-	proto "github.com/golang/protobuf/proto"
-	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	dsns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/namespace"
 	dsq "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/query"
+	posinfo "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-posinfo"
+	proto "github.com/golang/protobuf/proto"
+	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
+	dshelp "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-ds-help"
 )
 
 // FilestorePrefix identifies the key prefix for FileManager blocks.
@@ -155,12 +155,7 @@ func (f *FileManager) getDataObj(c *cid.Cid) (*pb.DataObj, error) {
 	return unmarshalDataObj(o)
 }
 
-func unmarshalDataObj(o interface{}) (*pb.DataObj, error) {
-	data, ok := o.([]byte)
-	if !ok {
-		return nil, fmt.Errorf("stored filestore dataobj was not a []byte")
-	}
-
+func unmarshalDataObj(data []byte) (*pb.DataObj, error) {
 	var dobj pb.DataObj
 	if err := proto.Unmarshal(data, &dobj); err != nil {
 		return nil, err
@@ -265,7 +260,7 @@ func (f *FileManager) Has(c *cid.Cid) (bool, error) {
 }
 
 type putter interface {
-	Put(ds.Key, interface{}) error
+	Put(ds.Key, []byte) error
 }
 
 // Put adds a new reference block to the FileManager. It does not check

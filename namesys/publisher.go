@@ -2,7 +2,6 @@ package namesys
 
 import (
 	"context"
-	"fmt"
 	"strings"
 	"sync"
 	"time"
@@ -12,12 +11,12 @@ import (
 	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
+	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
+	dsquery "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/query"
 	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
 	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns/pb"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	proto "github.com/gogo/protobuf/proto"
-	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
-	dsquery "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/query"
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
 	base32 "github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/base32"
 )
@@ -80,13 +79,8 @@ func (p *IpnsPublisher) ListPublished(ctx context.Context) (map[peer.ID]*pb.Ipns
 			if result.Error != nil {
 				return nil, result.Error
 			}
-			value, ok := result.Value.([]byte)
-			if !ok {
-				log.Error("found ipns record that we couldn't convert to a value")
-				continue
-			}
 			e := new(pb.IpnsEntry)
-			if err := proto.Unmarshal(value, e); err != nil {
+			if err := proto.Unmarshal(result.Value, e); err != nil {
 				// Might as well return what we can.
 				log.Error("found an invalid IPNS entry:", err)
 				continue
@@ -117,15 +111,9 @@ func (p *IpnsPublisher) GetPublished(ctx context.Context, id peer.ID, checkRouti
 	ctx, cancel := context.WithTimeout(ctx, time.Second*30)
 	defer cancel()
 
-	dsVal, err := p.ds.Get(IpnsDsKey(id))
-	var value []byte
+	value, err := p.ds.Get(IpnsDsKey(id))
 	switch err {
 	case nil:
-		var ok bool
-		value, ok = dsVal.([]byte)
-		if !ok {
-			return nil, fmt.Errorf("found ipns record that we couldn't convert to a value")
-		}
 	case ds.ErrNotFound:
 		if !checkRouting {
 			return nil, nil

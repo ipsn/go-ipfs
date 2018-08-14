@@ -13,15 +13,15 @@
     },
     {
       "author": "jbenet",
-      "hash": "QmeiCcJfDW1GJnWUArudsv5rQsihpi4oyddPhdqo3CfX6i",
+      "hash": "QmVG5gxteQNEMhrS8prJSmU2C9rebtFuTd3SYZ5kE3YZ5k",
       "name": "go-datastore",
-      "version": "2.4.1"
+      "version": "3.0.0"
     },
     {
       "author": "hsanjuan",
-      "hash": "QmWf5idGZ55KWUUo2EKM3BTeunjSiSgWbo4bLpYafENBgp",
+      "hash": "Qmeuoyt6qXqqaPeuZJwExzQzFTLC6epTAz3wFUK6jGbJjP",
       "name": "go-ipfs-ds-help",
-      "version": "0.0.6"
+      "version": "0.0.7"
     },
     {
       "author": "whyrusleeping",
@@ -86,6 +86,6 @@
   "license": "",
   "name": "go-libp2p-pubsub-router",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.3.11"
+  "version": "0.3.12"
 }
 

@@ -13,10 +13,10 @@ import (
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	goprocess "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
 	gpctx "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess/context"
+	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns/pb"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	proto "github.com/gogo/protobuf/proto"
-	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 )
 
 var errNoEntry = errors.New("no previous entry")
@@ -141,7 +141,7 @@ func (rp *Republisher) republishEntry(ctx context.Context, priv ic.PrivKey) erro
 
 func (rp *Republisher) getLastVal(id peer.ID) (path.Path, error) {
 	// Look for it locally only
-	vali, err := rp.ds.Get(namesys.IpnsDsKey(id))
+	val, err := rp.ds.Get(namesys.IpnsDsKey(id))
 	switch err {
 	case nil:
 	case ds.ErrNotFound:
@@ -149,8 +149,6 @@ func (rp *Republisher) getLastVal(id peer.ID) (path.Path, error) {
 	default:
 		return "", err
 	}
-
-	val := vali.([]byte)
 
 	e := new(pb.IpnsEntry)
 	if err := proto.Unmarshal(val, e); err != nil {
