@@ -8,8 +8,8 @@ import (
 	"github.com/ipsn/go-ipfs/pin"
 
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	bs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 )
 
 // RemovedBlock is used to respresent the result of removing a block.

@@ -3,8 +3,8 @@ package cidv0v1
 import (
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	bs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 )
 
 type blockstore struct {

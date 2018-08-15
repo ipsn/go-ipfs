@@ -22,9 +22,9 @@ import (
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	fstest "bazil.org/fuse/fs/fstestutil"
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
-	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil/ci"
 	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
+	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil/ci"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
 
 func maybeSkipFuseTests(t *testing.T) {

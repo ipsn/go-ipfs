@@ -14,8 +14,8 @@ import (
 	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 	ufspb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/pb"
 
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
 
 var ErrNotYetImplemented = errors.New("not yet implemented")

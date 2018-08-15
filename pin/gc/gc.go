@@ -8,16 +8,16 @@ import (
 	"strings"
 
 	pin "github.com/ipsn/go-ipfs/pin"
-	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	dstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
+	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-verifcid"
-	dstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 )
 
 var log = logging.Logger("gc")

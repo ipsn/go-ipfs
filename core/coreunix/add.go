@@ -21,11 +21,11 @@ import (
 
 	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit/files"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
-	posinfo "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-posinfo"
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
 	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	posinfo "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-posinfo"
 )
 
 var log = logging.Logger("coreunix")

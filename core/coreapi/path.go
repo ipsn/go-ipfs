@@ -12,8 +12,8 @@ import (
 	resolver "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
 	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
 
 // ResolveNode resolves the path `p` using Unixfs resolver, gets and returns the

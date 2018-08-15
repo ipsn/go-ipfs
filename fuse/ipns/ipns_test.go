@@ -16,9 +16,9 @@ import (
 	namesys "github.com/ipsn/go-ipfs/namesys"
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
+	offroute "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
 	fstest "bazil.org/fuse/fs/fstestutil"
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil/ci"
-	offroute "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
 	racedet "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-detect-race"
 )
 

@@ -1,10 +1,10 @@
 package verifbs
 
 import (
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-verifcid"
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-verifcid"
 )
 
 type VerifBSGC struct {

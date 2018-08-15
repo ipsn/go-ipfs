@@ -31,51 +31,51 @@ import (
 	pin "github.com/ipsn/go-ipfs/pin"
 	repo "github.com/ipsn/go-ipfs/repo"
 
-	exchange "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-interface"
 	circuit "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-circuit"
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
-	bitswap "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap"
-	bsnet "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/network"
 	ic "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	p2phost "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
-	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
-	psrouter "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-pubsub-router"
-	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
-	dht "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kad-dht"
-	dhtopts "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kad-dht/opts"
 	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
-	goprocess "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
+	bitswap "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap"
+	bsnet "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/network"
+	merkledag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	psrouter "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-pubsub-router"
 	rhelpers "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing-helpers"
+	nilrouting "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/none"
+	offroute "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
+	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
+	goprocess "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
 	mamask "github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/multiaddr-filter"
 	mafilter "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-maddr-filter"
+	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 	libp2p "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p"
 	discovery "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/discovery"
 	p2pbhost "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/host/basic"
 	rhost "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/host/routed"
 	identify "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/protocol/identify"
 	ping "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/protocol/ping"
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	record "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	floodsub "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-floodsub"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
 	metrics "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-metrics"
+	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
+	exchange "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-interface"
 	connmgr "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-connmgr"
 	smux "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-stream-muxer"
+	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
-	nilrouting "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/none"
-	offroute "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
-	merkledag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	pnet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-pnet"
-	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	yamux "github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/go-smux-yamux"
+	dht "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kad-dht"
+	dhtopts "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kad-dht/opts"
 	mplex "github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/go-smux-multiplex"
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	ifconnmgr "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-interface-connmgr"
-	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
 )
 
 const IpnsValidatorTag = "ipns"
@@ -453,7 +453,26 @@ func (n *IpfsNode) startOnlineServicesWithHost(ctx context.Context, host p2phost
 	n.Ping = ping.NewPingService(host)
 
 	if pubsub || ipnsps {
-		service, err := floodsub.NewFloodSub(ctx, host)
+		cfg, err := n.Repo.Config()
+		if err != nil {
+			return err
+		}
+
+		var service *floodsub.PubSub
+
+		switch cfg.Pubsub.Router {
+		case "":
+			fallthrough
+		case "floodsub":
+			service, err = floodsub.NewFloodSub(ctx, host)
+
+		case "gossipsub":
+			service, err = floodsub.NewGossipSub(ctx, host)
+
+		default:
+			err = fmt.Errorf("Unknown pubsub router %s", cfg.Pubsub.Router)
+		}
+
 		if err != nil {
 			return err
 		}

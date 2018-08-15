@@ -7,9 +7,9 @@ import (
 
 	backoff "github.com/cenkalti/backoff"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-verifcid"
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-verifcid"
 )
 
 var log = logging.Logger("reprovider")

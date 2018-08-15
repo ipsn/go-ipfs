@@ -13,9 +13,9 @@ import (
 	mdag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
 
 var log = logging.Logger("pin")

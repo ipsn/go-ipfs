@@ -11,12 +11,12 @@ import (
 	"context"
 	"errors"
 
+	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	dsq "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/query"
-	posinfo "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-posinfo"
-	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	posinfo "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-posinfo"
 )
 
 var log = logging.Logger("filestore")

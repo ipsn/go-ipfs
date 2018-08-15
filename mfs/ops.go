@@ -8,8 +8,8 @@ import (
 
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
 
 // Mv moves the file or directory at 'src' to 'dst'

@@ -4,12 +4,12 @@ import (
 	"context"
 	"testing"
 
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	mdtest "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag/test"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
 
 func TestAddLink(t *testing.T) {

@@ -8,8 +8,8 @@ import (
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
 
 func dagpbJSONParser(r io.Reader, mhType uint64, mhLen int) ([]ipld.Node, error) {

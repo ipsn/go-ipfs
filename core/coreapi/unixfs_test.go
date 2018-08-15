@@ -17,12 +17,12 @@ import (
 	keystore "github.com/ipsn/go-ipfs/keystore"
 	repo "github.com/ipsn/go-ipfs/repo"
 
-	cbor "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-cbor"
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
+	mdag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	datastore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	syncds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
-	mdag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	cbor "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-cbor"
 	unixfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 )

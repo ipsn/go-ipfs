@@ -20,8 +20,8 @@ import (
 	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
 
 var ErrNotExist = errors.New("no such rootfs")

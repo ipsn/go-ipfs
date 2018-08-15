@@ -25,8 +25,8 @@ import (
 	fsrepo "github.com/ipsn/go-ipfs/repo/fsrepo"
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
-	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds/cli"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds/http"
