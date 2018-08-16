@@ -17,8 +17,8 @@ import (
 	dsq "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/query"
 	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	proto "github.com/golang/protobuf/proto"
 	posinfo "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-posinfo"
+	proto "github.com/gogo/protobuf/proto"
 )
 
 // FilestorePrefix identifies the key prefix for FileManager blocks.
@@ -276,7 +276,7 @@ func (f *FileManager) putTo(b *posinfo.FilestoreNode, to putter) error {
 		if !f.AllowUrls {
 			return ErrUrlstoreNotEnabled
 		}
-		dobj.FilePath = proto.String(b.PosInfo.FullPath)
+		dobj.FilePath = b.PosInfo.FullPath
 	} else {
 		if !f.AllowFiles {
 			return ErrFilestoreNotEnabled
@@ -290,10 +290,10 @@ func (f *FileManager) putTo(b *posinfo.FilestoreNode, to putter) error {
 			return err
 		}
 
-		dobj.FilePath = proto.String(filepath.ToSlash(p))
+		dobj.FilePath = filepath.ToSlash(p)
 	}
-	dobj.Offset = proto.Uint64(b.PosInfo.Offset)
-	dobj.Size_ = proto.Uint64(uint64(len(b.RawData())))
+	dobj.Offset = b.PosInfo.Offset
+	dobj.Size_ = uint64(len(b.RawData()))
 
 	data, err := proto.Marshal(&dobj)
 	if err != nil {
