@@ -7,11 +7,11 @@ import (
 	"time"
 
 	"github.com/ipsn/go-ipfs/core"
-	mfs "github.com/ipsn/go-ipfs/mfs"
 	gc "github.com/ipsn/go-ipfs/pin/gc"
 	repo "github.com/ipsn/go-ipfs/repo"
 
 	humanize "github.com/dustin/go-humanize"
+	mfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-mfs"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 )

@@ -11,7 +11,6 @@ import (
 	"strconv"
 
 	core "github.com/ipsn/go-ipfs/core"
-	mfs "github.com/ipsn/go-ipfs/mfs"
 	"github.com/ipsn/go-ipfs/pin"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	unixfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
@@ -20,6 +19,7 @@ import (
 	trickle "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer/trickle"
 
 	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit/files"
+	mfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-mfs"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
 	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
