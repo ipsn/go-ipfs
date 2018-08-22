@@ -8,8 +8,8 @@ import (
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
 
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 )
 
 // These constants define the changes that can be applied to a DAG.

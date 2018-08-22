@@ -114,7 +114,7 @@ func TestNotifications(t *testing.T) {
 
 	for _, s := range nets {
 		s.SetStreamHandler(func(s inet.Stream) {
-			s.Close()
+			inet.FullClose(s)
 		})
 	}
 
@@ -131,7 +131,7 @@ func TestNotifications(t *testing.T) {
 	for _, s := range nets {
 		s.SetStreamHandler(func(s inet.Stream) {
 			streams <- s
-			s.Close()
+			inet.FullClose(s)
 		})
 	}
 
@@ -146,7 +146,7 @@ func TestNotifications(t *testing.T) {
 			} else {
 				t.Logf("%s %s <--%p--> %s %s", c.LocalPeer(), c.LocalMultiaddr(), st1, c.RemotePeer(), c.RemoteMultiaddr())
 				// st1.Write([]byte("hello"))
-				st1.Close()
+				go inet.FullClose(st1)
 				st2 := <-streams
 				t.Logf("%s %s <--%p--> %s %s", c2.LocalPeer(), c2.LocalMultiaddr(), st2, c2.RemotePeer(), c2.RemoteMultiaddr())
 				testOCStream(notifiees[i], st1)

@@ -13,14 +13,14 @@ import (
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
 	notif "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing/notifications"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	b58 "github.com/mr-tron/base58/base58"
-	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 )
 
 var ErrNotDHT = errors.New("routing service is not a DHT")
@@ -160,7 +160,7 @@ var findProvidersDhtCmd = &cmds.Command{
 		}
 
 		if n.Routing == nil {
-			res.SetError(errNotOnline, cmdkit.ErrNormal)
+			res.SetError(ErrNotOnline, cmdkit.ErrNormal)
 			return
 		}
 
@@ -272,7 +272,7 @@ var provideRefDhtCmd = &cmds.Command{
 		}
 
 		if n.Routing == nil {
-			res.SetError(errNotOnline, cmdkit.ErrNormal)
+			res.SetError(ErrNotOnline, cmdkit.ErrNormal)
 			return
 		}
 
@@ -424,7 +424,7 @@ var findPeerDhtCmd = &cmds.Command{
 		}
 
 		if n.Routing == nil {
-			res.SetError(errNotOnline, cmdkit.ErrNormal)
+			res.SetError(ErrNotOnline, cmdkit.ErrNormal)
 			return
 		}
 
@@ -529,7 +529,7 @@ Different key types can specify other 'best' rules.
 		}
 
 		if n.Routing == nil {
-			res.SetError(errNotOnline, cmdkit.ErrNormal)
+			res.SetError(ErrNotOnline, cmdkit.ErrNormal)
 			return
 		}
 
@@ -643,7 +643,7 @@ NOTE: A value may not exceed 2048 bytes.
 		}
 
 		if n.Routing == nil {
-			res.SetError(errNotOnline, cmdkit.ErrNormal)
+			res.SetError(ErrNotOnline, cmdkit.ErrNormal)
 			return
 		}
 

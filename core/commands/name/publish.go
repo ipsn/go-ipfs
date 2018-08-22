@@ -1,25 +1,23 @@
-package commands
+package name
 
 import (
 	"context"
 	"errors"
 	"fmt"
 	"io"
-	"strings"
 	"time"
 
-	cmds "github.com/ipsn/go-ipfs/commands"
 	core "github.com/ipsn/go-ipfs/core"
+	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 	keystore "github.com/ipsn/go-ipfs/keystore"
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	crypto "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 )
-
-var errNotOnline = errors.New("this command must be run in online mode. Try running 'ipfs daemon' first")
 
 var PublishCmd = &cmds.Command{
 	Helptext: cmdkit.HelpText{
@@ -73,8 +71,8 @@ Alternatively, publish an <ipfs-path> using a valid PeerID (as listed by
 		cmdkit.StringOption("ttl", "Time duration this record should be cached for (caution: experimental)."),
 		cmdkit.StringOption("key", "k", "Name of the key to be used or a valid PeerID, as listed by 'ipfs key list -l'. Default: <<default>>.").WithDefault("self"),
 	},
-	Run: func(req cmds.Request, res cmds.Response) {
-		n, err := req.InvocContext().GetNode()
+	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) {
+		n, err := cmdenv.GetNode(env)
 		if err != nil {
 			res.SetError(err, cmdkit.ErrNormal)
 			return
@@ -93,7 +91,7 @@ Alternatively, publish an <ipfs-path> using a valid PeerID (as listed by
 			return
 		}
 
-		pstr := req.Arguments()[0]
+		pstr := req.Arguments[0]
 
 		if n.Identity == "" {
 			res.SetError(errors.New("identity not loaded"), cmdkit.ErrNormal)
@@ -102,9 +100,9 @@ Alternatively, publish an <ipfs-path> using a valid PeerID (as listed by
 
 		popts := new(publishOpts)
 
-		popts.verifyExists, _, _ = req.Option("resolve").Bool()
+		popts.verifyExists, _ = req.Options["resolve"].(bool)
 
-		validtime, _, _ := req.Option("lifetime").String()
+		validtime, _ := req.Options["lifetime"].(string)
 		d, err := time.ParseDuration(validtime)
 		if err != nil {
 			res.SetError(fmt.Errorf("error parsing lifetime option: %s", err), cmdkit.ErrNormal)
@@ -113,8 +111,8 @@ Alternatively, publish an <ipfs-path> using a valid PeerID (as listed by
 
 		popts.pubValidTime = d
 
-		ctx := req.Context()
-		if ttl, found, _ := req.Option("ttl").String(); found {
+		ctx := req.Context
+		if ttl, found := req.Options["ttl"].(string); found {
 			d, err := time.ParseDuration(ttl)
 			if err != nil {
 				res.SetError(err, cmdkit.ErrNormal)
@@ -124,7 +122,7 @@ Alternatively, publish an <ipfs-path> using a valid PeerID (as listed by
 			ctx = context.WithValue(ctx, "ipns-publish-ttl", d)
 		}
 
-		kname, _, _ := req.Option("key").String()
+		kname, _ := req.Options["key"].(string)
 		k, err := keylookup(n, kname)
 		if err != nil {
 			res.SetError(err, cmdkit.ErrNormal)
@@ -142,22 +140,18 @@ Alternatively, publish an <ipfs-path> using a valid PeerID (as listed by
 			res.SetError(err, cmdkit.ErrNormal)
 			return
 		}
-		res.SetOutput(output)
+		cmds.EmitOnce(res, output)
 	},
-	Marshalers: cmds.MarshalerMap{
-		cmds.Text: func(res cmds.Response) (io.Reader, error) {
-			v, err := unwrapOutput(res.Output())
-			if err != nil {
-				return nil, err
-			}
+	Encoders: cmds.EncoderMap{
+		cmds.Text: cmds.MakeEncoder(func(req *cmds.Request, w io.Writer, v interface{}) error {
 			entry, ok := v.(*IpnsEntry)
 			if !ok {
-				return nil, e.TypeErr(entry, v)
+				return e.TypeErr(entry, v)
 			}
 
-			s := fmt.Sprintf("Published to %s: %s\n", entry.Name, entry.Value)
-			return strings.NewReader(s), nil
-		},
+			_, err := fmt.Fprintf(w, "Published to %s: %s\n", entry.Name, entry.Value)
+			return err
+		}),
 	},
 	Type: IpnsEntry{},
 }

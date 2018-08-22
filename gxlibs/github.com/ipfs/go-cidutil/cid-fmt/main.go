@@ -5,14 +5,15 @@ import (
 	"os"
 	"strings"
 
-	c "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	cidutil "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cidutil"
 
+	c "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	mb "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multibase"
 )
 
 func usage() {
 	fmt.Fprintf(os.Stderr, "usage: %s [-b multibase-code] [-v cid-version] <fmt-str> <cid> ...\n\n", os.Args[0])
-	fmt.Fprintf(os.Stderr, "<fmt-str> is either 'prefix' or a printf style format string:\n%s", c.FormatRef)
+	fmt.Fprintf(os.Stderr, "<fmt-str> is either 'prefix' or a printf style format string:\n%s", cidutil.FormatRef)
 	os.Exit(2)
 }
 
@@ -89,9 +90,9 @@ outer:
 				continue
 			}
 		}
-		str, err := c.Format(fmtStr, base, cid)
+		str, err := cidutil.Format(fmtStr, base, cid)
 		switch err.(type) {
-		case c.FormatStringError:
+		case cidutil.FormatStringError:
 			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 			os.Exit(2)
 		default:

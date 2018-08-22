@@ -21,9 +21,9 @@
     },
     {
       "author": "why",
-      "hash": "QmNysBQN8FUSE2TKUYRFiMrn7Fiqk5RPeCz33cKaLa6syn",
+      "hash": "QmWnUZVLLk2HKpZAMEsqW3EFNku1xGzG7bvvAHeEQQoi2V",
       "name": "go-ipfs-addr",
-      "version": "0.1.18"
+      "version": "0.1.19"
     },
     {
       "author": "lgierth",
@@ -45,9 +45,9 @@
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmcZSzKEM5yDfpZbeEEZaVmaZ1zXm6JWTbrQZSB8hCVPzk",
+      "hash": "QmQsErDt8Qgw1XrsXf2BpEzDgGWtB1YLsTAARBup5b6B9W",
       "name": "go-libp2p-peer",
-      "version": "2.3.6"
+      "version": "2.3.7"
     }
   ],
   "gxVersion": "0.12.1",
@@ -55,5 +55,6 @@
   "license": "",
   "name": "go-ipfs-config",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.2.3"
+  "version": "0.2.4"
 }
+

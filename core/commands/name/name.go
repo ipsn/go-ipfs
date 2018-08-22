@@ -1,8 +1,7 @@
-package commands
+package name
 
 import (
-	cmds "github.com/ipsn/go-ipfs/commands"
-
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 

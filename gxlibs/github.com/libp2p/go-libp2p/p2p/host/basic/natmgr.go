@@ -8,7 +8,6 @@ import (
 	lgbl "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-loggables"
 	inat "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-nat"
 	inet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
-	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 )
 
@@ -187,9 +186,6 @@ func addPortMapping(nmgr *natManager, intaddr ma.Multiaddr) {
 		lm["error"] = err
 		return
 	}
-
-	// TODO: make these temporary and rediscover them.
-	nmgr.net.Peerstore().AddAddr(nmgr.net.LocalPeer(), extaddr, pstore.PermanentAddrTTL)
 
 	lm["outcome"] = "success"
 	lm["externalAddr"] = func() interface{} { return extaddr.String() }

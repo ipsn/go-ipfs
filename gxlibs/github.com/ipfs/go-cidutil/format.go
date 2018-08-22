@@ -1,9 +1,10 @@
-package cid
+package cidutil
 
 import (
 	"bytes"
 	"fmt"
 
+	c "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	mb "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multibase"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
 )
@@ -34,7 +35,7 @@ used.  For Cid version 1 the multibase prefix is included.
 
 // Format formats a cid according to the format specificer as
 // documented in the FormatRef constant
-func Format(fmtStr string, base mb.Encoding, cid *Cid) (string, error) {
+func Format(fmtStr string, base mb.Encoding, cid *c.Cid) (string, error) {
 	p := cid.Prefix()
 	var out bytes.Buffer
 	var err error
@@ -127,7 +128,7 @@ func baseToString(base mb.Encoding) string {
 }
 
 func codecToString(num uint64) string {
-	name, ok := CodecToStr[num]
+	name, ok := c.CodecToStr[num]
 	if !ok {
 		return fmt.Sprintf("codec?%d", num)
 	}

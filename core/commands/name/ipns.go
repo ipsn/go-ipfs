@@ -1,19 +1,29 @@
-package commands
+package name
 
 import (
 	"errors"
+	"fmt"
 	"io"
 	"strings"
 	"time"
 
-	cmds "github.com/ipsn/go-ipfs/commands"
+	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 	namesys "github.com/ipsn/go-ipfs/namesys"
 	nsopts "github.com/ipsn/go-ipfs/namesys/opts"
 
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 )
+
+var log = logging.Logger("core/commands/ipns")
+
+type ResolvedPath struct {
+	Path path.Path
+}
 
 var IpnsCmd = &cmds.Command{
 	Helptext: cmdkit.HelpText{
@@ -62,8 +72,8 @@ Resolve the value of a dnslink:
 		cmdkit.UintOption("dht-record-count", "dhtrc", "Number of records to request for DHT resolution."),
 		cmdkit.StringOption("dht-timeout", "dhtt", "Max time to collect values during DHT resolution eg \"30s\". Pass 0 for no timeout."),
 	},
-	Run: func(req cmds.Request, res cmds.Response) {
-		n, err := req.InvocContext().GetNode()
+	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) {
+		n, err := cmdenv.GetNode(env)
 		if err != nil {
 			res.SetError(err, cmdkit.ErrNormal)
 			return
@@ -77,8 +87,8 @@ Resolve the value of a dnslink:
 			}
 		}
 
-		nocache, _, _ := req.Option("nocache").Bool()
-		local, _, _ := req.Option("local").Bool()
+		nocache, _ := req.Options["nocache"].(bool)
+		local, _ := req.Options["local"].(bool)
 
 		// default to nodes namesys resolver
 		var resolver namesys.Resolver = n.Namesys
@@ -98,7 +108,7 @@ Resolve the value of a dnslink:
 		}
 
 		var name string
-		if len(req.Arguments()) == 0 {
+		if len(req.Arguments) == 0 {
 			if n.Identity == "" {
 				res.SetError(errors.New("identity not loaded"), cmdkit.ErrNormal)
 				return
@@ -106,12 +116,12 @@ Resolve the value of a dnslink:
 			name = n.Identity.Pretty()
 
 		} else {
-			name = req.Arguments()[0]
+			name = req.Arguments[0]
 		}
 
-		recursive, _, _ := req.Option("recursive").Bool()
-		rc, rcok, _ := req.Option("dht-record-count").Int()
-		dhtt, dhttok, _ := req.Option("dht-timeout").String()
+		recursive, _ := req.Options["recursive"].(bool)
+		rc, rcok := req.Options["dht-record-count"].(int)
+		dhtt, dhttok := req.Options["dht-timeout"].(string)
 		var ropts []nsopts.ResolveOpt
 		if !recursive {
 			ropts = append(ropts, nsopts.Depth(1))
@@ -136,7 +146,7 @@ Resolve the value of a dnslink:
 			name = "/ipns/" + name
 		}
 
-		output, err := resolver.Resolve(req.Context(), name, ropts...)
+		output, err := resolver.Resolve(req.Context, name, ropts...)
 		if err != nil {
 			res.SetError(err, cmdkit.ErrNormal)
 			return
@@ -144,21 +154,17 @@ Resolve the value of a dnslink:
 
 		// TODO: better errors (in the case of not finding the name, we get "failed to find any peer in table")
 
-		res.SetOutput(&ResolvedPath{output})
+		cmds.EmitOnce(res, &ResolvedPath{output})
 	},
-	Marshalers: cmds.MarshalerMap{
-		cmds.Text: func(res cmds.Response) (io.Reader, error) {
-			v, err := unwrapOutput(res.Output())
-			if err != nil {
-				return nil, err
-			}
-
+	Encoders: cmds.EncoderMap{
+		cmds.Text: cmds.MakeEncoder(func(req *cmds.Request, w io.Writer, v interface{}) error {
 			output, ok := v.(*ResolvedPath)
 			if !ok {
-				return nil, e.TypeErr(output, v)
+				return e.TypeErr(output, v)
 			}
-			return strings.NewReader(output.Path.String() + "\n"), nil
-		},
+			_, err := fmt.Fprintln(w, output.Path)
+			return err
+		}),
 	},
 	Type: ResolvedPath{},
 }

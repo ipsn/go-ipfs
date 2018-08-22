@@ -9,11 +9,12 @@ import (
 	oldCmds "github.com/ipsn/go-ipfs/commands"
 	lgc "github.com/ipsn/go-ipfs/commands/legacy"
 	"github.com/ipsn/go-ipfs/core"
+	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 	"github.com/ipsn/go-ipfs/filestore"
 
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 )
 
@@ -231,7 +232,7 @@ var dupsFileStore = &oldCmds.Command{
 }
 
 func getFilestore(env interface{}) (*core.IpfsNode, *filestore.Filestore, error) {
-	n, err := GetNode(env)
+	n, err := cmdenv.GetNode(env)
 	if err != nil {
 		return nil, nil, err
 	}

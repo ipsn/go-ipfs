@@ -5,11 +5,12 @@ import (
 	"io"
 	"text/tabwriter"
 
+	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
 	"github.com/ipsn/go-ipfs/core/commands/e"
 	"github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
 var KeyCmd = &cmds.Command{
@@ -66,7 +67,7 @@ var keyGenCmd = &cmds.Command{
 		cmdkit.StringArg("name", true, false, "name of key to create"),
 	},
 	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) {
-		api, err := GetApi(env)
+		api, err := cmdenv.GetApi(env)
 		if err != nil {
 			res.SetError(err, cmdkit.ErrNormal)
 			return
@@ -125,7 +126,7 @@ var keyListCmd = &cmds.Command{
 		cmdkit.BoolOption("l", "Show extra information about keys."),
 	},
 	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) {
-		api, err := GetApi(env)
+		api, err := cmdenv.GetApi(env)
 		if err != nil {
 			res.SetError(err, cmdkit.ErrNormal)
 			return
@@ -163,7 +164,7 @@ var keyRenameCmd = &cmds.Command{
 		cmdkit.BoolOption("force", "f", "Allow to overwrite an existing key."),
 	},
 	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) {
-		api, err := GetApi(env)
+		api, err := cmdenv.GetApi(env)
 		if err != nil {
 			res.SetError(err, cmdkit.ErrNormal)
 			return
@@ -215,7 +216,7 @@ var keyRmCmd = &cmds.Command{
 		cmdkit.BoolOption("l", "Show extra information about keys."),
 	},
 	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) {
-		api, err := GetApi(env)
+		api, err := cmdenv.GetApi(env)
 		if err != nil {
 			res.SetError(err, cmdkit.ErrNormal)
 			return

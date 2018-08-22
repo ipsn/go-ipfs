@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"errors"
 	"io"
 	"strings"
 
@@ -8,15 +9,18 @@ import (
 	lgc "github.com/ipsn/go-ipfs/commands/legacy"
 	dag "github.com/ipsn/go-ipfs/core/commands/dag"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
+	name "github.com/ipsn/go-ipfs/core/commands/name"
 	ocmd "github.com/ipsn/go-ipfs/core/commands/object"
 	unixfs "github.com/ipsn/go-ipfs/core/commands/unixfs"
 
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
-	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
 var log = logging.Logger("core/commands")
+
+var ErrNotOnline = errors.New("this command must be run in online mode. Try running 'ipfs daemon' first")
 
 const (
 	ApiOption = "api"
@@ -125,7 +129,7 @@ var rootSubcommands = map[string]*cmds.Command{
 	"log":       lgc.NewCommand(LogCmd),
 	"ls":        lgc.NewCommand(LsCmd),
 	"mount":     lgc.NewCommand(MountCmd),
-	"name":      lgc.NewCommand(NameCmd),
+	"name":      name.NameCmd,
 	"object":    ocmd.ObjectCmd,
 	"pin":       lgc.NewCommand(PinCmd),
 	"ping":      lgc.NewCommand(PingCmd),
@@ -160,11 +164,11 @@ var rootROSubcommands = map[string]*cmds.Command{
 	"get": GetCmd,
 	"dns": lgc.NewCommand(DNSCmd),
 	"ls":  lgc.NewCommand(LsCmd),
-	"name": lgc.NewCommand(&oldcmds.Command{
-		Subcommands: map[string]*oldcmds.Command{
-			"resolve": IpnsCmd,
+	"name": &cmds.Command{
+		Subcommands: map[string]*cmds.Command{
+			"resolve": name.IpnsCmd,
 		},
-	}),
+	},
 	"object": lgc.NewCommand(&oldcmds.Command{
 		Subcommands: map[string]*oldcmds.Command{
 			"data":  ocmd.ObjectDataCmd,

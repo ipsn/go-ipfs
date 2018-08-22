@@ -7,12 +7,13 @@ import (
 
 	oldcmds "github.com/ipsn/go-ipfs/commands"
 	lgc "github.com/ipsn/go-ipfs/commands/legacy"
+	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
 	"github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 
-	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
 var ObjectPatchCmd = &cmds.Command{
@@ -67,7 +68,7 @@ the limit will not be respected by the network.
 		cmdkit.FileArg("data", true, false, "Data to append.").EnableStdin(),
 	},
 	Run: func(req *cmds.Request, re cmds.ResponseEmitter, env cmds.Environment) {
-		api, err := GetApi(env)
+		api, err := cmdenv.GetApi(env)
 		if err != nil {
 			re.SetError(err, cmdkit.ErrNormal)
 			return
@@ -249,16 +250,4 @@ to a file containing 'bar', and returns the hash of the new object.
 	Marshalers: oldcmds.MarshalerMap{
 		oldcmds.Text: objectMarshaler,
 	},
-}
-
-// TODO: fix import loop with core/commands so we don't need that
-// COPIED FROM ONE LEVEL UP
-// GetApi extracts CoreAPI instance from the environment.
-func GetApi(env cmds.Environment) (coreiface.CoreAPI, error) {
-	ctx, ok := env.(*oldcmds.Context)
-	if !ok {
-		return nil, fmt.Errorf("expected env to be of type %T, got %T", ctx, env)
-	}
-
-	return ctx.GetApi()
 }

@@ -1,9 +1,10 @@
-package cid
+package cidutil
 
 import (
 	"fmt"
 	"testing"
 
+	c "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	mb "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multibase"
 )
 
@@ -55,13 +56,13 @@ func TestFmt(t *testing.T) {
 }
 
 func testFmt(t *testing.T, cidStr string, newBase mb.Encoding, fmtStr string, result string) {
-	cid, err := Decode(cidStr)
+	cid, err := c.Decode(cidStr)
 	if err != nil {
 		t.Fatal(err)
 	}
 	base := newBase
 	if newBase == -1 {
-		base, _ = ExtractEncoding(cidStr)
+		base, _ = c.ExtractEncoding(cidStr)
 	}
 	str, err := Format(fmtStr, base, cid)
 	if err != nil {

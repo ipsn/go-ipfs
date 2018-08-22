@@ -44,19 +44,14 @@ func (p *PingService) PingHandler(s inet.Stream) {
 		select {
 		case <-timer.C:
 			log.Debug("ping timeout")
-			s.Reset()
 		case err, ok := <-errCh:
 			if ok {
 				log.Debug(err)
-				if err == io.EOF {
-					s.Close()
-				} else {
-					s.Reset()
-				}
 			} else {
 				log.Error("ping loop failed without error")
 			}
 		}
+		s.Reset()
 	}()
 
 	for {
@@ -85,7 +80,7 @@ func (ps *PingService) Ping(ctx context.Context, p peer.ID) (<-chan time.Duratio
 	out := make(chan time.Duration)
 	go func() {
 		defer close(out)
-		defer s.Close()
+		defer s.Reset()
 		for {
 			select {
 			case <-ctx.Done():
@@ -93,7 +88,6 @@ func (ps *PingService) Ping(ctx context.Context, p peer.ID) (<-chan time.Duratio
 			default:
 				t, err := ping(s)
 				if err != nil {
-					s.Reset()
 					log.Debugf("ping error: %s", err)
 					return
 				}
