@@ -11,10 +11,10 @@ import (
 	"syscall"
 
 	core "github.com/ipsn/go-ipfs/core"
-	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
-	ftpb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/pb"
 	mdag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
+	ftpb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/pb"
 
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	fuse "bazil.org/fuse"

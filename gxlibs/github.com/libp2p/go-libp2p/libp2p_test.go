@@ -9,6 +9,7 @@ import (
 
 	crypto "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	host "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
+	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-tcp-transport"
 )
 
@@ -29,6 +30,41 @@ func TestBadTransportConstructor(t *testing.T) {
 	}
 	if !strings.Contains(err.Error(), "libp2p_test.go") {
 		t.Error("expected error to contain debugging info")
+	}
+}
+
+func TestNoListenAddrs(t *testing.T) {
+	ctx := context.Background()
+	h, err := New(ctx, NoListenAddrs)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer h.Close()
+	if len(h.Addrs()) != 0 {
+		t.Fatal("expected no addresses")
+	}
+}
+
+func TestNoTransports(t *testing.T) {
+	ctx := context.Background()
+	a, err := New(ctx, NoTransports)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer a.Close()
+
+	b, err := New(ctx, ListenAddrStrings("/ip4/127.0.0.1/tcp/0"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer b.Close()
+
+	err = a.Connect(ctx, pstore.PeerInfo{
+		ID:    b.ID(),
+		Addrs: b.Addrs(),
+	})
+	if err == nil {
+		t.Error("dial should have failed as no transports have been configured")
 	}
 }
 

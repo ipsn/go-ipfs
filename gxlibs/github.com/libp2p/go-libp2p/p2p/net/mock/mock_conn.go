@@ -29,14 +29,16 @@ type conn struct {
 	rconn   *conn // counterpart
 	streams list.List
 	proc    process.Process
+	stat    inet.Stat
 
 	sync.RWMutex
 }
 
-func newConn(ln, rn *peernet, l *link) *conn {
+func newConn(ln, rn *peernet, l *link, dir inet.Direction) *conn {
 	c := &conn{net: ln, link: l}
 	c.local = ln.peer
 	c.remote = rn.peer
+	c.stat = inet.Stat{Direction: dir}
 
 	c.localAddr = ln.ps.Addrs(ln.peer)[0]
 	c.remoteAddr = rn.ps.Addrs(rn.peer)[0]
@@ -154,4 +156,9 @@ func (c *conn) RemotePeer() peer.ID {
 // RemotePublicKey is the private key of the peer on our side.
 func (c *conn) RemotePublicKey() ic.PubKey {
 	return c.remotePubKey
+}
+
+// Stat returns metadata about the connection
+func (c *conn) Stat() inet.Stat {
+	return c.stat
 }

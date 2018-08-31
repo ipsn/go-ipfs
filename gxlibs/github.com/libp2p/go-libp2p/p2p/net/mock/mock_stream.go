@@ -25,6 +25,7 @@ type stream struct {
 	writeErr error
 
 	protocol protocol.ID
+	stat     inet.Stat
 }
 
 var ErrReset error = errors.New("stream reset")
@@ -35,7 +36,7 @@ type transportObject struct {
 	arrivalTime time.Time
 }
 
-func NewStream(w *io.PipeWriter, r *io.PipeReader) *stream {
+func NewStream(w *io.PipeWriter, r *io.PipeReader, dir inet.Direction) *stream {
 	s := &stream{
 		read:      r,
 		write:     w,
@@ -43,6 +44,7 @@ func NewStream(w *io.PipeWriter, r *io.PipeReader) *stream {
 		close:     make(chan struct{}, 1),
 		closed:    make(chan struct{}),
 		toDeliver: make(chan *transportObject),
+		stat:      inet.Stat{Direction: dir},
 	}
 
 	go s.transport()
@@ -64,6 +66,10 @@ func (s *stream) Write(p []byte) (n int, err error) {
 
 func (s *stream) Protocol() protocol.ID {
 	return s.protocol
+}
+
+func (s *stream) Stat() inet.Stat {
+	return s.stat
 }
 
 func (s *stream) SetProtocol(proto protocol.ID) {

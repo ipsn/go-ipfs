@@ -33,8 +33,8 @@ func (l *link) newConnPair(dialer *peernet) (*conn, *conn) {
 	l.RLock()
 	defer l.RUnlock()
 
-	c1 := newConn(l.nets[0], l.nets[1], l)
-	c2 := newConn(l.nets[1], l.nets[0], l)
+	c1 := newConn(l.nets[0], l.nets[1], l, inet.DirOutbound)
+	c2 := newConn(l.nets[1], l.nets[0], l, inet.DirInbound)
 	c1.rconn = c2
 	c2.rconn = c1
 
@@ -48,8 +48,8 @@ func (l *link) newStreamPair() (*stream, *stream) {
 	ra, wb := io.Pipe()
 	rb, wa := io.Pipe()
 
-	sa := NewStream(wa, ra)
-	sb := NewStream(wb, rb)
+	sa := NewStream(wa, ra, inet.DirOutbound)
+	sb := NewStream(wb, rb, inet.DirInbound)
 	return sa, sb
 }
 

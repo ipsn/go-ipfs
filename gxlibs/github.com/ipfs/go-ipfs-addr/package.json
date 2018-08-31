@@ -26,9 +26,9 @@
     },
     {
       "author": "vyzo",
-      "hash": "Qmbc6WjgbkaYhPw5dd6X2RLGiJz854dPPKkyZf52vE2PTS",
+      "hash": "QmUveY3vGb6uQuzccihinJshn3KUFjvb5PaBZUVhqGx8TJ",
       "name": "go-libp2p-circuit",
-      "version": "2.1.9"
+      "version": "2.1.11"
     }
   ],
   "gxVersion": "0.11.0",
@@ -36,6 +36,6 @@
   "license": "",
   "name": "go-ipfs-addr",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.1.19"
+  "version": "0.1.21"
 }
 

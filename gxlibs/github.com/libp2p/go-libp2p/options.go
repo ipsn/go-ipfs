@@ -241,3 +241,21 @@ func NATManager(nm config.NATManagerC) Option {
 		return nil
 	}
 }
+
+// NoListenAddrs will configure libp2p to not listen by default.
+//
+// This will both clear any configured listen addrs and prevent libp2p from
+// applying the default listen address option.
+var NoListenAddrs = func(cfg *Config) error {
+	cfg.ListenAddrs = []ma.Multiaddr{}
+	return nil
+}
+
+// NoTransports will configure libp2p to not enable any transports.
+//
+// This will both clear any configured transports (specified in prior libp2p
+// options) and prevent libp2p from applying the default transports.
+var NoTransports = func(cfg *Config) error {
+	cfg.Transports = []config.TptC{}
+	return nil
+}
