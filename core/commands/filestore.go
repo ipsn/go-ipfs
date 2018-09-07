@@ -218,11 +218,18 @@ var dupsFileStore = &oldCmds.Command{
 			for cid := range ch {
 				have, err := fs.MainBlockstore().Has(cid)
 				if err != nil {
-					out <- &RefWrapper{Err: err.Error()}
+					select {
+					case out <- &RefWrapper{Err: err.Error()}:
+					case <-req.Context().Done():
+					}
 					return
 				}
 				if have {
-					out <- &RefWrapper{Ref: cid.String()}
+					select {
+					case out <- &RefWrapper{Ref: cid.String()}:
+					case <-req.Context().Done():
+						return
+					}
 				}
 			}
 		}()
@@ -269,10 +276,14 @@ func perKeyActionToChan(ctx context.Context, args []string, action func(*cid.Cid
 		for _, arg := range args {
 			c, err := cid.Decode(arg)
 			if err != nil {
-				out <- &filestore.ListRes{
+				select {
+				case out <- &filestore.ListRes{
 					Status:   filestore.StatusOtherError,
 					ErrorMsg: fmt.Sprintf("%s: %v", arg, err),
+				}:
+				case <-ctx.Done():
 				}
+
 				continue
 			}
 			r := action(c)
