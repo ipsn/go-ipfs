@@ -5,8 +5,8 @@ import (
 
 	"github.com/ipsn/go-ipfs/core"
 	nsys "github.com/ipsn/go-ipfs/namesys"
-	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 )
 

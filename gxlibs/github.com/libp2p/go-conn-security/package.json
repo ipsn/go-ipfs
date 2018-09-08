@@ -21,9 +21,9 @@
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmQSbtGXCyNrj34LWL8EgXyNNYDZ8r3SwQcpW5pPxVhLnM",
+      "hash": "QmZNJyx9GGCX4GeuHnLB8fxaxMLs4MjTjHokxfQcCd6Nve",
       "name": "go-libp2p-net",
-      "version": "3.0.8"
+      "version": "3.0.9"
     }
   ],
   "gxVersion": "0.12.1",
@@ -31,6 +31,6 @@
   "license": "MIT",
   "name": "go-conn-security",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.1.8"
+  "version": "0.1.9"
 }
 

@@ -13,11 +13,11 @@ import (
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 )
 
-// ErrNotFound is returned when a search fails to find anything
+// ErrNotFound is returned when the router fails to find the requested record.
 var ErrNotFound = errors.New("routing: not found")
 
-// ErrNotSupported is returned when a search or put fails because the key type
-// isn't supported.
+// ErrNotSupported is returned when the router doesn't support the given record
+// type/operation.
 var ErrNotSupported = errors.New("routing: operation or key not supported")
 
 // ContentRouting is a value provider layer of indirection. It is used to find

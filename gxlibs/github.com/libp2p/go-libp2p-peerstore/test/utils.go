@@ -1,36 +1,52 @@
-package testutil
+package test
 
 import (
-	"io"
-	"math/rand"
-	"time"
+	"context"
+	"fmt"
+	"testing"
 
-	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
-	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
+	pt "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer/test"
+	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 )
 
-func timeSeededRand() io.Reader {
-	return rand.New(rand.NewSource(time.Now().UnixNano()))
+type peerpair struct {
+	ID   peer.ID
+	Addr ma.Multiaddr
 }
 
-func RandPeerID() (peer.ID, error) {
-	buf := make([]byte, 16)
-	if _, err := io.ReadFull(timeSeededRand(), buf); err != nil {
-		return "", err
+func randomPeer(b *testing.B) *peerpair {
+	var pid peer.ID
+	var err error
+	var addr ma.Multiaddr
+
+	if pid, err = pt.RandPeerID(); err != nil {
+		b.Fatal(err)
 	}
-	h, err := mh.Sum(buf, mh.SHA2_256, -1)
+
+	if addr, err = ma.NewMultiaddr(fmt.Sprintf("/ip4/127.0.0.1/tcp/6666/ipfs/%s", pid.Pretty())); err != nil {
+		b.Fatal(err)
+	}
+
+	return &peerpair{pid, addr}
+}
+
+func addressProducer(ctx context.Context, b *testing.B, addrs chan *peerpair) {
+	defer close(addrs)
+	for {
+		p := randomPeer(b)
+		select {
+		case addrs <- p:
+		case <-ctx.Done():
+			return
+		}
+	}
+}
+
+func multiaddr(m string) ma.Multiaddr {
+	maddr, err := ma.NewMultiaddr(m)
 	if err != nil {
-		return "", err
+		panic(err)
 	}
-
-	return peer.ID(h), nil
-}
-
-func RandTestKeyPair(bits int) (ci.PrivKey, ci.PubKey, error) {
-	return ci.GenerateKeyPairWithReader(ci.RSA, bits, timeSeededRand())
-}
-
-func SeededTestKeyPair(seed int64) (ci.PrivKey, ci.PubKey, error) {
-	return ci.GenerateKeyPairWithReader(ci.RSA, 512, rand.New(rand.NewSource(seed)))
+	return maddr
 }

@@ -5,7 +5,7 @@ import (
 	"math/big"
 	"sync"
 
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	ks "github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/go-keyspace"
 )
 

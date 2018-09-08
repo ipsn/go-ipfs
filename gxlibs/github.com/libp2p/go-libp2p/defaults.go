@@ -6,7 +6,7 @@ import (
 	"crypto/rand"
 
 	crypto "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
-	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
+	pstoremem "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore/pstoremem"
 	secio "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-secio"
 	tcp "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-tcp-transport"
 	ws "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-ws-transport"
@@ -41,7 +41,7 @@ var DefaultTransports = ChainOptions(
 
 // DefaultPeerstore configures libp2p to use the default peerstore.
 var DefaultPeerstore Option = func(cfg *Config) error {
-	return cfg.Apply(Peerstore(pstore.NewPeerstore()))
+	return cfg.Apply(Peerstore(pstoremem.NewPeerstore()))
 }
 
 // RandomIdentity generates a random identity (default behaviour)

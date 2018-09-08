@@ -24,6 +24,7 @@ import (
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	secio "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-secio"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
+	pstoremem "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore/pstoremem"
 )
 
 var verbose = false
@@ -127,7 +128,7 @@ func setupPeer(a args) (peer.ID, pstore.Peerstore, error) {
 		return "", nil, err
 	}
 
-	ps := pstore.NewPeerstore()
+	ps := pstoremem.NewPeerstore()
 	ps.AddPrivKey(p, sk)
 	ps.AddPubKey(p, pk)
 

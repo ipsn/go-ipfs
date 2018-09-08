@@ -4,8 +4,6 @@ import (
 	"context"
 	"errors"
 	"io"
-	"io/ioutil"
-	golog "log"
 	"net"
 	"sync"
 	"time"
@@ -18,6 +16,11 @@ import (
 	manet "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/mdns"
 )
+
+func init() {
+	// don't let mdns use logging...
+	mdns.DisableLogging = true
+}
 
 var log = logging.Logger("mdns")
 
@@ -63,9 +66,6 @@ func getDialableListenAddrs(ph host.Host) ([]*net.TCPAddr, error) {
 }
 
 func NewMdnsService(ctx context.Context, peerhost host.Host, interval time.Duration, serviceTag string) (Service, error) {
-
-	// TODO: dont let mdns use logging...
-	golog.SetOutput(ioutil.Discard)
 
 	var ipaddrs []net.IP
 	port := 4001
