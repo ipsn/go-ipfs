@@ -18,7 +18,7 @@ func (p InlineBuilder) WithCodec(c uint64) cid.Builder {
 }
 
 // Sum implements the cid.Builder interface
-func (p InlineBuilder) Sum(data []byte) (*cid.Cid, error) {
+func (p InlineBuilder) Sum(data []byte) (cid.Cid, error) {
 	if len(data) > p.Limit {
 		return p.Builder.Sum(data)
 	}

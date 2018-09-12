@@ -13,15 +13,15 @@
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmSbvata2WqNkqGtZNg8MR3SKwnB8iQ7vTPJgWqB8bC5kR",
+      "hash": "QmekxXDhCxCJRNuzmHreuaT3BsuJcsjcXWNrtV9C8DRHtd",
       "name": "go-multibase",
-      "version": "0.2.7"
+      "version": "0.3.0"
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmZFbDTY9jfSBms2MchvYM9oYRbAF19K7Pby47yDBfpPrb",
+      "hash": "QmPSQnBKM9g7BaUcZCvswUJVscQ1ipjmwxN5PXCjkp9EQ7",
       "name": "go-cid",
-      "version": "0.8.0"
+      "version": "0.9.0"
     }
   ],
   "gxVersion": "0.12.1",
@@ -29,6 +29,6 @@
   "license": "",
   "name": "go-cidutil",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.0.2"
+  "version": "0.1.1"
 }
 

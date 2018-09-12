@@ -37,16 +37,16 @@ var tCodecs = map[uint64]string{
 	DecredTx:           "decred-tx",
 }
 
-func assertEqual(t *testing.T, a, b *Cid) {
-	if a.codec != b.codec {
+func assertEqual(t *testing.T, a, b Cid) {
+	if a.Type() != b.Type() {
 		t.Fatal("mismatch on type")
 	}
 
-	if a.version != b.version {
+	if a.Version() != b.Version() {
 		t.Fatal("mismatch on version")
 	}
 
-	if !bytes.Equal(a.hash, b.hash) {
+	if !bytes.Equal(a.Hash(), b.Hash()) {
 		t.Fatal("multihash mismatch")
 	}
 }
@@ -77,11 +77,7 @@ func TestBasicMarshaling(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	cid := &Cid{
-		codec:   7,
-		version: 1,
-		hash:    h,
-	}
+	cid := NewCidV1(7, h)
 
 	data := cid.Bytes()
 
@@ -107,11 +103,7 @@ func TestBasesMarshaling(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	cid := &Cid{
-		codec:   7,
-		version: 1,
-		hash:    h,
-	}
+	cid := NewCidV1(7, h)
 
 	data := cid.Bytes()
 
@@ -152,6 +144,15 @@ func TestBasesMarshaling(t *testing.T) {
 		}
 
 		assertEqual(t, cid, out2)
+
+		encoder, err := mbase.NewEncoder(b)
+		if err != nil {
+			t.Fatal(err)
+		}
+		s2 := cid.Encode(encoder)
+		if s != s2 {
+			t.Fatalf("'%s' != '%s'", s, s2)
+		}
 	}
 }
 
@@ -170,16 +171,32 @@ func TestV0Handling(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if cid.version != 0 {
+	if cid.Version() != 0 {
 		t.Fatal("should have gotten version 0 cid")
 	}
 
-	if cid.hash.B58String() != old {
-		t.Fatal("marshaling roundtrip failed")
+	if cid.Hash().B58String() != old {
+		t.Fatalf("marshaling roundtrip failed: %s != %s", cid.Hash().B58String(), old)
 	}
 
 	if cid.String() != old {
 		t.Fatal("marshaling roundtrip failed")
+	}
+
+	new, err := cid.StringOfBase(mbase.Base58BTC)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if new != old {
+		t.Fatal("StringOfBase roundtrip failed")
+	}
+
+	encoder, err := mbase.NewEncoder(mbase.Base58BTC)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if cid.Encode(encoder) != old {
+		t.Fatal("Encode roundtrip failed")
 	}
 }
 
@@ -281,9 +298,7 @@ func TestPrefixRoundtrip(t *testing.T) {
 func Test16BytesVarint(t *testing.T) {
 	data := []byte("this is some test content")
 	hash, _ := mh.Sum(data, mh.SHA2_256, -1)
-	c := NewCidV1(DagCBOR, hash)
-
-	c.codec = 1 << 63
+	c := NewCidV1(1<<63, hash)
 	_ = c.Bytes()
 }
 
@@ -326,8 +341,8 @@ func TestParse(t *testing.T) {
 		if err != nil {
 			return err
 		}
-		if cid.version != 0 {
-			return fmt.Errorf("expected version 0, got %s", string(cid.version))
+		if cid.Version() != 0 {
+			return fmt.Errorf("expected version 0, got %s", string(cid.Version()))
 		}
 		actual := cid.Hash().B58String()
 		if actual != expected {
@@ -399,18 +414,18 @@ func TestJsonRoundTrip(t *testing.T) {
 	}
 	var actual Cid
 	err = json.Unmarshal(enc, &actual)
-	if !exp.Equals(&actual) {
+	if !exp.Equals(actual) {
 		t.Fatal("cids not equal for *Cid")
 	}
 
 	// Verify it works for a Cid.
-	enc, err = json.Marshal(*exp)
+	enc, err = json.Marshal(exp)
 	if err != nil {
 		t.Fatal(err)
 	}
 	var actual2 Cid
 	err = json.Unmarshal(enc, &actual2)
-	if !exp.Equals(&actual2) {
+	if !exp.Equals(actual2) {
 		t.Fatal("cids not equal for Cid")
 	}
 }
@@ -419,7 +434,10 @@ func BenchmarkStringV1(b *testing.B) {
 	data := []byte("this is some test content")
 	hash, _ := mh.Sum(data, mh.SHA2_256, -1)
 	cid := NewCidV1(Raw, hash)
+
+	b.ReportAllocs()
 	b.ResetTimer()
+
 	count := 0
 	for i := 0; i < b.N; i++ {
 		count += len(cid.String())

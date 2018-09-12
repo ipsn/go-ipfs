@@ -250,7 +250,7 @@ func (r Parallel) FindPeer(ctx context.Context, p peer.ID) (pstore.PeerInfo, err
 	return pi, err
 }
 
-func (r Parallel) Provide(ctx context.Context, c *cid.Cid, local bool) error {
+func (r Parallel) Provide(ctx context.Context, c cid.Cid, local bool) error {
 	return r.filter(func(ri routing.IpfsRouting) bool {
 		return supportsContent(ri)
 	}).put(func(ri routing.IpfsRouting) error {
@@ -258,7 +258,7 @@ func (r Parallel) Provide(ctx context.Context, c *cid.Cid, local bool) error {
 	})
 }
 
-func (r Parallel) FindProvidersAsync(ctx context.Context, c *cid.Cid, count int) <-chan pstore.PeerInfo {
+func (r Parallel) FindProvidersAsync(ctx context.Context, c cid.Cid, count int) <-chan pstore.PeerInfo {
 	routers := r.filter(func(ri routing.IpfsRouting) bool {
 		return supportsContent(ri)
 	})

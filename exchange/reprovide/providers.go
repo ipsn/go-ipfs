@@ -5,29 +5,29 @@ import (
 
 	pin "github.com/ipsn/go-ipfs/pin"
 
-	merkledag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
-	cidutil "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cidutil"
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	cidutil "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cidutil"
+	merkledag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 )
 
 // NewBlockstoreProvider returns key provider using bstore.AllKeysChan
 func NewBlockstoreProvider(bstore blocks.Blockstore) KeyChanFunc {
-	return func(ctx context.Context) (<-chan *cid.Cid, error) {
+	return func(ctx context.Context) (<-chan cid.Cid, error) {
 		return bstore.AllKeysChan(ctx)
 	}
 }
 
 // NewPinnedProvider returns provider supplying pinned keys
 func NewPinnedProvider(pinning pin.Pinner, dag ipld.DAGService, onlyRoots bool) KeyChanFunc {
-	return func(ctx context.Context) (<-chan *cid.Cid, error) {
+	return func(ctx context.Context) (<-chan cid.Cid, error) {
 		set, err := pinSet(ctx, pinning, dag, onlyRoots)
 		if err != nil {
 			return nil, err
 		}
 
-		outCh := make(chan *cid.Cid)
+		outCh := make(chan cid.Cid)
 		go func() {
 			defer close(outCh)
 			for c := range set.New {

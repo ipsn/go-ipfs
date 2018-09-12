@@ -6,14 +6,14 @@ import (
 
 	mdag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
 
 // DiffEnumerate fetches every object in the graph pointed to by 'to' that is
 // not in 'from'. This can be used to more efficiently fetch a graph if you can
 // guarantee you already have the entirety of 'from'
-func DiffEnumerate(ctx context.Context, dserv ipld.NodeGetter, from, to *cid.Cid) error {
+func DiffEnumerate(ctx context.Context, dserv ipld.NodeGetter, from, to cid.Cid) error {
 	fnd, err := dserv.Get(ctx, from)
 	if err != nil {
 		return fmt.Errorf("get %s: %s", from, err)
@@ -31,12 +31,12 @@ func DiffEnumerate(ctx context.Context, dserv ipld.NodeGetter, from, to *cid.Cid
 		// Since we're already assuming we have everything in the 'from' graph,
 		// add all those cids to our 'already seen' set to avoid potentially
 		// enumerating them later
-		if c.bef != nil {
+		if c.bef.Defined() {
 			sset.Add(c.bef)
 		}
 	}
 	for _, c := range diff {
-		if c.bef == nil {
+		if !c.bef.Defined() {
 			if sset.Has(c.aft) {
 				continue
 			}
@@ -59,7 +59,7 @@ func DiffEnumerate(ctx context.Context, dserv ipld.NodeGetter, from, to *cid.Cid
 // if bef is nil and aft is not, that means aft was newly added
 // if aft is nil and bef is not, that means bef was deleted
 type diffpair struct {
-	bef, aft *cid.Cid
+	bef, aft cid.Cid
 }
 
 // getLinkDiff returns a changeset between nodes 'a' and 'b'. Currently does
@@ -67,7 +67,7 @@ type diffpair struct {
 func getLinkDiff(a, b ipld.Node) []diffpair {
 	ina := make(map[string]*ipld.Link)
 	inb := make(map[string]*ipld.Link)
-	var aonly []*cid.Cid
+	var aonly []cid.Cid
 	for _, l := range b.Links() {
 		inb[l.Cid.KeyString()] = l
 	}

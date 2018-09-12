@@ -46,7 +46,7 @@ func (d *dummyValueStore) GetValue(ctx context.Context, key string, opts ...ropt
 
 type dummyProvider map[string][]peer.ID
 
-func (d dummyProvider) FindProvidersAsync(ctx context.Context, c *cid.Cid, count int) <-chan pstore.PeerInfo {
+func (d dummyProvider) FindProvidersAsync(ctx context.Context, c cid.Cid, count int) <-chan pstore.PeerInfo {
 	peers := d[c.KeyString()]
 	if len(peers) > count {
 		peers = peers[:count]
@@ -68,17 +68,17 @@ func (d dummyProvider) FindProvidersAsync(ctx context.Context, c *cid.Cid, count
 	return out
 }
 
-func (d dummyProvider) Provide(ctx context.Context, c *cid.Cid, local bool) error {
+func (d dummyProvider) Provide(ctx context.Context, c cid.Cid, local bool) error {
 	return routing.ErrNotSupported
 }
 
-type cbProvider func(c *cid.Cid, local bool) error
+type cbProvider func(c cid.Cid, local bool) error
 
-func (d cbProvider) Provide(ctx context.Context, c *cid.Cid, local bool) error {
+func (d cbProvider) Provide(ctx context.Context, c cid.Cid, local bool) error {
 	return d(c, local)
 }
 
-func (d cbProvider) FindProvidersAsync(ctx context.Context, c *cid.Cid, count int) <-chan pstore.PeerInfo {
+func (d cbProvider) FindProvidersAsync(ctx context.Context, c cid.Cid, count int) <-chan pstore.PeerInfo {
 	ch := make(chan pstore.PeerInfo)
 	close(ch)
 	return ch

@@ -9,9 +9,9 @@ import (
 
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
-	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	posinfo "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-posinfo"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 )
 
@@ -55,7 +55,7 @@ func TestBasicFilestore(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	var cids []*cid.Cid
+	var cids []cid.Cid
 	for i := 0; i < 100; i++ {
 		n := &posinfo.FilestoreNode{
 			PosInfo: &posinfo.PosInfo{
@@ -104,7 +104,7 @@ func TestBasicFilestore(t *testing.T) {
 	}
 }
 
-func randomFileAdd(t *testing.T, fs *Filestore, dir string, size int) (string, []*cid.Cid) {
+func randomFileAdd(t *testing.T, fs *Filestore, dir string, size int) (string, []cid.Cid) {
 	buf := make([]byte, size)
 	rand.Read(buf)
 
@@ -113,7 +113,7 @@ func randomFileAdd(t *testing.T, fs *Filestore, dir string, size int) (string, [
 		t.Fatal(err)
 	}
 
-	var out []*cid.Cid
+	var out []cid.Cid
 	for i := 0; i < size/10; i++ {
 		n := &posinfo.FilestoreNode{
 			PosInfo: &posinfo.PosInfo{

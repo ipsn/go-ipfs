@@ -18,15 +18,15 @@ import (
 	"fmt"
 
 	"github.com/ipsn/go-ipfs/core"
+	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	resolver "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
-	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 )
 
-func Pin(n *core.IpfsNode, ctx context.Context, paths []string, recursive bool) ([]*cid.Cid, error) {
-	out := make([]*cid.Cid, len(paths))
+func Pin(n *core.IpfsNode, ctx context.Context, paths []string, recursive bool) ([]cid.Cid, error) {
+	out := make([]cid.Cid, len(paths))
 
 	r := &resolver.Resolver{
 		DAG:         n.DAG,
@@ -58,8 +58,8 @@ func Pin(n *core.IpfsNode, ctx context.Context, paths []string, recursive bool) 
 	return out, nil
 }
 
-func Unpin(n *core.IpfsNode, ctx context.Context, paths []string, recursive bool) ([]*cid.Cid, error) {
-	unpinned := make([]*cid.Cid, len(paths))
+func Unpin(n *core.IpfsNode, ctx context.Context, paths []string, recursive bool) ([]cid.Cid, error) {
+	unpinned := make([]cid.Cid, len(paths))
 
 	r := &resolver.Resolver{
 		DAG:         n.DAG,

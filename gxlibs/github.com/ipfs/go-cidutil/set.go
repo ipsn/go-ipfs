@@ -14,21 +14,21 @@ func NewSet() *Set { return c.NewSet() }
 // for the Visit function
 type StreamingSet struct {
 	Set *Set
-	New chan *c.Cid
+	New chan c.Cid
 }
 
 // NewStreamingSet initializes and returns new Set.
 func NewStreamingSet() *StreamingSet {
 	return &StreamingSet{
 		Set: c.NewSet(),
-		New: make(chan *c.Cid),
+		New: make(chan c.Cid),
 	}
 }
 
 // Visitor creates new visitor which adds a Cids to the set and emits them to
 // the set.New channel
-func (s *StreamingSet) Visitor(ctx context.Context) func(c *c.Cid) bool {
-	return func(c *c.Cid) bool {
+func (s *StreamingSet) Visitor(ctx context.Context) func(c c.Cid) bool {
+	return func(c c.Cid) bool {
 		if s.Set.Visit(c) {
 			select {
 			case s.New <- c:

@@ -25,12 +25,12 @@ func (nr Null) GetValue(context.Context, string, ...ropts.Option) ([]byte, error
 }
 
 // Provide always returns ErrNotSupported
-func (nr Null) Provide(context.Context, *cid.Cid, bool) error {
+func (nr Null) Provide(context.Context, cid.Cid, bool) error {
 	return routing.ErrNotSupported
 }
 
 // FindProvidersAsync always returns a closed channel
-func (nr Null) FindProvidersAsync(context.Context, *cid.Cid, int) <-chan pstore.PeerInfo {
+func (nr Null) FindProvidersAsync(context.Context, cid.Cid, int) <-chan pstore.PeerInfo {
 	ch := make(chan pstore.PeerInfo)
 	close(ch)
 	return ch

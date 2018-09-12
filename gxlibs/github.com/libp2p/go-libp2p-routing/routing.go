@@ -26,10 +26,10 @@ type ContentRouting interface {
 	// Provide adds the given cid to the content routing system. If 'true' is
 	// passed, it also announces it, otherwise it is just kept in the local
 	// accounting of which objects are being provided.
-	Provide(context.Context, *cid.Cid, bool) error
+	Provide(context.Context, cid.Cid, bool) error
 
 	// Search for peers who are able to provide a given key
-	FindProvidersAsync(context.Context, *cid.Cid, int) <-chan pstore.PeerInfo
+	FindProvidersAsync(context.Context, cid.Cid, int) <-chan pstore.PeerInfo
 }
 
 // PeerRouting is a way to find information about certain peers.

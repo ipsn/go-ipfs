@@ -226,7 +226,7 @@ func TestParallelFindProviders(t *testing.T) {
 	for i := 0; i < 2; i++ {
 
 		for i, tc := range []struct {
-			cid       *cid.Cid
+			cid       cid.Cid
 			providers []peer.ID
 		}{
 			{
@@ -370,12 +370,12 @@ func TestParallelProvide(t *testing.T) {
 	d := Parallel{
 		Parallel{
 			&Compose{
-				ContentRouting: cbProvider(func(c *cid.Cid, local bool) error {
+				ContentRouting: cbProvider(func(c cid.Cid, local bool) error {
 					return routing.ErrNotSupported
 				}),
 			},
 			&Compose{
-				ContentRouting: cbProvider(func(c *cid.Cid, local bool) error {
+				ContentRouting: cbProvider(func(c cid.Cid, local bool) error {
 					return errors.New(c.String())
 				}),
 			},

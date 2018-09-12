@@ -47,7 +47,7 @@ func (cr *Compose) GetValue(ctx context.Context, key string, opts ...ropts.Optio
 // Provide adds the given cid to the content routing system. If 'true' is
 // passed, it also announces it, otherwise it is just kept in the local
 // accounting of which objects are being provided.
-func (cr *Compose) Provide(ctx context.Context, c *cid.Cid, local bool) error {
+func (cr *Compose) Provide(ctx context.Context, c cid.Cid, local bool) error {
 	if cr.ContentRouting == nil {
 		return routing.ErrNotSupported
 	}
@@ -55,7 +55,7 @@ func (cr *Compose) Provide(ctx context.Context, c *cid.Cid, local bool) error {
 }
 
 // FindProvidersAsync searches for peers who are able to provide a given key
-func (cr *Compose) FindProvidersAsync(ctx context.Context, c *cid.Cid, count int) <-chan pstore.PeerInfo {
+func (cr *Compose) FindProvidersAsync(ctx context.Context, c cid.Cid, count int) <-chan pstore.PeerInfo {
 	if cr.ContentRouting == nil {
 		ch := make(chan pstore.PeerInfo)
 		close(ch)

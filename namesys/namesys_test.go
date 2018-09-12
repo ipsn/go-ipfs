@@ -7,8 +7,8 @@ import (
 	"time"
 
 	opts "github.com/ipsn/go-ipfs/namesys/opts"
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"

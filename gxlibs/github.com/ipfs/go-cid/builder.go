@@ -5,7 +5,7 @@ import (
 )
 
 type Builder interface {
-	Sum(data []byte) (*Cid, error)
+	Sum(data []byte) (Cid, error)
 	GetCodec() uint64
 	WithCodec(uint64) Builder
 }
@@ -33,10 +33,10 @@ func (p Prefix) WithCodec(c uint64) Builder {
 	return p
 }
 
-func (p V0Builder) Sum(data []byte) (*Cid, error) {
+func (p V0Builder) Sum(data []byte) (Cid, error) {
 	hash, err := mh.Sum(data, mh.SHA2_256, -1)
 	if err != nil {
-		return nil, err
+		return Undef, err
 	}
 	return NewCidV0(hash), nil
 }
@@ -52,14 +52,14 @@ func (p V0Builder) WithCodec(c uint64) Builder {
 	return V1Builder{Codec: c, MhType: mh.SHA2_256}
 }
 
-func (p V1Builder) Sum(data []byte) (*Cid, error) {
+func (p V1Builder) Sum(data []byte) (Cid, error) {
 	mhLen := p.MhLength
 	if mhLen <= 0 {
 		mhLen = -1
 	}
 	hash, err := mh.Sum(data, p.MhType, mhLen)
 	if err != nil {
-		return nil, err
+		return Undef, err
 	}
 	return NewCidV1(p.Codec, hash), nil
 }

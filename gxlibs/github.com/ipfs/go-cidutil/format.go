@@ -35,7 +35,7 @@ used.  For Cid version 1 the multibase prefix is included.
 
 // Format formats a cid according to the format specificer as
 // documented in the FormatRef constant
-func Format(fmtStr string, base mb.Encoding, cid *c.Cid) (string, error) {
+func Format(fmtStr string, base mb.Encoding, cid c.Cid) (string, error) {
 	p := cid.Prefix()
 	var out bytes.Buffer
 	var err error

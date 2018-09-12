@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	errwrap "github.com/hashicorp/errwrap"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
 )
 
@@ -85,7 +86,7 @@ func TestTieredGet(t *testing.T) {
 
 func TestTieredNoSupport(t *testing.T) {
 	d := Tiered{Tiered{Null{}}}
-	if _, ok := <-d.FindProvidersAsync(context.Background(), nil, 0); ok {
+	if _, ok := <-d.FindProvidersAsync(context.Background(), cid.Cid{}, 0); ok {
 		t.Fatal("shouldn't have found a provider")
 	}
 }

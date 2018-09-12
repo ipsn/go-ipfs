@@ -11,15 +11,15 @@ import (
 	"github.com/ipsn/go-ipfs/core"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
-	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
 
 // KeyList is a general type for outputting lists of keys
 type KeyList struct {
-	Keys []*cid.Cid
+	Keys []cid.Cid
 }
 
 // KeyListTextMarshaler outputs a KeyList as plaintext, one key per line
@@ -317,7 +317,7 @@ func (rw *RefWriter) writeRefsRecursive(n ipld.Node, depth int) (int, error) {
 // rw.MaxDepth = -1 disables any pruning. But setting rw.Unique to true will
 // prune already visited branches at the cost of keeping as set of visited
 // CIDs in memory.
-func (rw *RefWriter) visit(c *cid.Cid, depth int) (bool, bool) {
+func (rw *RefWriter) visit(c cid.Cid, depth int) (bool, bool) {
 	atMaxDepth := rw.MaxDepth >= 0 && depth == rw.MaxDepth
 	overMaxDepth := rw.MaxDepth >= 0 && depth > rw.MaxDepth
 
@@ -366,7 +366,7 @@ func (rw *RefWriter) visit(c *cid.Cid, depth int) (bool, bool) {
 }
 
 // Write one edge
-func (rw *RefWriter) WriteEdge(from, to *cid.Cid, linkname string) error {
+func (rw *RefWriter) WriteEdge(from, to cid.Cid, linkname string) error {
 	if rw.Ctx != nil {
 		select {
 		case <-rw.Ctx.Done(): // just in case.

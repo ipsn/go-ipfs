@@ -22,7 +22,7 @@ func main() {
 		usage()
 	}
 	newBase := mb.Encoding(-1)
-	var verConv func(cid *c.Cid) (*c.Cid, error)
+	var verConv func(cid c.Cid) (c.Cid, error)
 	args := os.Args[1:]
 outer:
 	for {
@@ -117,13 +117,13 @@ func errorMsg(fmtStr string, a ...interface{}) {
 	exitCode = 1
 }
 
-func toCidV0(cid *c.Cid) (*c.Cid, error) {
+func toCidV0(cid c.Cid) (c.Cid, error) {
 	if cid.Type() != c.DagProtobuf {
-		return nil, fmt.Errorf("can't convert non-protobuf nodes to cidv0")
+		return c.Cid{}, fmt.Errorf("can't convert non-protobuf nodes to cidv0")
 	}
 	return c.NewCidV0(cid.Hash()), nil
 }
 
-func toCidV1(cid *c.Cid) (*c.Cid, error) {
+func toCidV1(cid c.Cid) (c.Cid, error) {
 	return c.NewCidV1(cid.Type(), cid.Hash()), nil
 }

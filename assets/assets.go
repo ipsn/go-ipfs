@@ -30,7 +30,7 @@ var initDocPaths = []string{
 }
 
 // SeedInitDocs adds the list of embedded init documentation to the passed node, pins it and returns the root key
-func SeedInitDocs(nd *core.IpfsNode) (*cid.Cid, error) {
+func SeedInitDocs(nd *core.IpfsNode) (cid.Cid, error) {
 	return addAssetList(nd, initDocPaths)
 }
 
@@ -40,52 +40,52 @@ var initDirIndex = []string{
 	filepath.Join(initDirPath, "dir-index.html"),
 }
 
-func SeedInitDirIndex(nd *core.IpfsNode) (*cid.Cid, error) {
+func SeedInitDirIndex(nd *core.IpfsNode) (cid.Cid, error) {
 	return addAssetList(nd, initDirIndex)
 }
 
-func addAssetList(nd *core.IpfsNode, l []string) (*cid.Cid, error) {
+func addAssetList(nd *core.IpfsNode, l []string) (cid.Cid, error) {
 	dirb := uio.NewDirectory(nd.DAG)
 
 	for _, p := range l {
 		d, err := Asset(p)
 		if err != nil {
-			return nil, fmt.Errorf("assets: could load Asset '%s': %s", p, err)
+			return cid.Cid{}, fmt.Errorf("assets: could load Asset '%s': %s", p, err)
 		}
 
 		s, err := coreunix.Add(nd, bytes.NewBuffer(d))
 		if err != nil {
-			return nil, fmt.Errorf("assets: could not Add '%s': %s", p, err)
+			return cid.Cid{}, fmt.Errorf("assets: could not Add '%s': %s", p, err)
 		}
 
 		fname := filepath.Base(p)
 
 		c, err := cid.Decode(s)
 		if err != nil {
-			return nil, err
+			return cid.Cid{}, err
 		}
 
 		node, err := nd.DAG.Get(nd.Context(), c)
 		if err != nil {
-			return nil, err
+			return cid.Cid{}, err
 		}
 
 		if err := dirb.AddChild(nd.Context(), fname, node); err != nil {
-			return nil, fmt.Errorf("assets: could not add '%s' as a child: %s", fname, err)
+			return cid.Cid{}, fmt.Errorf("assets: could not add '%s' as a child: %s", fname, err)
 		}
 	}
 
 	dir, err := dirb.GetNode()
 	if err != nil {
-		return nil, err
+		return cid.Cid{}, err
 	}
 
 	if err := nd.Pinning.Pin(nd.Context(), dir, true); err != nil {
-		return nil, fmt.Errorf("assets: Pinning on init-docu failed: %s", err)
+		return cid.Cid{}, fmt.Errorf("assets: Pinning on init-docu failed: %s", err)
 	}
 
 	if err := nd.Pinning.Flush(); err != nil {
-		return nil, fmt.Errorf("assets: Pinning flush failed: %s", err)
+		return cid.Cid{}, fmt.Errorf("assets: Pinning flush failed: %s", err)
 	}
 
 	return dir.Cid(), nil

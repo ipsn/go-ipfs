@@ -13,9 +13,9 @@
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmZFbDTY9jfSBms2MchvYM9oYRbAF19K7Pby47yDBfpPrb",
+      "hash": "QmPSQnBKM9g7BaUcZCvswUJVscQ1ipjmwxN5PXCjkp9EQ7",
       "name": "go-cid",
-      "version": "0.8.0"
+      "version": "0.9.0"
     }
   ],
   "gxVersion": "0.12.1",
@@ -23,6 +23,6 @@
   "license": "",
   "name": "go-verifcid",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.0.4"
+  "version": "0.1.0"
 }
 

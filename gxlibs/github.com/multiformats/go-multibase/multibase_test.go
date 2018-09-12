@@ -7,13 +7,13 @@ import (
 )
 
 func TestMap(t *testing.T) {
-	for s,e := range Encodings {
+	for s, e := range Encodings {
 		s2 := EncodingToStr[e]
 		if s != s2 {
 			t.Errorf("round trip failed on encoding map: %s != %s", s, s2)
 		}
 	}
-	for e,s := range EncodingToStr {
+	for e, s := range EncodingToStr {
 		e2 := Encodings[s]
 		if e != e2 {
 			t.Errorf("round trip failed on encoding map: '%c' != '%c'", e, e2)
@@ -35,6 +35,8 @@ var encodedSamples = map[Encoding]string{
 	Base32hexPad:      "t8him6pbeehp62r39f9ii0pbmclp7it38d5n6e89144======",
 	Base32hexPadUpper: "T8HIM6PBEEHP62R39F9II0PBMCLP7IT38D5N6E89144======",
 	Base58BTC:         "z36UQrhJq9fNDS7DiAHM9YXqDHMPfr4EMArvt",
+	Base64:            "mRGVjZW50cmFsaXplIGV2ZXJ5dGhpbmchISE",
+	Base64url:         "uRGVjZW50cmFsaXplIGV2ZXJ5dGhpbmchISE",
 	Base64pad:         "MRGVjZW50cmFsaXplIGV2ZXJ5dGhpbmchISE=",
 	Base64urlPad:      "URGVjZW50cmFsaXplIGV2ZXJ5dGhpbmchISE=",
 }

@@ -13,11 +13,11 @@ import (
 	pin "github.com/ipsn/go-ipfs/pin"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit/files"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 )
 
 var DagCmd = &cmds.Command{
@@ -39,12 +39,12 @@ to deprecate and replace the existing 'ipfs object' command moving forward.
 
 // OutputObject is the output type of 'dag put' command
 type OutputObject struct {
-	Cid *cid.Cid
+	Cid cid.Cid
 }
 
 // ResolveOutput is the output type of 'dag resolve' command
 type ResolveOutput struct {
-	Cid     *cid.Cid
+	Cid     cid.Cid
 	RemPath string
 }
 
@@ -143,7 +143,7 @@ into an object of the specified format.
 			if dopin {
 				defer n.Blockstore.PinLock().Unlock()
 
-				cids.ForEach(func(c *cid.Cid) error {
+				cids.ForEach(func(c cid.Cid) error {
 					n.Pinning.PinWithMode(c, pin.Recursive)
 					return nil
 				})

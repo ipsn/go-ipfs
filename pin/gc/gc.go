@@ -11,12 +11,12 @@ import (
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 
-	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	dstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-verifcid"
+	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 )
 
@@ -25,7 +25,7 @@ var log = logging.Logger("gc")
 // Result represents an incremental output from a garbage collection
 // run.  It contains either an error, or the cid of a removed object.
 type Result struct {
-	KeyRemoved *cid.Cid
+	KeyRemoved cid.Cid
 	Error      error
 }
 
@@ -38,7 +38,7 @@ type Result struct {
 //
 // The routine then iterates over every block in the blockstore and
 // deletes any block that is not found in the marked set.
-func GC(ctx context.Context, bs bstore.GCBlockstore, dstor dstore.Datastore, pn pin.Pinner, bestEffortRoots []*cid.Cid) <-chan Result {
+func GC(ctx context.Context, bs bstore.GCBlockstore, dstor dstore.Datastore, pn pin.Pinner, bestEffortRoots []cid.Cid) <-chan Result {
 
 	elock := log.EventBegin(ctx, "GC.lockWait")
 	unlocker := bs.GCLock()
@@ -130,8 +130,8 @@ func GC(ctx context.Context, bs bstore.GCBlockstore, dstor dstore.Datastore, pn 
 // Descendants recursively finds all the descendants of the given roots and
 // adds them to the given cid.Set, using the provided dag.GetLinks function
 // to walk the tree.
-func Descendants(ctx context.Context, getLinks dag.GetLinks, set *cid.Set, roots []*cid.Cid) error {
-	verifyGetLinks := func(ctx context.Context, c *cid.Cid) ([]*ipld.Link, error) {
+func Descendants(ctx context.Context, getLinks dag.GetLinks, set *cid.Set, roots []cid.Cid) error {
+	verifyGetLinks := func(ctx context.Context, c cid.Cid) ([]*ipld.Link, error) {
 		err := verifcid.ValidateCid(c)
 		if err != nil {
 			return nil, err
@@ -168,12 +168,12 @@ func Descendants(ctx context.Context, getLinks dag.GetLinks, set *cid.Set, roots
 
 // ColoredSet computes the set of nodes in the graph that are pinned by the
 // pins in the given pinner.
-func ColoredSet(ctx context.Context, pn pin.Pinner, ng ipld.NodeGetter, bestEffortRoots []*cid.Cid, output chan<- Result) (*cid.Set, error) {
+func ColoredSet(ctx context.Context, pn pin.Pinner, ng ipld.NodeGetter, bestEffortRoots []cid.Cid, output chan<- Result) (*cid.Set, error) {
 	// KeySet currently implemented in memory, in the future, may be bloom filter or
 	// disk backed to conserve memory.
 	errors := false
 	gcs := cid.NewSet()
-	getLinks := func(ctx context.Context, cid *cid.Cid) ([]*ipld.Link, error) {
+	getLinks := func(ctx context.Context, cid cid.Cid) ([]*ipld.Link, error) {
 		links, err := ipld.GetLinks(ctx, ng, cid)
 		if err != nil {
 			errors = true
@@ -187,7 +187,7 @@ func ColoredSet(ctx context.Context, pn pin.Pinner, ng ipld.NodeGetter, bestEffo
 		output <- Result{Error: err}
 	}
 
-	bestEffortGetLinks := func(ctx context.Context, cid *cid.Cid) ([]*ipld.Link, error) {
+	bestEffortGetLinks := func(ctx context.Context, cid cid.Cid) ([]*ipld.Link, error) {
 		links, err := ipld.GetLinks(ctx, ng, cid)
 		if err != nil && err != ipld.ErrNotFound {
 			errors = true
@@ -230,7 +230,7 @@ var ErrCannotDeleteSomeBlocks = errors.New("garbage collection incomplete: could
 // CannotFetchLinksError provides detailed information about which links
 // could not be fetched and can appear as a Result in the GC output channel.
 type CannotFetchLinksError struct {
-	Key *cid.Cid
+	Key cid.Cid
 	Err error
 }
 
@@ -244,7 +244,7 @@ func (e *CannotFetchLinksError) Error() string {
 // blocks could not be deleted and can appear as a Result in the GC output
 // channel.
 type CannotDeleteBlockError struct {
-	Key *cid.Cid
+	Key cid.Cid
 	Err error
 }
 
