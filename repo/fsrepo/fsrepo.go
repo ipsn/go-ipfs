@@ -18,8 +18,6 @@ import (
 	mfsr "github.com/ipsn/go-ipfs/repo/fsrepo/migrations"
 	dir "github.com/ipsn/go-ipfs/thirdparty/dir"
 
-	"github.com/ipsn/go-ipfs/Godeps/_workspace/src/github.com/mitchellh/go-homedir"
-
 	util "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
@@ -28,6 +26,7 @@ import (
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	lockfile "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-fs-lock"
 	measure "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ds-measure"
+	homedir "github.com/mitchellh/go-homedir"
 )
 
 // LockFile is the filename of the repo lock, relative to config dir

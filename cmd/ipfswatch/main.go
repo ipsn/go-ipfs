@@ -14,11 +14,10 @@ import (
 	corehttp "github.com/ipsn/go-ipfs/core/corehttp"
 	coreunix "github.com/ipsn/go-ipfs/core/coreunix"
 	fsrepo "github.com/ipsn/go-ipfs/repo/fsrepo"
-	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
-
-	homedir "github.com/ipsn/go-ipfs/Godeps/_workspace/src/github.com/mitchellh/go-homedir"
 
 	process "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
+	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
+	homedir "github.com/mitchellh/go-homedir"
 	fsnotify "github.com/fsnotify/fsnotify"
 )
 

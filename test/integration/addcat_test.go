@@ -11,8 +11,6 @@ import (
 	"testing"
 	"time"
 
-	random "github.com/ipsn/go-ipfs/Godeps/_workspace/src/github.com/jbenet/go-random"
-
 	"github.com/ipsn/go-ipfs/core"
 	coreunix "github.com/ipsn/go-ipfs/core/coreunix"
 	mock "github.com/ipsn/go-ipfs/core/mock"
@@ -20,6 +18,7 @@ import (
 
 	testutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	random "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/go-random"
 	mocknet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/net/mock"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 )
