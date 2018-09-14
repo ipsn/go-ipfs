@@ -8,10 +8,10 @@ import (
 
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
 	caopts "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
-	ipfspath "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
 	crypto "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
+	ipfspath "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 )
 
 type KeyAPI CoreAPI
@@ -157,6 +157,12 @@ func (api *KeyAPI) Rename(ctx context.Context, oldName string, newName string, o
 	pid, err := peer.IDFromPublicKey(pubKey)
 	if err != nil {
 		return nil, false, err
+	}
+
+	// This is important, because future code will delete key `oldName`
+	// even if it is the same as newName.
+	if newName == oldName {
+		return &key{oldName, pid}, false, nil
 	}
 
 	overwrite := false
