@@ -7,17 +7,16 @@ import (
 	"strings"
 	"time"
 
-	core "github.com/ipsn/go-ipfs/core"
+	"github.com/ipsn/go-ipfs/core"
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
 	caopts "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
-	keystore "github.com/ipsn/go-ipfs/keystore"
-	namesys "github.com/ipsn/go-ipfs/namesys"
-	nsopts "github.com/ipsn/go-ipfs/namesys/opts"
+	"github.com/ipsn/go-ipfs/keystore"
+	"github.com/ipsn/go-ipfs/namesys"
 	ipath "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
-	crypto "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
-	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
 )
 
 type NameAPI CoreAPI
@@ -119,12 +118,7 @@ func (api *NameAPI) Resolve(ctx context.Context, name string, opts ...caopts.Nam
 		name = "/ipns/" + name
 	}
 
-	var ropts []nsopts.ResolveOpt
-	if !options.Recursive {
-		ropts = append(ropts, nsopts.Depth(1))
-	}
-
-	output, err := resolver.Resolve(ctx, name, ropts...)
+	output, err := resolver.Resolve(ctx, name, options.ResolveOpts...)
 	if err != nil {
 		return nil, err
 	}
