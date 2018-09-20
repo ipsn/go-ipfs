@@ -192,7 +192,7 @@ multihash.
 			return buf, nil
 		},
 	},
-	Type: Object{},
+	Type: &Object{},
 }
 
 var ObjectGetCmd = &oldcmds.Command{

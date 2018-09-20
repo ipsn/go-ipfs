@@ -1,7 +1,6 @@
 package name
 
 import (
-	"errors"
 	"fmt"
 	"io"
 	"strings"
@@ -48,14 +47,13 @@ var ipnspsStateCmd = &cmds.Command{
 	Helptext: cmdkit.HelpText{
 		Tagline: "Query the state of IPNS pubsub",
 	},
-	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) {
+	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) error {
 		n, err := cmdenv.GetNode(env)
 		if err != nil {
-			res.SetError(err, cmdkit.ErrNormal)
-			return
+			return err
 		}
 
-		cmds.EmitOnce(res, &ipnsPubsubState{n.PSRouter != nil})
+		return cmds.EmitOnce(res, &ipnsPubsubState{n.PSRouter != nil})
 	},
 	Type: ipnsPubsubState{},
 	Encoders: cmds.EncoderMap{
@@ -82,16 +80,14 @@ var ipnspsSubsCmd = &cmds.Command{
 	Helptext: cmdkit.HelpText{
 		Tagline: "Show current name subscriptions",
 	},
-	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) {
+	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) error {
 		n, err := cmdenv.GetNode(env)
 		if err != nil {
-			res.SetError(err, cmdkit.ErrNormal)
-			return
+			return err
 		}
 
 		if n.PSRouter == nil {
-			res.SetError(errors.New("IPNS pubsub subsystem is not enabled"), cmdkit.ErrClient)
-			return
+			return cmdkit.Errorf(cmdkit.ErrClient, "IPNS pubsub subsystem is not enabled")
 		}
 		var paths []string
 		for _, key := range n.PSRouter.GetSubscriptions() {
@@ -108,7 +104,7 @@ var ipnspsSubsCmd = &cmds.Command{
 			paths = append(paths, "/ipns/"+peer.IDB58Encode(pid))
 		}
 
-		cmds.EmitOnce(res, &stringList{paths})
+		return cmds.EmitOnce(res, &stringList{paths})
 	},
 	Type: stringList{},
 	Encoders: cmds.EncoderMap{
@@ -120,28 +116,25 @@ var ipnspsCancelCmd = &cmds.Command{
 	Helptext: cmdkit.HelpText{
 		Tagline: "Cancel a name subscription",
 	},
-	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) {
+	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) error {
 		n, err := cmdenv.GetNode(env)
 		if err != nil {
-			res.SetError(err, cmdkit.ErrNormal)
-			return
+			return err
 		}
 
 		if n.PSRouter == nil {
-			res.SetError(errors.New("IPNS pubsub subsystem is not enabled"), cmdkit.ErrClient)
-			return
+			return cmdkit.Errorf(cmdkit.ErrClient, "IPNS pubsub subsystem is not enabled")
 		}
 
 		name := req.Arguments[0]
 		name = strings.TrimPrefix(name, "/ipns/")
 		pid, err := peer.IDB58Decode(name)
 		if err != nil {
-			res.SetError(err, cmdkit.ErrClient)
-			return
+			return cmdkit.Errorf(cmdkit.ErrClient, err.Error())
 		}
 
 		ok := n.PSRouter.Cancel("/ipns/" + string(pid))
-		cmds.EmitOnce(res, &ipnsPubsubCancel{ok})
+		return cmds.EmitOnce(res, &ipnsPubsubCancel{ok})
 	},
 	Arguments: []cmdkit.Argument{
 		cmdkit.StringArg("name", true, false, "Name to cancel the subscription for."),
