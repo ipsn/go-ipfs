@@ -469,26 +469,42 @@ func (h *BasicHost) Addrs() []ma.Multiaddr {
 	return h.addrs(h.AllAddrs())
 }
 
+// mergeAddrs merges input address lists, leave only unique addresses
+func mergeAddrs(addrLists ...[]ma.Multiaddr) (uniqueAddrs []ma.Multiaddr) {
+	exists := make(map[string]bool)
+	for _, addrList := range addrLists {
+		for _, addr := range addrList {
+			k := string(addr.Bytes())
+			if exists[k] {
+				continue
+			}
+			exists[k] = true
+			uniqueAddrs = append(uniqueAddrs, addr)
+		}
+	}
+	return uniqueAddrs
+}
+
 // AllAddrs returns all the addresses of BasicHost at this moment in time.
 // It's ok to not include addresses if they're not available to be used now.
 func (h *BasicHost) AllAddrs() []ma.Multiaddr {
-	addrs, err := h.Network().InterfaceListenAddresses()
+	listenAddrs, err := h.Network().InterfaceListenAddresses()
 	if err != nil {
 		log.Debug("error retrieving network interface addrs")
 	}
-
-	if h.ids != nil { // add external observed addresses
-		addrs = append(addrs, h.ids.OwnObservedAddrs()...)
+	var observedAddrs []ma.Multiaddr
+	if h.ids != nil {
+		// peer observed addresses
+		observedAddrs = h.ids.OwnObservedAddrs()
+	}
+	var natAddrs []ma.Multiaddr
+	// natmgr is nil if we do not use nat option;
+	// h.natmgr.NAT() is nil if not ready, or no nat is available.
+	if h.natmgr != nil && h.natmgr.NAT() != nil {
+		natAddrs = h.natmgr.NAT().ExternalAddrs()
 	}
 
-	if h.natmgr != nil { // natmgr is nil if we do not use nat option.
-		nat := h.natmgr.NAT()
-		if nat != nil { // nat is nil if not ready, or no nat is available.
-			addrs = append(addrs, nat.ExternalAddrs()...)
-		}
-	}
-
-	return addrs
+	return mergeAddrs(listenAddrs, observedAddrs, natAddrs)
 }
 
 // Close shuts down the Host's services (network, etc).

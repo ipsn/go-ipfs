@@ -23,6 +23,10 @@ type Datastore struct {
 // the badger Datastore.
 type txn struct {
 	txn *badger.Txn
+
+	// Whether this transaction has been implicitly created as a result of a direct Datastore
+	// method invocation.
+	implicit bool
 }
 
 // Options are the badger datastore options, reexported here for convenience.
@@ -69,8 +73,7 @@ func NewDatastore(path string, options *Options) (*Datastore, error) {
 	}
 
 	return &Datastore{
-		DB: kv,
-
+		DB:             kv,
 		gcDiscardRatio: gcDiscardRatio,
 	}, nil
 }
@@ -79,11 +82,17 @@ func NewDatastore(path string, options *Options) (*Datastore, error) {
 // can be mutated without incurring changes to the underlying Datastore until
 // the transaction is Committed.
 func (d *Datastore) NewTransaction(readOnly bool) ds.Txn {
-	return &txn{d.DB.NewTransaction(!readOnly)}
+	return &txn{d.DB.NewTransaction(!readOnly), false}
+}
+
+// newImplicitTransaction creates a transaction marked as 'implicit'.
+// Implicit transactions are created by Datastore methods performing single operations.
+func (d *Datastore) newImplicitTransaction(readOnly bool) ds.Txn {
+	return &txn{d.DB.NewTransaction(!readOnly), true}
 }
 
 func (d *Datastore) Put(key ds.Key, value []byte) error {
-	txn := d.NewTransaction(false)
+	txn := d.newImplicitTransaction(false)
 	defer txn.Discard()
 
 	if err := txn.Put(key, value); err != nil {
@@ -94,7 +103,7 @@ func (d *Datastore) Put(key ds.Key, value []byte) error {
 }
 
 func (d *Datastore) PutWithTTL(key ds.Key, value []byte, ttl time.Duration) error {
-	txn := d.NewTransaction(false).(*txn)
+	txn := d.newImplicitTransaction(false).(*txn)
 	defer txn.Discard()
 
 	if err := txn.PutWithTTL(key, value, ttl); err != nil {
@@ -105,7 +114,7 @@ func (d *Datastore) PutWithTTL(key ds.Key, value []byte, ttl time.Duration) erro
 }
 
 func (d *Datastore) SetTTL(key ds.Key, ttl time.Duration) error {
-	txn := d.NewTransaction(false).(*txn)
+	txn := d.newImplicitTransaction(false).(*txn)
 	defer txn.Discard()
 
 	if err := txn.SetTTL(key, ttl); err != nil {
@@ -115,22 +124,29 @@ func (d *Datastore) SetTTL(key ds.Key, ttl time.Duration) error {
 	return txn.Commit()
 }
 
+func (d *Datastore) GetExpiration(key ds.Key) (time.Time, error) {
+	txn := d.newImplicitTransaction(false).(*txn)
+	defer txn.Discard()
+
+	return txn.GetExpiration(key)
+}
+
 func (d *Datastore) Get(key ds.Key) (value []byte, err error) {
-	txn := d.NewTransaction(true)
+	txn := d.newImplicitTransaction(true)
 	defer txn.Discard()
 
 	return txn.Get(key)
 }
 
 func (d *Datastore) Has(key ds.Key) (bool, error) {
-	txn := d.NewTransaction(true)
+	txn := d.newImplicitTransaction(true)
 	defer txn.Discard()
 
 	return txn.Has(key)
 }
 
 func (d *Datastore) Delete(key ds.Key) error {
-	txn := d.NewTransaction(false)
+	txn := d.newImplicitTransaction(false)
 	defer txn.Discard()
 
 	err := txn.Delete(key)
@@ -142,9 +158,10 @@ func (d *Datastore) Delete(key ds.Key) error {
 }
 
 func (d *Datastore) Query(q dsq.Query) (dsq.Results, error) {
-	txn := d.NewTransaction(true)
-	defer txn.Discard()
-
+	txn := d.newImplicitTransaction(true)
+	// We cannot defer txn.Discard() here, as the txn must remain active while the iterator is open.
+	// https://github.com/dgraph-io/badger/commit/b1ad1e93e483bbfef123793ceedc9a7e34b09f79
+	// The closing logic in the query goprocess takes care of discarding the implicit transaction.
 	return txn.Query(q)
 }
 
@@ -179,6 +196,16 @@ func (t *txn) Put(key ds.Key, value []byte) error {
 
 func (t *txn) PutWithTTL(key ds.Key, value []byte, ttl time.Duration) error {
 	return t.txn.SetWithTTL(key.Bytes(), value, ttl)
+}
+
+func (t *txn) GetExpiration(key ds.Key) (time.Time, error) {
+	item, err := t.txn.Get(key.Bytes())
+	if err == badger.ErrKeyNotFound {
+		return time.Time{}, ds.ErrNotFound
+	} else if err != nil {
+		return time.Time{}, err
+	}
+	return time.Unix(int64(item.ExpiresAt()), 0), nil
 }
 
 func (t *txn) SetTTL(key ds.Key, ttl time.Duration) error {
@@ -243,6 +270,11 @@ func (t *txn) Query(q dsq.Query) (dsq.Results, error) {
 	qrb := dsq.NewResultBuilder(q)
 
 	qrb.Process.Go(func(worker goprocess.Process) {
+		if t.implicit {
+			// this iterator is part of an implicit transaction, so when we're done we must discard
+			// the transaction. It's safe to discard the txn it because it contains the iterator only.
+			defer t.Discard()
+		}
 		defer it.Close()
 
 		for sent := 0; it.ValidForPrefix(prefix); sent++ {
@@ -268,6 +300,10 @@ func (t *txn) Query(q dsq.Query) (dsq.Results, error) {
 				}
 			} else {
 				result = dsq.Result{Entry: e}
+			}
+
+			if q.ReturnExpirations {
+				result.Expiration = time.Unix(int64(item.ExpiresAt()), 0)
 			}
 
 			select {

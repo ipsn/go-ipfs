@@ -44,6 +44,16 @@ func (cr *Compose) GetValue(ctx context.Context, key string, opts ...ropts.Optio
 	return cr.ValueStore.GetValue(ctx, key, opts...)
 }
 
+// SearchValue searches for the value corresponding to given Key.
+func (cr *Compose) SearchValue(ctx context.Context, key string, opts ...ropts.Option) (<-chan []byte, error) {
+	if cr.ValueStore == nil {
+		out := make(chan []byte)
+		close(out)
+		return out, nil
+	}
+	return cr.ValueStore.SearchValue(ctx, key, opts...)
+}
+
 // Provide adds the given cid to the content routing system. If 'true' is
 // passed, it also announces it, otherwise it is just kept in the local
 // accounting of which objects are being provided.

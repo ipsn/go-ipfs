@@ -18,19 +18,19 @@ import (
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
-	resolver "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	bservice "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	resolver "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
 
 	humanize "github.com/dustin/go-humanize"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
+	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
+	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	mfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-mfs"
-	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
-	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
 
@@ -223,25 +223,25 @@ func statNode(nd ipld.Node) (*statOutput, error) {
 
 	switch n := nd.(type) {
 	case *dag.ProtoNode:
-		d, err := ft.FromBytes(n.Data())
+		d, err := ft.FSNodeFromBytes(n.Data())
 		if err != nil {
 			return nil, err
 		}
 
 		var ndtype string
-		switch d.GetType() {
+		switch d.Type() {
 		case ft.TDirectory, ft.THAMTShard:
 			ndtype = "directory"
 		case ft.TFile, ft.TMetadata, ft.TRaw:
 			ndtype = "file"
 		default:
-			return nil, fmt.Errorf("unrecognized node type: %s", d.GetType())
+			return nil, fmt.Errorf("unrecognized node type: %s", d.Type())
 		}
 
 		return &statOutput{
 			Hash:           c.String(),
 			Blocks:         len(nd.Links()),
-			Size:           d.GetFilesize(),
+			Size:           d.FileSize(),
 			CumulativeSize: cumulsize,
 			Type:           ndtype,
 		}, nil

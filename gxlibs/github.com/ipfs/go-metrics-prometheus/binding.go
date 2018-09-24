@@ -33,7 +33,16 @@ func (c *creator) Counter() metrics.Counter {
 		Name: c.name,
 		Help: c.helptext,
 	})
-	c.register(res)
+	err := pro.Register(res)
+	if err != nil {
+		if registered, ok := err.(pro.AlreadyRegisteredError); ok {
+			if existing, ok := registered.ExistingCollector.(pro.Counter); ok {
+				log.Warningf("using existing prometheus collector: %s\n", c.name)
+				return existing
+			}
+		}
+		log.Errorf("Registering prometheus collector, name: %s, error: %s\n", c.name, err.Error())
+	}
 	return res
 }
 func (c *creator) Gauge() metrics.Gauge {
@@ -41,7 +50,16 @@ func (c *creator) Gauge() metrics.Gauge {
 		Name: c.name,
 		Help: c.helptext,
 	})
-	c.register(res)
+	err := pro.Register(res)
+	if err != nil {
+		if registered, ok := err.(pro.AlreadyRegisteredError); ok {
+			if existing, ok := registered.ExistingCollector.(pro.Gauge); ok {
+				log.Warningf("using existing prometheus collector: %s\n", c.name)
+				return existing
+			}
+		}
+		log.Errorf("Registering prometheus collector, name: %s, error: %s\n", c.name, err.Error())
+	}
 	return res
 }
 func (c *creator) Histogram(buckets []float64) metrics.Histogram {
@@ -50,7 +68,16 @@ func (c *creator) Histogram(buckets []float64) metrics.Histogram {
 		Help:    c.helptext,
 		Buckets: buckets,
 	})
-	c.register(res)
+	err := pro.Register(res)
+	if err != nil {
+		if registered, ok := err.(pro.AlreadyRegisteredError); ok {
+			if existing, ok := registered.ExistingCollector.(pro.Histogram); ok {
+				log.Warningf("using existing prometheus collector: %s\n", c.name)
+				return existing
+			}
+		}
+		log.Errorf("Registering prometheus collector, name: %s, error: %s\n", c.name, err.Error())
+	}
 	return res
 }
 
@@ -64,13 +91,15 @@ func (c *creator) Summary(opts metrics.SummaryOpts) metrics.Summary {
 		AgeBuckets: opts.AgeBuckets,
 		BufCap:     opts.BufCap,
 	})
-	c.register(res)
-	return res
-}
-
-func (c *creator) register(col pro.Collector) {
-	err := pro.Register(col)
+	err := pro.Register(res)
 	if err != nil {
+		if registered, ok := err.(pro.AlreadyRegisteredError); ok {
+			if existing, ok := registered.ExistingCollector.(pro.Summary); ok {
+				log.Warningf("using existing prometheus collector: %s\n", c.name)
+				return existing
+			}
+		}
 		log.Errorf("Registering prometheus collector, name: %s, error: %s\n", c.name, err.Error())
 	}
+	return res
 }

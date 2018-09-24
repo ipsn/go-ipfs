@@ -148,6 +148,55 @@ func (r Parallel) put(do func(routing.IpfsRouting) error) error {
 	}
 }
 
+func (r Parallel) search(ctx context.Context, do func(routing.IpfsRouting) (<-chan []byte, error)) (<-chan []byte, error) {
+	switch len(r) {
+	case 0:
+		return nil, routing.ErrNotFound
+	case 1:
+		return do(r[0])
+	}
+
+	out := make(chan []byte)
+	var errs []error
+	var wg sync.WaitGroup
+
+	for _, ri := range r {
+		vchan, err := do(ri)
+		switch err {
+		case nil:
+		case routing.ErrNotFound, routing.ErrNotSupported:
+			continue
+		default:
+			errs = append(errs, err)
+		}
+		wg.Add(1)
+
+		go func() {
+			defer wg.Done()
+			for {
+				select {
+				case v := <-vchan:
+					//TODO: run validator.Select here
+					select {
+					case out <- v:
+					case <-ctx.Done():
+						return
+					}
+				case <-ctx.Done():
+					return
+				}
+			}
+		}()
+	}
+
+	go func() {
+		wg.Wait()
+		close(out)
+	}()
+
+	return out, nil
+}
+
 func (r Parallel) get(ctx context.Context, do func(routing.IpfsRouting) (interface{}, error)) (interface{}, error) {
 	switch len(r) {
 	case 0:
@@ -180,7 +229,7 @@ func (r Parallel) get(ctx context.Context, do func(routing.IpfsRouting) (interfa
 	}
 
 	var errs []error
-	for _ = range r {
+	for range r {
 		select {
 		case res := <-results:
 			switch res.err {
@@ -228,6 +277,13 @@ func (r Parallel) GetValue(ctx context.Context, key string, opts ...ropts.Option
 	})
 	val, _ := vInt.([]byte)
 	return val, err
+}
+
+func (r Parallel) SearchValue(ctx context.Context, key string, opts ...ropts.Option) (<-chan []byte, error) {
+	resCh, err := r.forKey(key).search(ctx, func(ri routing.IpfsRouting) (<-chan []byte, error) {
+		return ri.SearchValue(ctx, key, opts...)
+	})
+	return resCh, err
 }
 
 func (r Parallel) GetPublicKey(ctx context.Context, p peer.ID) (ci.PubKey, error) {

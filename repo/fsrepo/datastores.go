@@ -11,13 +11,13 @@ import (
 	repo "github.com/ipsn/go-ipfs/repo"
 
 	humanize "github.com/dustin/go-humanize"
+	levelds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ds-leveldb"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	mount "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/mount"
-	badgerds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ds-badger"
 	flatfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ds-flatfs"
-	ldbopts "github.com/syndtr/goleveldb/leveldb/opt"
 	measure "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ds-measure"
-	levelds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ds-leveldb"
+	badgerds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ds-badger"
+	ldbopts "github.com/syndtr/goleveldb/leveldb/opt"
 )
 
 // ConfigFromMap creates a new datastore config from a map

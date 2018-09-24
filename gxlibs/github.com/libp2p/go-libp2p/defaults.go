@@ -32,7 +32,7 @@ var DefaultMuxers = ChainOptions(
 
 // DefaultTransports are the default libp2p transports.
 //
-// Use this option when you want to *extend* the set of multiplexers used by
+// Use this option when you want to *extend* the set of transports used by
 // libp2p instead of replacing them.
 var DefaultTransports = ChainOptions(
 	Transport(tcp.NewTCPTransport),

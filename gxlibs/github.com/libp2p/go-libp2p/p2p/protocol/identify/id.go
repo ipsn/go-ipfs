@@ -83,7 +83,12 @@ func (ids *IDService) IdentifyConn(c inet.Conn) {
 	ids.currid[c] = ch
 	ids.currmu.Unlock()
 
-	defer close(ch)
+	defer func() {
+		close(ch)
+		ids.currmu.Lock()
+		delete(ids.currid, c)
+		ids.currmu.Unlock()
+	}()
 
 	s, err := c.NewStream()
 	if err != nil {
@@ -103,16 +108,6 @@ func (ids *IDService) IdentifyConn(c inet.Conn) {
 	}
 
 	ids.responseHandler(s)
-
-	ids.currmu.Lock()
-	_, found := ids.currid[c]
-	delete(ids.currid, c)
-	ids.currmu.Unlock()
-
-	if !found {
-		log.Errorf("IdentifyConn failed to find channel (programmer error) for %s", c)
-	}
-	inet.FullClose(s)
 }
 
 func (ids *IDService) requestHandler(s inet.Stream) {
@@ -135,12 +130,14 @@ func (ids *IDService) responseHandler(s inet.Stream) {
 	mes := pb.Identify{}
 	if err := r.ReadMsg(&mes); err != nil {
 		log.Warning("error reading identify message: ", err)
+		s.Reset()
 		return
 	}
 	ids.consumeMessage(&mes, c)
-
 	log.Debugf("%s received message from %s %s", ID,
 		c.RemotePeer(), c.RemoteMultiaddr())
+
+	go inet.FullClose(s)
 }
 
 func (ids *IDService) populateMessage(mes *pb.Identify, c inet.Conn) {

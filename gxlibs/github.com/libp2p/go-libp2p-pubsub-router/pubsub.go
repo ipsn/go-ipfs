@@ -3,6 +3,7 @@ package namesys
 import (
 	"bytes"
 	"context"
+	"errors"
 	"sync"
 	"time"
 
@@ -22,6 +23,11 @@ import (
 
 var log = logging.Logger("pubsub-valuestore")
 
+type watchGroup struct {
+	// Note: this chan must be buffered, see notifyWatchers
+	listeners map[chan []byte]struct{}
+}
+
 type PubsubValueStore struct {
 	ctx  context.Context
 	ds   ds.Datastore
@@ -36,6 +42,9 @@ type PubsubValueStore struct {
 	mx   sync.Mutex
 	subs map[string]*floodsub.Subscription
 
+	watchLk  sync.Mutex
+	watching map[string]*watchGroup
+
 	Validator record.Validator
 }
 
@@ -44,13 +53,17 @@ type PubsubValueStore struct {
 // This could be greatly simplified if the pubsub implementation handled bootstrap itself
 func NewPubsubValueStore(ctx context.Context, host p2phost.Host, cr routing.ContentRouting, ps *floodsub.PubSub, validator record.Validator) *PubsubValueStore {
 	return &PubsubValueStore{
-		ctx:       ctx,
-		ds:        dssync.MutexWrap(ds.NewMapDatastore()),
-		host:      host, // needed for pubsub bootstrap
-		cr:        cr,   // needed for pubsub bootstrap
-		ps:        ps,
+		ctx: ctx,
+
+		ds:   dssync.MutexWrap(ds.NewMapDatastore()),
+		host: host, // needed for pubsub bootstrap
+		cr:   cr,   // needed for pubsub bootstrap
+		ps:   ps,
+
+		subs:     make(map[string]*floodsub.Subscription),
+		watching: make(map[string]*watchGroup),
+
 		Validator: validator,
-		subs:      make(map[string]*floodsub.Subscription),
 	}
 }
 
@@ -163,6 +176,70 @@ func (p *PubsubValueStore) GetValue(ctx context.Context, key string, opts ...rop
 	return p.getLocal(key)
 }
 
+func (p *PubsubValueStore) SearchValue(ctx context.Context, key string, opts ...ropts.Option) (<-chan []byte, error) {
+	if err := p.Subscribe(key); err != nil {
+		return nil, err
+	}
+
+	out := make(chan []byte, 1)
+	lv, err := p.getLocal(key)
+	if err == nil {
+		out <- lv
+	}
+
+	p.watchLk.Lock()
+	wg, ok := p.watching[key]
+	if !ok {
+		wg = &watchGroup{
+			listeners: map[chan []byte]struct{}{},
+		}
+		p.watching[key] = wg
+	}
+
+	proxy := make(chan []byte, 1)
+
+	ctx, cancel := context.WithCancel(ctx)
+	wg.listeners[proxy] = struct{}{}
+
+	go func() {
+		defer func() {
+			cancel()
+
+			p.watchLk.Lock()
+			delete(wg.listeners, proxy)
+
+			if _, ok := p.watching[key]; len(wg.listeners) == 0 && ok {
+				delete(p.watching, key)
+			}
+			p.watchLk.Unlock()
+
+			close(out)
+		}()
+
+		for {
+			select {
+			case val, ok := <-proxy:
+				if !ok {
+					return
+				}
+
+				// outCh is buffered, so we just put the value or swap it for the newer one
+				select {
+				case out <- val:
+				case <-out:
+					out <- val
+				}
+			case <-ctx.Done():
+				return
+			}
+		}
+	}()
+
+	p.watchLk.Unlock()
+
+	return out, nil
+}
+
 // GetSubscriptions retrieves a list of active topic subscriptions
 func (p *PubsubValueStore) GetSubscriptions() []string {
 	p.mx.Lock()
@@ -178,9 +255,16 @@ func (p *PubsubValueStore) GetSubscriptions() []string {
 
 // Cancel cancels a topic subscription; returns true if an active
 // subscription was canceled
-func (p *PubsubValueStore) Cancel(name string) bool {
+func (p *PubsubValueStore) Cancel(name string) (bool, error) {
 	p.mx.Lock()
 	defer p.mx.Unlock()
+
+	p.watchLk.Lock()
+	if _, wok := p.watching[name]; wok {
+		p.watchLk.Unlock()
+		return false, errors.New("key has active subscriptions")
+	}
+	p.watchLk.Unlock()
 
 	sub, ok := p.subs[name]
 	if ok {
@@ -188,7 +272,7 @@ func (p *PubsubValueStore) Cancel(name string) bool {
 		delete(p.subs, name)
 	}
 
-	return ok
+	return ok, nil
 }
 
 func (p *PubsubValueStore) handleSubscription(sub *floodsub.Subscription, key string, cancel func()) {
@@ -208,6 +292,24 @@ func (p *PubsubValueStore) handleSubscription(sub *floodsub.Subscription, key st
 			if err != nil {
 				log.Warningf("PubsubResolve: error writing update for %s: %s", key, err)
 			}
+			p.notifyWatchers(key, msg.GetData())
+		}
+	}
+}
+
+func (p *PubsubValueStore) notifyWatchers(key string, data []byte) {
+	p.watchLk.Lock()
+	defer p.watchLk.Unlock()
+	sg, ok := p.watching[key]
+	if !ok {
+		return
+	}
+
+	for watcher := range sg.listeners {
+		select {
+		case <-watcher:
+			watcher <- data
+		case watcher <- data:
 		}
 	}
 }

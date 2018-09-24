@@ -9,8 +9,8 @@ import (
 	"github.com/ipsn/go-ipfs/core/commands/e"
 	"github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 )
 
 var KeyCmd = &cmds.Command{

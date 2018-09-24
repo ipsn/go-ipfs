@@ -372,7 +372,7 @@ func (pn *peernet) Notify(f inet.Notifiee) {
 	pn.notifmu.Unlock()
 }
 
-// StopNotify unregisters Notifiee fromr receiving signals
+// StopNotify unregisters Notifiee from receiving signals
 func (pn *peernet) StopNotify(f inet.Notifiee) {
 	pn.notifmu.Lock()
 	delete(pn.notifs, f)

@@ -20,7 +20,7 @@ var log = logging.Logger("connmgr")
 // to trimming. Trims are automatically run on demand, only if the time from the
 // previous trim is higher than 10 seconds. Furthermore, trims can be explicitly
 // requested through the public interface of this struct (see TrimOpenConns).
-
+//
 // See configuration parameters in NewConnManager.
 type BasicConnMgr struct {
 	highWater int
@@ -129,6 +129,8 @@ func (cm *BasicConnMgr) getConnsToClose(ctx context.Context) []inet.Conn {
 	return closed
 }
 
+// GetTagInfo is called to fetch the tag information associated with a given
+// peer, nil is returned if p refers to an unknown peer.
 func (cm *BasicConnMgr) GetTagInfo(p peer.ID) *ifconnmgr.TagInfo {
 	cm.lk.Lock()
 	defer cm.lk.Unlock()
@@ -155,6 +157,7 @@ func (cm *BasicConnMgr) GetTagInfo(p peer.ID) *ifconnmgr.TagInfo {
 	return out
 }
 
+// TagPeer is called to associate a string and integer with a given peer.
 func (cm *BasicConnMgr) TagPeer(p peer.ID, tag string, val int) {
 	cm.lk.Lock()
 	defer cm.lk.Unlock()
@@ -170,6 +173,7 @@ func (cm *BasicConnMgr) TagPeer(p peer.ID, tag string, val int) {
 	pi.tags[tag] = val
 }
 
+// UntagPeer is called to disassociate a string and integer from a given peer.
 func (cm *BasicConnMgr) UntagPeer(p peer.ID, tag string) {
 	cm.lk.Lock()
 	defer cm.lk.Unlock()

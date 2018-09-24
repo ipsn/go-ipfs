@@ -44,6 +44,25 @@ func (d *dummyValueStore) GetValue(ctx context.Context, key string, opts ...ropt
 	return nil, routing.ErrNotFound
 }
 
+func (d *dummyValueStore) SearchValue(ctx context.Context, key string, opts ...ropts.Option) (<-chan []byte, error) {
+	out := make(chan []byte)
+	if strings.HasPrefix(key, "/error/") {
+		return nil, errors.New(key[len("/error/"):])
+	}
+
+	go func() {
+		defer close(out)
+		v, err := d.GetValue(ctx, key, opts...)
+		if err == nil {
+			select {
+			case out <- v:
+			case <-ctx.Done():
+			}
+		}
+	}()
+	return out, nil
+}
+
 type dummyProvider map[string][]peer.ID
 
 func (d dummyProvider) FindProvidersAsync(ctx context.Context, c cid.Cid, count int) <-chan pstore.PeerInfo {

@@ -66,13 +66,8 @@ func (testValidator) Select(key string, vals [][]byte) (int, error) {
 	return idx, nil
 }
 
-// tests
-func TestPubsubPublishSubscribe(t *testing.T) {
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-
+func setupTest(ctx context.Context, t *testing.T) (*PubsubValueStore, []*PubsubValueStore) {
 	key := "/namespace/key"
-	key2 := "/namespace/key2"
 
 	hosts := newNetHosts(ctx, t, 5)
 	vss := make([]*PubsubValueStore, len(hosts))
@@ -104,6 +99,19 @@ func TestPubsubPublishSubscribe(t *testing.T) {
 
 	// let the bootstrap finish
 	time.Sleep(time.Second * 1)
+
+	return pub, vss
+}
+
+// tests
+func TestPubsubPublishSubscribe(t *testing.T) {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	pub, vss := setupTest(ctx, t)
+
+	key := "/namespace/key"
+	key2 := "/namespace/key2"
 
 	val := []byte("valid for key 1")
 	err := pub.PutValue(ctx, key, val)
@@ -194,6 +202,48 @@ func TestPubsubPublishSubscribe(t *testing.T) {
 	for i, vs := range vss {
 		checkValue(ctx, t, i, vs, key, val)
 	}
+}
+
+func TestWatch(t *testing.T) {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	pub, vss := setupTest(ctx, t)
+
+	key := "/namespace/key"
+
+	ch, err := vss[1].SearchValue(ctx, key)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	val := []byte("valid for key 1")
+	err = pub.PutValue(ctx, key, val)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	v := string(<-ch)
+	if v != "valid for key 1" {
+		t.Errorf("got unexpected value: %s", v)
+	}
+
+	val = []byte("valid for key 2")
+	err = pub.PutValue(ctx, key, val)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = vss[1].Cancel(key)
+	if err.Error() != "key has active subscriptions" {
+		t.Fatal("cancel should have failed")
+	}
+
+	v = string(<-ch)
+	if v != "valid for key 2" {
+		t.Errorf("got unexpected value: %s", v)
+	}
+
 }
 
 func checkNotFound(ctx context.Context, t *testing.T, i int, vs routing.ValueStore, key string) {

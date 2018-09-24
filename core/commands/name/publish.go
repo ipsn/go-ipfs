@@ -12,10 +12,10 @@ import (
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 	keystore "github.com/ipsn/go-ipfs/keystore"
 
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	crypto "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 )
 
@@ -32,6 +32,7 @@ const (
 	lifeTimeOptionName     = "lifetime"
 	ttlOptionName          = "ttl"
 	keyOptionName          = "key"
+	quieterOptionName      = "quieter"
 )
 
 var PublishCmd = &cmds.Command{
@@ -86,6 +87,7 @@ Alternatively, publish an <ipfs-path> using a valid PeerID (as listed by
 		cmdkit.BoolOption(allowOfflineOptionName, "When offline, save the IPNS record to the the local datastore without broadcasting to the network instead of simply failing."),
 		cmdkit.StringOption(ttlOptionName, "Time duration this record should be cached for (caution: experimental)."),
 		cmdkit.StringOption(keyOptionName, "k", "Name of the key to be used or a valid PeerID, as listed by 'ipfs key list -l'. Default: <<default>>.").WithDefault("self"),
+		cmdkit.BoolOption(quieterOptionName, "Q", "Write only final hash."),
 	},
 	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) error {
 		n, err := cmdenv.GetNode(env)
@@ -161,7 +163,13 @@ Alternatively, publish an <ipfs-path> using a valid PeerID (as listed by
 				return e.TypeErr(entry, v)
 			}
 
-			_, err := fmt.Fprintf(w, "Published to %s: %s\n", entry.Name, entry.Value)
+			var err error
+			quieter, _ := req.Options[quieterOptionName].(bool)
+			if quieter {
+				_, err = fmt.Fprintln(w, entry.Name)
+			} else {
+				_, err = fmt.Fprintf(w, "Published to %s: %s\n", entry.Name, entry.Value)
+			}
 			return err
 		}),
 	},

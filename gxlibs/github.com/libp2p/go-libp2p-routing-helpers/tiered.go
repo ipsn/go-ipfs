@@ -54,6 +54,10 @@ func (r Tiered) GetValue(ctx context.Context, key string, opts ...ropts.Option) 
 	return val, err
 }
 
+func (r Tiered) SearchValue(ctx context.Context, key string, opts ...ropts.Option) (<-chan []byte, error) {
+	return Parallel(r).SearchValue(ctx, key, opts...)
+}
+
 func (r Tiered) GetPublicKey(ctx context.Context, p peer.ID) (ci.PubKey, error) {
 	vInt, err := r.get(ctx, func(ri routing.IpfsRouting) (interface{}, error) {
 		return routing.GetPublicKey(ri, ctx, p)

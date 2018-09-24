@@ -8,10 +8,10 @@ import (
 	"github.com/ipsn/go-ipfs/core/commands/cmdenv"
 	"github.com/ipsn/go-ipfs/core/commands/e"
 
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 )
 
 type ipnsPubsubState struct {
@@ -133,7 +133,10 @@ var ipnspsCancelCmd = &cmds.Command{
 			return cmdkit.Errorf(cmdkit.ErrClient, err.Error())
 		}
 
-		ok := n.PSRouter.Cancel("/ipns/" + string(pid))
+		ok, err := n.PSRouter.Cancel("/ipns/" + string(pid))
+		if err != nil {
+			return err
+		}
 		return cmds.EmitOnce(res, &ipnsPubsubCancel{ok})
 	},
 	Arguments: []cmdkit.Argument{

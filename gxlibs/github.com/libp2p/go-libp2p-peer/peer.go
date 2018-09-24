@@ -5,9 +5,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"strings"
 
-	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	ic "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	b58 "github.com/mr-tron/base58/base58"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
@@ -26,8 +24,6 @@ var (
 	// ErrEmptyPeerID is an error for empty peer ID.
 	ErrEmptyPeerID = errors.New("empty peer ID")
 )
-
-var log = logging.Logger("peer")
 
 // ID is a libp2p peer identity.
 type ID string
@@ -52,18 +48,10 @@ func (id ID) Loggable() map[string]interface{} {
 // codebase is known to be correct.
 func (id ID) String() string {
 	pid := id.Pretty()
-
-	//All sha256 nodes start with Qm
-	//We can skip the Qm to make the peer.ID more useful
-	if strings.HasPrefix(pid, "Qm") {
-		pid = pid[2:]
+	if len(pid) <= 10 {
+		return fmt.Sprintf("<peer.ID %s>", pid)
 	}
-
-	maxRunes := 6
-	if len(pid) < maxRunes {
-		maxRunes = len(pid)
-	}
-	return fmt.Sprintf("<peer.ID %s>", pid[:maxRunes])
+	return fmt.Sprintf("<peer.ID %s*%s>", pid[:2], pid[len(pid)-6:])
 }
 
 // MatchesPrivateKey tests whether this ID was derived from sk

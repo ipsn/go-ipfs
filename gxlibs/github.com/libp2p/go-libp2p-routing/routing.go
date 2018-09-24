@@ -51,14 +51,16 @@ type ValueStore interface {
 	// GetValue searches for the value corresponding to given Key.
 	GetValue(context.Context, string, ...ropts.Option) ([]byte, error)
 
-	// TODO
 	// SearchValue searches for better and better values from this value
 	// store corresponding to the given Key. Implementations may halt the
 	// search after a period of time or may continue searching indefinitely.
 	//
 	// Useful when you want a result *now* but still want to hear about
 	// better/newer results.
-	//SearchValue(context.Context, string, ...ropts.Option) (<-chan []byte, error)
+	//
+	// Implementations of this methods won't return ErrNotFound. When a value
+	// couldn't be found, the channel will get closed without passing any results
+	SearchValue(context.Context, string, ...ropts.Option) (<-chan []byte, error)
 }
 
 // IpfsRouting is the combination of different routing types that ipfs

@@ -8,8 +8,8 @@ import (
 	"time"
 
 	opts "github.com/ipsn/go-ipfs/namesys/opts"
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	isd "github.com/jbenet/go-is-domain"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 )
 
 type LookupTXTFunc func(name string) (txt []string, err error)

@@ -24,6 +24,11 @@ func (nr Null) GetValue(context.Context, string, ...ropts.Option) ([]byte, error
 	return nil, routing.ErrNotFound
 }
 
+// SearchValue always returns ErrNotFound
+func (nr Null) SearchValue(ctx context.Context, key string, opts ...ropts.Option) (<-chan []byte, error) {
+	return nil, routing.ErrNotFound
+}
+
 // Provide always returns ErrNotSupported
 func (nr Null) Provide(context.Context, cid.Cid, bool) error {
 	return routing.ErrNotSupported

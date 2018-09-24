@@ -113,7 +113,6 @@ func testKnowsAddrs(t *testing.T, h host.Host, p peer.ID, expected []ma.Multiadd
 	for _, addr := range expected {
 		if _, found := have[addr.String()]; !found {
 			t.Errorf("%s did not have addr for %s: %s", h.ID(), p, addr)
-			// panic("ahhhhhhh")
 		}
 	}
 }
