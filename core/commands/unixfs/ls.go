@@ -7,16 +7,13 @@ import (
 	"sort"
 	"text/tabwriter"
 
-	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
-
 	cmds "github.com/ipsn/go-ipfs/commands"
-	core "github.com/ipsn/go-ipfs/core"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
+	iface "github.com/ipsn/go-ipfs/core/coreapi/interface"
+
+	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	unixfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
-	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 	merkledag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
-	resolver "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
 )
 
 type LsLink struct {
@@ -82,6 +79,12 @@ possible, please use 'ipfs ls' instead.
 			return
 		}
 
+		api, err := req.InvocContext().GetApi()
+		if err != nil {
+			res.SetError(err, cmdkit.ErrNormal)
+			return
+		}
+
 		paths := req.Arguments()
 
 		output := LsOutput{
@@ -89,15 +92,16 @@ possible, please use 'ipfs ls' instead.
 			Objects:   map[string]*LsObject{},
 		}
 
-		for _, fpath := range paths {
+		for _, p := range paths {
 			ctx := req.Context()
 
-			resolver := &resolver.Resolver{
-				DAG:         node.DAG,
-				ResolveOnce: uio.ResolveUnixfsOnce,
+			fpath, err := iface.ParsePath(p)
+			if err != nil {
+				res.SetError(err, cmdkit.ErrNormal)
+				return
 			}
 
-			merkleNode, err := core.Resolve(ctx, node.Namesys, resolver, path.Path(fpath))
+			merkleNode, err := api.ResolveNode(ctx, fpath)
 			if err != nil {
 				res.SetError(err, cmdkit.ErrNormal)
 				return
@@ -106,7 +110,7 @@ possible, please use 'ipfs ls' instead.
 			c := merkleNode.Cid()
 
 			hash := c.String()
-			output.Arguments[fpath] = hash
+			output.Arguments[p] = hash
 
 			if _, ok := output.Objects[hash]; ok {
 				// duplicate argument for an already-listed node
