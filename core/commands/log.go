@@ -1,10 +1,12 @@
 package commands
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 
 	cmds "github.com/ipsn/go-ipfs/commands"
+	e "github.com/ipsn/go-ipfs/core/commands/e"
 
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
@@ -109,4 +111,24 @@ Outputs event log messages (not other log messages) as they are generated.
 		lwriter.WriterGroup.AddWriter(w)
 		res.SetOutput(r)
 	},
+}
+
+func stringListMarshaler(res cmds.Response) (io.Reader, error) {
+	v, err := unwrapOutput(res.Output())
+	if err != nil {
+		return nil, err
+	}
+
+	list, ok := v.(*stringList)
+	if !ok {
+		return nil, e.TypeErr(list, v)
+	}
+
+	buf := new(bytes.Buffer)
+	for _, s := range list.Strings {
+		buf.WriteString(s)
+		buf.WriteString("\n")
+	}
+
+	return buf, nil
 }
