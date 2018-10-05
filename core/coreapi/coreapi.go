@@ -16,7 +16,11 @@ package coreapi
 import (
 	core "github.com/ipsn/go-ipfs/core"
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
+
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 )
+
+var log = logging.Logger("core/coreapi")
 
 type CoreAPI struct {
 	node *core.IpfsNode
@@ -71,4 +75,9 @@ func (api *CoreAPI) Dht() coreiface.DhtAPI {
 // Swarm returns the SwarmAPI interface implementation backed by the go-ipfs node
 func (api *CoreAPI) Swarm() coreiface.SwarmAPI {
 	return (*SwarmAPI)(api)
+}
+
+// PubSub returns the PubSubAPI interface implementation backed by the go-ipfs node
+func (api *CoreAPI) PubSub() coreiface.PubSubAPI {
+	return (*PubSubAPI)(api)
 }

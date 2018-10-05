@@ -181,13 +181,17 @@ func (p *PubsubValueStore) SearchValue(ctx context.Context, key string, opts ...
 		return nil, err
 	}
 
+	p.watchLk.Lock()
+	defer p.watchLk.Unlock()
+
 	out := make(chan []byte, 1)
 	lv, err := p.getLocal(key)
 	if err == nil {
 		out <- lv
+		close(out)
+		return out, nil
 	}
 
-	p.watchLk.Lock()
 	wg, ok := p.watching[key]
 	if !ok {
 		wg = &watchGroup{
@@ -229,13 +233,14 @@ func (p *PubsubValueStore) SearchValue(ctx context.Context, key string, opts ...
 				case <-out:
 					out <- val
 				}
+
+				// 1 is good enough
+				return
 			case <-ctx.Done():
 				return
 			}
 		}
 	}()
-
-	p.watchLk.Unlock()
 
 	return out, nil
 }

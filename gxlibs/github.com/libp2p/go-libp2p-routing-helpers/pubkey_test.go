@@ -10,30 +10,36 @@ import (
 
 func TestGetPublicKey(t *testing.T) {
 	d := Parallel{
-		Parallel{
+		Routers: []routing.IpfsRouting{
+			Parallel{
+				Routers: []routing.IpfsRouting{
+					&Compose{
+						ValueStore: &LimitedValueStore{
+							ValueStore: new(dummyValueStore),
+							Namespaces: []string{"other"},
+						},
+					},
+				},
+			},
+			Tiered{
+				Routers: []routing.IpfsRouting{
+					&Compose{
+						ValueStore: &LimitedValueStore{
+							ValueStore: new(dummyValueStore),
+							Namespaces: []string{"pk"},
+						},
+					},
+				},
+			},
 			&Compose{
 				ValueStore: &LimitedValueStore{
 					ValueStore: new(dummyValueStore),
-					Namespaces: []string{"other"},
+					Namespaces: []string{"other", "pk"},
 				},
 			},
+			&struct{ Compose }{Compose{ValueStore: &LimitedValueStore{ValueStore: Null{}}}},
+			&struct{ Compose }{},
 		},
-		Tiered{
-			&Compose{
-				ValueStore: &LimitedValueStore{
-					ValueStore: new(dummyValueStore),
-					Namespaces: []string{"pk"},
-				},
-			},
-		},
-		&Compose{
-			ValueStore: &LimitedValueStore{
-				ValueStore: new(dummyValueStore),
-				Namespaces: []string{"other", "pk"},
-			},
-		},
-		&struct{ Compose }{Compose{ValueStore: &LimitedValueStore{ValueStore: Null{}}}},
-		&struct{ Compose }{},
 	}
 
 	pid, _ := peert.RandPeerID()

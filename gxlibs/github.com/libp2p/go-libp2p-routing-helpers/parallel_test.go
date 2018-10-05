@@ -18,36 +18,44 @@ import (
 
 func TestParallelPutGet(t *testing.T) {
 	d := Parallel{
-		Parallel{
+		Routers: []routing.IpfsRouting{
+			Parallel{
+				Routers: []routing.IpfsRouting{
+					&Compose{
+						ValueStore: &LimitedValueStore{
+							ValueStore: new(dummyValueStore),
+							Namespaces: []string{"allow1", "allow2", "notsupported"},
+						},
+					},
+				},
+			},
+			Tiered{
+				Routers: []routing.IpfsRouting{
+					&Compose{
+						ValueStore: &LimitedValueStore{
+							ValueStore: new(dummyValueStore),
+							Namespaces: []string{"allow1", "allow2", "notsupported", "error"},
+						},
+					},
+				},
+			},
 			&Compose{
 				ValueStore: &LimitedValueStore{
 					ValueStore: new(dummyValueStore),
-					Namespaces: []string{"allow1", "allow2", "notsupported"},
+					Namespaces: []string{"allow1", "error", "solo", "stall"},
 				},
 			},
-		},
-		Tiered{
-			&Compose{
-				ValueStore: &LimitedValueStore{
-					ValueStore: new(dummyValueStore),
-					Namespaces: []string{"allow1", "allow2", "notsupported", "error"},
+			Parallel{
+				Routers: []routing.IpfsRouting{&struct{ Compose }{}},
+			},
+			Tiered{
+				Routers: []routing.IpfsRouting{
+					&struct{ Compose }{},
 				},
 			},
+			&struct{ Parallel }{},
+			&struct{ Tiered }{},
 		},
-		&Compose{
-			ValueStore: &LimitedValueStore{
-				ValueStore: new(dummyValueStore),
-				Namespaces: []string{"allow1", "error", "solo", "stall"},
-			},
-		},
-		Parallel{
-			&struct{ Compose }{},
-		},
-		Tiered{
-			&struct{ Compose }{},
-		},
-		&struct{ Parallel }{},
-		&struct{ Tiered }{},
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -56,7 +64,7 @@ func TestParallelPutGet(t *testing.T) {
 	if err := d.PutValue(ctx, "/allow1/hello", []byte("world")); err != nil {
 		t.Fatal(err)
 	}
-	for _, di := range append([]routing.IpfsRouting{d}, d[:3]...) {
+	for _, di := range append([]routing.IpfsRouting{d}, d.Routers[:3]...) {
 		v, err := di.GetValue(ctx, "/allow1/hello")
 		if err != nil {
 			t.Fatal(err)
@@ -69,7 +77,7 @@ func TestParallelPutGet(t *testing.T) {
 	if err := d.PutValue(ctx, "/allow2/hello", []byte("world2")); err != nil {
 		t.Fatal(err)
 	}
-	for _, di := range append([]routing.IpfsRouting{d}, d[:1]...) {
+	for _, di := range append([]routing.IpfsRouting{d}, d.Routers[:1]...) {
 		v, err := di.GetValue(ctx, "/allow2/hello")
 		if err != nil {
 			t.Fatal(err)
@@ -81,7 +89,7 @@ func TestParallelPutGet(t *testing.T) {
 	if err := d.PutValue(ctx, "/forbidden/hello", []byte("world")); err != routing.ErrNotSupported {
 		t.Fatalf("expected ErrNotSupported, got: %s", err)
 	}
-	for _, di := range append([]routing.IpfsRouting{d}, d...) {
+	for _, di := range append([]routing.IpfsRouting{d}, d.Routers...) {
 		_, err := di.GetValue(ctx, "/forbidden/hello")
 		if err != routing.ErrNotFound {
 			t.Fatalf("expected ErrNotFound, got: %s", err)
@@ -132,8 +140,10 @@ func TestBasicParallelFindProviders(t *testing.T) {
 		t.Fatal("expected no results")
 	}
 	d = Parallel{
-		&Compose{
-			ContentRouting: &dummyProvider{},
+		Routers: []routing.IpfsRouting{
+			&Compose{
+				ContentRouting: &dummyProvider{},
+			},
 		},
 	}
 	if _, ok := <-d.FindProvidersAsync(ctx, c, 10); ok {
@@ -151,71 +161,81 @@ func TestParallelFindProviders(t *testing.T) {
 	cid5, _ := prefix.Sum([]byte("stall"))
 
 	d := Parallel{
-		Parallel{
-			&Compose{},
-		},
-		Tiered{
-			&Compose{},
+		Routers: []routing.IpfsRouting{
+			Parallel{
+				Routers: []routing.IpfsRouting{
+					&Compose{},
+				},
+			},
+			Tiered{
+				Routers: []routing.IpfsRouting{
+					&Compose{},
+					&struct{ Compose }{},
+				},
+			},
 			&struct{ Compose }{},
-		},
-		&struct{ Compose }{},
-		Null{},
-		Tiered{
-			&Compose{
-				ContentRouting: dummyProvider{
-					cid1.KeyString(): []peer.ID{
-						"first",
-						"second",
-						"third",
-						"fourth",
-						"fifth",
-						"sixth",
-					},
-					cid2.KeyString(): []peer.ID{
-						"fourth",
-						"fifth",
-						"sixth",
-					},
-					cid5.KeyString(): []peer.ID{
-						"before",
-						"stall",
-						"after",
-					},
-				},
-			},
-		},
-		Parallel{
 			Null{},
-			&Compose{
-				ContentRouting: dummyProvider{
-					cid1.KeyString(): []peer.ID{
-						"first",
-						"second",
-						"fifth",
-						"sixth",
+			Tiered{
+				Routers: []routing.IpfsRouting{
+					&Compose{
+						ContentRouting: dummyProvider{
+							cid1.KeyString(): []peer.ID{
+								"first",
+								"second",
+								"third",
+								"fourth",
+								"fifth",
+								"sixth",
+							},
+							cid2.KeyString(): []peer.ID{
+								"fourth",
+								"fifth",
+								"sixth",
+							},
+							cid5.KeyString(): []peer.ID{
+								"before",
+								"stall",
+								"after",
+							},
+						},
 					},
+				},
+			},
+			Parallel{
+				Routers: []routing.IpfsRouting{
+					Null{},
+					&Compose{
+						ContentRouting: dummyProvider{
+							cid1.KeyString(): []peer.ID{
+								"first",
+								"second",
+								"fifth",
+								"sixth",
+							},
+							cid2.KeyString(): []peer.ID{
+								"second",
+								"fourth",
+								"fifth",
+							},
+						},
+					},
+				},
+			},
+			&Compose{
+				ValueStore: &LimitedValueStore{
+					ValueStore: new(dummyValueStore),
+					Namespaces: []string{"allow1"},
+				},
+				ContentRouting: dummyProvider{
 					cid2.KeyString(): []peer.ID{
+						"first",
+					},
+					cid3.KeyString(): []peer.ID{
 						"second",
 						"fourth",
 						"fifth",
+						"sixth",
 					},
-				},
-			},
-		},
-		&Compose{
-			ValueStore: &LimitedValueStore{
-				ValueStore: new(dummyValueStore),
-				Namespaces: []string{"allow1"},
-			},
-			ContentRouting: dummyProvider{
-				cid2.KeyString(): []peer.ID{
-					"first",
-				},
-				cid3.KeyString(): []peer.ID{
-					"second",
-					"fourth",
-					"fifth",
-					"sixth",
 				},
 			},
 		},
@@ -297,7 +317,7 @@ func TestParallelFindProviders(t *testing.T) {
 
 		// Now to test many content routers
 		for i := 0; i < 30; i++ {
-			d = append(d, &Compose{
+			d.Routers = append(d.Routers, &Compose{
 				ContentRouting: &dummyProvider{},
 			})
 		}
@@ -306,43 +326,53 @@ func TestParallelFindProviders(t *testing.T) {
 
 func TestParallelFindPeer(t *testing.T) {
 	d := Parallel{
-		Null{},
-		Parallel{
+		Routers: []routing.IpfsRouting{
 			Null{},
-			Null{},
-		},
-		Tiered{
-			Null{},
-			Null{},
-		},
-		&struct{ Compose }{},
-		Parallel{
-			&Compose{
-				PeerRouting: dummyPeerRouter{
-					"first":  struct{}{},
-					"second": struct{}{},
+			Parallel{
+				Routers: []routing.IpfsRouting{
+					Null{},
+					Null{},
 				},
 			},
-		},
-		Tiered{
+			Tiered{
+				Routers: []routing.IpfsRouting{
+					Null{},
+					Null{},
+				},
+			},
+			&struct{ Compose }{},
+			Parallel{
+				Routers: []routing.IpfsRouting{
+					&Compose{
+						PeerRouting: dummyPeerRouter{
+							"first":  struct{}{},
+							"second": struct{}{},
+						},
+					},
+				},
+			},
+			Tiered{
+				Routers: []routing.IpfsRouting{
+					&Compose{
+						PeerRouting: dummyPeerRouter{
+							"first": struct{}{},
+							"third": struct{}{},
+						},
+					},
+				},
+			},
 			&Compose{
 				PeerRouting: dummyPeerRouter{
 					"first": struct{}{},
-					"third": struct{}{},
+					"fifth": struct{}{},
 				},
-			},
-		},
-		&Compose{
-			PeerRouting: dummyPeerRouter{
-				"first": struct{}{},
-				"fifth": struct{}{},
 			},
 		},
 	}
 
 	ctx := context.Background()
 
-	for _, di := range append([]routing.IpfsRouting{d}, d[4:]...) {
+	for _, di := range append([]routing.IpfsRouting{d}, d.Routers[4:]...) {
 		if _, err := di.FindPeer(ctx, "first"); err != nil {
 			t.Fatal(err)
 		}
@@ -368,22 +398,28 @@ func TestParallelProvide(t *testing.T) {
 	prefix := cid.NewPrefixV1(cid.Raw, mh.SHA2_256)
 
 	d := Parallel{
-		Parallel{
-			&Compose{
-				ContentRouting: cbProvider(func(c cid.Cid, local bool) error {
-					return routing.ErrNotSupported
-				}),
+		Routers: []routing.IpfsRouting{
+			Parallel{
+				Routers: []routing.IpfsRouting{
+					&Compose{
+						ContentRouting: cbProvider(func(c cid.Cid, local bool) error {
+							return routing.ErrNotSupported
+						}),
+					},
+					&Compose{
+						ContentRouting: cbProvider(func(c cid.Cid, local bool) error {
+							return errors.New(c.String())
+						}),
+					},
+				},
 			},
-			&Compose{
-				ContentRouting: cbProvider(func(c cid.Cid, local bool) error {
-					return errors.New(c.String())
-				}),
+			Tiered{
+				Routers: []routing.IpfsRouting{
+					&struct{ Compose }{},
+					&Compose{},
+					&Compose{},
+				},
 			},
-		},
-		Tiered{
-			&struct{ Compose }{},
-			&Compose{},
-			&Compose{},
 		},
 	}
 

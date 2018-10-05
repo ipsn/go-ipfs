@@ -11,19 +11,23 @@ import (
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
+	record "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record"
 )
 
 // Tiered is like the Parallel except that GetValue and FindPeer
 // are called in series.
-type Tiered []routing.IpfsRouting
+type Tiered struct {
+	Routers   []routing.IpfsRouting
+	Validator record.Validator
+}
 
 func (r Tiered) PutValue(ctx context.Context, key string, value []byte, opts ...ropts.Option) error {
-	return Parallel(r).PutValue(ctx, key, value, opts...)
+	return Parallel{Routers: r.Routers}.PutValue(ctx, key, value, opts...)
 }
 
 func (r Tiered) get(ctx context.Context, do func(routing.IpfsRouting) (interface{}, error)) (interface{}, error) {
 	var errs []error
-	for _, ri := range r {
+	for _, ri := range r.Routers {
 		val, err := do(ri)
 		switch err {
 		case nil:
@@ -55,7 +59,7 @@ func (r Tiered) GetValue(ctx context.Context, key string, opts ...ropts.Option) 
 }
 
 func (r Tiered) SearchValue(ctx context.Context, key string, opts ...ropts.Option) (<-chan []byte, error) {
-	return Parallel(r).SearchValue(ctx, key, opts...)
+	return Parallel{Routers: r.Routers, Validator: r.Validator}.SearchValue(ctx, key, opts...)
 }
 
 func (r Tiered) GetPublicKey(ctx context.Context, p peer.ID) (ci.PubKey, error) {
@@ -67,11 +71,11 @@ func (r Tiered) GetPublicKey(ctx context.Context, p peer.ID) (ci.PubKey, error) 
 }
 
 func (r Tiered) Provide(ctx context.Context, c cid.Cid, local bool) error {
-	return Parallel(r).Provide(ctx, c, local)
+	return Parallel{Routers: r.Routers}.Provide(ctx, c, local)
 }
 
 func (r Tiered) FindProvidersAsync(ctx context.Context, c cid.Cid, count int) <-chan pstore.PeerInfo {
-	return Parallel(r).FindProvidersAsync(ctx, c, count)
+	return Parallel{Routers: r.Routers}.FindProvidersAsync(ctx, c, count)
 }
 
 func (r Tiered) FindPeer(ctx context.Context, p peer.ID) (pstore.PeerInfo, error) {
@@ -83,7 +87,7 @@ func (r Tiered) FindPeer(ctx context.Context, p peer.ID) (pstore.PeerInfo, error
 }
 
 func (r Tiered) Bootstrap(ctx context.Context) error {
-	return Parallel(r).Bootstrap(ctx)
+	return Parallel{Routers: r.Routers}.Bootstrap(ctx)
 }
 
-var _ routing.IpfsRouting = (Tiered)(nil)
+var _ routing.IpfsRouting = Tiered{}

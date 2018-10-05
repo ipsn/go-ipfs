@@ -13,10 +13,10 @@ import (
 	"github.com/ipsn/go-ipfs/core"
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
+	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
-	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 )
 
 const kPingTimeout = 10 * time.Second
@@ -26,6 +26,10 @@ type PingResult struct {
 	Time    time.Duration
 	Text    string
 }
+
+const (
+	pingCountOptionName = "count"
+)
 
 // ErrPingSelf is returned when the user attempts to ping themself.
 var ErrPingSelf = errors.New("error: can't ping self")
@@ -43,7 +47,7 @@ trip latency information.
 		cmdkit.StringArg("peer ID", true, true, "ID of peer to be pinged.").EnableStdin(),
 	},
 	Options: []cmdkit.Option{
-		cmdkit.IntOption("count", "n", "Number of ping messages to send.").WithDefault(10),
+		cmdkit.IntOption(pingCountOptionName, "n", "Number of ping messages to send.").WithDefault(10),
 	},
 	Marshalers: cmds.MarshalerMap{
 		cmds.Text: func(res cmds.Response) (io.Reader, error) {
@@ -97,7 +101,7 @@ trip latency information.
 			n.Peerstore.AddAddr(peerID, addr, pstore.TempAddrTTL) // temporary
 		}
 
-		numPings, _, err := req.Option("count").Int()
+		numPings, _, err := req.Option(pingCountOptionName).Int()
 		if err != nil {
 			res.SetError(err, cmdkit.ErrNormal)
 			return

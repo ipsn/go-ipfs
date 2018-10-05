@@ -14,16 +14,16 @@ import (
 	"github.com/ipsn/go-ipfs/repo"
 	"github.com/ipsn/go-ipfs/repo/fsrepo"
 
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-swarm"
+	inet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
+	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	mafilter "github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/multiaddr-filter"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
-	iaddr "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-addr"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
-	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
-	inet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-swarm"
+	iaddr "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-addr"
 )
 
 type stringList struct {
@@ -52,6 +52,13 @@ ipfs peers in the internet.
 	},
 }
 
+const (
+	swarmVerboseOptionName   = "verbose"
+	swarmStreamsOptionName   = "streams"
+	swarmLatencyOptionName   = "latency"
+	swarmDirectionOptionName = "direction"
+)
+
 var swarmPeersCmd = &cmds.Command{
 	Helptext: cmdkit.HelpText{
 		Tagline: "List peers with open connections.",
@@ -60,10 +67,10 @@ var swarmPeersCmd = &cmds.Command{
 `,
 	},
 	Options: []cmdkit.Option{
-		cmdkit.BoolOption("verbose", "v", "display all extra information"),
-		cmdkit.BoolOption("streams", "Also list information about open streams for each peer"),
-		cmdkit.BoolOption("latency", "Also list information about latency to each peer"),
-		cmdkit.BoolOption("direction", "Also list information about the direction of connection"),
+		cmdkit.BoolOption(swarmVerboseOptionName, "v", "display all extra information"),
+		cmdkit.BoolOption(swarmStreamsOptionName, "Also list information about open streams for each peer"),
+		cmdkit.BoolOption(swarmLatencyOptionName, "Also list information about latency to each peer"),
+		cmdkit.BoolOption(swarmDirectionOptionName, "Also list information about the direction of connection"),
 	},
 	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) error {
 		api, err := cmdenv.GetApi(env)
@@ -71,10 +78,10 @@ var swarmPeersCmd = &cmds.Command{
 			return err
 		}
 
-		verbose, _ := req.Options["verbose"].(bool)
-		latency, _ := req.Options["latency"].(bool)
-		streams, _ := req.Options["streams"].(bool)
-		direction, _ := req.Options["direction"].(bool)
+		verbose, _ := req.Options[swarmVerboseOptionName].(bool)
+		latency, _ := req.Options[swarmLatencyOptionName].(bool)
+		streams, _ := req.Options[swarmStreamsOptionName].(bool)
+		direction, _ := req.Options[swarmDirectionOptionName].(bool)
 
 		conns, err := api.Swarm().Peers(req.Context)
 		if err != nil {

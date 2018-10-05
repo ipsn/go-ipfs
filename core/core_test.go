@@ -7,9 +7,9 @@ import (
 
 	"github.com/ipsn/go-ipfs/repo"
 
+	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	datastore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	syncds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
-	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 )
 
 func TestInitialization(t *testing.T) {
@@ -21,7 +21,7 @@ func TestInitialization(t *testing.T) {
 			Identity: id,
 			Addresses: config.Addresses{
 				Swarm: []string{"/ip4/0.0.0.0/tcp/4001"},
-				API:   "/ip4/127.0.0.1/tcp/8000",
+				API:   []string{"/ip4/127.0.0.1/tcp/8000"},
 			},
 		},
 
@@ -29,7 +29,7 @@ func TestInitialization(t *testing.T) {
 			Identity: id,
 			Addresses: config.Addresses{
 				Swarm: []string{"/ip4/0.0.0.0/tcp/4001"},
-				API:   "/ip4/127.0.0.1/tcp/8000",
+				API:   []string{"/ip4/127.0.0.1/tcp/8000"},
 			},
 		},
 	}

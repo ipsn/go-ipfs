@@ -52,8 +52,9 @@ type ValueStore interface {
 	GetValue(context.Context, string, ...ropts.Option) ([]byte, error)
 
 	// SearchValue searches for better and better values from this value
-	// store corresponding to the given Key. Implementations may halt the
-	// search after a period of time or may continue searching indefinitely.
+	// store corresponding to the given Key. By default implementations must
+	// stop the search after a good value is found. A 'good' value is a value
+	// that would be returned from GetValue.
 	//
 	// Useful when you want a result *now* but still want to hear about
 	// better/newer results.

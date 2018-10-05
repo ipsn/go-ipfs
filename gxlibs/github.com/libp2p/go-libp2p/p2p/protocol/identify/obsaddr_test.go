@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	net "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 )
 
@@ -49,15 +50,22 @@ func TestObsAddrSet(t *testing.T) {
 	b4 := m("/ip4/1.2.3.9/tcp/1237")
 	b5 := m("/ip4/1.2.3.10/tcp/1237")
 
-	oas := ObservedAddrSet{}
+	oas := &ObservedAddrSet{}
 
 	if !addrsMarch(oas.Addrs(), nil) {
 		t.Error("addrs should be empty")
 	}
 
-	oas.Add(a1, a4)
-	oas.Add(a2, a4)
-	oas.Add(a3, a4)
+	add := func(oas *ObservedAddrSet, observed, observer ma.Multiaddr) {
+		dummyLocal := m("/ip4/127.0.0.1/tcp/10086")
+		dummyDirection := net.DirOutbound
+
+		oas.Add(observed, dummyLocal, observer, dummyDirection)
+	}
+
+	add(oas, a1, a4)
+	add(oas, a2, a4)
+	add(oas, a3, a4)
 
 	// these are all different so we should not yet get them.
 	if !addrsMarch(oas.Addrs(), nil) {
@@ -65,39 +73,39 @@ func TestObsAddrSet(t *testing.T) {
 	}
 
 	// same observer, so should not yet get them.
-	oas.Add(a1, a4)
-	oas.Add(a2, a4)
-	oas.Add(a3, a4)
+	add(oas, a1, a4)
+	add(oas, a2, a4)
+	add(oas, a3, a4)
 	if !addrsMarch(oas.Addrs(), nil) {
 		t.Error("addrs should _still_ be empty (same obs)")
 	}
 
 	// different observer, but same observer group.
-	oas.Add(a1, a5)
-	oas.Add(a2, a5)
-	oas.Add(a3, a5)
+	add(oas, a1, a5)
+	add(oas, a2, a5)
+	add(oas, a3, a5)
 	if !addrsMarch(oas.Addrs(), nil) {
 		t.Error("addrs should _still_ be empty (same obs group)")
 	}
 
-	oas.Add(a1, b1)
-	oas.Add(a1, b2)
-	oas.Add(a1, b3)
+	add(oas, a1, b1)
+	add(oas, a1, b2)
+	add(oas, a1, b3)
 	if !addrsMarch(oas.Addrs(), []ma.Multiaddr{a1}) {
 		t.Error("addrs should only have a1")
 	}
 
-	oas.Add(a2, a5)
-	oas.Add(a1, a5)
-	oas.Add(a1, a5)
-	oas.Add(a2, b1)
-	oas.Add(a1, b1)
-	oas.Add(a1, b1)
-	oas.Add(a2, b2)
-	oas.Add(a1, b2)
-	oas.Add(a1, b2)
-	oas.Add(a2, b4)
-	oas.Add(a2, b5)
+	add(oas, a2, a5)
+	add(oas, a1, a5)
+	add(oas, a1, a5)
+	add(oas, a2, b1)
+	add(oas, a1, b1)
+	add(oas, a1, b1)
+	add(oas, a2, b2)
+	add(oas, a1, b2)
+	add(oas, a1, b2)
+	add(oas, a2, b4)
+	add(oas, a2, b5)
 	if !addrsMarch(oas.Addrs(), []ma.Multiaddr{a1, a2}) {
 		t.Error("addrs should only have a1, a2")
 	}

@@ -21,9 +21,9 @@
     },
     {
       "author": "why",
-      "hash": "QmSzdvo9aPzLj4HXWTcgGAp8N84tZc8LbLmFZFwUb1dpWk",
+      "hash": "QmesXvbRGyKQn1XbPHx1Mr5E6RTJYR9c8zwFVuGZq9Aa1j",
       "name": "go-ipfs-addr",
-      "version": "0.1.23"
+      "version": "0.1.24"
     },
     {
       "author": "lgierth",
@@ -55,6 +55,6 @@
   "license": "",
   "name": "go-ipfs-config",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.2.9"
+  "version": "0.2.13"
 }
 

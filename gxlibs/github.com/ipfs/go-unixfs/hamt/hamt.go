@@ -25,14 +25,11 @@ import (
 	"fmt"
 	"os"
 
-	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
-	format "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
-	upb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/pb"
-
 	bitfield "github.com/ipsn/go-ipfs/gxlibs/github.com/Stebalien/go-bitfield"
-	proto "github.com/gogo/protobuf/proto"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	format "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	"github.com/spaolacci/murmur3"
 )
 
@@ -108,7 +105,7 @@ func NewHamtFromDag(dserv ipld.DAGService, nd ipld.Node) (*Shard, error) {
 	}
 
 
-	if fsn.Type() != upb.Data_HAMTShard {
+	if fsn.Type() != format.THAMTShard {
 		return nil, fmt.Errorf("node was not a dir shard")
 	}
 
@@ -176,13 +173,7 @@ func (ds *Shard) Node() (ipld.Node, error) {
 		cindex++
 	}
 
-	typ := upb.Data_HAMTShard
-	data, err := proto.Marshal(&upb.Data{
-		Type:     &typ,
-		Fanout:   proto.Uint64(uint64(ds.tableSize)),
-		HashType: proto.Uint64(HashMurmur3),
-		Data:     ds.bitfield.Bytes(),
-	})
+	data, err := format.HAMTShardData(ds.bitfield.Bytes(), uint64(ds.tableSize), HashMurmur3)
 	if err != nil {
 		return nil, err
 	}

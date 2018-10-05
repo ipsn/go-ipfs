@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	errwrap "github.com/hashicorp/errwrap"
+	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
 )
 
 type bootstrapRouter struct {
@@ -20,57 +21,63 @@ func (bs *bootstrapRouter) Bootstrap(ctx context.Context) error {
 func TestBootstrap(t *testing.T) {
 	pings := make([]bool, 6)
 	d := Parallel{
-		Tiered{
-			&bootstrapRouter{
-				bs: func() error {
-					pings[0] = true
-					return nil
+		Routers: []routing.IpfsRouting{
+			Tiered{
+				Routers: []routing.IpfsRouting{
+					&bootstrapRouter{
+						bs: func() error {
+							pings[0] = true
+							return nil
+						},
+					},
 				},
 			},
-		},
-		Tiered{
-			&bootstrapRouter{
-				bs: func() error {
-					pings[1] = true
-					return nil
+			Tiered{
+				Routers: []routing.IpfsRouting{
+					&bootstrapRouter{
+						bs: func() error {
+							pings[1] = true
+							return nil
+						},
+					},
+					&bootstrapRouter{
+						bs: func() error {
+							pings[2] = true
+							return nil
+						},
+					},
 				},
 			},
-			&bootstrapRouter{
-				bs: func() error {
-					pings[2] = true
-					return nil
+			&Compose{
+				ValueStore: &LimitedValueStore{
+					ValueStore: &bootstrapRouter{
+						bs: func() error {
+							pings[3] = true
+							return nil
+						},
+					},
+					Namespaces: []string{"allow1", "allow2", "notsupported", "error"},
 				},
 			},
-		},
-		&Compose{
-			ValueStore: &LimitedValueStore{
-				ValueStore: &bootstrapRouter{
+			&Compose{
+				ValueStore: &LimitedValueStore{
+					ValueStore: &dummyValueStore{},
+				},
+			},
+			Null{},
+			&Compose{},
+			&Compose{
+				ContentRouting: &bootstrapRouter{
 					bs: func() error {
-						pings[3] = true
+						pings[4] = true
 						return nil
 					},
 				},
-				Namespaces: []string{"allow1", "allow2", "notsupported", "error"},
-			},
-		},
-		&Compose{
-			ValueStore: &LimitedValueStore{
-				ValueStore: &dummyValueStore{},
-			},
-		},
-		Null{},
-		&Compose{},
-		&Compose{
-			ContentRouting: &bootstrapRouter{
-				bs: func() error {
-					pings[4] = true
-					return nil
-				},
-			},
-			PeerRouting: &bootstrapRouter{
-				bs: func() error {
-					pings[5] = true
-					return nil
+				PeerRouting: &bootstrapRouter{
+					bs: func() error {
+						pings[5] = true
+						return nil
+					},
 				},
 			},
 		},
@@ -88,48 +95,54 @@ func TestBootstrap(t *testing.T) {
 }
 func TestBootstrapErr(t *testing.T) {
 	d := Parallel{
-		Tiered{
-			&bootstrapRouter{
-				bs: func() error {
-					return errors.New("err1")
-				},
-			},
-		},
-		Tiered{
-			&bootstrapRouter{
-				bs: func() error {
-					return nil
-				},
-			},
-			&bootstrapRouter{
-				bs: func() error {
-					return nil
-				},
-			},
-		},
-		&Compose{
-			ValueStore: &LimitedValueStore{
-				ValueStore: &bootstrapRouter{
-					bs: func() error {
-						return errors.New("err2")
+		Routers: []routing.IpfsRouting{
+			Tiered{
+				Routers: []routing.IpfsRouting{
+					&bootstrapRouter{
+						bs: func() error {
+							return errors.New("err1")
+						},
 					},
 				},
-				Namespaces: []string{"allow1", "allow2", "notsupported", "error"},
 			},
-		},
-		&Compose{
-			ValueStore: &bootstrapRouter{
-				bs: func() error {
-					return errors.New("err3")
+			Tiered{
+				Routers: []routing.IpfsRouting{
+					&bootstrapRouter{
+						bs: func() error {
+							return nil
+						},
+					},
+					&bootstrapRouter{
+						bs: func() error {
+							return nil
+						},
+					},
 				},
 			},
-			ContentRouting: &bootstrapRouter{
-				bs: func() error {
-					return errors.New("err4")
+			&Compose{
+				ValueStore: &LimitedValueStore{
+					ValueStore: &bootstrapRouter{
+						bs: func() error {
+							return errors.New("err2")
+						},
+					},
+					Namespaces: []string{"allow1", "allow2", "notsupported", "error"},
 				},
 			},
+			&Compose{
+				ValueStore: &bootstrapRouter{
+					bs: func() error {
+						return errors.New("err3")
+					},
+				},
+				ContentRouting: &bootstrapRouter{
+					bs: func() error {
+						return errors.New("err4")
+					},
+				},
+			},
+			Null{},
 		},
-		Null{},
 	}
 	ctx := context.Background()
 	err := d.Bootstrap(ctx)

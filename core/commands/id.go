@@ -12,12 +12,12 @@ import (
 	core "github.com/ipsn/go-ipfs/core"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 
-	ic "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
-	kb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kbucket"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	identify "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/protocol/identify"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
+	ic "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	kb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kbucket"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 )
 
 const offlineIdErrorMessage = `'ipfs id' currently cannot query information on remote
@@ -36,6 +36,10 @@ type IdOutput struct {
 	AgentVersion    string
 	ProtocolVersion string
 }
+
+const (
+	formatOptionName = "format"
+)
 
 var IDCmd = &cmds.Command{
 	Helptext: cmdkit.HelpText{
@@ -60,7 +64,7 @@ EXAMPLE:
 		cmdkit.StringArg("peerid", false, false, "Peer.ID of node to look up."),
 	},
 	Options: []cmdkit.Option{
-		cmdkit.StringOption("format", "f", "Optional output format."),
+		cmdkit.StringOption(formatOptionName, "f", "Optional output format."),
 	},
 	Run: func(req cmds.Request, res cmds.Response) {
 		node, err := req.InvocContext().GetNode()
@@ -126,7 +130,7 @@ EXAMPLE:
 				return nil, e.TypeErr(val, v)
 			}
 
-			format, found, err := res.Request().Option("format").String()
+			format, found, err := res.Request().Option(formatOptionName).String()
 			if err != nil {
 				return nil, err
 			}

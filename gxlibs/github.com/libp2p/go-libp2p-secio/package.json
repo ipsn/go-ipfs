@@ -51,15 +51,21 @@
     },
     {
       "author": "Stebalien",
-      "hash": "QmcnVbkHxvzHKYvdbDxiUVGbn5yQjkSbb9qqkGHcgwvZff",
+      "hash": "QmTSeQWcL14juHXsqDfNjCADy89XS7sQpfJ3KFiiajXzJn",
       "name": "go-conn-security",
-      "version": "0.1.10"
+      "version": "0.1.11"
     },
     {
       "author": "whyrusleeping",
       "hash": "QmdxUuburamoF6zF9qjeQC4WYcWGbWuRmdLacMEsW8ioD8",
       "name": "gogo-protobuf",
       "version": "0.0.0"
+    },
+    {
+      "author": "Stebalien",
+      "hash": "QmZRt3dzgDWkjssrmNvBKVNJpLBMafJi5AKpdfMkbfWRu5",
+      "name": "go-buffer-pool",
+      "version": "0.1.2"
     }
   ],
   "gxVersion": "0.4.0",
@@ -67,6 +73,6 @@
   "license": "MIT",
   "name": "go-libp2p-secio",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "2.0.10"
+  "version": "2.0.12"
 }
 

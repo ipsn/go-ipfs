@@ -17,6 +17,15 @@ var good = []string{
 	"/ip4/1.2.3.4/tcp/1234/ipfs/QmUCseQWXCSrhf9edzVKTvoj8o8Ts5aXFGNPameZRPJ6uR",
 }
 
+var transports = []string{
+	"",
+	"",
+	"",
+	"/ip4/1.2.3.4/tcp/1234",
+	"/ip4/1.2.3.4/tcp/1234",
+	"/ip4/1.2.3.4/tcp/1234",
+}
+
 var bad = []string{
 	"5dru6bJPUM1B7N69528u49DJiWZnok",                                // bad ma
 	"kTRX47RthhwNzWdi6ggwqjuX",                                      // bad ma

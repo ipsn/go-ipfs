@@ -393,7 +393,8 @@ func (ids *IDService) consumeObservedAddress(observed []byte, c inet.Conn) {
 
 	// ok! we have the observed version of one of our ListenAddresses!
 	log.Debugf("added own observed listen addr: %s --> %s", c.LocalMultiaddr(), maddr)
-	ids.observedAddrs.Add(maddr, c.RemoteMultiaddr())
+	ids.observedAddrs.Add(maddr, c.LocalMultiaddr(), c.RemoteMultiaddr(),
+		c.Stat().Direction)
 }
 
 func addrInAddrs(a ma.Multiaddr, as []ma.Multiaddr) bool {

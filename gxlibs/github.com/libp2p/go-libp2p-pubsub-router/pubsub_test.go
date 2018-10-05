@@ -211,6 +211,7 @@ func TestWatch(t *testing.T) {
 	pub, vss := setupTest(ctx, t)
 
 	key := "/namespace/key"
+	key2 := "/namespace/key2"
 
 	ch, err := vss[1].SearchValue(ctx, key)
 	if err != nil {
@@ -234,9 +235,22 @@ func TestWatch(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	_, err = vss[1].Cancel(key)
+	ch, err = vss[1].SearchValue(ctx, key2)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = vss[1].Cancel(key2)
 	if err.Error() != "key has active subscriptions" {
 		t.Fatal("cancel should have failed")
+	}
+
+	// let the flood propagate
+	time.Sleep(time.Second * 1)
+
+	ch, err = vss[1].SearchValue(ctx, key)
+	if err != nil {
+		t.Fatal(err)
 	}
 
 	v = string(<-ch)
