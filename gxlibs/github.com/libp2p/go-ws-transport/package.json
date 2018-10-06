@@ -21,9 +21,9 @@
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmRJFmMd5ed1fy5pGLfmWPGGSb1FFm5tJm62euuFPBQXjk",
+      "hash": "QmajSo5YEqW898AuVcY77oa5Jffx4N7wvQBGxyLnaD5zxo",
       "name": "go-libp2p-transport",
-      "version": "3.0.11"
+      "version": "3.0.12"
     },
     {
       "author": "gorilla",
@@ -39,21 +39,21 @@
     },
     {
       "author": "Stebalien",
-      "hash": "QmTSeQWcL14juHXsqDfNjCADy89XS7sQpfJ3KFiiajXzJn",
+      "hash": "QmPsFSk7bKhBeRkELpLagpWLJywG3bxgiiMcXXyBnZKiPK",
       "name": "go-conn-security",
-      "version": "0.1.11"
+      "version": "0.1.12"
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmYsbnP57nNUKWijs8o2q3ZFrSUcAGTdKoQPuSJC3Uxt1Y",
+      "hash": "QmQvMxiavoMJzuLPuqrzVX4nXZpMks29hqpv13d81aJNEF",
       "name": "go-smux-multiplex",
-      "version": "3.0.13"
+      "version": "3.0.15"
     },
     {
       "author": "steb",
-      "hash": "QmUhdmaWBQaxSBX8PXQme85Wgj1FFj29DePskiv44MDKPi",
+      "hash": "QmXffKE4ikCV3medQiCzbzuoE5QUuLd2rGr4EyiC6b9Mye",
       "name": "go-libp2p-transport-upgrader",
-      "version": "0.1.11"
+      "version": "0.1.13"
     },
     {
       "author": "whyrusleeping",
@@ -67,6 +67,6 @@
   "license": "MIT",
   "name": "go-ws-transport",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "2.0.11"
+  "version": "2.0.13"
 }
 

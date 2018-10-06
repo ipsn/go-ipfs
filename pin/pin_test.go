@@ -5,12 +5,12 @@ import (
 	"testing"
 	"time"
 
-	bs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 	mdag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	bs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	util "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
+	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	dssync "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
 	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"

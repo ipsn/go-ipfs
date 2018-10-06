@@ -9,21 +9,21 @@
   "gxDependencies": [
     {
       "author": "whyrusleeping",
-      "hash": "QmX9pw5dSUZ2FozbppcSDJiS7eEh1RFwJNwrbmyLoUMS9x",
+      "hash": "QmQKod7iLxQK6X3aFYvhDDnFdXo3QjxKeL2F7UrPtdKQR2",
       "name": "go-libp2p-host",
-      "version": "3.0.11"
+      "version": "3.0.12"
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmQdLcvoy3JuSqhV6iwQ9T6Cv7hWLAdzob4jUZRPqFL67Z",
+      "hash": "QmWUPYHpNv4YahaBYXovuEJttgfqcNcN9Gg4arhQYcRoqa",
       "name": "go-libp2p-net",
-      "version": "3.0.11"
+      "version": "3.0.12"
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmSJ36wcYQyEViJUWUEhJU81tw1KdakTKqLLHbvYbA9zDv",
+      "hash": "QmXEyLwySuDMXejWBu8XwdkX2WuGKk8x9jFwz8js7j72UX",
       "name": "go-libp2p-peerstore",
-      "version": "2.0.2"
+      "version": "2.0.3"
     },
     {
       "hash": "QmZChCsSt8DctjceaL56Eibc29CVQq4dGKRXC5JRZ6Ppae",
@@ -56,9 +56,9 @@
     },
     {
       "author": "why",
-      "hash": "QmYbLGD41kmPZfgGs5B8DMMwxtY61Wz4KPeGFZ2qoetsPY",
+      "hash": "QmXPqoktJEKkWPT6rSdhCM2G3E1yR7uUBdjnJrhJYeBgHU",
       "name": "go-libp2p-interface-connmgr",
-      "version": "0.0.17"
+      "version": "0.0.18"
     }
   ],
   "gxVersion": "0.10.0",
@@ -66,6 +66,6 @@
   "license": "",
   "name": "go-libp2p-blankhost",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.3.11"
+  "version": "0.3.12"
 }
 

@@ -9,20 +9,20 @@
   "gxDependencies": [
     {
       "author": "whyrusleeping",
-      "hash": "QmX9pw5dSUZ2FozbppcSDJiS7eEh1RFwJNwrbmyLoUMS9x",
+      "hash": "QmQKod7iLxQK6X3aFYvhDDnFdXo3QjxKeL2F7UrPtdKQR2",
       "name": "go-libp2p-host",
-      "version": "3.0.11"
+      "version": "3.0.12"
     },
     {
-      "hash": "QmQRfifvvbJ8xTKj4KX1VvGWK26hnPiy8eQvW1hmjc82nD",
+      "hash": "QmVQPj6rHdqz6dDQrjcdP36zDYLaoB7xwqRg39kx2PqqKU",
       "name": "go-libp2p-routing",
-      "version": "2.6.3"
+      "version": "2.6.4"
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmSJ36wcYQyEViJUWUEhJU81tw1KdakTKqLLHbvYbA9zDv",
+      "hash": "QmXEyLwySuDMXejWBu8XwdkX2WuGKk8x9jFwz8js7j72UX",
       "name": "go-libp2p-peerstore",
-      "version": "2.0.2"
+      "version": "2.0.3"
     },
     {
       "author": "whyrusleeping",
@@ -38,9 +38,9 @@
     },
     {
       "author": "jbenet",
-      "hash": "QmbQshXLNcCPRUGZv4sBGxnZNAHREA6MKeomkwihNXPZWP",
+      "hash": "QmaRb5yNXKonhbkpNxNawoydk4N6es6b4fPj19sjEKsh5D",
       "name": "go-datastore",
-      "version": "3.3.0"
+      "version": "3.4.0"
     },
     {
       "author": "hsanjuan",
@@ -61,7 +61,7 @@
     },
     {
       "author": "hsanjuan",
-      "hash": "QmafbjCxKZEU87RYYCHX2pFP9Q6uLSLAScLr2VUErNTH1f",
+      "hash": "QmS73grfbWgWrNztd8Lns9GCG3jjRNDfcPYg2VYQzKDZSt",
       "name": "go-ipfs-ds-help",
       "version": "0.1.3"
     },
@@ -106,6 +106,6 @@
   "license": "MIT",
   "name": "go-ipfs-routing",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.1.4"
+  "version": "0.1.5"
 }
 

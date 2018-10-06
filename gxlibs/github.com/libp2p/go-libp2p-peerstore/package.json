@@ -57,19 +57,25 @@
     },
     {
       "author": "magik6k",
-      "hash": "Qmd1Zxnuj9puWCPS7DV1YVw1RM478NqyZmf1X5nsgjp6fQ",
+      "hash": "QmaixNkKwtinV3umL5VD1VDD5CQjnZhXY31awM2YHTzbui",
       "name": "go-ds-badger",
-      "version": "1.9.0"
+      "version": "1.10.0"
     },
     {
-      "hash": "QmbQshXLNcCPRUGZv4sBGxnZNAHREA6MKeomkwihNXPZWP",
+      "hash": "QmaRb5yNXKonhbkpNxNawoydk4N6es6b4fPj19sjEKsh5D",
       "name": "go-datastore",
-      "version": "3.3.0"
+      "version": "3.4.0"
     },
     {
       "hash": "QmQjMHF8ptRgx4E57UFMiT4YM6kqaJeYxZ1MCDX23aw4rK",
       "name": "golang-lru",
       "version": "2017.10.18"
+    },
+    {
+      "author": "Stebalien",
+      "hash": "QmZRt3dzgDWkjssrmNvBKVNJpLBMafJi5AKpdfMkbfWRu5",
+      "name": "go-buffer-pool",
+      "version": "0.1.2"
     }
   ],
   "gxVersion": "0.4.0",
@@ -77,6 +83,6 @@
   "license": "MIT",
   "name": "go-libp2p-peerstore",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "2.0.2"
+  "version": "2.0.3"
 }
 

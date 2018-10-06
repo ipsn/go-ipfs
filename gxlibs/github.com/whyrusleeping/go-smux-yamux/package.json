@@ -9,9 +9,9 @@
   "gxDependencies": [
     {
       "author": "whyrusleeping",
-      "hash": "QmZt87ZHYGaZFBrtGPEqYjAC2yNAhgiRDBmu8KaCzHjx6h",
+      "hash": "QmTXJA8qX6f7XF5nNjtioW4aiY57pcf5SLKGe8f1SXYdM8",
       "name": "yamux",
-      "version": "1.0.7"
+      "version": "1.1.1"
     },
     {
       "author": "whyrusleeping",
@@ -25,6 +25,6 @@
   "license": "",
   "name": "go-smux-yamux",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "2.0.3"
+  "version": "2.0.4"
 }
 

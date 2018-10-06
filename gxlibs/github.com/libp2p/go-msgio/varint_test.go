@@ -3,6 +3,7 @@ package msgio
 import (
 	"bytes"
 	"encoding/binary"
+	"io"
 	"testing"
 )
 
@@ -63,4 +64,18 @@ func SubtestVarintWrite(t *testing.T, msg []byte) {
 	if len(bb) != bblen {
 		t.Fatalf("wrote incorrect number of bytes: %d != %d", len(bb), bblen)
 	}
+}
+
+func TestVarintReadClose(t *testing.T) {
+	r, w := io.Pipe()
+	writer := NewVarintWriter(w)
+	reader := NewVarintReader(r)
+	SubtestReadClose(t, writer, reader)
+}
+
+func TestVarintWriteClose(t *testing.T) {
+	r, w := io.Pipe()
+	writer := NewVarintWriter(w)
+	reader := NewVarintReader(r)
+	SubtestWriteClose(t, writer, reader)
 }

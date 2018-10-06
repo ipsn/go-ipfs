@@ -9,9 +9,9 @@
   "gxDependencies": [
     {
       "author": "whyrusleeping",
-      "hash": "QmWBug6eBS7AxRdCDVuSY5CnSit7cS2XnPFYJWqWDumhCG",
+      "hash": "QmRCchSdr1MhQXBjLXE5zg4RgJSsj3wzzJmMedANZXx2hC",
       "name": "go-msgio",
-      "version": "0.0.3"
+      "version": "0.0.5"
     },
     {
       "author": "whyrusleeping",
@@ -37,6 +37,6 @@
   "license": "MIT",
   "name": "go-multicodec",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.1.6"
+  "version": "0.1.7"
 }
 

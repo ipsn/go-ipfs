@@ -17,8 +17,8 @@ import (
 
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil/ci"
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
-	fstest "bazil.org/fuse/fs/fstestutil"
 	offroute "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
+	fstest "bazil.org/fuse/fs/fstestutil"
 	racedet "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-detect-race"
 )
 

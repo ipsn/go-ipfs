@@ -15,8 +15,8 @@ import (
 	core "github.com/ipsn/go-ipfs/core"
 	p2p "github.com/ipsn/go-ipfs/p2p"
 
-	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-protocol"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-addr"

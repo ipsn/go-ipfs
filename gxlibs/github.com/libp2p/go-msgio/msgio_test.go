@@ -3,12 +3,13 @@ package msgio
 import (
 	"bytes"
 	"fmt"
-	randbuf "github.com/jbenet/go-randbuf"
 	"io"
 	"math/rand"
 	"sync"
 	"testing"
 	"time"
+
+	randbuf "github.com/jbenet/go-randbuf"
 )
 
 func TestReadWrite(t *testing.T) {
@@ -30,6 +31,20 @@ func TestReadWriteMsgSync(t *testing.T) {
 	writer := NewWriter(buf)
 	reader := NewReader(buf)
 	SubtestReadWriteMsgSync(t, writer, reader)
+}
+
+func TestReadClose(t *testing.T) {
+	r, w := io.Pipe()
+	writer := NewWriter(w)
+	reader := NewReader(r)
+	SubtestReadClose(t, writer, reader)
+}
+
+func TestWriteClose(t *testing.T) {
+	r, w := io.Pipe()
+	writer := NewWriter(w)
+	reader := NewReader(r)
+	SubtestWriteClose(t, writer, reader)
 }
 
 func SubtestReadWrite(t *testing.T, writer WriteCloser, reader ReadCloser) {
@@ -194,4 +209,38 @@ func TestBadSizes(t *testing.T) {
 		t.Fatal(err)
 	}
 	_ = msg
+}
+
+func SubtestReadClose(t *testing.T, writer WriteCloser, reader ReadCloser) {
+	defer writer.Close()
+
+	buf := [10]byte{}
+	done := make(chan struct{})
+	go func() {
+		defer close(done)
+		time.Sleep(10 * time.Millisecond)
+		reader.Close()
+	}()
+	n, err := reader.Read(buf[:])
+	if n != 0 || err == nil {
+		t.Error("expected to read nothing")
+	}
+	<-done
+}
+
+func SubtestWriteClose(t *testing.T, writer WriteCloser, reader ReadCloser) {
+	defer reader.Close()
+
+	buf := [10]byte{}
+	done := make(chan struct{})
+	go func() {
+		defer close(done)
+		time.Sleep(10 * time.Millisecond)
+		writer.Close()
+	}()
+	n, err := writer.Write(buf[:])
+	if n != 0 || err == nil {
+		t.Error("expected to read nothing")
+	}
+	<-done
 }

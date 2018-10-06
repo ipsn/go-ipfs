@@ -9,6 +9,12 @@
       "hash": "QmYNGtJHgaGZkpzq8yG6Wxqm6EQTKqgpBfnyyGBKbZeDUi",
       "name": "go-randbuf",
       "version": "0.0.0"
+    },
+    {
+      "author": "Stebalien",
+      "hash": "QmZRt3dzgDWkjssrmNvBKVNJpLBMafJi5AKpdfMkbfWRu5",
+      "name": "go-buffer-pool",
+      "version": "0.1.2"
     }
   ],
   "gxVersion": "0.11.0",
@@ -16,6 +22,6 @@
   "license": "",
   "name": "go-msgio",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.0.3"
+  "version": "0.0.5"
 }
 

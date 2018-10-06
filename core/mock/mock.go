@@ -8,14 +8,14 @@ import (
 	"github.com/ipsn/go-ipfs/repo"
 
 	testutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
+	host "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
+	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	libp2p "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p"
 	mocknet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/net/mock"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
-	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
-	host "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	datastore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	syncds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 )
 
 // NewMockNode constructs an IpfsNode for use in tests.

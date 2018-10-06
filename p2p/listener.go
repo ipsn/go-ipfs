@@ -4,8 +4,8 @@ import (
 	"errors"
 	"sync"
 
-	net "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
 	p2phost "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
+	net "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-protocol"
 )

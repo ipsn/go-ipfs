@@ -11,10 +11,10 @@ import (
 	"time"
 
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
-	mpool "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-msgio/mpool"
+	pool "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-buffer-pool"
 )
 
-var log = logging.Logger("multiplex")
+var log = logging.Logger("mplex")
 
 var MaxMessageSize = 1 << 20
 
@@ -407,7 +407,7 @@ func (mp *Multiplex) readNext() ([]byte, error) {
 		return nil, nil
 	}
 
-	buf := mpool.ByteSlicePool.Get(uint32(l)).([]byte)[:l]
+	buf := pool.Get(int(l))
 	n, err := io.ReadFull(mp.buf, buf)
 	if err != nil {
 		return nil, err

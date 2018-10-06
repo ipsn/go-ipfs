@@ -7,16 +7,16 @@ import (
 	"time"
 
 	pin "github.com/ipsn/go-ipfs/pin"
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
 	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
 	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns/pb"
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	dsquery "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/query"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	proto "github.com/gogo/protobuf/proto"
 	base32 "github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/base32"
 )

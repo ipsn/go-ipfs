@@ -12,13 +12,13 @@ import (
 	math2 "github.com/ipsn/go-ipfs/thirdparty/math2"
 	lgbl "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-loggables"
 
-	inet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
+	host "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
 	goprocess "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
 	procctx "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess/context"
 	periodicproc "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess/periodic"
-	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
-	host "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
+	inet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
+	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 )
 

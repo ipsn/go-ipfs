@@ -13,12 +13,6 @@
       "version": "1.5.7"
     },
     {
-      "author": "jbenet",
-      "hash": "QmWBug6eBS7AxRdCDVuSY5CnSit7cS2XnPFYJWqWDumhCG",
-      "name": "go-msgio",
-      "version": "0.0.3"
-    },
-    {
       "author": "whyrusleeping",
       "hash": "QmZooytqEoUwQjv7KzH4d3xyJnyvD3AWJaCDMYt5pbCtua",
       "name": "chunker",
@@ -35,6 +29,12 @@
       "hash": "QmRcHuYzAyswytBuMF78rj3LTChYszomRFXNg4685ZN1WM",
       "name": "go-block-format",
       "version": "0.2.0"
+    },
+    {
+      "author": "Stebalien",
+      "hash": "QmZRt3dzgDWkjssrmNvBKVNJpLBMafJi5AKpdfMkbfWRu5",
+      "name": "go-buffer-pool",
+      "version": "0.1.2"
     }
   ],
   "gxVersion": "0.12.1",
@@ -42,6 +42,6 @@
   "license": "MIT",
   "name": "go-ipfs-chunker",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.1.1"
+  "version": "0.1.2"
 }
 

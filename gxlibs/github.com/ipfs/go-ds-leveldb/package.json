@@ -21,9 +21,9 @@
     },
     {
       "author": "jbenet",
-      "hash": "QmbQshXLNcCPRUGZv4sBGxnZNAHREA6MKeomkwihNXPZWP",
+      "hash": "QmaRb5yNXKonhbkpNxNawoydk4N6es6b4fPj19sjEKsh5D",
       "name": "go-datastore",
-      "version": "3.3.0"
+      "version": "3.4.0"
     }
   ],
   "gxVersion": "0.8.0",
@@ -31,6 +31,6 @@
   "license": "",
   "name": "go-ds-leveldb",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "1.2.0"
+  "version": "1.2.1"
 }
 

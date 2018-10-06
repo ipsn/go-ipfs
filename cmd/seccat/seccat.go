@@ -19,11 +19,11 @@ import (
 	"os/signal"
 	"syscall"
 
-	secio "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-secio"
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	pstoremem "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore/pstoremem"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	secio "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-secio"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 )
 

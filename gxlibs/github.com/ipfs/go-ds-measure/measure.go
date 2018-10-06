@@ -43,6 +43,10 @@ func New(prefix string, ds datastore.Datastore) *measure {
 		hasErr: metrics.New(prefix+".has.errors_total", "Number of errored Datastore.Has calls").Counter(),
 		hasLatency: metrics.New(prefix+".has.latency_seconds",
 			"Latency distribution of Datastore.Has calls").Histogram(datastoreLatencyBuckets),
+		getsizeNum: metrics.New(prefix+".getsize_total", "Total number of Datastore.GetSize calls").Counter(),
+		getsizeErr: metrics.New(prefix+".getsize.errors_total", "Number of errored Datastore.GetSize calls").Counter(),
+		getsizeLatency: metrics.New(prefix+".getsize.latency_seconds",
+			"Latency distribution of Datastore.GetSize calls").Histogram(datastoreLatencyBuckets),
 
 		deleteNum: metrics.New(prefix+".delete_total", "Total number of Datastore.Delete calls").Counter(),
 		deleteErr: metrics.New(prefix+".delete.errors_total", "Number of errored Datastore.Delete calls").Counter(),
@@ -94,6 +98,10 @@ type measure struct {
 	hasErr     metrics.Counter
 	hasLatency metrics.Histogram
 
+	getsizeNum     metrics.Counter
+	getsizeErr     metrics.Counter
+	getsizeLatency metrics.Histogram
+
 	deleteNum     metrics.Counter
 	deleteErr     metrics.Counter
 	deleteLatency metrics.Histogram
@@ -139,10 +147,13 @@ func (m *measure) Get(key datastore.Key) (value []byte, err error) {
 	defer recordLatency(m.getLatency, time.Now())
 	m.getNum.Inc()
 	value, err = m.backend.Get(key)
-	if err != nil {
-		m.getErr.Inc()
-	} else {
+	switch err {
+	case nil:
 		m.getSize.Observe(float64(len(value)))
+	case datastore.ErrNotFound:
+		// Not really an error.
+	default:
+		m.getErr.Inc()
 	}
 	return value, err
 }
@@ -155,6 +166,18 @@ func (m *measure) Has(key datastore.Key) (exists bool, err error) {
 		m.hasErr.Inc()
 	}
 	return exists, err
+}
+
+func (m *measure) GetSize(key datastore.Key) (size int, err error) {
+	defer recordLatency(m.getsizeLatency, time.Now())
+	m.hasNum.Inc()
+	size, err = m.backend.GetSize(key)
+	switch err {
+	case nil, datastore.ErrNotFound:
+	default:
+		m.getsizeErr.Inc()
+	}
+	return size, err
 }
 
 func (m *measure) Delete(key datastore.Key) error {

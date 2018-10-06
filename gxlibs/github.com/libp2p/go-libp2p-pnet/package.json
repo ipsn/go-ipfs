@@ -15,22 +15,22 @@
       "version": "3.0.0"
     },
     {
-      "author": "whyrusleeping",
-      "hash": "QmWBug6eBS7AxRdCDVuSY5CnSit7cS2XnPFYJWqWDumhCG",
-      "name": "go-msgio",
-      "version": "0.0.3"
-    },
-    {
       "author": "multiformats",
-      "hash": "QmewJ1Zp9Hwz5HcMd7JYjhLXwvEHTL2UBCCz3oLt1E2N5z",
+      "hash": "QmSd767zQyAw7Qw6nHUELpZccAoPcd521YFP2GUZ4PiRqR",
       "name": "go-multicodec",
-      "version": "0.1.6"
+      "version": "0.1.7"
     },
     {
       "author": "davidlazar",
       "hash": "QmNi5J1mEQKAKWbPRBEMKKYVNok9EN4MsGM4YUqPvraPEX",
       "name": "go-crypto-dav",
       "version": "0.2.2"
+    },
+    {
+      "author": "Stebalien",
+      "hash": "QmZRt3dzgDWkjssrmNvBKVNJpLBMafJi5AKpdfMkbfWRu5",
+      "name": "go-buffer-pool",
+      "version": "0.1.2"
     }
   ],
   "gxVersion": "0.9.1",
@@ -38,6 +38,6 @@
   "license": "MIT",
   "name": "go-libp2p-pnet",
   "releaseCmd": "git commit -a -m \"gx release $VERSION\"",
-  "version": "3.0.2"
+  "version": "3.0.3"
 }
 
