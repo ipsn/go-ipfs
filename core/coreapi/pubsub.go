@@ -13,8 +13,8 @@ import (
 
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	floodsub "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-floodsub"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 )
 
 type PubSubAPI CoreAPI

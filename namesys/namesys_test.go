@@ -12,8 +12,8 @@ import (
 
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	offroute "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
-	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
 	pstoremem "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore/pstoremem"
+	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	dssync "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"

@@ -10,10 +10,10 @@ import (
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 	iface "github.com/ipsn/go-ipfs/core/coreapi/interface"
 
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	unixfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 	unixfspb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/pb"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	merkledag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"

@@ -4,9 +4,9 @@ import (
 	"context"
 	"time"
 
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
 	tec "github.com/jbenet/go-temp-err-catcher"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-protocol"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"

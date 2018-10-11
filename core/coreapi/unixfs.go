@@ -10,12 +10,12 @@ import (
 	"github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 	"github.com/ipsn/go-ipfs/core/coreunix"
 
-	mfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-mfs"
 	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 	cidutil "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cidutil"
 	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit/files"
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
+	mfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-mfs"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	dagtest "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag/test"
 	blockservice "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"

@@ -8,12 +8,12 @@ import (
 	core "github.com/ipsn/go-ipfs/core"
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
 
+	swarm "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-swarm"
 	inet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
 	net "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	protocol "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-protocol"
-	swarm "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-swarm"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	iaddr "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-addr"
 )

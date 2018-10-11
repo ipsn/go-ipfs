@@ -10,8 +10,8 @@ import (
 	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
-	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
+	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
 	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns/pb"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"

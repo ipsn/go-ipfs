@@ -18,9 +18,9 @@ import (
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-verifcid"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-verifcid"
 )
 
 var PinCmd = &cmds.Command{

@@ -20,9 +20,9 @@ import (
 
 	testutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
 	random "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/go-random"
-	mocknet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/net/mock"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	mocknet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/net/mock"
 )
 
 var log = logging.Logger("epictest")

@@ -9,13 +9,13 @@ import (
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
-	dht "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kad-dht"
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
+	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
 	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
 	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns/pb"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
+	dht "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kad-dht"
 	proto "github.com/gogo/protobuf/proto"
 )
 

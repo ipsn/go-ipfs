@@ -13,8 +13,8 @@ import (
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
 	goprocess "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
-	mocknet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/net/mock"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
+	mocknet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/net/mock"
 )
 
 func TestRepublish(t *testing.T) {

@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	ipath "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit/files"
+	ipath "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
 	opt "github.com/ipsn/go-ipfs/core/coreapi/interface/options"

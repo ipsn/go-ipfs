@@ -19,12 +19,12 @@ import (
 	repo "github.com/ipsn/go-ipfs/repo"
 
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
-	id "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/protocol/identify"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	datastore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	syncds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
+	id "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/protocol/identify"
 )
 
 // `ipfs object new unixfs-dir`

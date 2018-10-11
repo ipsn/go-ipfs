@@ -9,9 +9,9 @@
   "gxDependencies": [
     {
       "author": "whyrusleeping",
-      "hash": "QmRCchSdr1MhQXBjLXE5zg4RgJSsj3wzzJmMedANZXx2hC",
+      "hash": "QmcxL9MDzSU5Mj1GcWZD8CXkAFuJXjdbjotZ93o371bKSf",
       "name": "go-msgio",
-      "version": "0.0.5"
+      "version": "0.0.6"
     },
     {
       "author": "whyrusleeping",
