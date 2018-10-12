@@ -13,13 +13,13 @@ import (
 	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 
-	uarchive "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/archive"
 	"github.com/cheggaaa/pb"
 	tar "github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/tar-utils"
+	uarchive "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/archive"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 )
 
 var ErrInvalidCompressionLevel = errors.New("compression level must be between 1 and 9")

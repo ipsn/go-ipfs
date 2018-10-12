@@ -18,10 +18,10 @@ import (
 	iface "github.com/ipsn/go-ipfs/core/coreapi/interface"
 	coremock "github.com/ipsn/go-ipfs/core/mock"
 
-	importer "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer"
-	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil/ci"
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
+	importer "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer"
+	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 	fstest "bazil.org/fuse/fs/fstestutil"
 	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"

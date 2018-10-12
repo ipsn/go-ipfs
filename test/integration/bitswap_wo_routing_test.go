@@ -9,8 +9,8 @@ import (
 	"github.com/ipsn/go-ipfs/core/mock"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	mocknet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/net/mock"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 )
 
 func TestBitswapWithoutRouting(t *testing.T) {

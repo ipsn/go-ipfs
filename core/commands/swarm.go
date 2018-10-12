@@ -14,7 +14,6 @@ import (
 	"github.com/ipsn/go-ipfs/repo"
 	"github.com/ipsn/go-ipfs/repo/fsrepo"
 
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-swarm"
 	mafilter "github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/multiaddr-filter"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	inet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
@@ -22,6 +21,7 @@ import (
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-swarm"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	iaddr "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-addr"
 )

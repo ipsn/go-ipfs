@@ -18,13 +18,13 @@ import (
 	nsopts "github.com/ipsn/go-ipfs/namesys/opts"
 	repo "github.com/ipsn/go-ipfs/repo"
 
+	id "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/protocol/identify"
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	datastore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	syncds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
-	id "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/protocol/identify"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 )
 
 // `ipfs object new unixfs-dir`
