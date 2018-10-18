@@ -1,10 +1,10 @@
 {
+  "author": "magik6k",
   "bugs": {
-    "url": "https://github.com/ipfs/go-ipfs-cmdkit"
+    "url": "https://github.com/ipfs/go-ipfs-files"
   },
   "gx": {
-    "dvcsimport": "github.com/ipfs/go-ipfs-cmdkit",
-    "goversion": "1.7"
+    "dvcsimport": "github.com/ipfs/go-ipfs-files"
   },
   "gxDependencies": [
     {
@@ -14,11 +14,11 @@
       "version": "0.2.0"
     }
   ],
-  "gxVersion": "0.10.0",
+  "gxVersion": "0.11.0",
   "language": "go",
-  "license": "MIT",
-  "name": "go-ipfs-cmdkit",
+  "license": "",
+  "name": "go-ipfs-files",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "1.2.0"
+  "version": "1.0.1"
 }
 

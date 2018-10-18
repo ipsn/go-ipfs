@@ -11,8 +11,8 @@ import (
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 	nodeMount "github.com/ipsn/go-ipfs/fuse/node"
 
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
 var MountCmd = &cmds.Command{

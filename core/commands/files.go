@@ -21,15 +21,15 @@ import (
 	humanize "github.com/dustin/go-humanize"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
-	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
-	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	bservice "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
-	mfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-mfs"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	mfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-mfs"
 )
 
 var flog = logging.Logger("cmds/files")
@@ -479,7 +479,7 @@ Examples:
 			return
 		case *mfs.File:
 			_, name := gopath.Split(path)
-			out := &filesLsOutput{[]mfs.NodeListing{mfs.NodeListing{Name: name}}}
+			out := &filesLsOutput{[]mfs.NodeListing{{Name: name}}}
 			if long {
 				out.Entries[0].Type = int(fsn.Type())
 
@@ -527,6 +527,9 @@ Examples:
 			long, _, _ := res.Request().Option(longOptionName).Bool()
 			for _, o := range out.Entries {
 				if long {
+					if o.Type == int(mfs.TDir) {
+						o.Name += "/"
+					}
 					fmt.Fprintf(buf, "%s\t%s\t%d\n", o.Name, o.Hash, o.Size)
 				} else {
 					fmt.Fprintf(buf, "%s\n", o.Name)
@@ -561,8 +564,8 @@ Examples:
 		cmdkit.StringArg("path", true, false, "Path to file to be read."),
 	},
 	Options: []cmdkit.Option{
-		cmdkit.IntOption(filesOffsetOptionName, "o", "Byte offset to begin reading from."),
-		cmdkit.IntOption(filesCountOptionName, "n", "Maximum number of bytes to read."),
+		cmdkit.Int64Option(filesOffsetOptionName, "o", "Byte offset to begin reading from."),
+		cmdkit.Int64Option(filesCountOptionName, "n", "Maximum number of bytes to read."),
 	},
 	Run: func(req oldcmds.Request, res oldcmds.Response) {
 		n, err := req.InvocContext().GetNode()
@@ -597,7 +600,7 @@ Examples:
 
 		defer rfd.Close()
 
-		offset, _, err := req.Option(offsetOptionName).Int()
+		offset, _, err := req.Option(offsetOptionName).Int64()
 		if err != nil {
 			res.SetError(err, cmdkit.ErrNormal)
 			return
@@ -625,7 +628,7 @@ Examples:
 		}
 
 		var r io.Reader = &contextReaderWrapper{R: rfd, ctx: req.Context()}
-		count, found, err := req.Option(filesCountOptionName).Int()
+		count, found, err := req.Option(filesCountOptionName).Int64()
 		if err != nil {
 			res.SetError(err, cmdkit.ErrNormal)
 			return
@@ -747,11 +750,11 @@ stat' on the file or any of its ancestors.
 		cmdkit.FileArg("data", true, false, "Data to write.").EnableStdin(),
 	},
 	Options: []cmdkit.Option{
-		cmdkit.IntOption(filesOffsetOptionName, "o", "Byte offset to begin writing at."),
+		cmdkit.Int64Option(filesOffsetOptionName, "o", "Byte offset to begin writing at."),
 		cmdkit.BoolOption(filesCreateOptionName, "e", "Create the file if it does not exist."),
 		cmdkit.BoolOption(filesParentsOptionName, "p", "Make parent directories as needed."),
 		cmdkit.BoolOption(filesTruncateOptionName, "t", "Truncate the file to size zero before writing."),
-		cmdkit.IntOption(filesCountOptionName, "n", "Maximum number of bytes to read."),
+		cmdkit.Int64Option(filesCountOptionName, "n", "Maximum number of bytes to read."),
 		cmdkit.BoolOption(filesRawLeavesOptionName, "Use raw blocks for newly created leaf nodes. (experimental)"),
 		cidVersionOption,
 		hashOption,
@@ -778,7 +781,7 @@ stat' on the file or any of its ancestors.
 			return err
 		}
 
-		offset, _ := req.Options[filesOffsetOptionName].(int)
+		offset, _ := req.Options[filesOffsetOptionName].(int64)
 		if offset < 0 {
 			return fmt.Errorf("cannot have negative write offset")
 		}
@@ -820,7 +823,7 @@ stat' on the file or any of its ancestors.
 			}
 		}
 
-		count, countfound := req.Options[filesCountOptionName].(int)
+		count, countfound := req.Options[filesCountOptionName].(int64)
 		if countfound && count < 0 {
 			return fmt.Errorf("cannot have negative byte count")
 		}

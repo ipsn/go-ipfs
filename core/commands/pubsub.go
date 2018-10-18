@@ -12,8 +12,8 @@ import (
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 	options "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 
-	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
 var PubsubCmd = &cmds.Command{

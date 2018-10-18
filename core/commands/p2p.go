@@ -15,10 +15,10 @@ import (
 	core "github.com/ipsn/go-ipfs/core"
 	p2p "github.com/ipsn/go-ipfs/p2p"
 
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-protocol"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-addr"
 	madns "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-dns"
 )
@@ -215,6 +215,12 @@ Example:
 			return
 		}
 
+		// port can't be 0
+		if err := checkPort(target); err != nil {
+			res.SetError(err, cmdkit.ErrNormal)
+			return
+		}
+
 		allowCustom, _, err := req.Option(allowCustomProtocolOptionName).Bool()
 		if err != nil {
 			res.SetError(err, cmdkit.ErrNormal)
@@ -233,6 +239,40 @@ Example:
 
 		res.SetOutput(nil)
 	},
+}
+
+// checkPort checks whether target multiaddr contains tcp or udp protocol
+// and whether the port is equal to 0
+func checkPort(target ma.Multiaddr) error {
+	// get tcp or udp port from multiaddr
+	getPort := func() (string, error) {
+		sport, _ := target.ValueForProtocol(ma.P_TCP)
+		if sport != "" {
+			return sport, nil
+		}
+
+		sport, _ = target.ValueForProtocol(ma.P_UDP)
+		if sport != "" {
+			return sport, nil
+		}
+		return "", fmt.Errorf("address does not contain tcp or udp protocol")
+	}
+
+	sport, err := getPort()
+	if err != nil {
+		return err
+	}
+
+	port, err := strconv.Atoi(sport)
+	if err != nil {
+		return err
+	}
+
+	if port == 0 {
+		return fmt.Errorf("port can not be 0")
+	}
+
+	return nil
 }
 
 // forwardRemote forwards libp2p service connections to a manet address

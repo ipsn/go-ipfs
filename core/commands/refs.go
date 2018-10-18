@@ -12,8 +12,8 @@ import (
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 )
 

@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit/files"
+	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
 	ipath "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"

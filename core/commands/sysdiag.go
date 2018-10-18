@@ -8,9 +8,9 @@ import (
 	version "github.com/ipfs/go-ipfs"
 	cmds "github.com/ipsn/go-ipfs/commands"
 
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	manet "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
 	sysi "github.com/whyrusleeping/go-sysinfo"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
 var sysDiagCmd = &cmds.Command{

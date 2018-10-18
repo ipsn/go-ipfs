@@ -7,17 +7,18 @@ import (
 	"math"
 	"strings"
 
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+
 	cmds "github.com/ipsn/go-ipfs/commands"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 	coredag "github.com/ipsn/go-ipfs/core/coredag"
 	pin "github.com/ipsn/go-ipfs/pin"
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
-	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
-	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit/files"
+	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
 var DagCmd = &cmds.Command{
