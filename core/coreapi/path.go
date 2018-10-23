@@ -7,12 +7,12 @@ import (
 
 	"github.com/ipsn/go-ipfs/core"
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
-	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
-	ipfspath "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
 
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	ipfspath "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
 )
 
 // ResolveNode resolves the path `p` using Unixfs resolver, gets and returns the
@@ -23,7 +23,7 @@ func (api *CoreAPI) ResolveNode(ctx context.Context, p coreiface.Path) (ipld.Nod
 		return nil, err
 	}
 
-	node, err := api.node.DAG.Get(ctx, rp.Cid())
+	node, err := api.dag.Get(ctx, rp.Cid())
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func (api *CoreAPI) ResolvePath(ctx context.Context, p coreiface.Path) (coreifac
 	}
 
 	r := &resolver.Resolver{
-		DAG:         api.node.DAG,
+		DAG:         api.dag,
 		ResolveOnce: resolveOnce,
 	}
 

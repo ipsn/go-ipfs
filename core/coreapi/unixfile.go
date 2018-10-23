@@ -8,6 +8,8 @@ import (
 	gopath "path"
 	"time"
 
+	"github.com/ipsn/go-ipfs/core/coreapi/interface"
+
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
@@ -95,6 +97,14 @@ func (d *ufsDirectory) NextFile() (files.File, error) {
 	return newUnixfsFile(d.ctx, d.dserv, nd, l.Name, d)
 }
 
+func (d *ufsDirectory) Size() (int64, error) {
+	return 0, files.ErrNotReader
+}
+
+func (d *ufsDirectory) Seek(offset int64, whence int) (int64, error) {
+	return 0, files.ErrNotReader
+}
+
 type ufsFile struct {
 	uio.DagReader
 
@@ -122,7 +132,7 @@ func (f *ufsFile) Size() (int64, error) {
 	return int64(f.DagReader.Size()), nil
 }
 
-func newUnixfsDir(ctx context.Context, dserv ipld.DAGService, nd ipld.Node, name string, path string) (files.File, error) {
+func newUnixfsDir(ctx context.Context, dserv ipld.DAGService, nd ipld.Node, name string, path string) (iface.UnixfsFile, error) {
 	dir, err := uio.NewDirectoryFromNode(dserv, nd)
 	if err != nil {
 		return nil, err
@@ -153,7 +163,7 @@ func newUnixfsDir(ctx context.Context, dserv ipld.DAGService, nd ipld.Node, name
 	}, nil
 }
 
-func newUnixfsFile(ctx context.Context, dserv ipld.DAGService, nd ipld.Node, name string, parent files.File) (files.File, error) {
+func newUnixfsFile(ctx context.Context, dserv ipld.DAGService, nd ipld.Node, name string, parent files.File) (iface.UnixfsFile, error) {
 	path := name
 	if parent != nil {
 		path = gopath.Join(parent.FullPath(), name)
