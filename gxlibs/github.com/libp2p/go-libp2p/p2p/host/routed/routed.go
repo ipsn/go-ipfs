@@ -8,6 +8,7 @@ import (
 	host "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
 
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	circuit "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-circuit"
 	ifconnmgr "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-interface-connmgr"
 	lgbl "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-loggables"
 	inet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
@@ -65,6 +66,43 @@ func (rh *RoutedHost) Connect(ctx context.Context, pi pstore.PeerInfo) error {
 		if err != nil {
 			return err
 		}
+	}
+
+	// Issue 448: if our address set includes routed specific relay addrs,
+	// we need to make sure the relay's addr itself is in the peerstore or else
+	// we wont be able to dial it.
+	for _, addr := range addrs {
+		_, err := addr.ValueForProtocol(circuit.P_CIRCUIT)
+		if err != nil {
+			// not a relay address
+			continue
+		}
+
+		if addr.Protocols()[0].Code != ma.P_P2P {
+			// not a routed relay specific address
+			continue
+		}
+
+		relay, _ := addr.ValueForProtocol(ma.P_P2P)
+
+		relayID, err := peer.IDFromString(relay)
+		if err != nil {
+			log.Debugf("failed to parse relay ID in address %s: %s", relay, err)
+			continue
+		}
+
+		if len(rh.Peerstore().Addrs(relayID)) > 0 {
+			// we already have addrs for this relay
+			continue
+		}
+
+		relayAddrs, err := rh.findPeerAddrs(ctx, relayID)
+		if err != nil {
+			log.Debugf("failed to find relay %s: %s", relay, err)
+			continue
+		}
+
+		rh.Peerstore().AddAddrs(relayID, relayAddrs, pstore.TempAddrTTL)
 	}
 
 	// if we're here, we got some addrs. let's use our wrapped host to connect.

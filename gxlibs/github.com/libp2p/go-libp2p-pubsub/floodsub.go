@@ -1,9 +1,9 @@
-package floodsub
+package pubsub
 
 import (
 	"context"
 
-	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-floodsub/pb"
+	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-pubsub/pb"
 
 	host "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"

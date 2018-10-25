@@ -175,12 +175,20 @@ func TestListenAddrs(t *testing.T) {
 	test("/ip4/0.0.0.0/tcp/4324", "", true)
 	test("/ip4/0.0.0.0/udp/4325", "", false)
 	test("/ip4/0.0.0.0/udp/4326/udt", "", false)
+
 	test("/ip6/::1/tcp/4324", "", true)
 	test("/ip6/::1/udp/4325", "", false)
 	test("/ip6/::1/udp/4326/udt", "", false)
 	test("/ip6/::/tcp/4324", "", true)
 	test("/ip6/::/udp/4325", "", false)
 	test("/ip6/::/udp/4326/udt", "", false)
+
+	/* "An implementation should also support the concept of a "default"
+	 * zone for each scope.  And, when supported, the index value zero
+	 * at each scope SHOULD be reserved to mean "use the default zone"."
+	 * -- rfc4007. So, this _should_ work everywhere(?). */
+	test("/ip6zone/0/ip6/::1/tcp/4324", "/ip6/::1/tcp/4324", true)
+	test("/ip6zone/0/ip6/::1/udp/4324", "", false)
 }
 
 func TestListenAndDial(t *testing.T) {
@@ -306,8 +314,8 @@ func TestIPLoopback(t *testing.T) {
 		t.Error("IP6Loopback incorrect:", IP6Loopback)
 	}
 
-	if IP6LinkLocalLoopback.String() != "/ip6/fe80::1" {
-		t.Error("IP6LinkLocalLoopback incorrect:", IP6Loopback)
+	if IP4MappedIP6Loopback.String() != "/ip6/::ffff:127.0.0.1" {
+		t.Error("IP4MappedIP6Loopback incorrect:", IP4MappedIP6Loopback)
 	}
 
 	if !IsIPLoopback(IP4Loopback) {
@@ -330,8 +338,28 @@ func TestIPLoopback(t *testing.T) {
 		t.Error("IsIPLoopback failed (IP6Loopback)")
 	}
 
-	if !IsIPLoopback(IP6LinkLocalLoopback) {
-		t.Error("IsIPLoopback failed (IP6LinkLocalLoopback)")
+	if !IsIPLoopback(newMultiaddr(t, "/ip6/127.0.0.1")) {
+		t.Error("IsIPLoopback failed (/ip6/127.0.0.1)")
+	}
+
+	if !IsIPLoopback(newMultiaddr(t, "/ip6/127.99.3.2")) {
+		t.Error("IsIPLoopback failed (/ip6/127.99.3.2)")
+	}
+
+	if IsIPLoopback(newMultiaddr(t, "/ip6/::fffa:127.99.3.2")) {
+		t.Error("IsIPLoopback false positive (/ip6/::fffa:127.99.3.2)")
+	}
+
+	if !IsIPLoopback(newMultiaddr(t, "/ip6zone/0/ip6/::1")) {
+		t.Error("IsIPLoopback failed (/ip6zone/0/ip6/::1)")
+	}
+
+	if !IsIPLoopback(newMultiaddr(t, "/ip6zone/xxx/ip6/::1")) {
+		t.Error("IsIPLoopback failed (/ip6zone/xxx/ip6/::1)")
+	}
+
+	if IsIPLoopback(newMultiaddr(t, "/ip6zone/0/ip6/1::1")) {
+		t.Errorf("IsIPLoopback false positive (/ip6zone/0/ip6/1::1)")
 	}
 }
 
@@ -351,19 +379,23 @@ func TestIPUnspecified(t *testing.T) {
 	if !IsIPUnspecified(IP6Unspecified) {
 		t.Error("IsIPUnspecified failed (IP6Unspecified)")
 	}
+
+	if !IsIPUnspecified(newMultiaddr(t, "/ip6zone/xxx/ip6/::")) {
+		t.Error("IsIPUnspecified failed (/ip6zone/xxx/ip6/::)")
+	}
 }
 
 func TestIP6LinkLocal(t *testing.T) {
-	if !IsIP6LinkLocal(IP6LinkLocalLoopback) {
-		t.Error("IsIP6LinkLocal failed (IP6LinkLocalLoopback)")
-	}
-
 	for a := 0; a < 65536; a++ {
-		isLinkLocal := (a == 0xfe80)
+		isLinkLocal := (a&0xffc0 == 0xfe80 || a&0xff0f == 0xff02)
 		m := newMultiaddr(t, fmt.Sprintf("/ip6/%x::1", a))
 		if IsIP6LinkLocal(m) != isLinkLocal {
 			t.Errorf("IsIP6LinkLocal failed (%s != %v)", m, isLinkLocal)
 		}
+	}
+
+	if !IsIP6LinkLocal(newMultiaddr(t, "/ip6zone/hello/ip6/fe80::9999")) {
+		t.Error("IsIP6LinkLocal failed (/ip6/fe80::9999)")
 	}
 }
 

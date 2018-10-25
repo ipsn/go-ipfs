@@ -1,6 +1,6 @@
 syntax = "proto2";
 
-package floodsub.pb;
+package pubsub.pb;
 
 message RPC {
 	repeated SubOpts subscriptions = 1;
@@ -19,6 +19,8 @@ message Message {
 	optional bytes data = 2;
 	optional bytes seqno = 3;
 	repeated string topicIDs = 4;
+	optional bytes signature = 5;
+	optional bytes key = 6;
 }
 
 message ControlMessage {
@@ -45,7 +47,6 @@ message ControlPrune {
 	optional string topicID = 1;
 }
 
-// topicID = hash(topicDescriptor); (not the topic.name)
 message TopicDescriptor {
 	optional string name = 1;
 	optional AuthOpts auth = 2;

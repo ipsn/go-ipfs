@@ -13,9 +13,9 @@ import (
 	dshelp "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-ds-help"
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
-	floodsub "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-floodsub"
 	p2phost "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
+	pubsub "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-pubsub"
 	record "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record"
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
 	ropts "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing/options"
@@ -33,14 +33,14 @@ type PubsubValueStore struct {
 	ds   ds.Datastore
 	host p2phost.Host
 	cr   routing.ContentRouting
-	ps   *floodsub.PubSub
+	ps   *pubsub.PubSub
 
 	// Map of keys to subscriptions.
 	//
 	// If a key is present but the subscription is nil, we've bootstrapped
 	// but haven't subscribed.
 	mx   sync.Mutex
-	subs map[string]*floodsub.Subscription
+	subs map[string]*pubsub.Subscription
 
 	watchLk  sync.Mutex
 	watching map[string]*watchGroup
@@ -51,7 +51,7 @@ type PubsubValueStore struct {
 // NewPubsubPublisher constructs a new Publisher that publishes IPNS records through pubsub.
 // The constructor interface is complicated by the need to bootstrap the pubsub topic.
 // This could be greatly simplified if the pubsub implementation handled bootstrap itself
-func NewPubsubValueStore(ctx context.Context, host p2phost.Host, cr routing.ContentRouting, ps *floodsub.PubSub, validator record.Validator) *PubsubValueStore {
+func NewPubsubValueStore(ctx context.Context, host p2phost.Host, cr routing.ContentRouting, ps *pubsub.PubSub, validator record.Validator) *PubsubValueStore {
 	return &PubsubValueStore{
 		ctx: ctx,
 
@@ -60,7 +60,7 @@ func NewPubsubValueStore(ctx context.Context, host p2phost.Host, cr routing.Cont
 		cr:   cr,   // needed for pubsub bootstrap
 		ps:   ps,
 
-		subs:     make(map[string]*floodsub.Subscription),
+		subs:     make(map[string]*pubsub.Subscription),
 		watching: make(map[string]*watchGroup),
 
 		Validator: validator,
@@ -119,7 +119,7 @@ func (p *PubsubValueStore) Subscribe(key string) error {
 	// record hasn't expired.
 	//
 	// Also, make sure to do this *before* subscribing.
-	p.ps.RegisterTopicValidator(key, func(ctx context.Context, msg *floodsub.Message) bool {
+	p.ps.RegisterTopicValidator(key, func(ctx context.Context, msg *pubsub.Message) bool {
 		return p.isBetter(key, msg.GetData())
 	})
 
@@ -280,7 +280,7 @@ func (p *PubsubValueStore) Cancel(name string) (bool, error) {
 	return ok, nil
 }
 
-func (p *PubsubValueStore) handleSubscription(sub *floodsub.Subscription, key string, cancel func()) {
+func (p *PubsubValueStore) handleSubscription(sub *pubsub.Subscription, key string, cancel func()) {
 	defer sub.Cancel()
 	defer cancel()
 
@@ -322,6 +322,7 @@ func (p *PubsubValueStore) notifyWatchers(key string, data []byte) {
 // rendezvous with peers in the name topic through provider records
 // Note: rendezvous/boostrap should really be handled by the pubsub implementation itself!
 func bootstrapPubsub(ctx context.Context, cr routing.ContentRouting, host p2phost.Host, name string) {
+	// TODO: consider changing this to `pubsub:...`
 	topic := "floodsub:" + name
 	hash := u.Hash([]byte(topic))
 	rz := cid.NewCidV1(cid.Raw, hash)

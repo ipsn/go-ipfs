@@ -1,10 +1,10 @@
 {
   "author": "whyrusleeping",
   "bugs": {
-    "url": "https://github.com/libp2p/go-floodsub"
+    "url": "https://github.com/libp2p/go-libp2p-pubsub"
   },
   "gx": {
-    "dvcsimport": "github.com/libp2p/go-floodsub"
+    "dvcsimport": "github.com/libp2p/go-libp2p-pubsub"
   },
   "gxDependencies": [
     {
@@ -15,21 +15,21 @@
     },
     {
       "author": "whyrusleeping",
-      "hash": "Qmf5yHzmWAyHSJRPAmZzfk3Yd7icydBLi7eec5741aov7v",
+      "hash": "QmdJfsSbKSZnMkfZ1kpopiyB9i3Hd6cp8VKWZmtWPa7Moc",
       "name": "go-libp2p-host",
-      "version": "3.0.13"
+      "version": "3.0.15"
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmcZbC2qrMF6DAsHKzk7xgWBDiJHHc15jJ6aDNrv84DG6S",
+      "hash": "Qmcwep23T9AwwbuQRRhVyjk9PBRbMFCyGKCKGZfTPteiFU",
       "name": "go-libp2p-blankhost",
-      "version": "0.3.13"
+      "version": "0.3.15"
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmSTaEYUgDe1r581hxyd2u9582Hgp3KX4wGwYbRqz2u9Qh",
+      "hash": "QmXuRkCR7BNQa9uqfpTiFWsTQLzmTWYg91Ja1w95gnqb6u",
       "name": "go-libp2p-net",
-      "version": "3.0.13"
+      "version": "3.0.15"
     },
     {
       "hash": "QmZChCsSt8DctjceaL56Eibc29CVQq4dGKRXC5JRZ6Ppae",
@@ -38,15 +38,15 @@
     },
     {
       "author": "multiformats",
-      "hash": "QmYmsdtJ3HsodkePE3eU3TsCaP2YvPZJ4LoXnNkDE5Tpt7",
+      "hash": "QmT4U94DnD8FRfqr21obWY32HLM5VExccPKMjQHofeYqr9",
       "name": "go-multiaddr",
-      "version": "1.3.0"
+      "version": "1.3.5"
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmbNepETomvmXfz1X5pHNFD2QuPqnqi47dTd94QJWSorQ3",
+      "hash": "QmTRhk7cgjUf2gfQ3p2M9KPECNZEW9XUrmHcFCgog4cPgB",
       "name": "go-libp2p-peer",
-      "version": "2.3.8"
+      "version": "2.4.0"
     },
     {
       "author": "whyrusleeping",
@@ -56,22 +56,28 @@
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmYyFNDLTSy6rW99K8vHPvFPLa5bB4zoy8gGZENoiaBN6R",
+      "hash": "QmVHhT8NxtApPTndiZPe4JNGNUxGWtJe3ebyxtRz4HnbEp",
       "name": "go-libp2p-swarm",
-      "version": "3.0.19"
+      "version": "3.0.22"
     },
     {
       "author": "whyrusleeping",
       "hash": "QmdxUuburamoF6zF9qjeQC4WYcWGbWuRmdLacMEsW8ioD8",
       "name": "gogo-protobuf",
       "version": "0.0.0"
+    },
+    {
+      "author": "whyrusleeping",
+      "hash": "QmPvyPwuCgJ7pDmrKDxRtsScJgBaM5h4EpRL2qQJsmXf4n",
+      "name": "go-libp2p-crypto",
+      "version": "2.0.1"
     }
   ],
   "gxVersion": "0.9.0",
   "language": "go",
-  "license": "",
-  "name": "go-libp2p-floodsub",
+  "license": "MIT",
+  "name": "go-libp2p-pubsub",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.9.36"
+  "version": "0.10.2"
 }
 

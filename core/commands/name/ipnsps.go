@@ -9,8 +9,8 @@ import (
 	"github.com/ipsn/go-ipfs/core/commands/e"
 
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 

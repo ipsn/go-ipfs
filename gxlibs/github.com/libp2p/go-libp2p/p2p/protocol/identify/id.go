@@ -2,12 +2,10 @@ package identify
 
 import (
 	"context"
-	"strings"
 	"sync"
 
 	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/protocol/identify/pb"
 
-	semver "github.com/coreos/go-semver/semver"
 	ggio "github.com/gogo/protobuf/io"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	ic "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
@@ -225,15 +223,6 @@ func (ids *IDService) consumeMessage(mes *pb.Identify, c inet.Conn) {
 	pv := mes.GetProtocolVersion()
 	av := mes.GetAgentVersion()
 
-	// version check. if we shouldn't talk, bail.
-	// TODO: at this point, we've already exchanged information.
-	// move this into a first handshake before the connection can open streams.
-	if !protocolVersionsAreCompatible(pv, LibP2PVersion) {
-		logProtocolMismatchDisconnect(c, pv, av)
-		c.Close()
-		return
-	}
-
 	ids.Host.Peerstore().Put(p, "ProtocolVersion", pv)
 	ids.Host.Peerstore().Put(p, "AgentVersion", av)
 
@@ -404,31 +393,6 @@ func addrInAddrs(a ma.Multiaddr, as []ma.Multiaddr) bool {
 		}
 	}
 	return false
-}
-
-// protocolVersionsAreCompatible checks that the two implementations
-// can talk to each other. It will use semver, but for now while
-// we're in tight development, we will return false for minor version
-// changes too.
-func protocolVersionsAreCompatible(v1, v2 string) bool {
-	if strings.HasPrefix(v1, "ipfs/") {
-		v1 = v1[5:]
-	}
-	if strings.HasPrefix(v2, "ipfs/") {
-		v2 = v2[5:]
-	}
-
-	v1s, err := semver.NewVersion(v1)
-	if err != nil {
-		return false
-	}
-
-	v2s, err := semver.NewVersion(v2)
-	if err != nil {
-		return false
-	}
-
-	return v1s.Major == v2s.Major && v1s.Minor == v2s.Minor
 }
 
 // netNotifiee defines methods to be used with the IpfsDHT

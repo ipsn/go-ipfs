@@ -1,4 +1,4 @@
-package ping
+package ping_test
 
 import (
 	"context"
@@ -9,6 +9,7 @@ import (
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	swarmt "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-swarm/testing"
 	bhost "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/host/basic"
+	ping "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/protocol/ping"
 )
 
 func TestPing(t *testing.T) {
@@ -26,14 +27,14 @@ func TestPing(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	ps1 := NewPingService(h1)
-	ps2 := NewPingService(h2)
+	ps1 := ping.NewPingService(h1)
+	ps2 := ping.NewPingService(h2)
 
 	testPing(t, ps1, h2.ID())
 	testPing(t, ps2, h1.ID())
 }
 
-func testPing(t *testing.T, ps *PingService, p peer.ID) {
+func testPing(t *testing.T, ps *ping.PingService, p peer.ID) {
 	pctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	ts, err := ps.Ping(pctx, p)

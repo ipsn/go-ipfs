@@ -83,7 +83,7 @@ func TestHostAddrsFactory(t *testing.T) {
 	if len(addrs) != 1 {
 		t.Fatalf("expected 1 addr, got %d", len(addrs))
 	}
-	if addrs[0] != maddr {
+	if !addrs[0].Equal(maddr) {
 		t.Fatalf("expected %s, got %s", maddr.String(), addrs[0].String())
 	}
 }

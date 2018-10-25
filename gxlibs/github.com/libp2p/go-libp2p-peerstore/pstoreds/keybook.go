@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 
+	base32 "github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/base32"
+
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	query "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/query"
 
@@ -13,7 +15,7 @@ import (
 )
 
 // Public and private keys are stored under the following db key pattern:
-// /peers/keys/<b58 of peer id>/{pub, priv}
+// /peers/keys/<b32 peer id no padding>/{pub, priv}
 var (
 	kbBase     = ds.NewKey("/peers/keys")
 	pubSuffix  = ds.NewKey("/pub")
@@ -31,7 +33,7 @@ func NewKeyBook(_ context.Context, store ds.TxnDatastore, _ Options) (pstore.Key
 }
 
 func (kb *dsKeyBook) PubKey(p peer.ID) ic.PubKey {
-	key := kbBase.ChildString(peer.IDB58Encode(p)).Child(pubSuffix)
+	key := kbBase.ChildString(base32.RawStdEncoding.EncodeToString([]byte(p))).Child(pubSuffix)
 
 	var pk ic.PubKey
 	if value, err := kb.ds.Get(key); err == nil {
@@ -41,7 +43,11 @@ func (kb *dsKeyBook) PubKey(p peer.ID) ic.PubKey {
 		}
 	} else if err == ds.ErrNotFound {
 		pk, err = p.ExtractPublicKey()
-		if err != nil {
+		switch err {
+		case nil:
+		case peer.ErrNoPublicKey:
+			return nil
+		default:
 			log.Errorf("error when extracting pubkey from peer ID for peer %s: %s\n", p.Pretty(), err)
 			return nil
 		}
@@ -68,7 +74,7 @@ func (kb *dsKeyBook) AddPubKey(p peer.ID, pk ic.PubKey) error {
 		return errors.New("peer ID does not match public key")
 	}
 
-	key := kbBase.ChildString(peer.IDB58Encode(p)).Child(pubSuffix)
+	key := kbBase.ChildString(base32.RawStdEncoding.EncodeToString([]byte(p))).Child(pubSuffix)
 	val, err := pk.Bytes()
 	if err != nil {
 		log.Errorf("error while converting pubkey byte string for peer %s: %s\n", p.Pretty(), err)
@@ -82,7 +88,7 @@ func (kb *dsKeyBook) AddPubKey(p peer.ID, pk ic.PubKey) error {
 }
 
 func (kb *dsKeyBook) PrivKey(p peer.ID) ic.PrivKey {
-	key := kbBase.ChildString(peer.IDB58Encode(p)).Child(privSuffix)
+	key := kbBase.ChildString(base32.RawStdEncoding.EncodeToString([]byte(p))).Child(privSuffix)
 	value, err := kb.ds.Get(key)
 	if err != nil {
 		log.Errorf("error while fetching privkey from datastore for peer %s: %s\n", p.Pretty(), err)
@@ -104,7 +110,7 @@ func (kb *dsKeyBook) AddPrivKey(p peer.ID, sk ic.PrivKey) error {
 		return errors.New("peer ID does not match private key")
 	}
 
-	key := kbBase.ChildString(peer.IDB58Encode(p)).Child(privSuffix)
+	key := kbBase.ChildString(base32.RawStdEncoding.EncodeToString([]byte(p))).Child(privSuffix)
 	val, err := sk.Bytes()
 	if err != nil {
 		log.Errorf("error while converting privkey byte string for peer %s: %s\n", p.Pretty(), err)

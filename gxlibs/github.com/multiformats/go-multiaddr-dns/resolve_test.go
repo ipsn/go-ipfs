@@ -137,3 +137,12 @@ func TestDnsaddrMatching(t *testing.T) {
 		t.Fatalf("expected [%s], got %+v", txtmd, addrs)
 	}
 }
+
+func TestBadDomain(t *testing.T) {
+	bts := ma.StringCast("/dns4/example.com").Bytes()
+	bts[len(bts)-5] = '/'
+	_, err := ma.NewMultiaddrBytes(bts)
+	if err == nil {
+		t.Error("expected malformed address to fail to parse")
+	}
+}

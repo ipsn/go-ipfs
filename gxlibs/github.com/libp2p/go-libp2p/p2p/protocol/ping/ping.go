@@ -72,7 +72,11 @@ func (p *PingService) PingHandler(s inet.Stream) {
 }
 
 func (ps *PingService) Ping(ctx context.Context, p peer.ID) (<-chan time.Duration, error) {
-	s, err := ps.Host.NewStream(ctx, p, ID)
+	return Ping(ctx, ps.Host, p)
+}
+
+func Ping(ctx context.Context, h host.Host, p peer.ID) (<-chan time.Duration, error) {
+	s, err := h.NewStream(ctx, p, ID)
 	if err != nil {
 		return nil, err
 	}
@@ -92,7 +96,7 @@ func (ps *PingService) Ping(ctx context.Context, p peer.ID) (<-chan time.Duratio
 					return
 				}
 
-				ps.Host.Peerstore().RecordLatency(p, t)
+				h.Peerstore().RecordLatency(p, t)
 				select {
 				case out <- t:
 				case <-ctx.Done():

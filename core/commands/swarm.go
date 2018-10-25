@@ -6,7 +6,6 @@ import (
 	"io"
 	"path"
 	"sort"
-	"strings"
 
 	"github.com/ipsn/go-ipfs/commands"
 	"github.com/ipsn/go-ipfs/core/commands/cmdenv"
@@ -14,16 +13,16 @@ import (
 	"github.com/ipsn/go-ipfs/repo"
 	"github.com/ipsn/go-ipfs/repo/fsrepo"
 
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	mafilter "github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/multiaddr-filter"
-	inet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
-	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-swarm"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-swarm"
+	inet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
 	iaddr "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-addr"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
 type stringList struct {
@@ -138,12 +137,7 @@ var swarmPeersCmd = &cmds.Command{
 
 			pipfs := ma.ProtocolWithCode(ma.P_IPFS).Name
 			for _, info := range ci.Peers {
-				ids := fmt.Sprintf("/%s/%s", pipfs, info.Peer)
-				if strings.HasSuffix(info.Addr, ids) {
-					fmt.Fprintf(w, "%s", info.Addr)
-				} else {
-					fmt.Fprintf(w, "%s%s", info.Addr, ids)
-				}
+				fmt.Fprintf(w, "%s/%s/%s", info.Addr, pipfs, info.Peer)
 				if info.Latency != "" {
 					fmt.Fprintf(w, " %s", info.Latency)
 				}

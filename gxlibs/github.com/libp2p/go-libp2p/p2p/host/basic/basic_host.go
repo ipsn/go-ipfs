@@ -14,6 +14,7 @@ import (
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	protocol "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-protocol"
 	identify "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/protocol/identify"
+	ping "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/protocol/ping"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	madns "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-dns"
 	msmux "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multistream"
@@ -56,6 +57,7 @@ type BasicHost struct {
 	network    inet.Network
 	mux        *msmux.MultistreamMuxer
 	ids        *identify.IDService
+	pings      *ping.PingService
 	natmgr     NATManager
 	addrs      AddrsFactory
 	maResolver *madns.Resolver
@@ -96,6 +98,9 @@ type HostOpts struct {
 
 	// ConnManager is a libp2p connection manager
 	ConnManager ifconnmgr.ConnManager
+
+	// EnablePing indicates whether to instantiate the ping service
+	EnablePing bool
 }
 
 // NewHost constructs a new *BasicHost and activates it by attaching its stream and connection handlers to the given inet.Network.
@@ -147,6 +152,10 @@ func NewHost(ctx context.Context, net inet.Network, opts *HostOpts) (*BasicHost,
 	} else {
 		h.cmgr = opts.ConnManager
 		net.Notify(h.cmgr.Notifee())
+	}
+
+	if opts.EnablePing {
+		h.pings = ping.NewPingService(h)
 	}
 
 	net.SetConnHandler(h.newConnHandler)

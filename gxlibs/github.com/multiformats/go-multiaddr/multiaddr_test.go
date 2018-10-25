@@ -23,6 +23,9 @@ func TestConstructFails(t *testing.T) {
 		"/ip4/::1",
 		"/ip4/fdpsofodsajfdoisa",
 		"/ip6",
+		"/ip6zone",
+		"/ip6zone/",
+		"/ip6zone//ip6/fe80::1",
 		"/udp",
 		"/tcp",
 		"/sctp",
@@ -65,6 +68,10 @@ func TestConstructSucceeds(t *testing.T) {
 		"/ip6/::1",
 		"/ip6/2601:9:4f81:9700:803e:ca65:66e8:c21",
 		"/ip6/2601:9:4f81:9700:803e:ca65:66e8:c21/udp/1234/quic",
+		"/ip6zone/x/ip6/fe80::1",
+		"/ip6zone/x%y/ip6/fe80::1",
+		"/ip6zone/x%y/ip6/::",
+		"/ip6zone/x/ip6/fe80::1/udp/1234/quic",
 		"/onion/timaq4ygg2iegci7:1234",
 		"/onion/timaq4ygg2iegci7:80/http",
 		"/udp/0",
@@ -172,6 +179,7 @@ func TestStringToBytes(t *testing.T) {
 func TestBytesToString(t *testing.T) {
 
 	testString := func(s1 string, h string) {
+		t.Helper()
 		b, err := hex.DecodeString(h)
 		if err != nil {
 			t.Error("failed to decode hex", h)
@@ -220,12 +228,6 @@ func TestBytesSplitAndJoin(t *testing.T) {
 		joined := Join(split...)
 		if !m.Equal(joined) {
 			t.Errorf("joined components failed: %s != %s", m, joined)
-		}
-
-		// modifying underlying bytes is fine.
-		m2 := m.(*multiaddr)
-		for i := range m2.bytes {
-			m2.bytes[i] = 0
 		}
 
 		for i, a := range split {
@@ -374,7 +376,7 @@ func TestGetValue(t *testing.T) {
 
 	a = newMultiaddr(t, "/ip4/0.0.0.0/unix/a/b/c/d") // ending in a path one.
 	assertValueForProto(t, a, P_IP4, "0.0.0.0")
-	assertValueForProto(t, a, P_UNIX, "a/b/c/d")
+	assertValueForProto(t, a, P_UNIX, "/a/b/c/d")
 }
 
 func TestFuzzBytes(t *testing.T) {
@@ -444,6 +446,7 @@ func TestBinaryRepresentation(t *testing.T) {
 func TestRoundTrip(t *testing.T) {
 	for _, s := range []string{
 		"/unix/a/b/c/d",
+		"/ip6/::ffff:127.0.0.1/tcp/111",
 		"/ip4/127.0.0.1/tcp/123",
 		"/ip4/127.0.0.1/udp/123",
 		"/ip4/127.0.0.1/udp/123/ip6/::",
@@ -490,5 +493,34 @@ func TestInvalidP2PAddr(t *testing.T) {
 		t.Error("should have failed")
 		// Check for panic
 		_ = ma.String()
+	}
+}
+
+func TestZone(t *testing.T) {
+	ip6String := "/ip6zone/eth0/ip6/::1"
+	ip6Bytes := []byte{
+		0x2a, 4,
+		'e', 't', 'h', '0',
+		0x29,
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+		0, 0, 0, 0,
+		0, 0, 0, 1,
+	}
+
+	ma, err := NewMultiaddr(ip6String)
+	if err != nil {
+		t.Error(err)
+	}
+	if !bytes.Equal(ma.Bytes(), ip6Bytes) {
+		t.Errorf("expected %x, got %x", ip6Bytes, ma.Bytes())
+	}
+
+	ma2, err2 := NewMultiaddrBytes(ip6Bytes)
+	if err2 != nil {
+		t.Error(err)
+	}
+	if ma2.String() != ip6String {
+		t.Errorf("expected %s, got %s", ip6String, ma2.String())
 	}
 }

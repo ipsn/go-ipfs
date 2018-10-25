@@ -1,7 +1,7 @@
-package floodsub
+package pubsub
 
 import (
-	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-floodsub/pb"
+	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-pubsub/pb"
 )
 
 func NewMessageCache(gossip, history int) *MessageCache {

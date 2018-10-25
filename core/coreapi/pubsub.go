@@ -12,20 +12,20 @@ import (
 	caopts "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	floodsub "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-floodsub"
-	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
+	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
+	pubsub "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-pubsub"
 )
 
 type PubSubAPI CoreAPI
 
 type pubSubSubscription struct {
 	cancel       context.CancelFunc
-	subscription *floodsub.Subscription
+	subscription *pubsub.Subscription
 }
 
 type pubSubMessage struct {
-	msg *floodsub.Message
+	msg *pubsub.Message
 }
 
 func (api *PubSubAPI) Ls(ctx context.Context) ([]string, error) {
@@ -33,7 +33,7 @@ func (api *PubSubAPI) Ls(ctx context.Context) ([]string, error) {
 		return nil, err
 	}
 
-	return api.node.Floodsub.GetTopics(), nil
+	return api.node.PubSub.GetTopics(), nil
 }
 
 func (api *PubSubAPI) Peers(ctx context.Context, opts ...caopts.PubSubPeersOption) ([]peer.ID, error) {
@@ -46,7 +46,7 @@ func (api *PubSubAPI) Peers(ctx context.Context, opts ...caopts.PubSubPeersOptio
 		return nil, err
 	}
 
-	peers := api.node.Floodsub.ListPeers(settings.Topic)
+	peers := api.node.PubSub.ListPeers(settings.Topic)
 	out := make([]peer.ID, len(peers))
 
 	for i, peer := range peers {
@@ -61,7 +61,7 @@ func (api *PubSubAPI) Publish(ctx context.Context, topic string, data []byte) er
 		return err
 	}
 
-	return api.node.Floodsub.Publish(topic, data)
+	return api.node.PubSub.Publish(topic, data)
 }
 
 func (api *PubSubAPI) Subscribe(ctx context.Context, topic string, opts ...caopts.PubSubSubscribeOption) (coreiface.PubSubSubscription, error) {
@@ -71,7 +71,7 @@ func (api *PubSubAPI) Subscribe(ctx context.Context, topic string, opts ...caopt
 		return nil, err
 	}
 
-	sub, err := api.node.Floodsub.Subscribe(topic)
+	sub, err := api.node.PubSub.Subscribe(topic)
 	if err != nil {
 		return nil, err
 	}
@@ -122,7 +122,7 @@ func (api *PubSubAPI) checkNode() error {
 		return coreiface.ErrOffline
 	}
 
-	if api.node.Floodsub == nil {
+	if api.node.PubSub == nil {
 		return errors.New("experimental pubsub feature not enabled. Run daemon with --enable-pubsub-experiment to use.")
 	}
 

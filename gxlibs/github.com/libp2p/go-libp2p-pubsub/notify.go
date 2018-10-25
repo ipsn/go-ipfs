@@ -1,4 +1,4 @@
-package floodsub
+package pubsub
 
 import (
 	inet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"

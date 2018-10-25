@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	floodsub "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-floodsub"
 	bhost "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-blankhost"
 	p2phost "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
+	pubsub "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-pubsub"
 	record "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record"
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
 	rhelper "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing-helpers"
@@ -73,7 +73,7 @@ func setupTest(ctx context.Context, t *testing.T) (*PubsubValueStore, []*PubsubV
 	vss := make([]*PubsubValueStore, len(hosts))
 	for i := 0; i < len(vss); i++ {
 
-		fs, err := floodsub.NewFloodSub(ctx, hosts[i])
+		fs, err := pubsub.NewFloodSub(ctx, hosts[i])
 		if err != nil {
 			t.Fatal(err)
 		}

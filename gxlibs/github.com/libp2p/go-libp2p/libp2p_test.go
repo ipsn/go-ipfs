@@ -81,6 +81,7 @@ func TestDefaultListenAddrs(t *testing.T) {
 	ctx := context.Background()
 
 	re := regexp.MustCompile("/(ip)[4|6]/((0.0.0.0)|(::))/tcp/")
+	re2 := regexp.MustCompile("/p2p-circuit")
 
 	// Test 1: Setting the correct listen addresses if userDefined.Transport == nil && userDefined.ListenAddrs == nil
 	h, err := New(ctx)
@@ -88,14 +89,15 @@ func TestDefaultListenAddrs(t *testing.T) {
 		t.Fatal(err)
 	}
 	for _, addr := range h.Network().ListenAddresses() {
-		if re.FindStringSubmatchIndex(addr.String()) == nil {
-			t.Error("expected ip4 or ip6 interface")
+		if re.FindStringSubmatchIndex(addr.String()) == nil &&
+			re2.FindStringSubmatchIndex(addr.String()) == nil {
+			t.Error("expected ip4 or ip6 or relay interface")
 		}
 	}
 
 	h.Close()
 
-	// Test 2: Listen addr should not set if user defined transport is passed.
+	// Test 2: Listen addr only include relay if user defined transport is passed.
 	h, err = New(
 		ctx,
 		Transport(tcp.NewTCPTransport),
@@ -104,8 +106,11 @@ func TestDefaultListenAddrs(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if len(h.Network().ListenAddresses()) != 0 {
-		t.Error("expected zero listen addrs as none is set with user defined transport")
+	if len(h.Network().ListenAddresses()) != 1 {
+		t.Error("expected one listen addr with user defined transport")
+	}
+	if re2.FindStringSubmatchIndex(h.Network().ListenAddresses()[0].String()) == nil {
+		t.Error("expected relay address")
 	}
 	h.Close()
 }

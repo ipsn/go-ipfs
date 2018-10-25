@@ -100,13 +100,13 @@ func KeyForPublicKey(id peer.ID) string {
 // If the ValueStore is also a PubKeyFetcher, this method will call GetPublicKey
 // (which may be better optimized) instead of GetValue.
 func GetPublicKey(r ValueStore, ctx context.Context, p peer.ID) (ci.PubKey, error) {
-	k, err := p.ExtractPublicKey()
-	if err != nil {
-		// An error means that the peer ID is invalid.
-		return nil, err
-	}
-	if k != nil {
+	switch k, err := p.ExtractPublicKey(); err {
+	case peer.ErrNoPublicKey:
+		// check the datastore
+	case nil:
 		return k, nil
+	default:
+		return nil, err
 	}
 
 	if dht, ok := r.(PubKeyFetcher); ok {
