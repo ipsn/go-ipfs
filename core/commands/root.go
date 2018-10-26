@@ -13,8 +13,8 @@ import (
 	ocmd "github.com/ipsn/go-ipfs/core/commands/object"
 	unixfs "github.com/ipsn/go-ipfs/core/commands/unixfs"
 
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
@@ -124,10 +124,10 @@ var rootSubcommands = map[string]*cmds.Command{
 	"stats":     StatsCmd,
 	"bootstrap": lgc.NewCommand(BootstrapCmd),
 	"config":    lgc.NewCommand(ConfigCmd),
-	"dag":       lgc.NewCommand(dag.DagCmd),
+	"dag":       dag.DagCmd,
 	"dht":       lgc.NewCommand(DhtCmd),
 	"diag":      lgc.NewCommand(DiagCmd),
-	"dns":       lgc.NewCommand(DNSCmd),
+	"dns":       DNSCmd,
 	"id":        IDCmd,
 	"key":       KeyCmd,
 	"log":       lgc.NewCommand(LogCmd),
@@ -141,11 +141,11 @@ var rootSubcommands = map[string]*cmds.Command{
 	"refs":      lgc.NewCommand(RefsCmd),
 	"resolve":   ResolveCmd,
 	"swarm":     SwarmCmd,
-	"tar":       lgc.NewCommand(TarCmd),
+	"tar":       TarCmd,
 	"file":      lgc.NewCommand(unixfs.UnixFSCmd),
 	"update":    lgc.NewCommand(ExternalBinary()),
 	"urlstore":  urlStoreCmd,
-	"version":   lgc.NewCommand(VersionCmd),
+	"version":   VersionCmd,
 	"shutdown":  daemonShutdownCmd,
 	"cid":       CidCmd,
 }
@@ -167,9 +167,9 @@ var rootROSubcommands = map[string]*cmds.Command{
 		},
 	},
 	"get": GetCmd,
-	"dns": lgc.NewCommand(DNSCmd),
+	"dns": DNSCmd,
 	"ls":  lgc.NewCommand(LsCmd),
-	"name": &cmds.Command{
+	"name": {
 		Subcommands: map[string]*cmds.Command{
 			"resolve": name.IpnsCmd,
 		},
@@ -182,14 +182,14 @@ var rootROSubcommands = map[string]*cmds.Command{
 			"stat":  ocmd.ObjectStatCmd,
 		},
 	}),
-	"dag": lgc.NewCommand(&oldcmds.Command{
-		Subcommands: map[string]*oldcmds.Command{
+	"dag": {
+		Subcommands: map[string]*cmds.Command{
 			"get":     dag.DagGetCmd,
 			"resolve": dag.DagResolveCmd,
 		},
-	}),
+	},
 	"resolve": ResolveCmd,
-	"version": lgc.NewCommand(VersionCmd),
+	"version": VersionCmd,
 }
 
 func init() {

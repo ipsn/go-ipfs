@@ -10,14 +10,13 @@ import (
 
 	core "github.com/ipsn/go-ipfs/core"
 	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
-	e "github.com/ipsn/go-ipfs/core/commands/e"
 
 	ic "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	identify "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/protocol/identify"
 	kb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kbucket"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
@@ -112,25 +111,20 @@ EXAMPLE:
 		return cmds.EmitOnce(res, output)
 	},
 	Encoders: cmds.EncoderMap{
-		cmds.Text: cmds.MakeEncoder(func(req *cmds.Request, w io.Writer, v interface{}) error {
-			val, ok := v.(*IdOutput)
-			if !ok {
-				return e.TypeErr(val, v)
-			}
-
+		cmds.Text: cmds.MakeTypedEncoder(func(req *cmds.Request, w io.Writer, out *IdOutput) error {
 			format, found := req.Options[formatOptionName].(string)
 			if found {
 				output := format
-				output = strings.Replace(output, "<id>", val.ID, -1)
-				output = strings.Replace(output, "<aver>", val.AgentVersion, -1)
-				output = strings.Replace(output, "<pver>", val.ProtocolVersion, -1)
-				output = strings.Replace(output, "<pubkey>", val.PublicKey, -1)
-				output = strings.Replace(output, "<addrs>", strings.Join(val.Addresses, "\n"), -1)
+				output = strings.Replace(output, "<id>", out.ID, -1)
+				output = strings.Replace(output, "<aver>", out.AgentVersion, -1)
+				output = strings.Replace(output, "<pver>", out.ProtocolVersion, -1)
+				output = strings.Replace(output, "<pubkey>", out.PublicKey, -1)
+				output = strings.Replace(output, "<addrs>", strings.Join(out.Addresses, "\n"), -1)
 				output = strings.Replace(output, "\\n", "\n", -1)
 				output = strings.Replace(output, "\\t", "\t", -1)
 				fmt.Fprint(w, output)
 			} else {
-				marshaled, err := json.MarshalIndent(val, "", "\t")
+				marshaled, err := json.MarshalIndent(out, "", "\t")
 				if err != nil {
 					return err
 				}

@@ -30,9 +30,9 @@ import (
 	pin "github.com/ipsn/go-ipfs/pin"
 	repo "github.com/ipsn/go-ipfs/repo"
 
-	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	bitswap "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap"
 	bsnet "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/network"
+	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	psrouter "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-pubsub-router"
@@ -475,14 +475,23 @@ func (n *IpfsNode) startOnlineServicesWithHost(ctx context.Context, host p2phost
 
 		var service *pubsub.PubSub
 
+		var pubsubOptions []pubsub.Option
+		if cfg.Pubsub.DisableSigning {
+			pubsubOptions = append(pubsubOptions, pubsub.WithMessageSigning(false))
+		}
+
+		if cfg.Pubsub.StrictSignatureVerification {
+			pubsubOptions = append(pubsubOptions, pubsub.WithStrictSignatureVerification(true))
+		}
+
 		switch cfg.Pubsub.Router {
 		case "":
 			fallthrough
 		case "floodsub":
-			service, err = pubsub.NewFloodSub(ctx, host)
+			service, err = pubsub.NewFloodSub(ctx, host, pubsubOptions...)
 
 		case "gossipsub":
-			service, err = pubsub.NewGossipSub(ctx, host)
+			service, err = pubsub.NewGossipSub(ctx, host, pubsubOptions...)
 
 		default:
 			err = fmt.Errorf("Unknown pubsub router %s", cfg.Pubsub.Router)
@@ -599,7 +608,7 @@ func (n *IpfsNode) setupIpnsRepublisher() error {
 	}
 
 	if cfg.Ipns.RecordLifetime != "" {
-		d, err := time.ParseDuration(cfg.Ipns.RepublishPeriod)
+		d, err := time.ParseDuration(cfg.Ipns.RecordLifetime)
 		if err != nil {
 			return fmt.Errorf("failure to parse config setting IPNS.RecordLifetime: %s", err)
 		}

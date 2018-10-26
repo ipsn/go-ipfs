@@ -12,8 +12,8 @@ import (
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	mhash "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
 	cidutil "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cidutil"
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	verifcid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-verifcid"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	mbase "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multibase"
 )

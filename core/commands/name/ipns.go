@@ -13,8 +13,8 @@ import (
 	nsopts "github.com/ipsn/go-ipfs/namesys/opts"
 
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 

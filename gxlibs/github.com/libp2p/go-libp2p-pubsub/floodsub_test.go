@@ -900,12 +900,22 @@ func assertPeerList(t *testing.T, peers []peer.ID, expected ...peer.ID) {
 	}
 }
 
+func TestNonsensicalSigningOptions(t *testing.T) {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	hosts := getNetHosts(t, ctx, 1)
+	_, err := NewFloodSub(ctx, hosts[0], WithMessageSigning(false), WithStrictSignatureVerification(true))
+	if err == nil {
+		t.Error("expected constructor to fail on nonsensical options")
+	}
+}
+
 func TestWithSigning(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	hosts := getNetHosts(t, ctx, 2)
-	psubs := getPubsubs(ctx, hosts, WithMessageSigning(true))
+	psubs := getPubsubs(ctx, hosts, WithStrictSignatureVerification(true))
 
 	connect(t, hosts[0], hosts[1])
 

@@ -21,7 +21,6 @@ import (
 	humanize "github.com/dustin/go-humanize"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	bservice "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
@@ -29,6 +28,7 @@ import (
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	mfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-mfs"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
