@@ -13,8 +13,8 @@ import (
 	ocmd "github.com/ipsn/go-ipfs/core/commands/object"
 	unixfs "github.com/ipsn/go-ipfs/core/commands/unixfs"
 
-	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
@@ -136,7 +136,7 @@ var rootSubcommands = map[string]*cmds.Command{
 	"name":      name.NameCmd,
 	"object":    ocmd.ObjectCmd,
 	"pin":       lgc.NewCommand(PinCmd),
-	"ping":      lgc.NewCommand(PingCmd),
+	"ping":      PingCmd,
 	"p2p":       lgc.NewCommand(P2PCmd),
 	"refs":      lgc.NewCommand(RefsCmd),
 	"resolve":   ResolveCmd,

@@ -5,8 +5,8 @@ import (
 
 	oldcmds "github.com/ipsn/go-ipfs/commands"
 
-	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 )
 
 var log = logging.Logger("cmds/lgc")

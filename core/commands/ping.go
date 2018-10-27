@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	"fmt"
@@ -9,14 +8,14 @@ import (
 	"strings"
 	"time"
 
-	cmds "github.com/ipsn/go-ipfs/commands"
 	"github.com/ipsn/go-ipfs/core"
+	"github.com/ipsn/go-ipfs/core/commands/cmdenv"
 
-	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
 const kPingTimeout = 10 * time.Second
@@ -49,72 +48,52 @@ trip latency information.
 	Options: []cmdkit.Option{
 		cmdkit.IntOption(pingCountOptionName, "n", "Number of ping messages to send.").WithDefault(10),
 	},
-	Marshalers: cmds.MarshalerMap{
-		cmds.Text: func(res cmds.Response) (io.Reader, error) {
-			v, err := unwrapOutput(res.Output())
-			if err != nil {
-				return nil, err
-			}
-
-			obj, ok := v.(*PingResult)
-			if !ok {
-				return nil, u.ErrCast()
-			}
-
-			buf := new(bytes.Buffer)
-			if len(obj.Text) > 0 {
-				buf = bytes.NewBufferString(obj.Text + "\n")
-			} else if obj.Success {
-				fmt.Fprintf(buf, "Pong received: time=%.2f ms\n", obj.Time.Seconds()*1000)
-			} else {
-				fmt.Fprintf(buf, "Pong failed\n")
-			}
-			return buf, nil
-		},
-	},
-	Run: func(req cmds.Request, res cmds.Response) {
-		ctx := req.Context()
-		n, err := req.InvocContext().GetNode()
+	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) error {
+		n, err := cmdenv.GetNode(env)
 		if err != nil {
-			res.SetError(err, cmdkit.ErrNormal)
-			return
+			return err
 		}
 
 		// Must be online!
 		if !n.OnlineMode() {
-			res.SetError(ErrNotOnline, cmdkit.ErrClient)
-			return
+			return ErrNotOnline
 		}
 
-		addr, peerID, err := ParsePeerParam(req.Arguments()[0])
+		addr, peerID, err := ParsePeerParam(req.Arguments[0])
 		if err != nil {
-			res.SetError(fmt.Errorf("failed to parse peer address '%s': %s", req.Arguments()[0], err), cmdkit.ErrNormal)
-			return
+			return fmt.Errorf("failed to parse peer address '%s': %s", req.Arguments[0], err)
 		}
 
 		if peerID == n.Identity {
-			res.SetError(ErrPingSelf, cmdkit.ErrNormal)
-			return
+			return ErrPingSelf
 		}
 
 		if addr != nil {
 			n.Peerstore.AddAddr(peerID, addr, pstore.TempAddrTTL) // temporary
 		}
 
-		numPings, _, err := req.Option(pingCountOptionName).Int()
-		if err != nil {
-			res.SetError(err, cmdkit.ErrNormal)
-			return
-		}
-
+		numPings, _ := req.Options[pingCountOptionName].(int)
 		if numPings <= 0 {
-			res.SetError(fmt.Errorf("error: ping count must be greater than 0, was %d", numPings), cmdkit.ErrNormal)
+			return fmt.Errorf("error: ping count must be greater than 0, was %d", numPings)
 		}
 
-		outChan := pingPeer(ctx, n, peerID, numPings)
-		res.SetOutput(outChan)
+		outChan := pingPeer(req.Context, n, peerID, numPings)
+
+		return res.Emit(outChan)
 	},
 	Type: PingResult{},
+	Encoders: cmds.EncoderMap{
+		cmds.Text: cmds.MakeTypedEncoder(func(req *cmds.Request, w io.Writer, out *PingResult) error {
+			if len(out.Text) > 0 {
+				fmt.Fprintln(w, out.Text)
+			} else if out.Success {
+				fmt.Fprintf(w, "Pong received: time=%.2f ms\n", out.Time.Seconds()*1000)
+			} else {
+				fmt.Fprintf(w, "Pong failed\n")
+			}
+			return nil
+		}),
+	},
 }
 
 func pingPeer(ctx context.Context, n *core.IpfsNode, pid peer.ID, numPings int) <-chan interface{} {
