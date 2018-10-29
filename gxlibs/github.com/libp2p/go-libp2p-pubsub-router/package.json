@@ -76,9 +76,9 @@
     },
     {
       "author": "whyrusleeping",
-      "hash": "Qma69SSfgYENa23tUFctmGBteR9J6akXv2CKee6uPH8G5S",
+      "hash": "QmY4dowpPFCBsbaoaJc9mNWso64eDJsm32LJznwPNaAiJG",
       "name": "go-libp2p-pubsub",
-      "version": "0.11.2"
+      "version": "0.11.3"
     }
   ],
   "gxVersion": "0.12.1",
@@ -86,6 +86,6 @@
   "license": "",
   "name": "go-libp2p-pubsub-router",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.5.2"
+  "version": "0.5.3"
 }
 
