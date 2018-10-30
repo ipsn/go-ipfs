@@ -9,15 +9,15 @@
   "gxDependencies": [
     {
       "author": "why",
-      "hash": "QmY8BMUSpCwNiTmFhACmC9Bt1qT63cHP35AoQAus4x14qH",
+      "hash": "QmSei8kFMfqdJq7Q68d2LMnHbTWKKg2daA29ezUYFAUNgc",
       "name": "go-merkledag",
-      "version": "1.1.13"
+      "version": "1.1.15"
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmdDXJs4axxefSPgK6Y1QhpJWKuDPnGJiqgq4uncb4rFHL",
+      "hash": "QmR7TcHkR9nxkUorfi8XMTAMLUK7GiP64TWWBzY3aacc1o",
       "name": "go-ipld-format",
-      "version": "0.6.0"
+      "version": "0.7.1"
     },
     {
       "author": "whyrusleeping",
@@ -36,6 +36,6 @@
   "license": "",
   "name": "go-path",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "1.1.13"
+  "version": "1.1.16"
 }
 

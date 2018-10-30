@@ -11,9 +11,9 @@ import (
 
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
@@ -110,7 +110,7 @@ into an object of the specified format.
 			}
 
 			for _, nd := range nds {
-				err := b.Add(nd)
+				err := b.Add(req.Context, nd)
 				if err != nil {
 					return err
 				}
@@ -188,7 +188,7 @@ format.
 			}
 			out = final
 		}
-		return res.Emit(&out)
+		return cmds.EmitOnce(res, &out)
 	},
 }
 
@@ -219,7 +219,7 @@ var DagResolveCmd = &cmds.Command{
 			return err
 		}
 
-		return res.Emit(&ResolveOutput{
+		return cmds.EmitOnce(res, &ResolveOutput{
 			Cid:     lastCid,
 			RemPath: path.Join(rem),
 		})

@@ -20,9 +20,9 @@ import (
 
 	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	id "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/protocol/identify"
-	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	datastore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	syncds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
 )
@@ -188,7 +188,7 @@ func TestGatewayGet(t *testing.T) {
 		{"working.example.com", "/", http.StatusOK, "fnord"},
 		{"double.example.com", "/", http.StatusOK, "fnord"},
 		{"triple.example.com", "/", http.StatusOK, "fnord"},
-		{"working.example.com", "/ipfs/" + k, http.StatusNotFound, "ipfs resolve -r /ipns/working.example.com/ipfs/" + k + ": no link by that name\n"},
+		{"working.example.com", "/ipfs/" + k, http.StatusNotFound, "ipfs resolve -r /ipns/working.example.com/ipfs/" + k + ": no link named \"ipfs\" under " + k + "\n"},
 		{"broken.example.com", "/", http.StatusNotFound, "ipfs resolve -r /ipns/broken.example.com/: " + namesys.ErrResolveFailed.Error() + "\n"},
 		{"broken.example.com", "/ipfs/" + k, http.StatusNotFound, "ipfs resolve -r /ipns/broken.example.com/ipfs/" + k + ": " + namesys.ErrResolveFailed.Error() + "\n"},
 		// This test case ensures we don't treat the TLD as a file extension.

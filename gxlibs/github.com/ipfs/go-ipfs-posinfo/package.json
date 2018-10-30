@@ -9,9 +9,9 @@
   "gxDependencies": [
     {
       "author": "whyrusleeping",
-      "hash": "QmdDXJs4axxefSPgK6Y1QhpJWKuDPnGJiqgq4uncb4rFHL",
+      "hash": "QmR7TcHkR9nxkUorfi8XMTAMLUK7GiP64TWWBzY3aacc1o",
       "name": "go-ipld-format",
-      "version": "0.6.0"
+      "version": "0.7.1"
     }
   ],
   "gxVersion": "0.12.1",
@@ -19,6 +19,6 @@
   "license": "MIT",
   "name": "go-ipfs-posinfo",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.1.0"
+  "version": "0.1.2"
 }
 

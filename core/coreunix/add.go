@@ -14,19 +14,19 @@ import (
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
 	"github.com/ipsn/go-ipfs/pin"
 
-	posinfo "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-posinfo"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	posinfo "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-posinfo"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
+	mfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-mfs"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
+	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	unixfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	balanced "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer/balanced"
 	ihelper "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer/helpers"
 	trickle "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer/trickle"
-	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
-	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
-	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
-	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
-	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
-	mfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-mfs"
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
 
 var log = logging.Logger("coreunix")
@@ -49,11 +49,14 @@ type Object struct {
 
 // NewAdder Returns a new Adder used for a file add operation.
 func NewAdder(ctx context.Context, p pin.Pinner, bs bstore.GCBlockstore, ds ipld.DAGService) (*Adder, error) {
+	bufferedDS := ipld.NewBufferedDAG(ctx, ds)
+
 	return &Adder{
 		ctx:        ctx,
 		pinning:    p,
 		blockstore: bs,
 		dagService: ds,
+		bufferedDS: bufferedDS,
 		Progress:   false,
 		Hidden:     true,
 		Pin:        true,
@@ -69,6 +72,7 @@ type Adder struct {
 	pinning    pin.Pinner
 	blockstore bstore.GCBlockstore
 	dagService ipld.DAGService
+	bufferedDS *ipld.BufferedDAG
 	Out        chan<- interface{}
 	Progress   bool
 	Hidden     bool
@@ -114,8 +118,11 @@ func (adder *Adder) add(reader io.Reader) (ipld.Node, error) {
 		return nil, err
 	}
 
+	// Make sure all added nodes are written when done.
+	defer adder.bufferedDS.Commit()
+
 	params := ihelper.DagBuilderParams{
-		Dagserv:    adder.dagService,
+		Dagserv:    adder.bufferedDS,
 		RawLeaves:  adder.RawLeaves,
 		Maxlinks:   ihelper.DefaultLinksPerBlock,
 		NoCopy:     adder.NoCopy,

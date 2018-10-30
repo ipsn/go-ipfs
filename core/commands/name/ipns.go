@@ -12,8 +12,8 @@ import (
 	options "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 	nsopts "github.com/ipsn/go-ipfs/namesys/opts"
 
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )

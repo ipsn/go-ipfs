@@ -9,9 +9,9 @@ import (
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
 	tar "github.com/ipsn/go-ipfs/tar"
 
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
@@ -57,7 +57,7 @@ represent it.
 		c := node.Cid()
 
 		fi.FileName()
-		return res.Emit(&coreiface.AddEvent{
+		return cmds.EmitOnce(res, &coreiface.AddEvent{
 			Name: fi.FileName(),
 			Hash: c.String(),
 		})

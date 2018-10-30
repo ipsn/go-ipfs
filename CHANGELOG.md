@@ -85,7 +85,24 @@ nodes from one host to another. It's `ssh -L` but for IPFS. You can find
 documentation in
 [here](https://github.com/ipfs/go-ipfs/docs/experimental-features.md#ipfs-p2p)).
 It's still experimental but we don't expect too many breaking changes at this
-point (it will very likely be stabilized in the next release).
+point (it will very likely be stabilized in the next release). Quick summary of
+breaking changes:
+
+* We don't stop listening for local (forwarded) connections after accepting a
+  single connection.
+* `ipfs p2p stream ls` output now returns more useful output, first address is
+  always the initiator address.
+* `ipfs p2p listener ls` is renamed to `ipfs p2p ls`
+* `ipfs p2p listener close` is renamed to `ipfs p2p close`
+* Protocol names have to be prefixed with `/x/` and are now just passed to
+  libp2p as handler name. Previous version did this 'under the hood' and with
+  `/p2p/` prefix. There is a `--allow-custom-protocol` flag which allows you
+  to use any libp2p handler name.
+* `ipfs p2p listener open` and `ipfs p2p stream dial` got renamed:
+    * `ipfs p2p listener open p2p-test /ip4/127.0.0.1/tcp/10101`
+      new becomes `ipfs p2p listen /x/p2p-test /ip4/127.0.0.1/tcp/10101`
+    * `ipfs p2p stream dial $NODE_A_PEERID p2p-test /ip4/127.0.0.1/tcp/10102`
+      is now `ipfs p2p forward /x/p2p-test /ip4/127.0.0.1/tcp/10102 /ipfs/$NODE_A_PEERID`
 
 There is now a new flag for `ipfs name resolve` - `--stream`. When the command
 is invoked with the flag set, it will start returning results as soon as they
@@ -224,8 +241,9 @@ case intensive encoding required by domain names. This command converts a CID to
 version 1 and encodes it using base32.
 
 (2) A hack to allow locally looking up blocks associated with a CIDv0 CID using
-the equivalent CIDv1 CID. This hack will eventually (likely in the next release)
-be replaced with a proper CID-version agnostic datastore.
+the equivalent CIDv1 CID (or the reverse). This hack will eventually
+be replaced with a multihash indexed blockstore, which is agnostic to both the
+CID version and multicodec content type.
 
 ### go-ipfs changelog
 

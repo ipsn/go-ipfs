@@ -86,7 +86,7 @@ func TestBatch(t *testing.T) {
 		// It would be great if we could use *many* different nodes here
 		// but we can't add any dependencies and I don't feel like adding
 		// any more testing code.
-		if err := b.Add(new(EmptyNode)); err != nil {
+		if err := b.Add(ctx, new(EmptyNode)); err != nil {
 			t.Fatal(err)
 		}
 	}
@@ -106,5 +106,41 @@ func TestBatch(t *testing.T) {
 
 	if len(d.nodes) != 1 {
 		t.Fatal("should have one node")
+	}
+}
+
+func TestBufferedDAG(t *testing.T) {
+	ds := newTestDag()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	var bdag DAGService = NewBufferedDAG(ctx, ds)
+
+	for i := 0; i < 1000; i++ {
+		n := new(EmptyNode)
+		if err := bdag.Add(ctx, n); err != nil {
+			t.Fatal(err)
+		}
+		if _, err := bdag.Get(ctx, n.Cid()); err != nil {
+			t.Fatal(err)
+		}
+		if err := bdag.Remove(ctx, n.Cid()); err != nil {
+			t.Fatal(err)
+		}
+	}
+}
+
+func TestBatchOptions(t *testing.T) {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	wantMaxSize := 8 << 10
+	wantMaxNodes := 500
+	d := newTestDag()
+	b := NewBatch(ctx, d, MaxSizeBatchOption(wantMaxSize), MaxNodesBatchOption(wantMaxNodes))
+	if b.opts.maxSize != wantMaxSize {
+		t.Fatalf("maxSize incorrect, want: %d, got: %d", wantMaxSize, b.opts.maxSize)
+	}
+	if b.opts.maxNodes != wantMaxNodes {
+		t.Fatalf("maxNodes incorrect, want: %d, got: %d", wantMaxNodes, b.opts.maxNodes)
 	}
 }
