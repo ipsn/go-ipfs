@@ -14,9 +14,9 @@ import (
 	repo "github.com/ipsn/go-ipfs/repo"
 	cidv0v1 "github.com/ipsn/go-ipfs/thirdparty/cidv0v1"
 	"github.com/ipsn/go-ipfs/thirdparty/verifbs"
-	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	resolver "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
 	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 
 	cfg "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"

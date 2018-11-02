@@ -8,14 +8,14 @@ import (
 	opts "github.com/ipsn/go-ipfs/namesys/opts"
 
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	pstoremem "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore/pstoremem"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	dssync "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
-	offroute "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
+	offroute "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
 )
 
 type mockResolver struct {

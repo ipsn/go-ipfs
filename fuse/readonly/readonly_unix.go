@@ -11,8 +11,8 @@ import (
 	"syscall"
 
 	core "github.com/ipsn/go-ipfs/core"
-	mdag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	mdag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 

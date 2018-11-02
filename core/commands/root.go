@@ -125,7 +125,7 @@ var rootSubcommands = map[string]*cmds.Command{
 	"bootstrap": lgc.NewCommand(BootstrapCmd),
 	"config":    lgc.NewCommand(ConfigCmd),
 	"dag":       dag.DagCmd,
-	"dht":       lgc.NewCommand(DhtCmd),
+	"dht":       DhtCmd,
 	"diag":      lgc.NewCommand(DiagCmd),
 	"dns":       DNSCmd,
 	"id":        IDCmd,
@@ -137,7 +137,7 @@ var rootSubcommands = map[string]*cmds.Command{
 	"object":    ocmd.ObjectCmd,
 	"pin":       lgc.NewCommand(PinCmd),
 	"ping":      PingCmd,
-	"p2p":       lgc.NewCommand(P2PCmd),
+	"p2p":       P2PCmd,
 	"refs":      lgc.NewCommand(RefsCmd),
 	"resolve":   ResolveCmd,
 	"swarm":     SwarmCmd,
@@ -174,14 +174,14 @@ var rootROSubcommands = map[string]*cmds.Command{
 			"resolve": name.IpnsCmd,
 		},
 	},
-	"object": lgc.NewCommand(&oldcmds.Command{
-		Subcommands: map[string]*oldcmds.Command{
+	"object": {
+		Subcommands: map[string]*cmds.Command{
 			"data":  ocmd.ObjectDataCmd,
 			"links": ocmd.ObjectLinksCmd,
 			"get":   ocmd.ObjectGetCmd,
 			"stat":  ocmd.ObjectStatCmd,
 		},
-	}),
+	},
 	"dag": {
 		Subcommands: map[string]*cmds.Command{
 			"get":     dag.DagGetCmd,

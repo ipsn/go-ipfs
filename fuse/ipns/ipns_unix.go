@@ -13,8 +13,8 @@ import (
 
 	core "github.com/ipsn/go-ipfs/core"
 	namesys "github.com/ipsn/go-ipfs/namesys"
-	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
@@ -22,8 +22,8 @@ import (
 	fuse "bazil.org/fuse"
 	fs "bazil.org/fuse/fs"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
-	mfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-mfs"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	mfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-mfs"
 )
 
 func init() {

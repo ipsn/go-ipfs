@@ -7,12 +7,14 @@ import (
 	"io/ioutil"
 	"testing"
 
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	h "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer/helpers"
 	trickle "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer/trickle"
 	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 	testu "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/test"
 
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 )
 
 func testModWrite(t *testing.T, beg, size uint64, orig []byte, dm *DagModifier, opts testu.NodeOpts) []byte {
@@ -407,6 +409,57 @@ func testDagTruncate(t *testing.T, opts testu.NodeOpts) {
 
 	if size != 0 {
 		t.Fatal("size was incorrect!")
+	}
+}
+
+// TestDagSync tests that a DAG will expand sparse during sync
+// if offset > curNode's size.
+func TestDagSync(t *testing.T) {
+	dserv := testu.GetDAGServ()
+	nd := dag.NodeWithData(unixfs.FilePBData(nil, 0))
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	dagmod, err := NewDagModifier(ctx, nd, dserv, testu.SizeSplitterGen(512))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = dagmod.Write([]byte("test1"))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = dagmod.Sync()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Truncate leave the offset at 5 and filesize at 0
+	err = dagmod.Truncate(0)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = dagmod.Write([]byte("test2"))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// When Offset > filesize , Sync will call enpandSparse
+	err = dagmod.Sync()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	out, err := ioutil.ReadAll(dagmod)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if err = testu.ArrComp(out[5:], []byte("test2")); err != nil {
+		t.Fatal(err)
 	}
 }
 
