@@ -8,18 +8,6 @@
   },
   "gxDependencies": [
     {
-      "author": "whyrusleeping",
-      "hash": "QmT4U94DnD8FRfqr21obWY32HLM5VExccPKMjQHofeYqr9",
-      "name": "go-multiaddr",
-      "version": "1.3.5"
-    },
-    {
-      "author": "jbenet",
-      "hash": "Qmaabb1tJZ2CX5cp6MuuiGgns71NYoxdgQP6Xdid1dVceC",
-      "name": "go-multiaddr-net",
-      "version": "1.6.5"
-    },
-    {
       "author": "urfave",
       "hash": "Qmc1AtgBdoUHP8oYSqU81NRYdzohmF45t5XNwVMvhCxsBA",
       "name": "cli",
@@ -27,29 +15,23 @@
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmZLUtHGe9HDQrreAYkXCzzK6mHVByV4MRd8heXAtV5wyS",
-      "name": "stump",
+      "hash": "QmVmDhyTTUcQXFD1rRQ64fGLMSAoaQvNH3hwuaCFAPq2hy",
+      "name": "errors",
+      "version": "0.0.1"
+    },
+    {
+      "author": "mattn",
+      "hash": "QmbgMitQCJBeteUr9jGMyTRFjhZQjXKW5Kif6UdK4aW6W6",
+      "name": "go-shellwords",
       "version": "0.0.0"
-    },
-    {
-      "author": "whyrusleeping",
-      "hash": "QmfEZa44SyWfyXpkbVfi19H1QpY73DU6E5omK2HbKXwqR6",
-      "name": "go-ctrlnet",
-      "version": "0.1.0"
-    },
-    {
-      "author": "magik6k",
-      "hash": "QmPEpj17FDRpc7K1aArKZp3RsHtzRMKykeK9GVgn4WQGPR",
-      "name": "go-ipfs-config",
-      "version": "0.2.16"
     }
   ],
   "gxVersion": "0.6.0",
-  "issues_url": "https://github.com/ipfs/iptb/issues",
+  "issues_url": "",
   "language": "go",
-  "license": "MIT",
+  "license": "",
   "name": "iptb",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "1.3.19"
+  "version": "2.0.0"
 }
 
