@@ -10,12 +10,12 @@ import (
 	"github.com/ipsn/go-ipfs/core/commands/e"
 
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	mhash "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
-	cidutil "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cidutil"
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	verifcid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-verifcid"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	cidutil "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cidutil"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	mbase "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multibase"
+	mhash "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
 )
 
 var CidCmd = &cmds.Command{

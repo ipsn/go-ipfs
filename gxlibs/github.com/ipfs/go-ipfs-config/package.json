@@ -9,9 +9,9 @@
   "gxDependencies": [
     {
       "author": "whyrusleeping",
-      "hash": "QmPdKqUcHGFdeSpvjVoaTRPPstGif9GBZb5Q56RVw9o69A",
+      "hash": "QmNohiVssaPw3KVLZik59DBVGTSm2dGvYT9eoXt5DQ36Yz",
       "name": "go-ipfs-util",
-      "version": "1.2.8"
+      "version": "1.2.9"
     },
     {
       "author": "facebookgo",
@@ -21,15 +21,15 @@
     },
     {
       "author": "why",
-      "hash": "QmZc5PLgxW61uTPG24TroxHDF6xzgbhZZQf5i53ciQC47Y",
+      "hash": "QmUSE3APe1pMFVsUBZUZaKQKERiPteCWvTAERtVQmtXzgE",
       "name": "go-ipfs-addr",
-      "version": "0.1.25"
+      "version": "0.1.28"
     },
     {
       "author": "lgierth",
-      "hash": "QmeHJXPqCNzSFbVkYM1uQLuM2L5FyJB9zukQ7EeqRP8ZC9",
+      "hash": "QmT4zgnKCyZBpRyxzsvZqUjzUkMWLJ2pZCw7uk6M6Kto5m",
       "name": "go-multiaddr-dns",
-      "version": "0.2.5"
+      "version": "0.2.6"
     },
     {
       "author": "mitchellh",
@@ -39,15 +39,15 @@
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmPvyPwuCgJ7pDmrKDxRtsScJgBaM5h4EpRL2qQJsmXf4n",
+      "hash": "QmNiJiXwWE3kRhZrC5ej3kSjWHm337pYfhjLGSCDNKJP2s",
       "name": "go-libp2p-crypto",
-      "version": "2.0.1"
+      "version": "2.0.4"
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmTRhk7cgjUf2gfQ3p2M9KPECNZEW9XUrmHcFCgog4cPgB",
+      "hash": "QmcqU6QUDSXprb1518vYDGczrTJTyGwLG9eUa5iNX4xUtS",
       "name": "go-libp2p-peer",
-      "version": "2.4.0"
+      "version": "2.4.3"
     }
   ],
   "gxVersion": "0.12.1",
@@ -55,6 +55,6 @@
   "license": "",
   "name": "go-ipfs-config",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.2.16"
+  "version": "0.2.19"
 }
 

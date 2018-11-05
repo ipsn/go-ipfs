@@ -10,9 +10,9 @@ import (
 	"github.com/ipsn/go-ipfs/plugin"
 
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	git "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-git"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
 )
 
 // Plugins is exported list of plugins that will be loaded

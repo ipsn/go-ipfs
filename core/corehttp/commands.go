@@ -14,10 +14,10 @@ import (
 	"github.com/ipsn/go-ipfs/core"
 	corecommands "github.com/ipsn/go-ipfs/core/commands"
 
-	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	cmdsHttp "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds/http"
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 )
 
 var (

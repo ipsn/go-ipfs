@@ -5,8 +5,8 @@ import (
 
 	"github.com/ipsn/go-ipfs/namesys"
 
-	tu "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
 	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
+	tu "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
 )
 
 func TestKeyTranslation(t *testing.T) {

@@ -10,6 +10,7 @@ import (
 	lru "github.com/hashicorp/golang-lru"
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	exchange "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-interface"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	loggables "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-loggables"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
@@ -51,7 +52,7 @@ type Session struct {
 
 // NewSession creates a new bitswap session whose lifetime is bounded by the
 // given context
-func (bs *Bitswap) NewSession(ctx context.Context) *Session {
+func (bs *Bitswap) NewSession(ctx context.Context) exchange.Fetcher {
 	s := &Session{
 		activePeers:   make(map[peer.ID]struct{}),
 		liveWants:     make(map[cid.Cid]time.Time),

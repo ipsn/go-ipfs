@@ -15,10 +15,10 @@ import (
 	corerepo "github.com/ipsn/go-ipfs/core/corerepo"
 	pin "github.com/ipsn/go-ipfs/pin"
 
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-verifcid"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-verifcid"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )

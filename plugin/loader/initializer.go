@@ -5,8 +5,8 @@ import (
 	"github.com/ipsn/go-ipfs/plugin"
 	"github.com/ipsn/go-ipfs/repo/fsrepo"
 
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	"github.com/opentracing/opentracing-go"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
 
 func initialize(plugins []plugin.Plugin) error {

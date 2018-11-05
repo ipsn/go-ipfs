@@ -24,17 +24,17 @@ import (
 	repo "github.com/ipsn/go-ipfs/repo"
 	fsrepo "github.com/ipsn/go-ipfs/repo/fsrepo"
 
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
+	manet "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
+	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
+	madns "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-dns"
+	osh "github.com/ipsn/go-ipfs/gxlibs/github.com/Kubuxu/go-os-helper"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds/cli"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds/http"
-	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	loggables "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-loggables"
-	osh "github.com/ipsn/go-ipfs/gxlibs/github.com/Kubuxu/go-os-helper"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
-	manet "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
-	madns "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-dns"
 )
 
 // log is the command logger
@@ -174,10 +174,11 @@ func makeExecutor(req *cmds.Request, env interface{}) (cmds.Executor, error) {
 		if err != nil {
 			return nil, err
 		}
-		if ok {
-			if _, err := loader.LoadPlugins(pluginpath); err != nil {
-				log.Error("error loading plugins: ", err)
-			}
+		if !ok {
+			pluginpath = ""
+		}
+		if _, err := loader.LoadPlugins(pluginpath); err != nil {
+			log.Error("error loading plugins: ", err)
 		}
 
 		exctr = cmds.NewExecutor(req.Root)

@@ -10,11 +10,11 @@ import (
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
 	options "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 
-	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
 	pb "github.com/cheggaaa/pb"
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
 )
 
 // ErrDepthLimitExceeded indicates that the max depth has been exceeded.

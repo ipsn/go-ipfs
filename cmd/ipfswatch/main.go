@@ -15,8 +15,8 @@ import (
 	coreunix "github.com/ipsn/go-ipfs/core/coreunix"
 	fsrepo "github.com/ipsn/go-ipfs/repo/fsrepo"
 
-	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	process "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
+	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	homedir "github.com/mitchellh/go-homedir"
 	fsnotify "github.com/fsnotify/fsnotify"
 )

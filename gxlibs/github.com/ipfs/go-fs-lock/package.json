@@ -9,14 +9,14 @@
   "gxDependencies": [
     {
       "author": "whyrusleeping",
-      "hash": "QmPdKqUcHGFdeSpvjVoaTRPPstGif9GBZb5Q56RVw9o69A",
+      "hash": "QmNohiVssaPw3KVLZik59DBVGTSm2dGvYT9eoXt5DQ36Yz",
       "name": "go-ipfs-util",
-      "version": "1.2.8"
+      "version": "1.2.9"
     },
     {
-      "hash": "QmZChCsSt8DctjceaL56Eibc29CVQq4dGKRXC5JRZ6Ppae",
+      "hash": "QmcuXC5cxs79ro2cUuHs4HQ2bkDLJUYokwL8aivcX6HW3C",
       "name": "go-log",
-      "version": "1.5.7"
+      "version": "1.5.8"
     },
     {
       "author": "hsanjuan",
@@ -30,6 +30,6 @@
   "license": "MIT",
   "name": "go-fs-lock",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.1.8"
+  "version": "0.1.9"
 }
 

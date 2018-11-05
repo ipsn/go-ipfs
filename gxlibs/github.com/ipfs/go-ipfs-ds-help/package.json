@@ -15,9 +15,9 @@
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmPSQnBKM9g7BaUcZCvswUJVscQ1ipjmwxN5PXCjkp9EQ7",
+      "hash": "QmR8BauakNcBa3RbE4nbQu76PDiJgoQgz8AJdhJuiU4TAw",
       "name": "go-cid",
-      "version": "0.9.0"
+      "version": "0.9.1"
     },
     {
       "author": "whyrusleeping",
@@ -31,6 +31,6 @@
   "license": "",
   "name": "go-ipfs-ds-help",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.1.3"
+  "version": "0.1.4"
 }
 

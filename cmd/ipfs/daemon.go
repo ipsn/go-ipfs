@@ -23,11 +23,11 @@ import (
 	fsrepo "github.com/ipsn/go-ipfs/repo/fsrepo"
 	migrate "github.com/ipsn/go-ipfs/repo/fsrepo/migrations"
 
-	mprome "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-metrics-prometheus"
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
+	mprome "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-metrics-prometheus"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
@@ -435,7 +435,7 @@ func serveHTTPApi(req *cmds.Request, cctx *oldcmds.Context) (<-chan error, error
 		// we might have listened to /tcp/0 - lets see what we are listing on
 		apiMaddr = apiLis.Multiaddr()
 		fmt.Printf("API server listening on %s\n", apiMaddr)
-
+		fmt.Printf("WebUI: http://%s/webui\n", apiLis.Addr())
 		listeners = append(listeners, apiLis)
 	}
 

@@ -18,14 +18,14 @@ import (
 	mfsr "github.com/ipsn/go-ipfs/repo/fsrepo/migrations"
 	dir "github.com/ipsn/go-ipfs/thirdparty/dir"
 
-	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
-	serialize "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config/serialize"
 	util "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	measure "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ds-measure"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
-	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
+	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
+	serialize "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config/serialize"
 	lockfile "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-fs-lock"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	homedir "github.com/mitchellh/go-homedir"
 )
 
