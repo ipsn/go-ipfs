@@ -3,8 +3,7 @@ package commands
 import (
 	"errors"
 
-	cmds "github.com/ipsn/go-ipfs/commands"
-
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
@@ -14,7 +13,7 @@ var MountCmd = &cmds.Command{
 		ShortDescription: "Not yet implemented on Windows. :(",
 	},
 
-	Run: func(req cmds.Request, res cmds.Response) {
-		res.SetError(errors.New("Mount isn't compatible with Windows yet"), cmdkit.ErrNormal)
+	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) error {
+		return errors.New("Mount isn't compatible with Windows yet")
 	},
 }

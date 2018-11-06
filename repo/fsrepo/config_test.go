@@ -10,7 +10,7 @@ import (
 	"github.com/ipsn/go-ipfs/plugin/loader"
 	"github.com/ipsn/go-ipfs/repo/fsrepo"
 
-	"gx/ipfs/QmPEpj17FDRpc7K1aArKZp3RsHtzRMKykeK9GVgn4WQGPR/go-ipfs-config"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 )
 
 // note: to test sorting of the mountpoints in the disk spec they are

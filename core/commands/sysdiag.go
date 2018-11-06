@@ -6,11 +6,12 @@ import (
 	"runtime"
 
 	version "github.com/ipfs/go-ipfs"
-	cmds "github.com/ipsn/go-ipfs/commands"
+	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
 
 	manet "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
 	sysi "github.com/whyrusleeping/go-sysinfo"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
 var sysDiagCmd = &cmds.Command{
@@ -20,46 +21,40 @@ var sysDiagCmd = &cmds.Command{
 Prints out information about your computer to aid in easier debugging.
 `,
 	},
-	Run: func(req cmds.Request, res cmds.Response) {
+	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) error {
 		info := make(map[string]interface{})
 		err := runtimeInfo(info)
 		if err != nil {
-			res.SetError(err, cmdkit.ErrNormal)
-			return
+			return err
 		}
 
 		err = envVarInfo(info)
 		if err != nil {
-			res.SetError(err, cmdkit.ErrNormal)
-			return
+			return err
 		}
 
 		err = diskSpaceInfo(info)
 		if err != nil {
-			res.SetError(err, cmdkit.ErrNormal)
-			return
+			return err
 		}
 
 		err = memInfo(info)
 		if err != nil {
-			res.SetError(err, cmdkit.ErrNormal)
-			return
+			return err
 		}
-		node, err := req.InvocContext().GetNode()
+		nd, err := cmdenv.GetNode(env)
 		if err != nil {
-			res.SetError(err, cmdkit.ErrNormal)
-			return
+			return err
 		}
 
-		err = netInfo(node.OnlineMode(), info)
+		err = netInfo(nd.OnlineMode(), info)
 		if err != nil {
-			res.SetError(err, cmdkit.ErrNormal)
-			return
+			return err
 		}
 
 		info["ipfs_version"] = version.CurrentVersionNumber
 		info["ipfs_commit"] = version.CurrentCommit
-		res.SetOutput(info)
+		return cmds.EmitOnce(res, info)
 	},
 }
 
