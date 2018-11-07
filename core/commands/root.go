@@ -122,7 +122,7 @@ var rootSubcommands = map[string]*cmds.Command{
 	"pubsub":    PubsubCmd,
 	"repo":      RepoCmd,
 	"stats":     StatsCmd,
-	"bootstrap": lgc.NewCommand(BootstrapCmd),
+	"bootstrap": BootstrapCmd,
 	"config":    ConfigCmd,
 	"dag":       dag.DagCmd,
 	"dht":       DhtCmd,
@@ -135,10 +135,10 @@ var rootSubcommands = map[string]*cmds.Command{
 	"mount":     MountCmd,
 	"name":      name.NameCmd,
 	"object":    ocmd.ObjectCmd,
-	"pin":       lgc.NewCommand(PinCmd),
+	"pin":       PinCmd,
 	"ping":      PingCmd,
 	"p2p":       P2PCmd,
-	"refs":      lgc.NewCommand(RefsCmd),
+	"refs":      RefsCmd,
 	"resolve":   ResolveCmd,
 	"swarm":     SwarmCmd,
 	"tar":       TarCmd,
@@ -155,7 +155,8 @@ var RootRO = &cmds.Command{}
 
 var CommandsDaemonROCmd = CommandsCmd(RootRO)
 
-var RefsROCmd = &oldcmds.Command{}
+// RefsROCmd is `ipfs refs` command
+var RefsROCmd = &cmds.Command{}
 
 var rootROSubcommands = map[string]*cmds.Command{
 	"commands": CommandsDaemonROCmd,
@@ -198,12 +199,12 @@ func init() {
 
 	// sanitize readonly refs command
 	*RefsROCmd = *RefsCmd
-	RefsROCmd.Subcommands = map[string]*oldcmds.Command{}
+	RefsROCmd.Subcommands = map[string]*cmds.Command{}
 
 	// this was in the big map definition above before,
 	// but if we leave it there lgc.NewCommand will be executed
 	// before the value is updated (:/sanitize readonly refs command/)
-	rootROSubcommands["refs"] = lgc.NewCommand(RefsROCmd)
+	rootROSubcommands["refs"] = RefsROCmd
 
 	Root.Subcommands = rootSubcommands
 
