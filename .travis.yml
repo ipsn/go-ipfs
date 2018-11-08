@@ -44,7 +44,7 @@ before_script:
   # Overwrite the reposiory readme and commit all the changes
   - cp -f ../README.md README.md
   - git add .
-  - git commit --author="Péter Szilágyi <peterke@gmail.com>" -m "Ungx-ed commit $COMMIT"
+  - if [ -n "$(git status --porcelain)" ]; then git commit --author="Péter Szilágyi <peterke@gmail.com>" -m "Ungx-ed commit $COMMIT"; fi
 
   # Sanity check that the repository can be built
   - go install cmd/...
