@@ -8,14 +8,13 @@ import (
 	"time"
 
 	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
-	e "github.com/ipsn/go-ipfs/core/commands/e"
 	options "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 	nsopts "github.com/ipsn/go-ipfs/namesys/opts"
 
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
 var log = logging.Logger("core/commands/ipns")
@@ -158,12 +157,8 @@ Resolve the value of a dnslink:
 		return nil
 	},
 	Encoders: cmds.EncoderMap{
-		cmds.Text: cmds.MakeEncoder(func(req *cmds.Request, w io.Writer, v interface{}) error {
-			output, ok := v.(*ResolvedPath)
-			if !ok {
-				return e.TypeErr(output, v)
-			}
-			_, err := fmt.Fprintln(w, output.Path)
+		cmds.Text: cmds.MakeTypedEncoder(func(req *cmds.Request, w io.Writer, rp *ResolvedPath) error {
+			_, err := fmt.Fprintln(w, rp.Path)
 			return err
 		}),
 	},

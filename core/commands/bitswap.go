@@ -11,6 +11,7 @@ import (
 	bitswap "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap"
 	decision "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/decision"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	cidutil "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cidutil"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
@@ -64,18 +65,19 @@ Print out all blocks currently on the bitswap wantlist for the local peer.`,
 			if err != nil {
 				return err
 			}
-			if pid == nd.Identity {
-				return cmds.EmitOnce(res, &KeyList{bs.GetWantlist()})
+			if pid != nd.Identity {
+				return cmds.EmitOnce(res, &KeyList{bs.WantlistForPeer(pid)})
 			}
-
-			return cmds.EmitOnce(res, &KeyList{bs.WantlistForPeer(pid)})
 		}
+
 		return cmds.EmitOnce(res, &KeyList{bs.GetWantlist()})
 	},
 	Encoders: cmds.EncoderMap{
 		cmds.Text: cmds.MakeTypedEncoder(func(req *cmds.Request, w io.Writer, out *KeyList) error {
+			// sort the keys first
+			cidutil.Sort(out.Keys)
 			for _, key := range out.Keys {
-				fmt.Fprintln(w, key.String())
+				fmt.Fprintln(w, key)
 			}
 
 			return nil
@@ -112,26 +114,21 @@ var bitswapStatCmd = &cmds.Command{
 		return cmds.EmitOnce(res, st)
 	},
 	Encoders: cmds.EncoderMap{
-		cmds.Text: cmds.MakeEncoder(func(req *cmds.Request, w io.Writer, v interface{}) error {
-			out, ok := v.(*bitswap.Stat)
-			if !ok {
-				return e.TypeErr(out, v)
-			}
-
+		cmds.Text: cmds.MakeTypedEncoder(func(req *cmds.Request, w io.Writer, s *bitswap.Stat) error {
 			fmt.Fprintln(w, "bitswap status")
-			fmt.Fprintf(w, "\tprovides buffer: %d / %d\n", out.ProvideBufLen, bitswap.HasBlockBufferSize)
-			fmt.Fprintf(w, "\tblocks received: %d\n", out.BlocksReceived)
-			fmt.Fprintf(w, "\tblocks sent: %d\n", out.BlocksSent)
-			fmt.Fprintf(w, "\tdata received: %d\n", out.DataReceived)
-			fmt.Fprintf(w, "\tdata sent: %d\n", out.DataSent)
-			fmt.Fprintf(w, "\tdup blocks received: %d\n", out.DupBlksReceived)
-			fmt.Fprintf(w, "\tdup data received: %s\n", humanize.Bytes(out.DupDataReceived))
-			fmt.Fprintf(w, "\twantlist [%d keys]\n", len(out.Wantlist))
-			for _, k := range out.Wantlist {
+			fmt.Fprintf(w, "\tprovides buffer: %d / %d\n", s.ProvideBufLen, bitswap.HasBlockBufferSize)
+			fmt.Fprintf(w, "\tblocks received: %d\n", s.BlocksReceived)
+			fmt.Fprintf(w, "\tblocks sent: %d\n", s.BlocksSent)
+			fmt.Fprintf(w, "\tdata received: %d\n", s.DataReceived)
+			fmt.Fprintf(w, "\tdata sent: %d\n", s.DataSent)
+			fmt.Fprintf(w, "\tdup blocks received: %d\n", s.DupBlksReceived)
+			fmt.Fprintf(w, "\tdup data received: %s\n", humanize.Bytes(s.DupDataReceived))
+			fmt.Fprintf(w, "\twantlist [%d keys]\n", len(s.Wantlist))
+			for _, k := range s.Wantlist {
 				fmt.Fprintf(w, "\t\t%s\n", k.String())
 			}
-			fmt.Fprintf(w, "\tpartners [%d]\n", len(out.Peers))
-			for _, p := range out.Peers {
+			fmt.Fprintf(w, "\tpartners [%d]\n", len(s.Peers))
+			for _, p := range s.Peers {
 				fmt.Fprintf(w, "\t\t%s\n", p)
 			}
 
@@ -172,6 +169,7 @@ prints the ledger associated with a given peer.
 		if err != nil {
 			return err
 		}
+
 		return cmds.EmitOnce(res, bs.LedgerForPeer(partner))
 	},
 	Encoders: cmds.EncoderMap{

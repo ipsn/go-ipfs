@@ -8,7 +8,6 @@ import (
 	"time"
 
 	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
-	e "github.com/ipsn/go-ipfs/core/commands/e"
 	ncmd "github.com/ipsn/go-ipfs/core/commands/name"
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
 	options "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
@@ -16,8 +15,8 @@ import (
 	nsopts "github.com/ipsn/go-ipfs/namesys/opts"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
 const (
@@ -144,13 +143,8 @@ Resolve the value of an IPFS DAG path:
 		return cmds.EmitOnce(res, &ncmd.ResolvedPath{Path: path.Path("/" + rp.Namespace() + "/" + rp.Cid().String())})
 	},
 	Encoders: cmds.EncoderMap{
-		cmds.Text: cmds.MakeEncoder(func(req *cmds.Request, w io.Writer, v interface{}) error {
-			output, ok := v.(*ncmd.ResolvedPath)
-			if !ok {
-				return e.TypeErr(output, v)
-			}
-
-			fmt.Fprintln(w, output.Path.String())
+		cmds.Text: cmds.MakeTypedEncoder(func(req *cmds.Request, w io.Writer, rp *ncmd.ResolvedPath) error {
+			fmt.Fprintln(w, rp.Path.String())
 			return nil
 		}),
 	},
