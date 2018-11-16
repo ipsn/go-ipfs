@@ -10,13 +10,13 @@ import (
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
 	ic "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
+	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns/pb"
 	goprocess "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
 	gpctx "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess/context"
-	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns/pb"
-	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	proto "github.com/gogo/protobuf/proto"
+	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 )
 
 var errNoEntry = errors.New("no previous entry")

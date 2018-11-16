@@ -3,6 +3,7 @@ package mocknet
 import (
 	"context"
 	"fmt"
+	"net"
 	"sort"
 	"sync"
 
@@ -17,9 +18,12 @@ import (
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	pstoremem "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore/pstoremem"
-	testutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 )
+
+// IP6 range that gets blackholed (in case our traffic ever makes it out onto
+// the internet).
+var blackholeIP6 = net.ParseIP("100::")
 
 // mocknet implements mocknet.Mocknet
 type mocknet struct {
@@ -54,8 +58,20 @@ func (mn *mocknet) GenPeer() (host.Host, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	a := testutil.RandLocalTCPAddress()
+	id, err := peer.IDFromPrivateKey(sk)
+	if err != nil {
+		return nil, err
+	}
+	suffix := id
+	if len(id) > 8 {
+		suffix = id[len(id)-8:]
+	}
+	ip := append(net.IP{}, blackholeIP6...)
+	copy(ip[net.IPv6len-len(suffix):], suffix)
+	a, err := ma.NewMultiaddr(fmt.Sprintf("/ip6/%s/tcp/4242", ip))
+	if err != nil {
+		return nil, fmt.Errorf("failed to create test multiaddr: %s", err)
+	}
 
 	h, err := mn.AddPeer(sk, a)
 	if err != nil {

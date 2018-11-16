@@ -11,17 +11,17 @@ import (
 	"github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 	"github.com/ipsn/go-ipfs/core/coreunix"
 
-	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
-	blockservice "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
+	mfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-mfs"
+	blockservice "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
+	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
+	cidutil "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cidutil"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	dagtest "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag/test"
-	cidutil "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cidutil"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
-	mfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-mfs"
 )
 
 type UnixfsAPI CoreAPI

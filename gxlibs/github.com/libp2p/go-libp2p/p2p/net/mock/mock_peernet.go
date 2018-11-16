@@ -118,6 +118,10 @@ func (pn *peernet) DialPeer(ctx context.Context, p peer.ID) (inet.Conn, error) {
 }
 
 func (pn *peernet) connect(p peer.ID) (*conn, error) {
+	if p == pn.peer {
+		return nil, fmt.Errorf("attempted to dial self %s", p)
+	}
+
 	// first, check if we already have live connections
 	pn.RLock()
 	cs, found := pn.connsByPeer[p]
@@ -326,26 +330,10 @@ func (pn *peernet) Connectedness(p peer.ID) inet.Connectedness {
 // NewStream returns a new stream to given peer p.
 // If there is no connection to p, attempts to create one.
 func (pn *peernet) NewStream(ctx context.Context, p peer.ID) (inet.Stream, error) {
-	pn.Lock()
-	cs, found := pn.connsByPeer[p]
-	if !found || len(cs) < 1 {
-		pn.Unlock()
-		return nil, fmt.Errorf("no connection to peer")
+	c, err := pn.DialPeer(ctx, p)
+	if err != nil {
+		return nil, err
 	}
-
-	// if many conns are found, how do we select? for now, randomly...
-	// this would be an interesting place to test logic that can measure
-	// links (network interfaces) and select properly
-	n := rand.Intn(len(cs))
-	var c *conn
-	for c = range cs {
-		if n == 0 {
-			break
-		}
-		n--
-	}
-	pn.Unlock()
-
 	return c.NewStream()
 }
 

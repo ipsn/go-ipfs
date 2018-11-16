@@ -15,8 +15,8 @@ import (
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
-	dsq "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/query"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	dsq "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/query"
 )
 
 var log = logging.Logger("filestore")

@@ -11,13 +11,13 @@ import (
 	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
-	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-verifcid"
-	dstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
+	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	dstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 )
 
 var log = logging.Logger("gc")

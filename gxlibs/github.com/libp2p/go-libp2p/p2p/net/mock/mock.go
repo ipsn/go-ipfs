@@ -44,14 +44,9 @@ func FullMeshConnected(ctx context.Context, n int) (Mocknet, error) {
 		return nil, err
 	}
 
-	nets := m.Nets()
-	for _, n1 := range nets {
-		for _, n2 := range nets {
-			if _, err := m.ConnectNets(n1, n2); err != nil {
-				return nil, err
-			}
-		}
+	err = m.ConnectAllButSelf()
+	if err != nil {
+		return nil, err
 	}
-
 	return m, nil
 }

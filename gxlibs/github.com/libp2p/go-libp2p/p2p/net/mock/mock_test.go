@@ -225,14 +225,14 @@ func TestNetworkSetup(t *testing.T) {
 		t.Error("should not be able to connect")
 	}
 
-	// connect p1->p1 (should work)
-	if _, err := n1.DialPeer(ctx, p1); err != nil {
-		t.Error("p1 should be able to dial self.", err)
+	// connect p1->p1 (should fail)
+	if _, err := n1.DialPeer(ctx, p1); err == nil {
+		t.Error("p1 shouldn't be able to dial self")
 	}
 
 	// and a stream too
-	if _, err := n1.NewStream(ctx, p1); err != nil {
-		t.Error(err)
+	if _, err := n1.NewStream(ctx, p1); err == nil {
+		t.Error("p1 shouldn't be able to dial self")
 	}
 
 	// connect p1->p2
@@ -383,8 +383,11 @@ func TestStreamsStress(t *testing.T) {
 		wg.Add(1)
 		go func(i int) {
 			defer wg.Done()
-			from := rand.Intn(len(hosts))
-			to := rand.Intn(len(hosts))
+			var from, to int
+			for from == to {
+				from = rand.Intn(len(hosts))
+				to = rand.Intn(len(hosts))
+			}
 			s, err := hosts[from].NewStream(ctx, hosts[to].ID(), protocol.TestingID)
 			if err != nil {
 				log.Debugf("%d (%s) %d (%s)", from, hosts[from], to, hosts[to])
@@ -580,6 +583,14 @@ func TestLimitedStreams(t *testing.T) {
 	wg.Wait()
 	if !within(time.Since(before), time.Duration(time.Second*2), time.Second/3) {
 		t.Fatal("Expected 2ish seconds but got ", time.Since(before))
+	}
+}
+func TestFuzzManyPeers(t *testing.T) {
+	for i := 0; i < 50000; i++ {
+		_, err := FullMeshConnected(context.Background(), 2)
+		if err != nil {
+			t.Fatal(err)
+		}
 	}
 }
 

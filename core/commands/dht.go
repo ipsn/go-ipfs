@@ -9,9 +9,9 @@ import (
 
 	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
 
+	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
-	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	b58 "github.com/mr-tron/base58/base58"
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
 	notif "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing/notifications"

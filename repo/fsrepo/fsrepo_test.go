@@ -9,8 +9,8 @@ import (
 
 	"github.com/ipsn/go-ipfs/thirdparty/assert"
 
-	datastore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
+	datastore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 )
 
 // swap arg order

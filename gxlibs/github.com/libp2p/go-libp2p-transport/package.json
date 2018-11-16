@@ -20,9 +20,9 @@
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmRKbEchaYADxSCyyjhDh4cTrUby8ftXUb8MRLBTHQYupw",
+      "hash": "QmenvQQy4bFGSiHJUGupVmCRHfetg5rH3vTp9Z2f6v2KXR",
       "name": "go-libp2p-net",
-      "version": "3.0.19"
+      "version": "3.0.20"
     },
     {
       "author": "whyrusleeping",
@@ -42,6 +42,6 @@
   "license": "MIT",
   "name": "go-libp2p-transport",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "3.0.18"
+  "version": "3.0.19"
 }
 

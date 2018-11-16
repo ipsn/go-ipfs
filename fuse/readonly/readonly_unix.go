@@ -11,9 +11,9 @@ import (
 	"syscall"
 
 	core "github.com/ipsn/go-ipfs/core"
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	mdag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
 	fuse "bazil.org/fuse"

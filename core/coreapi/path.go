@@ -9,9 +9,9 @@ import (
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
 
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 	ipfspath "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
-	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
 

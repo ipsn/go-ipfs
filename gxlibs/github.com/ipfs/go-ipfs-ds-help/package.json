@@ -9,9 +9,9 @@
   "gxDependencies": [
     {
       "author": "jbenet",
-      "hash": "QmaRb5yNXKonhbkpNxNawoydk4N6es6b4fPj19sjEKsh5D",
+      "hash": "Qmf4xQhNomPNhrtZc67qSnfJSjxjXs9LWvknJtSXwimPrM",
       "name": "go-datastore",
-      "version": "3.4.0"
+      "version": "3.4.1"
     },
     {
       "author": "whyrusleeping",
@@ -31,6 +31,6 @@
   "license": "",
   "name": "go-ipfs-ds-help",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.1.4"
+  "version": "0.1.5"
 }
 

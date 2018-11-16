@@ -15,10 +15,10 @@ import (
 	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 	dshelp "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-ds-help"
+	proto "github.com/gogo/protobuf/proto"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	dsns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/namespace"
 	dsq "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/query"
-	proto "github.com/gogo/protobuf/proto"
 )
 
 // FilestorePrefix identifies the key prefix for FileManager blocks.

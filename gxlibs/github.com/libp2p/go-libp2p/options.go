@@ -260,6 +260,17 @@ func Ping(enable bool) Option {
 	}
 }
 
+// Routing will configure libp2p to use routing.
+func Routing(rt config.RoutingC) Option {
+	return func(cfg *Config) error {
+		if cfg.Routing != nil {
+			return fmt.Errorf("cannot specify multiple routing options")
+		}
+		cfg.Routing = rt
+		return nil
+	}
+}
+
 // NoListenAddrs will configure libp2p to not listen by default.
 //
 // This will both clear any configured listen addrs and prevent libp2p from

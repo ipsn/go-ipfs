@@ -13,9 +13,9 @@ import (
 	lru "github.com/hashicorp/golang-lru"
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
 	isd "github.com/jbenet/go-is-domain"
-	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
+	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 )
 
 // mpns (a multi-protocol NameSystem) implements generic IPFS naming.

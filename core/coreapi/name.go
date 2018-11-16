@@ -14,9 +14,9 @@ import (
 	"github.com/ipsn/go-ipfs/namesys"
 
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
 	ipath "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
 )
 
 type NameAPI CoreAPI

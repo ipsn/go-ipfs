@@ -18,8 +18,8 @@ import (
 	mock "github.com/ipsn/go-ipfs/core/mock"
 	"github.com/ipsn/go-ipfs/thirdparty/unit"
 
-	random "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/go-random"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
+	random "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/go-random"
 	mocknet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/net/mock"
 	testutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"

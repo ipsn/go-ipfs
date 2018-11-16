@@ -3,6 +3,7 @@ package identify
 import (
 	"context"
 	"sync"
+	"time"
 
 	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/protocol/identify/pb"
 
@@ -22,6 +23,9 @@ var log = logging.Logger("net/identify")
 
 // ID is the protocol.ID of the Identify Service.
 const ID = "/ipfs/id/1.0.0"
+
+// IDPush is the protocol.ID of the Identify push protocol
+const IDPush = "/ipfs/id/push/1.0.0"
 
 // LibP2PVersion holds the current protocol version for a client running this code
 // TODO(jbenet): fix the versioning mess.
@@ -60,6 +64,7 @@ func NewIDService(h host.Host) *IDService {
 		currid: make(map[inet.Conn]chan struct{}),
 	}
 	h.SetStreamHandler(ID, s.requestHandler)
+	h.SetStreamHandler(IDPush, s.pushHandler)
 	h.Network().Notify((*netNotifiee)(s))
 	return s
 }
@@ -136,6 +141,26 @@ func (ids *IDService) responseHandler(s inet.Stream) {
 		c.RemotePeer(), c.RemoteMultiaddr())
 
 	go inet.FullClose(s)
+}
+
+func (ids *IDService) pushHandler(s inet.Stream) {
+	ids.responseHandler(s)
+}
+
+func (ids *IDService) Push() {
+	for _, p := range ids.Host.Network().Peers() {
+		go func(p peer.ID) {
+			ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+			defer cancel()
+			s, err := ids.Host.NewStream(ctx, p, IDPush)
+			if err != nil {
+				log.Debugf("error opening push stream: %s", err.Error())
+				return
+			}
+
+			ids.requestHandler(s)
+		}(p)
+	}
 }
 
 func (ids *IDService) populateMessage(mes *pb.Identify, c inet.Conn) {

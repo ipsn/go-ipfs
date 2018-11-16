@@ -9,9 +9,9 @@
   "gxDependencies": [
     {
       "author": "Stebalien",
-      "hash": "QmbNjbKRJKbek3jPV6rpbGEtrZd84cDxjpBtsiGYa9Z5Do",
+      "hash": "QmbyjEKtxXmZdiByBiNhfayzEuEPPBvuD2dLpHky8cHUvy",
       "name": "go-conn-security",
-      "version": "0.1.19"
+      "version": "0.1.20"
     },
     {
       "author": "whyrusleeping",
@@ -27,9 +27,9 @@
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmZJ5hXLAz8vrZ4cw4EFk355pqMuxWTZQ5Hs2xhYGjdvGr",
+      "hash": "QmdQx4ZhKGdv9TvpCFpMxFzjTQFHRmFqjBxkRVwzT1JNes",
       "name": "go-libp2p-transport",
-      "version": "3.0.18"
+      "version": "3.0.19"
     },
     {
       "author": "libp2p",
@@ -74,9 +74,9 @@
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmRKbEchaYADxSCyyjhDh4cTrUby8ftXUb8MRLBTHQYupw",
+      "hash": "QmenvQQy4bFGSiHJUGupVmCRHfetg5rH3vTp9Z2f6v2KXR",
       "name": "go-libp2p-net",
-      "version": "3.0.19"
+      "version": "3.0.20"
     },
     {
       "author": "onsi",
@@ -96,6 +96,6 @@
   "license": "",
   "name": "go-libp2p-transport-upgrader",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.1.19"
+  "version": "0.1.20"
 }
 

@@ -88,7 +88,7 @@ func subtestIDService(t *testing.T) {
 	// Forget the first one.
 	testKnowsAddrs(t, h2, h1p, addrs[:len(addrs)-1])
 
-	time.Sleep(500 * time.Millisecond)
+	time.Sleep(1 * time.Second)
 
 	// Forget the rest.
 	testKnowsAddrs(t, h1, h2p, []ma.Multiaddr{})
