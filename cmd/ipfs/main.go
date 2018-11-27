@@ -28,11 +28,11 @@ import (
 	manet "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	madns "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-dns"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	osh "github.com/ipsn/go-ipfs/gxlibs/github.com/Kubuxu/go-os-helper"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds/cli"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds/http"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	loggables "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-loggables"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 )

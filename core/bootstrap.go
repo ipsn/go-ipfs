@@ -16,8 +16,8 @@ import (
 	goprocess "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
 	procctx "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess/context"
 	periodicproc "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess/periodic"
-	host "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
 	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
+	host "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	inet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
 )

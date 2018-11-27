@@ -15,9 +15,9 @@ import (
 	corecommands "github.com/ipsn/go-ipfs/core/commands"
 
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	cmdsHttp "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds/http"
-	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 )
 
 var (
