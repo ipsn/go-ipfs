@@ -11,11 +11,13 @@ import (
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
 
 	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
-	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 )
 
+var log = logging.Logger("command")
+
+// Context represents request context
 type Context struct {
 	Online     bool
 	ConfigRoot string
@@ -55,9 +57,9 @@ func (c *Context) GetNode() (*core.IpfsNode, error) {
 	return c.node, err
 }
 
-// GetApi returns CoreAPI instance backed by ipfs node.
+// GetAPI returns CoreAPI instance backed by ipfs node.
 // It may construct the node with the provided function
-func (c *Context) GetApi() (coreiface.CoreAPI, error) {
+func (c *Context) GetAPI() (coreiface.CoreAPI, error) {
 	if c.api == nil {
 		n, err := c.GetNode()
 		if err != nil {
@@ -108,17 +110,4 @@ func (c *Context) Close() {
 		log.Info("Shutting down node...")
 		c.node.Close()
 	}
-}
-
-// Request represents a call to a command from a consumer
-type Request interface {
-	Path() []string
-	Option(name string) *cmdkit.OptionValue
-	Options() cmdkit.OptMap
-	Arguments() []string
-	StringArguments() []string
-	Files() files.File
-	Context() context.Context
-	InvocContext() *Context
-	Command() *Command
 }

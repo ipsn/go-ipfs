@@ -13,8 +13,8 @@ import (
 
 	core "github.com/ipsn/go-ipfs/core"
 	namesys "github.com/ipsn/go-ipfs/namesys"
-	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
