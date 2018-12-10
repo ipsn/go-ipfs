@@ -26,9 +26,10 @@ import (
 
 // test specific parameters
 func init() {
-	autonat.AutoNATIdentifyDelay = 100 * time.Millisecond
+	autonat.AutoNATIdentifyDelay = 500 * time.Millisecond
 	autonat.AutoNATBootDelay = 1 * time.Second
 	relay.BootDelay = 1 * time.Second
+	relay.AdvertiseBootDelay = 1 * time.Millisecond
 	manet.Private4 = []*net.IPNet{}
 }
 
@@ -142,11 +143,11 @@ func TestAutoRelay(t *testing.T) {
 	}
 
 	h1 := makeAutoNATServicePrivate(ctx, t)
-	_, err := libp2p.New(ctx, libp2p.EnableRelay(circuit.OptHop), libp2p.Routing(makeRouting))
+	_, err := libp2p.New(ctx, libp2p.EnableRelay(circuit.OptHop), libp2p.EnableAutoRelay(), libp2p.Routing(makeRouting))
 	if err != nil {
 		t.Fatal(err)
 	}
-	h3, err := libp2p.New(ctx, libp2p.EnableRelay(), libp2p.Routing(makeRouting))
+	h3, err := libp2p.New(ctx, libp2p.EnableRelay(), libp2p.EnableAutoRelay(), libp2p.Routing(makeRouting))
 	if err != nil {
 		t.Fatal(err)
 	}

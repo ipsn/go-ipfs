@@ -220,6 +220,15 @@ func DisableRelay() Option {
 	}
 }
 
+// EnableAutoRelay configures libp2p to enable autorelay advertising; requires relay to
+// be enabled and the Routing option to provide an instance of ContentRouting.
+func EnableAutoRelay() Option {
+	return func(cfg *Config) error {
+		cfg.EnableAutoRelay = true
+		return nil
+	}
+}
+
 // FilterAddresses configures libp2p to never dial nor accept connections from
 // the given addresses.
 func FilterAddresses(addrs ...*net.IPNet) Option {

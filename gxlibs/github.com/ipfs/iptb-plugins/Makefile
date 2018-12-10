@@ -29,7 +29,7 @@ ipfsbrowser:
 	gx-go uw
 CLEAN += build/browseripfs.so
 
-install:
+install: deps
 	gx-go rw
 	(cd iptb; go install)
 	gx-go uw

@@ -66,6 +66,8 @@ type Config struct {
 	DisablePing bool
 
 	Routing RoutingC
+
+	EnableAutoRelay bool
 }
 
 // NewNode constructs a new libp2p Host from the Config.
@@ -166,34 +168,51 @@ func (cfg *Config) NewNode(ctx context.Context) (host.Host, error) {
 		return nil, err
 	}
 
+	// Configure routing and autorelay
+	var router routing.PeerRouting
 	if cfg.Routing != nil {
-		router, err := cfg.Routing(h)
+		router, err = cfg.Routing(h)
 		if err != nil {
 			h.Close()
 			return nil, err
 		}
+	}
+
+	if cfg.EnableAutoRelay {
+		if !cfg.Relay {
+			h.Close()
+			return nil, fmt.Errorf("cannot enable autorelay; relay is not enabled")
+		}
+
+		if router == nil {
+			h.Close()
+			return nil, fmt.Errorf("cannot enable autorelay; no routing for discovery")
+		}
 
 		crouter, ok := router.(routing.ContentRouting)
-		if ok {
-			if cfg.Relay {
-				discovery := discovery.NewRoutingDiscovery(crouter)
+		if !ok {
+			h.Close()
+			return nil, fmt.Errorf("cannot enable autorelay; no suitable routing for discovery")
+		}
 
-				hop := false
-				for _, opt := range cfg.RelayOpts {
-					if opt == circuit.OptHop {
-						hop = true
-						break
-					}
-				}
+		discovery := discovery.NewRoutingDiscovery(crouter)
 
-				if hop {
-					h = relay.NewRelayHost(swrm.Context(), h.(*bhost.BasicHost), discovery)
-				} else {
-					h = relay.NewAutoRelayHost(swrm.Context(), h.(*bhost.BasicHost), discovery)
-				}
+		hop := false
+		for _, opt := range cfg.RelayOpts {
+			if opt == circuit.OptHop {
+				hop = true
+				break
 			}
 		}
 
+		if hop {
+			h = relay.NewRelayHost(swrm.Context(), h.(*bhost.BasicHost), discovery)
+		} else {
+			h = relay.NewAutoRelayHost(swrm.Context(), h.(*bhost.BasicHost), discovery)
+		}
+	}
+
+	if router != nil {
 		h = routed.Wrap(h, router)
 	}
 

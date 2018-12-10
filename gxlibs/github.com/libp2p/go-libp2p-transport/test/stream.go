@@ -6,6 +6,7 @@ import (
 	crand "crypto/rand"
 	"fmt"
 	"io"
+	"io/ioutil"
 	mrand "math/rand"
 	"runtime/debug"
 	"sync"
@@ -38,6 +39,21 @@ type Options struct {
 	msgNum    int
 	msgMin    int
 	msgMax    int
+}
+
+func fullClose(t *testing.T, s smux.Stream) {
+	if err := s.Close(); err != nil {
+		t.Error(err)
+		s.Reset()
+		return
+	}
+	b, err := ioutil.ReadAll(s)
+	if err != nil {
+		t.Error(err)
+	}
+	if len(b) != 0 {
+		t.Error("expected to be done reading")
+	}
 }
 
 func randBuf(size int) []byte {
@@ -190,7 +206,7 @@ func SubtestStress(t *testing.T, ta, tb tpt.Transport, maddr ma.Multiaddr, peerA
 		}()
 
 		readStream(s, bufs)
-		s.Close()
+		fullClose(t, s)
 	}
 
 	openConnAndRW := func() {
@@ -270,7 +286,7 @@ func SubtestStreamOpenStress(t *testing.T, ta, tb tpt.Transport, maddr ma.Multia
 				if err != nil {
 					panic(err)
 				}
-				s.Close()
+				fullClose(t, s)
 			}
 		}
 
@@ -295,7 +311,7 @@ func SubtestStreamOpenStress(t *testing.T, ta, tb tpt.Transport, maddr ma.Multia
 			}
 			go func() {
 				recv <- struct{}{}
-				str.Close()
+				fullClose(t, str)
 			}()
 		}
 	}()

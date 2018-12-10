@@ -19,17 +19,17 @@ import (
 	"github.com/ipsn/go-ipfs/dagutils"
 
 	humanize "github.com/dustin/go-humanize"
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
-	resolver "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
 	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer"
-	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	resolver "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
 	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer"
+	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 	multibase "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multibase"
 )
 

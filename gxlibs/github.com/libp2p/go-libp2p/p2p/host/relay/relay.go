@@ -2,12 +2,17 @@ package relay
 
 import (
 	"context"
+	"time"
 
 	basic "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/host/basic"
 
 	discovery "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-discovery"
 	host "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
+)
+
+var (
+	AdvertiseBootDelay = 5 * time.Second
 )
 
 // RelayHost is a Host that provides Relay services.
@@ -25,7 +30,13 @@ func NewRelayHost(ctx context.Context, bhost *basic.BasicHost, advertise discove
 		advertise: advertise,
 	}
 	bhost.AddrsFactory = h.hostAddrs
-	discovery.Advertise(ctx, advertise, RelayRendezvous)
+	go func() {
+		select {
+		case <-time.After(AdvertiseBootDelay):
+			discovery.Advertise(ctx, advertise, RelayRendezvous)
+		case <-ctx.Done():
+		}
+	}()
 	return h
 }
 

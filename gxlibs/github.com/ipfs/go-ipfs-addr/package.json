@@ -20,9 +20,9 @@
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmcqU6QUDSXprb1518vYDGczrTJTyGwLG9eUa5iNX4xUtS",
+      "hash": "QmY5Grm8pJdiSSVsYxx4uNRgweY72EmYwuSDbRnbFok3iY",
       "name": "go-libp2p-peer",
-      "version": "2.4.3"
+      "version": "3.0.0"
     }
   ],
   "gxVersion": "0.11.0",
@@ -30,6 +30,6 @@
   "license": "",
   "name": "go-ipfs-addr",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.1.28"
+  "version": "0.1.29"
 }
 

@@ -69,7 +69,7 @@ GLOBAL OPTIONS:
 
 ```
 $ go get -d github.com/ipfs/iptb-plugins
-$ cd $GOPATH/src/github.com/ipfs/ipfs-plugins
+$ cd $GOPATH/src/github.com/ipfs/iptb-plugins
 $ make install
 ```
 
