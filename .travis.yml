@@ -43,6 +43,7 @@ before_script:
 
   # Overwrite the reposiory readme and commit all the changes
   - cp -f ../README.md README.md
+  - rm .gitignore
   - git add .
   - if [ -n "$(git status --porcelain)" ]; then git commit --author="Péter Szilágyi <peterke@gmail.com>" -m "Ungx-ed commit $COMMIT"; fi
 
