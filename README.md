@@ -51,18 +51,24 @@ import (
 	"log"
 
 	"github.com/ipsn/go-ipfs/core"
-	"github.com/ipsn/go-ipfs/core/coreunix"
+	"github.com/ipsn/go-ipfs/core/coreapi"
+	"github.com/ipsn/go-ipfs/core/coreapi/interface"
 )
 
 func main() {
+	// Create a new IPFS network node
 	node, err := core.NewNode(context.TODO(), &core.BuildCfg{Online: true})
 	if err != nil {
 		log.Fatalf("Failed to start IPFS node: %v", err)
 	}
-	reader, err := coreunix.Cat(context.TODO(), node, "QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB")
+	path, _ := iface.ParsePath("QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB")
+
+	// Resolve the IPFS welcome page
+	reader, err := coreapi.NewCoreAPI(node).Unixfs().Get(context.TODO(), path)
 	if err != nil {
 		log.Fatalf("Failed to look up IPFS welcome page: %v", err)
 	}
+	// Retrieve and print the welcome page
 	blob, err := ioutil.ReadAll(reader)
 	if err != nil {
 		log.Fatalf("Failed to retrieve IPFS welcome page: %v", err)
