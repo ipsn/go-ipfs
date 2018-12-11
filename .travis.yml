@@ -20,7 +20,7 @@ before_script:
   # Install the necessary tools for ungx-ing and convert go-ipfs
   - go get github.com/whyrusleeping/gx
   - go get github.com/karalabe/ungx
-  - ungx --fork=github.com/ipsn/go-ipfs
+  - ungx --fork=github.com/ipsn/go-ipfs --embed=github.com/lucas-clemente/quic-go,github.com/polydawn/refmt
 
   # Save the latest commit hash and wipe all git history recursively
   - COMMIT=`git rev-parse HEAD`
