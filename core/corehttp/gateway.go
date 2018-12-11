@@ -5,7 +5,7 @@ import (
 	"net"
 	"net/http"
 
-	version "github.com/ipfs/go-ipfs"
+	version "github.com/ipsn/go-ipfs"
 	core "github.com/ipsn/go-ipfs/core"
 	coreapi "github.com/ipsn/go-ipfs/core/coreapi"
 

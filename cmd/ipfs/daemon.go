@@ -12,7 +12,7 @@ import (
 	"sort"
 	"sync"
 
-	version "github.com/ipfs/go-ipfs"
+	version "github.com/ipsn/go-ipfs"
 	utilmain "github.com/ipsn/go-ipfs/cmd/ipfs/util"
 	oldcmds "github.com/ipsn/go-ipfs/commands"
 	"github.com/ipsn/go-ipfs/core"

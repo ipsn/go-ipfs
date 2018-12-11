@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	version "github.com/ipfs/go-ipfs"
+	version "github.com/ipsn/go-ipfs"
 	core "github.com/ipsn/go-ipfs/core"
 	coreunix "github.com/ipsn/go-ipfs/core/coreunix"
 	namesys "github.com/ipsn/go-ipfs/namesys"

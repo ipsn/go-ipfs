@@ -20,7 +20,7 @@ import (
 	"strings"
 	"time"
 
-	version "github.com/ipfs/go-ipfs"
+	version "github.com/ipsn/go-ipfs"
 	rp "github.com/ipsn/go-ipfs/exchange/reprovide"
 	filestore "github.com/ipsn/go-ipfs/filestore"
 	mount "github.com/ipsn/go-ipfs/fuse/mount"

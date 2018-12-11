@@ -5,7 +5,7 @@ import (
 	"io"
 	"runtime"
 
-	version "github.com/ipfs/go-ipfs"
+	version "github.com/ipsn/go-ipfs"
 	fsrepo "github.com/ipsn/go-ipfs/repo/fsrepo"
 
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"

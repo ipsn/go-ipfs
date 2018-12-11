@@ -5,7 +5,7 @@ import (
 	"path"
 	"runtime"
 
-	version "github.com/ipfs/go-ipfs"
+	version "github.com/ipsn/go-ipfs"
 	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
 
 	manet "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
