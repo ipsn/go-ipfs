@@ -12,7 +12,7 @@ import (
 	ic "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	tpt "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-transport"
-	quic "github.com/lucas-clemente/quic-go"
+	quic "github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	manet "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/mafmt"

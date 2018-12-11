@@ -9,8 +9,8 @@ import (
 	"os"
 	"time"
 
-	randomfiles "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/go-random-files"
-	ringreader "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/go-random-files/ringreader"
+	randomfiles "github.com/jbenet/go-random-files"
+	ringreader "github.com/jbenet/go-random-files/ringreader"
 )
 
 var usage = `usage: %s [options] <path>...

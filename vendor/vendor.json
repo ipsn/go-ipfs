@@ -1,6 +1,37 @@
 {
 	"comment": "",
 	"ignore": "",
-	"package": [],
+	"package": [
+		{
+			"checksumSHA1": "y9Q5q+r3mmAZ2b5BEqOMFzrbsV4=",
+			"path": "github.com/bifurcation/mint",
+			"revision": "a14404e9a861605b3bc889790cbc303435876d6b",
+			"revisionTime": "2018-11-05T07:19:58Z"
+		},
+		{
+			"checksumSHA1": "HnzrrCx9iVd9h4ItB3YKZMrkO2g=",
+			"path": "github.com/bifurcation/mint/syntax",
+			"revision": "a14404e9a861605b3bc889790cbc303435876d6b",
+			"revisionTime": "2018-11-05T07:19:58Z"
+		},
+		{
+			"checksumSHA1": "PYXuf7wvcj492uWhjvmXlyyQUYc=",
+			"path": "github.com/cheekybits/genny/generic",
+			"revision": "d2cf3cdd35ce0d789056c4bc02a4d6349c947caf",
+			"revisionTime": "2018-08-30T15:03:46Z"
+		},
+		{
+			"checksumSHA1": "ITlVkWmRdYmxG1xsYBy0D8+nC0Q=",
+			"path": "github.com/lucas-clemente/aes12",
+			"revision": "cd47fb39b79f867c6e4e5cd39cf7abd799f71670",
+			"revisionTime": "2017-10-27T16:34:21Z"
+		},
+		{
+			"checksumSHA1": "OA9E+y7g05x/mWJJHmA7oPxWKQo=",
+			"path": "github.com/lucas-clemente/quic-go-certificates",
+			"revision": "d2f86524cced5186554df90d92529757d22c1cb6",
+			"revisionTime": "2016-08-23T09:51:56Z"
+		}
+	],
 	"rootPath": "github.com/ipsn/go-ipfs"
 }
