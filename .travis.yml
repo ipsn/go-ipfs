@@ -47,7 +47,7 @@ before_script:
   - if [ -n "$(git status --porcelain)" ]; then git commit --author="Péter Szilágyi <peterke@gmail.com>" -m "Ungx-ed commit $COMMIT"; fi
 
   # Sanity check that the repository can be built
-  - go install cmd/...
+  - go install ./cmd/...
 
 script:
   # Everything seems ok, push the ungx-ed master branch back to GitHub
