@@ -1,6 +1,6 @@
 language: go
 
-go: 1.10.x
+go: 1.11.x
 
 # Don't grab any dependencies or whatnot, we're not building go-ipfs, rather
 # forking the upstream one.
