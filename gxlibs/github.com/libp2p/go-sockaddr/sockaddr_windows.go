@@ -4,7 +4,7 @@ import (
 	"syscall"
 	"unsafe"
 
-	"golang.org/x/sys/windows"
+	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/sys/windows"
 )
 
 func sockaddrToAny(sa windows.Sockaddr) (*windows.RawSockaddrAny, Socklen, error) {

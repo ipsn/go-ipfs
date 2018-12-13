@@ -17,7 +17,7 @@ import (
 	"math/big"
 	"time"
 
-	"golang.org/x/crypto/curve25519"
+	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/crypto/curve25519"
 
 	// Blank includes to ensure hash support
 	_ "crypto/sha1"

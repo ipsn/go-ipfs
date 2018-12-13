@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"io"
 
-	"golang.org/x/crypto/hkdf"
+	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/crypto/hkdf"
 )
 
 // CookieProtector is used to create and verify a cookie

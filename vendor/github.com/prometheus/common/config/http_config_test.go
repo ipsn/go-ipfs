@@ -24,7 +24,7 @@ import (
 	"strings"
 	"testing"
 
-	"gopkg.in/yaml.v2"
+	"github.com/ipsn/go-ipfs/gxlibs/gopkg.in/yaml.v2"
 )
 
 const (

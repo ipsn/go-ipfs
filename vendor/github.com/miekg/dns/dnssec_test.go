@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"golang.org/x/crypto/ed25519"
+	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/crypto/ed25519"
 )
 
 func getKey() *DNSKEY {

@@ -6,6 +6,6 @@
 
 package fsnotify
 
-import "golang.org/x/sys/unix"
+import "github.com/ipsn/go-ipfs/gxlibs/golang.org/x/sys/unix"
 
 const openMode = unix.O_NONBLOCK | unix.O_RDONLY

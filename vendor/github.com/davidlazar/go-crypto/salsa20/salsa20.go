@@ -4,7 +4,7 @@ import (
 	"crypto/cipher"
 	"encoding/binary"
 
-	"golang.org/x/crypto/salsa20/salsa"
+	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/crypto/salsa20/salsa"
 )
 
 const BlockSize = 64

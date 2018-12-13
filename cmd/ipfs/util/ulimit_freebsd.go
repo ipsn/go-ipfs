@@ -6,7 +6,7 @@ import (
 	"errors"
 	"math"
 
-	unix "golang.org/x/sys/unix"
+	unix "github.com/ipsn/go-ipfs/gxlibs/golang.org/x/sys/unix"
 )
 
 func init() {

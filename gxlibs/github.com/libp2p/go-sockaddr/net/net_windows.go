@@ -1,7 +1,7 @@
 package sockaddrnet
 
 import (
-	"golang.org/x/sys/windows"
+	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/sys/windows"
 )
 
 const (

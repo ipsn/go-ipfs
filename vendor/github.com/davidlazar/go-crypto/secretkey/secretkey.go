@@ -11,8 +11,8 @@ import (
 	"runtime"
 	"syscall"
 
-	"golang.org/x/crypto/scrypt"
-	"golang.org/x/crypto/ssh/terminal"
+	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/crypto/scrypt"
+	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/crypto/ssh/terminal"
 
 	"github.com/davidlazar/go-crypto/encoding/base32"
 )

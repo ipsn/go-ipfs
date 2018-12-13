@@ -24,7 +24,7 @@ import (
 	"time"
 
 	"github.com/mwitkow/go-conntrack"
-	"gopkg.in/yaml.v2"
+	"github.com/ipsn/go-ipfs/gxlibs/gopkg.in/yaml.v2"
 )
 
 // BasicAuth contains basic HTTP authentication credentials.

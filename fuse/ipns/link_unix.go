@@ -6,8 +6,8 @@ import (
 	"context"
 	"os"
 
-	"bazil.org/fuse"
-	"bazil.org/fuse/fs"
+	"github.com/ipsn/go-ipfs/gxlibs/bazil.org/fuse"
+	"github.com/ipsn/go-ipfs/gxlibs/bazil.org/fuse/fs"
 )
 
 type Link struct {

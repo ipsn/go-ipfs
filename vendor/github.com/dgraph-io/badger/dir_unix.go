@@ -25,7 +25,7 @@ import (
 	"path/filepath"
 
 	"github.com/pkg/errors"
-	"golang.org/x/sys/unix"
+	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/sys/unix"
 )
 
 // directoryLockGuard holds a lock on a directory and a pid file inside.  The pid file isn't part

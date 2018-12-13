@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/onsi/gomega/format"
-	"gopkg.in/yaml.v2"
+	"github.com/ipsn/go-ipfs/gxlibs/gopkg.in/yaml.v2"
 )
 
 type MatchYAMLMatcher struct {

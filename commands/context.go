@@ -10,8 +10,8 @@ import (
 	coreapi "github.com/ipsn/go-ipfs/core/coreapi"
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
 
-	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 )
 

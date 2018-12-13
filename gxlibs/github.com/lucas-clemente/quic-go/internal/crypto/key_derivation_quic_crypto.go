@@ -7,7 +7,7 @@ import (
 
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/internal/protocol"
 
-	"golang.org/x/crypto/hkdf"
+	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/crypto/hkdf"
 )
 
 // DeriveKeysChacha20 derives the client and server keys and creates a matching chacha20poly1305 AEAD instance

@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
-	"bazil.org/fuse"
-	"bazil.org/fuse/fs"
+	"github.com/ipsn/go-ipfs/gxlibs/bazil.org/fuse"
+	"github.com/ipsn/go-ipfs/gxlibs/bazil.org/fuse/fs"
 )
 
 var ErrNotMounted = errors.New("not mounted")

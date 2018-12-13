@@ -6,7 +6,7 @@ import (
 	"syscall"
 	"unsafe"
 
-	"golang.org/x/sys/unix"
+	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/sys/unix"
 )
 
 func sockaddrToAny(sa unix.Sockaddr) (*unix.RawSockaddrAny, Socklen, error) {

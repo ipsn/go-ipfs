@@ -39,7 +39,7 @@ import (
 
 	"github.com/dgraph-io/badger/y"
 	"github.com/pkg/errors"
-	"golang.org/x/net/trace"
+	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/trace"
 )
 
 // Values have their first byte being byteData or byteDelete. This helps us distinguish between

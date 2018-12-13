@@ -24,7 +24,7 @@ import (
 	"sort"
 	"time"
 
-	"golang.org/x/net/trace"
+	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/trace"
 
 	"github.com/dgraph-io/badger/protos"
 	"github.com/dgraph-io/badger/table"

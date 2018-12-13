@@ -17,8 +17,8 @@ import (
 	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 
 	lgbl "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-loggables"
-	fuse "bazil.org/fuse"
-	fs "bazil.org/fuse/fs"
+	fuse "github.com/ipsn/go-ipfs/gxlibs/bazil.org/fuse"
+	fs "github.com/ipsn/go-ipfs/gxlibs/bazil.org/fuse/fs"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 )

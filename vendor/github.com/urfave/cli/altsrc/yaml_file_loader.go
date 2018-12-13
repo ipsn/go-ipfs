@@ -14,7 +14,7 @@ import (
 
 	"gopkg.in/urfave/cli.v1"
 
-	"gopkg.in/yaml.v2"
+	"github.com/ipsn/go-ipfs/gxlibs/gopkg.in/yaml.v2"
 )
 
 type yamlSourceContext struct {

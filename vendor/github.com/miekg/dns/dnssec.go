@@ -20,7 +20,7 @@ import (
 	"strings"
 	"time"
 
-	"golang.org/x/crypto/ed25519"
+	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/crypto/ed25519"
 )
 
 // DNSSEC encryption algorithm codes.

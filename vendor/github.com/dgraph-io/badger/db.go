@@ -31,7 +31,7 @@ import (
 
 	"github.com/dgraph-io/badger/options"
 
-	"golang.org/x/net/trace"
+	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/trace"
 
 	"github.com/dgraph-io/badger/skl"
 	"github.com/dgraph-io/badger/table"
