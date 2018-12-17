@@ -7,7 +7,7 @@ import (
 
 	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto/pb"
 
-	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/crypto/ed25519"
+	"golang.org/x/crypto/ed25519"
 )
 
 // Ed25519PrivateKey is an ed25519 private key

@@ -6,7 +6,7 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/crypto/poly1305"
+	"golang.org/x/crypto/poly1305"
 )
 
 var testVectors = []struct {

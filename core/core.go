@@ -71,7 +71,6 @@ import (
 	merkledag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	nilrouting "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/none"
-	offroute "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
 	yamux "github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/go-smux-yamux"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	record "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record"
@@ -160,9 +159,8 @@ func (n *IpfsNode) startOnlineServices(ctx context.Context, routingOption Routin
 		return errors.New("node already online")
 	}
 
-	// load private key
-	if err := n.LoadPrivateKey(); err != nil {
-		return err
+	if n.PrivateKey == nil {
+		return fmt.Errorf("private key not available")
 	}
 
 	// get undialable addrs from config
@@ -773,13 +771,17 @@ func (n *IpfsNode) loadID() error {
 // GetKey will return a key from the Keystore with name `name`.
 func (n *IpfsNode) GetKey(name string) (ic.PrivKey, error) {
 	if name == "self" {
+		if n.PrivateKey == nil {
+			return nil, fmt.Errorf("private key not available")
+		}
 		return n.PrivateKey, nil
 	} else {
 		return n.Repo.Keystore().Get(name)
 	}
 }
 
-func (n *IpfsNode) LoadPrivateKey() error {
+// loadPrivateKey loads the private key *if* available
+func (n *IpfsNode) loadPrivateKey() error {
 	if n.Identity == "" || n.Peerstore == nil {
 		return errors.New("loaded private key out of order")
 	}
@@ -792,6 +794,10 @@ func (n *IpfsNode) LoadPrivateKey() error {
 	cfg, err := n.Repo.Config()
 	if err != nil {
 		return err
+	}
+
+	if cfg.Identity.PrivKey == "" {
+		return nil
 	}
 
 	sk, err := loadPrivateKey(&cfg.Identity, n.Identity)
@@ -861,32 +867,6 @@ func (n *IpfsNode) loadFilesRoot() error {
 	}
 
 	n.FilesRoot = mr
-	return nil
-}
-
-// SetupOfflineRouting instantiates a routing system in offline mode. This is
-// primarily used for offline ipns modifications.
-func (n *IpfsNode) SetupOfflineRouting() error {
-	if n.Routing != nil {
-		// Routing was already set up
-		return nil
-	}
-
-	// TODO: move this somewhere else.
-	err := n.LoadPrivateKey()
-	if err != nil {
-		return err
-	}
-
-	n.Routing = offroute.NewOfflineRouter(n.Repo.Datastore(), n.RecordValidator)
-
-	size, err := n.getCacheSize()
-	if err != nil {
-		return err
-	}
-
-	n.Namesys = namesys.NewNameSystem(n.Routing, n.Repo.Datastore(), size)
-
 	return nil
 }
 

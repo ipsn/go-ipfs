@@ -10,8 +10,8 @@ import (
 	blake2b "github.com/minio/blake2b-simd"
 	sha256 "github.com/minio/sha256-simd"
 	murmur3 "github.com/spaolacci/murmur3"
-	blake2s "github.com/ipsn/go-ipfs/gxlibs/golang.org/x/crypto/blake2s"
-	sha3 "github.com/ipsn/go-ipfs/gxlibs/golang.org/x/crypto/sha3"
+	blake2s "golang.org/x/crypto/blake2s"
+	sha3 "golang.org/x/crypto/sha3"
 )
 
 // ErrSumNotSupported is returned when the Sum function code is not implemented

@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/rs/xhandler"
-	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/context"
+	"golang.org/x/net/context"
 )
 
 type key int

@@ -1,6 +1,6 @@
 // Package poly1305 implements Poly1305 one-time message authentication code
 // as specified in http://cr.yp.to/mac/poly1305-20050329.pdf. This package
-// provides a streaming interface, unlike "github.com/ipsn/go-ipfs/gxlibs/golang.org/x/crypto/poly1305".
+// provides a streaming interface, unlike "golang.org/x/crypto/poly1305".
 //
 // For readability, we do not gofmt this file.
 package poly1305

@@ -19,7 +19,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/ipsn/go-ipfs/gxlibs/gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v2"
 )
 
 // LoadTLSConfig parses the given YAML file into a tls.Config.

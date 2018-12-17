@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/sys/unix"
+	"golang.org/x/sys/unix"
 )
 
 type testFd [2]int

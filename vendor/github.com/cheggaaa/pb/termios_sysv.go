@@ -7,7 +7,7 @@
 
 package pb
 
-import "github.com/ipsn/go-ipfs/gxlibs/golang.org/x/sys/unix"
+import "golang.org/x/sys/unix"
 
 const ioctlReadTermios = unix.TCGETS
 const ioctlWriteTermios = unix.TCSETS

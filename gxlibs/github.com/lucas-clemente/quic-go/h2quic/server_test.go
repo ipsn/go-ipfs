@@ -13,8 +13,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/http2"
-	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/http2/hpack"
+	"golang.org/x/net/http2"
+	"golang.org/x/net/http2/hpack"
 
 	quic "github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/internal/protocol"

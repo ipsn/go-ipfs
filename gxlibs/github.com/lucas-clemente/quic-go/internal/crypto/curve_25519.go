@@ -4,7 +4,7 @@ import (
 	"crypto/rand"
 	"errors"
 
-	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/crypto/curve25519"
+	"golang.org/x/crypto/curve25519"
 )
 
 // KeyExchange manages the exchange of keys

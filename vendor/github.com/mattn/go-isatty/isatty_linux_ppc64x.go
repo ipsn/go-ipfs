@@ -6,7 +6,7 @@ package isatty
 import (
 	"unsafe"
 
-	syscall "github.com/ipsn/go-ipfs/gxlibs/golang.org/x/sys/unix"
+	syscall "golang.org/x/sys/unix"
 )
 
 const ioctlReadTermios = syscall.TCGETS

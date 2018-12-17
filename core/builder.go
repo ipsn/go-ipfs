@@ -10,16 +10,14 @@ import (
 	"time"
 
 	filestore "github.com/ipsn/go-ipfs/filestore"
+	namesys "github.com/ipsn/go-ipfs/namesys"
 	pin "github.com/ipsn/go-ipfs/pin"
 	repo "github.com/ipsn/go-ipfs/repo"
 	cidv0v1 "github.com/ipsn/go-ipfs/thirdparty/cidv0v1"
 	"github.com/ipsn/go-ipfs/thirdparty/verifbs"
-	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
-	resolver "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
-	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
-	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
+	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
 	libp2p "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p"
 	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
@@ -29,6 +27,10 @@ import (
 	cfg "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	pstoremem "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore/pstoremem"
+	resolver "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
+	offroute "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
 	metrics "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-metrics-interface"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	retry "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/retrystore"
@@ -176,8 +178,13 @@ func isTooManyFDError(err error) bool {
 }
 
 func setupNode(ctx context.Context, n *IpfsNode, cfg *BuildCfg) error {
-	// setup local peer ID (private key is loaded in online setup)
+	// setup local identity
 	if err := n.loadID(); err != nil {
+		return err
+	}
+
+	// load the private key (if present)
+	if err := n.loadPrivateKey(); err != nil {
 		return err
 	}
 
@@ -254,6 +261,8 @@ func setupNode(ctx context.Context, n *IpfsNode, cfg *BuildCfg) error {
 		}
 	} else {
 		n.Exchange = offline.Exchange(n.Blockstore)
+		n.Routing = offroute.NewOfflineRouter(n.Repo.Datastore(), n.RecordValidator)
+		n.Namesys = namesys.NewNameSystem(n.Routing, n.Repo.Datastore(), 0)
 	}
 
 	n.Blocks = bserv.New(n.Blockstore, n.Exchange)

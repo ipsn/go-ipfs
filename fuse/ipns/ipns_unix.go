@@ -19,8 +19,8 @@ import (
 
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	fuse "github.com/ipsn/go-ipfs/gxlibs/bazil.org/fuse"
-	fs "github.com/ipsn/go-ipfs/gxlibs/bazil.org/fuse/fs"
+	fuse "bazil.org/fuse"
+	fs "bazil.org/fuse/fs"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	mfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-mfs"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"

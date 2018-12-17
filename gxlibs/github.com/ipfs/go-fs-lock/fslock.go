@@ -10,7 +10,7 @@ import (
 
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
-	lock "github.com/ipsn/go-ipfs/gxlibs/go4.org/lock"
+	lock "go4.org/lock"
 )
 
 // log is the fsrepo logger

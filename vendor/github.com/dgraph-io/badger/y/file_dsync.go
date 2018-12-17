@@ -18,7 +18,7 @@
 
 package y
 
-import "github.com/ipsn/go-ipfs/gxlibs/golang.org/x/sys/unix"
+import "golang.org/x/sys/unix"
 
 func init() {
 	datasyncFileFlag = unix.O_DSYNC

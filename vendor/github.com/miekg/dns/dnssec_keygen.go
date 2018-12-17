@@ -9,7 +9,7 @@ import (
 	"crypto/rsa"
 	"math/big"
 
-	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/crypto/ed25519"
+	"golang.org/x/crypto/ed25519"
 )
 
 // Generate generates a DNSKEY of the given bit size.

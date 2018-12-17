@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/context"
+	"golang.org/x/net/context"
 )
 
 func TestAppendHandlerC(t *testing.T) {

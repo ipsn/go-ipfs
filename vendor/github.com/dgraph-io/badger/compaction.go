@@ -23,7 +23,7 @@ import (
 	"math"
 	"sync"
 
-	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/trace"
+	"golang.org/x/net/trace"
 
 	"github.com/dgraph-io/badger/table"
 	"github.com/dgraph-io/badger/y"

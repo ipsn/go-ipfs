@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	windows "github.com/ipsn/go-ipfs/gxlibs/golang.org/x/sys/windows"
+	windows "golang.org/x/sys/windows"
 )
 
 func IsHidden(f File) bool {

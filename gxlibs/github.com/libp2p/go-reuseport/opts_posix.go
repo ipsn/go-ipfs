@@ -7,7 +7,7 @@
 package reuseport
 
 import (
-	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/sys/unix"
+	"golang.org/x/sys/unix"
 	"os"
 )
 

@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/sys/windows/svc/eventlog"
+	"golang.org/x/sys/windows/svc/eventlog"
 
 	"github.com/sirupsen/logrus"
 )

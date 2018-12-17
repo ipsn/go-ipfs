@@ -25,7 +25,7 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/trace"
+	"golang.org/x/net/trace"
 
 	"github.com/dgraph-io/badger/options"
 	"github.com/dgraph-io/badger/protos"

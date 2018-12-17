@@ -15,7 +15,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/sys/unix"
+	"golang.org/x/sys/unix"
 )
 
 // Watcher watches a set of files, delivering events to a channel.

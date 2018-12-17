@@ -28,7 +28,7 @@ import (
 	"github.com/dgraph-io/badger/y"
 	humanize "github.com/dustin/go-humanize"
 	"github.com/stretchr/testify/require"
-	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/trace"
+	"golang.org/x/net/trace"
 )
 
 func TestValueBasic(t *testing.T) {

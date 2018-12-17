@@ -1,8 +1,8 @@
 package pnet
 
 import (
-	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/crypto/salsa20"
-	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/crypto/sha3"
+	"golang.org/x/crypto/salsa20"
+	"golang.org/x/crypto/sha3"
 )
 
 var zero64 = make([]byte, 64)

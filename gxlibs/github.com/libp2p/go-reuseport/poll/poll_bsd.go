@@ -4,7 +4,7 @@ package poll
 
 import (
 	"context"
-	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/sys/unix"
+	"golang.org/x/sys/unix"
 	"time"
 )
 

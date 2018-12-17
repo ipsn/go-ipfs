@@ -11,7 +11,7 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/sys/unix"
+	"golang.org/x/sys/unix"
 )
 
 var ErrPoolWasStarted = errors.New("Bar pool was started")
