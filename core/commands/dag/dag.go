@@ -9,9 +9,10 @@ import (
 	"github.com/ipsn/go-ipfs/core/coredag"
 	"github.com/ipsn/go-ipfs/pin"
 
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
@@ -92,15 +93,12 @@ into an object of the specified format.
 			defer nd.Blockstore.PinLock().Unlock()
 		}
 
-		for {
-			file, err := req.Files.NextFile()
-			if err == io.EOF {
-				// Finished the list of files.
-				break
-			} else if err != nil {
-				return err
+		it := req.Files.Entries()
+		for it.Next() {
+			file := files.FileFromEntry(it)
+			if file == nil {
+				return fmt.Errorf("expected a regular file")
 			}
-
 			nds, err := coredag.ParseInputs(ienc, format, file, mhType, -1)
 			if err != nil {
 				return err
@@ -121,6 +119,9 @@ into an object of the specified format.
 			if err := res.Emit(&OutputObject{Cid: cid}); err != nil {
 				return err
 			}
+		}
+		if it.Err() != nil {
+			return it.Err()
 		}
 
 		if err := b.Commit(); err != nil {

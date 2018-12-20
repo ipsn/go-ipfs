@@ -7,11 +7,13 @@ import (
 	"time"
 
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-interface-connmgr"
+	ifconnmgr "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-interface-connmgr"
 	inet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 )
+
+const silencePeriod = 10 * time.Second
 
 var log = logging.Logger("connmgr")
 
@@ -23,17 +25,16 @@ var log = logging.Logger("connmgr")
 //
 // See configuration parameters in NewConnManager.
 type BasicConnMgr struct {
-	highWater int
-	lowWater  int
-
+	lk          sync.Mutex
+	highWater   int
+	lowWater    int
+	connCount   int
 	gracePeriod time.Duration
+	peers       map[peer.ID]*peerInfo
 
-	peers     map[peer.ID]*peerInfo
-	connCount int
-
-	lk sync.Mutex
-
-	lastTrim time.Time
+	// channel-based semaphore that enforces only a single trim is in progress
+	trimRunningCh chan struct{}
+	lastTrim      time.Time
 }
 
 var _ ifconnmgr.ConnManager = (*BasicConnMgr)(nil)
@@ -46,10 +47,11 @@ var _ ifconnmgr.ConnManager = (*BasicConnMgr)(nil)
 //   subject to pruning.
 func NewConnManager(low, hi int, grace time.Duration) *BasicConnMgr {
 	return &BasicConnMgr{
-		highWater:   hi,
-		lowWater:    low,
-		gracePeriod: grace,
-		peers:       make(map[peer.ID]*peerInfo),
+		highWater:     hi,
+		lowWater:      low,
+		gracePeriod:   grace,
+		peers:         make(map[peer.ID]*peerInfo),
+		trimRunningCh: make(chan struct{}, 1),
 	}
 }
 
@@ -67,13 +69,27 @@ type peerInfo struct {
 // equal the low watermark. Peers are sorted in ascending order based on their total value,
 // pruning those peers with the lowest scores first, as long as they are not within their
 // grace period.
+//
+// TODO: error return value so we can cleanly signal we are aborting because:
+// (a) there's another trim in progress, or (b) the silence period is in effect.
 func (cm *BasicConnMgr) TrimOpenConns(ctx context.Context) {
+	select {
+	case cm.trimRunningCh <- struct{}{}:
+	default:
+		return
+	}
+	defer func() { <-cm.trimRunningCh }()
+	if time.Since(cm.lastTrim) < silencePeriod {
+		// skip this attempt to trim as the last one just took place.
+		return
+	}
 	defer log.EventBegin(ctx, "connCleanup").Done()
 	for _, c := range cm.getConnsToClose(ctx) {
 		log.Info("closing conn: ", c.RemotePeer())
 		log.Event(ctx, "closeConn", c.RemotePeer())
 		c.Close()
 	}
+	cm.lastTrim = time.Now()
 }
 
 // getConnsToClose runs the heuristics described in TrimOpenConns and returns the
@@ -87,8 +103,6 @@ func (cm *BasicConnMgr) getConnsToClose(ctx context.Context) []inet.Conn {
 		return nil
 	}
 	now := time.Now()
-	cm.lastTrim = now
-
 	if len(cm.peers) < cm.lowWater {
 		log.Info("open connection count below limit")
 		return nil
@@ -263,9 +277,7 @@ func (nn *cmNotifee) Connected(n inet.Network, c inet.Conn) {
 	cm.connCount++
 
 	if cm.connCount > nn.highWater {
-		if cm.lastTrim.IsZero() || time.Since(cm.lastTrim) > time.Second*10 {
-			go cm.TrimOpenConns(context.Background())
-		}
+		go cm.TrimOpenConns(context.Background())
 	}
 }
 

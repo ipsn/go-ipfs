@@ -9,6 +9,7 @@ import (
 	"github.com/ipsn/go-ipfs/core/commands/cmdenv"
 	"github.com/ipsn/go-ipfs/core/coreapi/interface"
 
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
@@ -33,7 +34,7 @@ var CatCmd = &cmds.Command{
 		cmdkit.Int64Option(lengthOptionName, "l", "Maximum number of bytes to read."),
 	},
 	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) error {
-		api, err := cmdenv.GetApi(env)
+		api, err := cmdenv.GetApi(env, req)
 		if err != nil {
 			return err
 		}
@@ -122,13 +123,14 @@ func cat(ctx context.Context, api iface.CoreAPI, paths []string, offset int64, m
 			return nil, 0, err
 		}
 
-		file, err := api.Unixfs().Get(ctx, fpath)
+		f, err := api.Unixfs().Get(ctx, fpath)
 		if err != nil {
 			return nil, 0, err
 		}
 
-		if file.IsDirectory() {
-			return nil, 0, iface.ErrIsDir
+		file, ok := f.(files.File)
+		if !ok {
+			return nil, 0, iface.ErrNotFile
 		}
 
 		fsize, err := file.Size()

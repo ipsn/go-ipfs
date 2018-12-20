@@ -10,21 +10,21 @@ import (
 	"sort"
 	"strings"
 
-	core "github.com/ipsn/go-ipfs/core"
-	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
-	iface "github.com/ipsn/go-ipfs/core/coreapi/interface"
+	"github.com/ipsn/go-ipfs/core"
+	"github.com/ipsn/go-ipfs/core/commands/cmdenv"
+	"github.com/ipsn/go-ipfs/core/coreapi/interface"
 
-	humanize "github.com/dustin/go-humanize"
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	"github.com/dustin/go-humanize"
 	bservice "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
-	mfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-mfs"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-mfs"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
-	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
-	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
 )
 
@@ -124,7 +124,7 @@ var filesStatCmd = &cmds.Command{
 			return err
 		}
 
-		api, err := cmdenv.GetApi(env)
+		api, err := cmdenv.GetApi(env, req)
 		if err != nil {
 			return err
 		}
@@ -308,7 +308,7 @@ var filesCpCmd = &cmds.Command{
 			return err
 		}
 
-		api, err := cmdenv.GetApi(env)
+		api, err := cmdenv.GetApi(env, req)
 		if err != nil {
 			return err
 		}
@@ -769,12 +769,11 @@ stat' on the file or any of its ancestors.
 			return err
 		}
 
-		input, err := req.Files.NextFile()
+		var r io.Reader
+		r, err = cmdenv.GetFileArg(req.Files.Entries())
 		if err != nil {
 			return err
 		}
-
-		var r io.Reader = input
 		if countfound {
 			r = io.LimitReader(r, int64(count))
 		}

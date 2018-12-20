@@ -17,6 +17,12 @@ ipfslocal: deps
 	gx-go uw
 CLEAN += build/localipfs.so
 
+p2pdlocal: deps
+	gx-go rw
+	(cd localp2pd/plugin; go build -buildmode=plugin -o ../../build/localp2pd.so)
+	gx-go uw
+CLEAN += build/localp2pd.so
+
 ipfsdocker: deps
 	gx-go rw
 	(cd docker/plugin; go build -buildmode=plugin -o ../../build/dockeripfs.so)
@@ -37,4 +43,4 @@ install: deps
 clean:
 	rm ${CLEAN}
 
-.PHONY: all clean ipfslocal ipfsdocker ipfsbrowser
+.PHONY: all clean ipfslocal p2pdlocal ipfsdocker ipfsbrowser

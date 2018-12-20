@@ -10,6 +10,7 @@ import (
 	browser "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/iptb-plugins/browser"
 	docker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/iptb-plugins/docker"
 	local "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/iptb-plugins/local"
+	localp2pd "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/iptb-plugins/localp2pd"
 )
 
 func init() {
@@ -19,6 +20,19 @@ func init() {
 		GetAttrList: local.GetAttrList,
 		GetAttrDesc: local.GetAttrDesc,
 		PluginName:  local.PluginName,
+		BuiltIn:     true,
+	}, false)
+
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = testbed.RegisterPlugin(testbed.IptbPlugin{
+		From:        "<builtin>",
+		NewNode:     localp2pd.NewNode,
+		GetAttrList: localp2pd.GetAttrList,
+		GetAttrDesc: localp2pd.GetAttrDesc,
+		PluginName:  localp2pd.PluginName,
 		BuiltIn:     true,
 	}, false)
 

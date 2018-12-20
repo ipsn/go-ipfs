@@ -6,13 +6,12 @@ import (
 	"os"
 	"strings"
 
-	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
+	"github.com/ipsn/go-ipfs/core/commands/cmdenv"
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
-	options "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
+	"github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	pb "github.com/cheggaaa/pb"
-	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
 )
@@ -140,7 +139,7 @@ You can now check what blocks have been created by:
 		return nil
 	},
 	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) error {
-		api, err := cmdenv.GetApi(env)
+		api, err := cmdenv.GetApi(env, req)
 		if err != nil {
 			return err
 		}
@@ -161,7 +160,6 @@ You can now check what blocks have been created by:
 		inline, _ := req.Options[inlineOptionName].(bool)
 		inlineLimit, _ := req.Options[inlineLimitOptionName].(int)
 		pathName, _ := req.Options[stdinPathName].(string)
-		local, _ := req.Options["local"].(bool)
 
 		hashFunCode, ok := mh.Names[strings.ToLower(hashFunStr)]
 		if !ok {
@@ -180,7 +178,6 @@ You can now check what blocks have been created by:
 
 			options.Unixfs.Pin(dopin),
 			options.Unixfs.HashOnly(hash),
-			options.Unixfs.Local(local),
 			options.Unixfs.FsCache(fscache),
 			options.Unixfs.Nocopy(nocopy),
 
@@ -226,24 +223,17 @@ You can now check what blocks have been created by:
 			outChan := make(chan interface{})
 			req := res.Request()
 
-			sizeFile, ok := req.Files.(files.SizeFile)
-			if ok {
-				// Could be slow.
-				go func() {
-					size, err := sizeFile.Size()
-					if err != nil {
-						log.Warningf("error getting files size: %s", err)
-						// see comment above
-						return
-					}
+			// Could be slow.
+			go func() {
+				size, err := req.Files.Size()
+				if err != nil {
+					log.Warningf("error getting files size: %s", err)
+					// see comment above
+					return
+				}
 
-					sizeChan <- size
-				}()
-			} else {
-				// we don't need to error, the progress bar just
-				// won't know how big the files are
-				log.Warning("cannot determine size of input file")
-			}
+				sizeChan <- size
+			}()
 
 			progressBar := func(wait chan struct{}) {
 				defer close(wait)

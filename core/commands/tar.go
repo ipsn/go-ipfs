@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"io"
 
-	core "github.com/ipsn/go-ipfs/core"
-	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
+	"github.com/ipsn/go-ipfs/core"
+	"github.com/ipsn/go-ipfs/core/commands/cmdenv"
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
 	tar "github.com/ipsn/go-ipfs/tar"
 
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
-	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
 var TarCmd = &cmds.Command{
@@ -44,21 +44,21 @@ represent it.
 			return err
 		}
 
-		fi, err := req.Files.NextFile()
+		it := req.Files.Entries()
+		file, err := cmdenv.GetFileArg(it)
 		if err != nil {
 			return err
 		}
 
-		node, err := tar.ImportTar(req.Context, fi, nd.DAG)
+		node, err := tar.ImportTar(req.Context, file, nd.DAG)
 		if err != nil {
 			return err
 		}
 
 		c := node.Cid()
 
-		fi.FileName()
 		return cmds.EmitOnce(res, &coreiface.AddEvent{
-			Name: fi.FileName(),
+			Name: it.Name(),
 			Hash: c.String(),
 		})
 	},

@@ -13,12 +13,17 @@ import (
 
 type tconn struct {
 	inet.Conn
-	peer   peer.ID
-	closed bool
+
+	peer             peer.ID
+	closed           bool
+	disconnectNotify func(net inet.Network, conn inet.Conn)
 }
 
 func (c *tconn) Close() error {
 	c.closed = true
+	if c.disconnectNotify != nil {
+		c.disconnectNotify(nil, c)
+	}
 	return nil
 }
 
@@ -34,9 +39,9 @@ func (c *tconn) RemoteMultiaddr() ma.Multiaddr {
 	return addr
 }
 
-func randConn(t *testing.T) inet.Conn {
+func randConn(t *testing.T, discNotify func(inet.Network, inet.Conn)) inet.Conn {
 	pid := tu.RandPeerIDFatal(t)
-	return &tconn{peer: pid}
+	return &tconn{peer: pid, disconnectNotify: discNotify}
 }
 
 func TestConnTrimming(t *testing.T) {
@@ -45,7 +50,7 @@ func TestConnTrimming(t *testing.T) {
 
 	var conns []inet.Conn
 	for i := 0; i < 300; i++ {
-		rc := randConn(t)
+		rc := randConn(t, nil)
 		conns = append(conns, rc)
 		not.Connected(nil, rc)
 	}
@@ -98,7 +103,7 @@ func TestConnsToClose(t *testing.T) {
 	cm = NewConnManager(1, 1, time.Duration(10*time.Minute))
 	not := cm.Notifee()
 	for i := 0; i < 5; i++ {
-		conn := randConn(t)
+		conn := randConn(t, nil)
 		not.Connected(nil, conn)
 	}
 	conns = cm.getConnsToClose(context.Background())
@@ -111,7 +116,7 @@ func TestGetTagInfo(t *testing.T) {
 	start := time.Now()
 	cm := NewConnManager(1, 1, time.Duration(10*time.Minute))
 	not := cm.Notifee()
-	conn := randConn(t)
+	conn := randConn(t, nil)
 	not.Connected(nil, conn)
 	end := time.Now()
 
@@ -192,7 +197,7 @@ func TestTagPeerNonExistant(t *testing.T) {
 func TestUntagPeer(t *testing.T) {
 	cm := NewConnManager(1, 1, time.Duration(10*time.Minute))
 	not := cm.Notifee()
-	conn := randConn(t)
+	conn := randConn(t, nil)
 	not.Connected(nil, conn)
 	rp := conn.RemotePeer()
 	cm.TagPeer(rp, "tag", 5)
@@ -223,7 +228,7 @@ func TestGetInfo(t *testing.T) {
 	gp := time.Duration(10 * time.Minute)
 	cm := NewConnManager(1, 5, gp)
 	not := cm.Notifee()
-	conn := randConn(t)
+	conn := randConn(t, nil)
 	not.Connected(nil, conn)
 	cm.TrimOpenConns(context.Background())
 	end := time.Now()
@@ -250,7 +255,7 @@ func TestDoubleConnection(t *testing.T) {
 	gp := time.Duration(10 * time.Minute)
 	cm := NewConnManager(1, 5, gp)
 	not := cm.Notifee()
-	conn := randConn(t)
+	conn := randConn(t, nil)
 	not.Connected(nil, conn)
 	cm.TagPeer(conn.RemotePeer(), "foo", 10)
 	not.Connected(nil, conn)
@@ -266,11 +271,11 @@ func TestDisconnected(t *testing.T) {
 	gp := time.Duration(10 * time.Minute)
 	cm := NewConnManager(1, 5, gp)
 	not := cm.Notifee()
-	conn := randConn(t)
+	conn := randConn(t, nil)
 	not.Connected(nil, conn)
 	cm.TagPeer(conn.RemotePeer(), "foo", 10)
 
-	not.Disconnected(nil, randConn(t))
+	not.Disconnected(nil, randConn(t, nil))
 	if cm.connCount != 1 {
 		t.Fatal("unexpected number of connections")
 	}
@@ -292,5 +297,37 @@ func TestDisconnected(t *testing.T) {
 	}
 	if len(cm.peers) != 0 {
 		t.Fatal("unexpected number of peers")
+	}
+}
+
+// see https://github.com/libp2p/go-libp2p-connmgr/issues/23
+func TestQuickBurstRespectsSilencePeriod(t *testing.T) {
+	cm := NewConnManager(10, 20, 0)
+	not := cm.Notifee()
+
+	var conns []inet.Conn
+
+	// quickly produce 30 connections (sending us above the high watermark)
+	for i := 0; i < 30; i++ {
+		rc := randConn(t, not.Disconnected)
+		conns = append(conns, rc)
+		not.Connected(nil, rc)
+	}
+
+	// wait for a few seconds
+	time.Sleep(time.Second * 3)
+
+	// only the first trim is allowed in; make sure we close at most 20 connections, not all of them.
+	var closed int
+	for _, c := range conns {
+		if c.(*tconn).closed {
+			closed++
+		}
+	}
+	if closed > 20 {
+		t.Fatalf("should have closed at most 20 connections, closed: %d", closed)
+	}
+	if total := closed + cm.connCount; total != 30 {
+		t.Fatalf("expected closed connections + open conn count to equal 30, value: %d", total)
 	}
 }
