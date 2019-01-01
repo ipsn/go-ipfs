@@ -21,18 +21,6 @@
 			"revisionTime": "2018-08-30T15:03:46Z"
 		},
 		{
-			"checksumSHA1": "Qw/xVnd5ry32U0mZOiCj+o2GZa8=",
-			"path": "github.com/hashicorp/golang-lru",
-			"revision": "20f1fb78b0740ba8c3cb143a61e86ba5c8669768",
-			"revisionTime": "2018-08-30T03:29:55Z"
-		},
-		{
-			"checksumSHA1": "Qf2I7riZlexFkNuUM0v165VZ/iU=",
-			"path": "github.com/hashicorp/golang-lru/simplelru",
-			"revision": "20f1fb78b0740ba8c3cb143a61e86ba5c8669768",
-			"revisionTime": "2018-08-30T03:29:55Z"
-		},
-		{
 			"checksumSHA1": "ITlVkWmRdYmxG1xsYBy0D8+nC0Q=",
 			"path": "github.com/lucas-clemente/aes12",
 			"revision": "cd47fb39b79f867c6e4e5cd39cf7abd799f71670",
@@ -43,6 +31,12 @@
 			"path": "github.com/lucas-clemente/quic-go-certificates",
 			"revision": "d2f86524cced5186554df90d92529757d22c1cb6",
 			"revisionTime": "2016-08-23T09:51:56Z"
+		},
+		{
+			"checksumSHA1": "Tn+LgLsuYTzoCnQPai6TdiPw4ZQ=",
+			"path": "golang.org/x/crypto/curve25519",
+			"revision": "505ab145d0a99da450461ae2c1a9f6cd10d1f447",
+			"revisionTime": "2018-09-26T22:07:39Z"
 		},
 		{
 			"checksumSHA1": "GyJO23KIK26BOFakPDOno2A6+iM=",
