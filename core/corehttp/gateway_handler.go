@@ -7,7 +7,6 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"os"
 	gopath "path"
 	"runtime/debug"
 	"strings"
@@ -26,7 +25,6 @@ import (
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
 	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer"
-	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multibase"
@@ -254,24 +252,16 @@ func (i *gatewayHandler) getOrHeadHandler(ctx context.Context, w http.ResponseWr
 		}
 		i.serveFile(w, r, name, modtime, f)
 		return
-
 	}
-
-	nd, err := i.api.ResolveNode(ctx, resolvedPath)
-	if err != nil {
-		internalWebError(w, err)
+	dir, ok := dr.(files.Directory)
+	if !ok {
+		internalWebError(w, fmt.Errorf("unsupported file type"))
 		return
 	}
 
-	dirr, err := uio.NewDirectoryFromNode(i.node.DAG, nd)
-	if err != nil {
-		internalWebError(w, err)
-		return
-	}
-
-	ixnd, err := dirr.Find(ctx, "index.html")
-	switch {
-	case err == nil:
+	idx, err := i.api.Unixfs().Get(ctx, coreiface.Join(resolvedPath, "index.html"))
+	switch err.(type) {
+	case nil:
 		dirwithoutslash := urlPath[len(urlPath)-1] != '/'
 		goget := r.URL.Query().Get("go-get") == "1"
 		if dirwithoutslash && !goget {
@@ -280,14 +270,7 @@ func (i *gatewayHandler) getOrHeadHandler(ctx context.Context, w http.ResponseWr
 			return
 		}
 
-		dr, err := i.api.Unixfs().Get(ctx, coreiface.IpfsPath(ixnd.Cid()))
-		if err != nil {
-			internalWebError(w, err)
-			return
-		}
-		defer dr.Close()
-
-		f, ok := dr.(files.File)
+		f, ok := idx.(files.File)
 		if !ok {
 			internalWebError(w, files.ErrNotReader)
 			return
@@ -296,10 +279,11 @@ func (i *gatewayHandler) getOrHeadHandler(ctx context.Context, w http.ResponseWr
 		// write to request
 		http.ServeContent(w, r, "index.html", modtime, f)
 		return
+	case resolver.ErrNoLink:
+		// no index.html; noop
 	default:
 		internalWebError(w, err)
 		return
-	case os.IsNotExist(err):
 	}
 
 	if r.Method == "HEAD" {
@@ -308,12 +292,22 @@ func (i *gatewayHandler) getOrHeadHandler(ctx context.Context, w http.ResponseWr
 
 	// storage for directory listing
 	var dirListing []directoryItem
-	dirr.ForEachLink(ctx, func(link *ipld.Link) error {
+	dirit := dir.Entries()
+	for dirit.Next() {
 		// See comment above where originalUrlPath is declared.
-		di := directoryItem{humanize.Bytes(link.Size), link.Name, gopath.Join(originalUrlPath, link.Name)}
+		s, err := dirit.Node().Size()
+		if err != nil {
+			internalWebError(w, err)
+			return
+		}
+
+		di := directoryItem{humanize.Bytes(uint64(s)), dirit.Name(), gopath.Join(originalUrlPath, dirit.Name())}
 		dirListing = append(dirListing, di)
-		return nil
-	})
+	}
+	if dirit.Err() != nil {
+		internalWebError(w, dirit.Err())
+		return
+	}
 
 	// construct the correct back link
 	// https://github.com/ipfs/go-ipfs/issues/1365

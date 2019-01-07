@@ -1,9 +1,8 @@
 package iface
 
 import (
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipfspath "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
-
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 )
 
 //TODO: merge with ipfspath so we don't depend on it
@@ -104,6 +103,12 @@ type resolvedPath struct {
 	cid       cid.Cid
 	root      cid.Cid
 	remainder string
+}
+
+// Join appends provided segments to the base path
+func Join(base Path, a ...string) Path {
+	s := ipfspath.Join(append([]string{base.String()}, a...))
+	return &path{path: ipfspath.FromString(s)}
 }
 
 // IpfsPath creates new /ipfs path from the provided CID

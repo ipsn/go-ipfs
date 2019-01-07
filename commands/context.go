@@ -9,10 +9,11 @@ import (
 	core "github.com/ipsn/go-ipfs/core"
 	coreapi "github.com/ipsn/go-ipfs/core/coreapi"
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
+	options "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 	loader "github.com/ipsn/go-ipfs/plugin/loader"
 
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 )
 
@@ -29,6 +30,7 @@ type Context struct {
 	config     *config.Config
 	LoadConfig func(path string) (*config.Config, error)
 
+	Gateway       bool
 	api           coreiface.CoreAPI
 	node          *core.IpfsNode
 	ConstructNode func() (*core.IpfsNode, error)
@@ -68,7 +70,16 @@ func (c *Context) GetAPI() (coreiface.CoreAPI, error) {
 		if err != nil {
 			return nil, err
 		}
-		c.api, err = coreapi.NewCoreAPI(n)
+		fetchBlocks := true
+		if c.Gateway {
+			cfg, err := c.GetConfig()
+			if err != nil {
+				return nil, err
+			}
+			fetchBlocks = !cfg.Gateway.NoFetch
+		}
+
+		c.api, err = coreapi.NewCoreAPI(n, options.Api.FetchBlocks(fetchBlocks))
 		if err != nil {
 			return nil, err
 		}

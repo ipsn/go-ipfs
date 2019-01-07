@@ -8,6 +8,7 @@ import (
 	version "github.com/ipsn/go-ipfs"
 	core "github.com/ipsn/go-ipfs/core"
 	coreapi "github.com/ipsn/go-ipfs/core/coreapi"
+	options "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 
 	id "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/protocol/identify"
 )
@@ -25,7 +26,7 @@ func GatewayOption(writable bool, paths ...string) ServeOption {
 			return nil, err
 		}
 
-		api, err := coreapi.NewCoreAPI(n)
+		api, err := coreapi.NewCoreAPI(n, options.Api.FetchBlocks(!cfg.Gateway.NoFetch))
 		if err != nil {
 			return nil, err
 		}

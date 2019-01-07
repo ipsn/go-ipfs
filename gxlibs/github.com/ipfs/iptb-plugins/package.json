@@ -39,9 +39,9 @@
     },
     {
       "author": "magik6k",
-      "hash": "QmcZfkbgwwwH5ZLTQRHkSQBDiDqd3skY2eU6MZRgWuXcse",
+      "hash": "QmRd5T3VmYoX6jaNoZovFRQcwWHJqHgTVQTs1Qz92ELJ7C",
       "name": "go-ipfs-config",
-      "version": "0.2.22"
+      "version": "0.2.23"
     },
     {
       "author": "whyrusleeping",
@@ -67,6 +67,6 @@
   "license": "",
   "name": "iptb-plugins",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "1.0.8"
+  "version": "1.0.9"
 }
 
