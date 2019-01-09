@@ -5,10 +5,18 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/ipsn/go-ipfs/core/coreapi/interface"
 	opt "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 )
 
 func (tp *provider) TestKey(t *testing.T) {
+	tp.hasApi(t, func(api iface.CoreAPI) error {
+		if api.Key() == nil {
+			return apiNotImplemented
+		}
+		return nil
+	})
+
 	t.Run("TestListSelf", tp.TestListSelf)
 	t.Run("TestRenameSelf", tp.TestRenameSelf)
 	t.Run("TestRemoveSelf", tp.TestRemoveSelf)
