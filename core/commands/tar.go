@@ -9,8 +9,8 @@ import (
 	tar "github.com/ipsn/go-ipfs/tar"
 
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 

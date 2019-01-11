@@ -18,8 +18,8 @@ import (
 	mfsr "github.com/ipsn/go-ipfs/repo/fsrepo/migrations"
 	dir "github.com/ipsn/go-ipfs/thirdparty/dir"
 
-	util "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
+	util "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	serialize "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config/serialize"
 	lockfile "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-fs-lock"

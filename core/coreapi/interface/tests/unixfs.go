@@ -15,11 +15,11 @@ import (
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
 	"github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	cbor "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-cbor"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	mdag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
 )
 

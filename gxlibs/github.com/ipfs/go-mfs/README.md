@@ -33,6 +33,26 @@ import "github.com/ipfs/go-mfs"
 
 Check the [GoDoc documentation](https://godoc.org/github.com/ipfs/go-mfs)
 
+## Documentation
+
+Documentation around the MFS and the Files API in general around IPFS is a work in progress the following links may be of use:
+
+* [UnixFS](https://docs.ipfs.io/guides/concepts/unixfs/)
+* [MFS](https://docs.ipfs.io/guides/concepts/mfs/)
+* [General concept document about how are files handled in IPFS (WIP)](https://github.com/ipfs/docs/issues/133)
+
+## Repository Structure
+This repository contains many files, all belonging to the root `mfs` package.
+
+* `file.go`: MFS `File`.
+* `dir.go`: MFS `Directory`.
+* `fd.go`: `FileDescriptor` used to operate on `File`s.
+* `ops.go`: Functions that do not belong to either `File` nor `Directory` (although they mostly operate on them) that contain common operations to the MFS, e.g., find, move, add a file, make a directory.
+* `root.go`: MFS `Root` (a `Directory` with republishing support).
+* `repub.go`: `Republisher`.
+* `mfs_test.go`: General tests (needs a [revision](https://github.com/ipfs/go-mfs/issues/9)).
+* `repub_test.go`: Republisher-specific tests (contains only the `TestRepublisher` function).
+
 ## Contribute
 
 PRs accepted.

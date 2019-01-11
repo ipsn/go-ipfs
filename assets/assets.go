@@ -11,8 +11,8 @@ import (
 
 	"github.com/ipsn/go-ipfs/core"
 	"github.com/ipsn/go-ipfs/core/coreunix"
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 
 	// this import keeps gx from thinking the dep isn't used
 	_ "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/dir-index-html"

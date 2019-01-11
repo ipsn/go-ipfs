@@ -15,9 +15,9 @@
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmRKLtwMw131aK7ugC3G7ybpumMz78YrJe5dzneyindvG1",
+      "hash": "QmNTCey11oxhb1AxDnQBRHtdhap6Ctud872NjAYPYYXPuc",
       "name": "go-multiaddr",
-      "version": "1.3.6"
+      "version": "1.4.0"
     },
     {
       "author": "whyrusleeping",
@@ -33,15 +33,15 @@
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmPtFaR7BWHLAjSwLh9kXcyrgTzDpuhcWLkx8ioa9RMYnx",
+      "hash": "QmNgLg1NTw37iWbYPKcyK85YJ9Whs1MkPtJwhfqbNYAyKg",
       "name": "go-libp2p-net",
-      "version": "3.0.21"
+      "version": "3.0.22"
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmZ9zH2FnLcxv1xyzFeUpDUeo55xEhZQHgveZijcxr7TLj",
+      "hash": "QmPiemjiKBC9VA7vZF82m4x1oygtg2c2YVqag8PX7dN1BD",
       "name": "go-libp2p-peerstore",
-      "version": "2.0.12"
+      "version": "2.0.13"
     },
     {
       "author": "whyrusleeping",
@@ -51,9 +51,9 @@
     },
     {
       "author": "why",
-      "hash": "QmRkzmq686MdtAVHZLncm3sXCzyFzBq4eLxk2rch2r788f",
+      "hash": "QmSFo2QrMF4M1mKdB291ZqNtsie4NfwXCRdWgDU3inw4Ff",
       "name": "go-libp2p-interface-connmgr",
-      "version": "0.0.26"
+      "version": "0.0.27"
     }
   ],
   "gxVersion": "0.9.1",
@@ -61,6 +61,6 @@
   "license": "",
   "name": "go-libp2p-host",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "3.0.20"
+  "version": "3.0.21"
 }
 

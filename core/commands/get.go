@@ -13,12 +13,12 @@ import (
 	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 
-	tar "github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/tar-utils"
-	"github.com/cheggaaa/pb"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	uarchive "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/archive"
+	tar "github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/tar-utils"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	"github.com/cheggaaa/pb"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 

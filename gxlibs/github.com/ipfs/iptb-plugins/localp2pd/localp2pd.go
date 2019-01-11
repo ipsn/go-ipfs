@@ -378,7 +378,15 @@ func (l *LocalP2pd) Connect(ctx context.Context, n testbedi.Core) error {
 }
 
 func (l *LocalP2pd) newClient() (*client.Client, error) {
-	client, err := client.NewClient(l.sockPath(), filepath.Join(l.dir, "p2pclient.sock"))
+	ctrlAddr, err := ma.NewComponent("unix", l.sockPath())
+	if err != nil {
+		return nil, err
+	}
+	daemonAddr, err := ma.NewComponent("unix", filepath.Join(l.dir, "p2pclient.sock"))
+	if err != nil {
+		return nil, err
+	}
+	client, err := client.NewClient(ctrlAddr, daemonAddr)
 	if err != nil {
 		return nil, err
 	}

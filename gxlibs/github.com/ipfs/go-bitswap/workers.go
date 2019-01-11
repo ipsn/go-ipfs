@@ -6,8 +6,8 @@ import (
 	"sync"
 	"time"
 
+	engine "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/decision"
 	bsmsg "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/message"
-
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	process "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
@@ -74,7 +74,7 @@ func (bs *Bitswap) taskWorker(ctx context.Context, id int) {
 				}
 				bs.engine.MessageSent(envelope.Peer, outgoing)
 
-				bs.wm.SendBlocks(ctx, envelope)
+				bs.sendBlocks(ctx, envelope)
 				bs.counterLk.Lock()
 				for _, block := range envelope.Message.Blocks() {
 					bs.counters.blocksSent++
@@ -87,6 +87,26 @@ func (bs *Bitswap) taskWorker(ctx context.Context, id int) {
 		case <-ctx.Done():
 			return
 		}
+	}
+}
+
+func (bs *Bitswap) sendBlocks(ctx context.Context, env *engine.Envelope) {
+	// Blocks need to be sent synchronously to maintain proper backpressure
+	// throughout the network stack
+	defer env.Sent()
+
+	msgSize := 0
+	msg := bsmsg.New(false)
+	for _, block := range env.Message.Blocks() {
+		msgSize += len(block.RawData())
+		msg.AddBlock(block)
+		log.Infof("Sending block %s to %s", block, env.Peer)
+	}
+
+	bs.sentHistogram.Observe(float64(msgSize))
+	err := bs.network.SendMessage(ctx, env.Peer, msg)
+	if err != nil {
+		log.Infof("sendblock error: %s", err)
 	}
 }
 
@@ -185,7 +205,7 @@ func (bs *Bitswap) rebroadcastWorker(parent context.Context) {
 		case <-tick.C:
 			n := bs.wm.WantCount()
 			if n > 0 {
-				log.Debug(n, " keys in bitswap wantlist")
+				log.Debugf("%d keys in bitswap wantlist", n)
 			}
 		case <-broadcastSignal.C: // resend unfulfilled wantlist keys
 			log.Event(ctx, "Bitswap.Rebroadcast.active")
@@ -239,7 +259,7 @@ func (bs *Bitswap) providerQueryManager(ctx context.Context) {
 						defer wg.Done()
 						err := bs.network.ConnectTo(child, p)
 						if err != nil {
-							log.Debug("failed to connect to provider %s: %s", p, err)
+							log.Debugf("failed to connect to provider %s: %s", p, err)
 						}
 					}(p)
 				}

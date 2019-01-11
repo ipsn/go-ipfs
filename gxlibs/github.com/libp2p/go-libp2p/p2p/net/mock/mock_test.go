@@ -487,7 +487,7 @@ func TestAdding(t *testing.T) {
 }
 
 func TestRateLimiting(t *testing.T) {
-	rl := NewRatelimiter(10)
+	rl := NewRateLimiter(10)
 
 	if !within(rl.Limit(10), time.Duration(float32(time.Second)), time.Millisecond/10) {
 		t.Fail()

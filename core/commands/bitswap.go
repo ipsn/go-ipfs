@@ -8,9 +8,9 @@ import (
 	e "github.com/ipsn/go-ipfs/core/commands/e"
 
 	humanize "github.com/dustin/go-humanize"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	bitswap "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap"
 	decision "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/decision"
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	cidutil "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cidutil"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"

@@ -21,44 +21,48 @@ var ErrNotYetImplemented = errors.New("not yet implemented")
 var ErrInvalidChild = errors.New("invalid child node")
 var ErrDirExists = errors.New("directory already has entry by that name")
 
+// TODO: There's too much functionality associated with this structure,
+// let's organize it (and if possible extract part of it elsewhere)
+// and document the main features of `Directory` here.
 type Directory struct {
-	dserv  ipld.DAGService
-	parent childCloser
+	inode
 
-	childDirs map[string]*Directory
-	files     map[string]*File
+	// Internal cache with added entries to the directory, its cotents
+	// are synched with the underlying `unixfsDir` node in `sync()`.
+	entriesCache map[string]FSNode
 
 	lock sync.Mutex
-	ctx  context.Context
+	// TODO: What content is being protected here exactly? The entire directory?
+
+	ctx context.Context
 
 	// UnixFS directory implementation used for creating,
 	// reading and editing directories.
 	unixfsDir uio.Directory
 
 	modTime time.Time
-
-	name string
 }
 
 // NewDirectory constructs a new MFS directory.
 //
 // You probably don't want to call this directly. Instead, construct a new root
 // using NewRoot.
-func NewDirectory(ctx context.Context, name string, node ipld.Node, parent childCloser, dserv ipld.DAGService) (*Directory, error) {
+func NewDirectory(ctx context.Context, name string, node ipld.Node, parent parent, dserv ipld.DAGService) (*Directory, error) {
 	db, err := uio.NewDirectoryFromNode(dserv, node)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Directory{
-		dserv:     dserv,
-		ctx:       ctx,
-		name:      name,
-		unixfsDir: db,
-		parent:    parent,
-		childDirs: make(map[string]*Directory),
-		files:     make(map[string]*File),
-		modTime:   time.Now(),
+		inode: inode{
+			name:       name,
+			parent:     parent,
+			dagService: dserv,
+		},
+		ctx:          ctx,
+		unixfsDir:    db,
+		entriesCache: make(map[string]FSNode),
+		modTime:      time.Now(),
 	}, nil
 }
 
@@ -72,43 +76,38 @@ func (d *Directory) SetCidBuilder(b cid.Builder) {
 	d.unixfsDir.SetCidBuilder(b)
 }
 
-// closeChild updates the child by the given name to the dag node 'nd'
-// and changes its own dag node
-func (d *Directory) closeChild(name string, nd ipld.Node, sync bool) error {
-	mynd, err := d.closeChildUpdate(name, nd, sync)
+// This method implements the `parent` interface. It first does the local
+// update of the child entry in the underlying UnixFS directory and saves
+// the newly created directory node with the updated entry in the DAG
+// service. Then it propagates the update upwards (through this same
+// interface) repeating the whole process in the parent.
+func (d *Directory) updateChildEntry(c child) error {
+	newDirNode, err := d.localUpdate(c)
 	if err != nil {
 		return err
 	}
 
-	if sync {
-		return d.parent.closeChild(d.name, mynd, true)
-	}
-	return nil
+	// Continue to propagate the update process upwards
+	// (all the way up to the root).
+	return d.parent.updateChildEntry(child{d.name, newDirNode})
 }
 
-// closeChildUpdate is the portion of closeChild that needs to be locked around
-func (d *Directory) closeChildUpdate(name string, nd ipld.Node, sync bool) (*dag.ProtoNode, error) {
+// This method implements the part of `updateChildEntry` that needs
+// to be locked around: in charge of updating the UnixFS layer and
+// generating the new node reflecting the update. It also stores the
+// new node in the DAG layer.
+func (d *Directory) localUpdate(c child) (*dag.ProtoNode, error) {
 	d.lock.Lock()
 	defer d.lock.Unlock()
 
-	err := d.updateChild(name, nd)
+	err := d.updateChild(c)
 	if err != nil {
 		return nil, err
 	}
+	// TODO: Clearly define how are we propagating changes to lower layers
+	// like UnixFS.
 
-	if sync {
-		return d.flushCurrentNode()
-	}
-	return nil, nil
-}
-
-func (d *Directory) flushCurrentNode() (*dag.ProtoNode, error) {
 	nd, err := d.unixfsDir.GetNode()
-	if err != nil {
-		return nil, err
-	}
-
-	err = d.dserv.Add(d.ctx, nd)
 	if err != nil {
 		return nil, err
 	}
@@ -118,11 +117,18 @@ func (d *Directory) flushCurrentNode() (*dag.ProtoNode, error) {
 		return nil, dag.ErrNotProtobuf
 	}
 
+	err = d.dagService.Add(d.ctx, nd)
+	if err != nil {
+		return nil, err
+	}
+
 	return pbnd.Copy().(*dag.ProtoNode), nil
+	// TODO: Why do we need a copy?
 }
 
-func (d *Directory) updateChild(name string, nd ipld.Node) error {
-	err := d.AddUnixFSChild(name, nd)
+// Update child entry in the underlying UnixFS directory.
+func (d *Directory) updateChild(c child) error {
+	err := d.addUnixFSChild(c)
 	if err != nil {
 		return err
 	}
@@ -158,19 +164,19 @@ func (d *Directory) cacheNode(name string, nd ipld.Node) (FSNode, error) {
 
 		switch fsn.Type() {
 		case ft.TDirectory, ft.THAMTShard:
-			ndir, err := NewDirectory(d.ctx, name, nd, d, d.dserv)
+			ndir, err := NewDirectory(d.ctx, name, nd, d, d.dagService)
 			if err != nil {
 				return nil, err
 			}
 
-			d.childDirs[name] = ndir
+			d.entriesCache[name] = ndir
 			return ndir, nil
 		case ft.TFile, ft.TRaw, ft.TSymlink:
-			nfi, err := NewFile(name, nd, d, d.dserv)
+			nfi, err := NewFile(name, nd, d, d.dagService)
 			if err != nil {
 				return nil, err
 			}
-			d.files[name] = nfi
+			d.entriesCache[name] = nfi
 			return nfi, nil
 		case ft.TMetadata:
 			return nil, ErrNotYetImplemented
@@ -178,11 +184,11 @@ func (d *Directory) cacheNode(name string, nd ipld.Node) (FSNode, error) {
 			return nil, ErrInvalidChild
 		}
 	case *dag.RawNode:
-		nfi, err := NewFile(name, nd, d, d.dserv)
+		nfi, err := NewFile(name, nd, d, d.dagService)
 		if err != nil {
 			return nil, err
 		}
-		d.files[name] = nfi
+		d.entriesCache[name] = nfi
 		return nfi, nil
 	default:
 		return nil, fmt.Errorf("unrecognized node type in cache node")
@@ -199,8 +205,7 @@ func (d *Directory) Child(name string) (FSNode, error) {
 func (d *Directory) Uncache(name string) {
 	d.lock.Lock()
 	defer d.lock.Unlock()
-	delete(d.files, name)
-	delete(d.childDirs, name)
+	delete(d.entriesCache, name)
 }
 
 // childFromDag searches through this directories dag node for a child link
@@ -212,14 +217,9 @@ func (d *Directory) childFromDag(name string) (ipld.Node, error) {
 // childUnsync returns the child under this directory by the given name
 // without locking, useful for operations which already hold a lock
 func (d *Directory) childUnsync(name string) (FSNode, error) {
-	cdir, ok := d.childDirs[name]
+	entry, ok := d.entriesCache[name]
 	if ok {
-		return cdir, nil
-	}
-
-	cfile, ok := d.files[name]
-	if ok {
-		return cfile, nil
+		return entry, nil
 	}
 
 	return d.childNode(name)
@@ -308,22 +308,22 @@ func (d *Directory) Mkdir(name string) (*Directory, error) {
 	ndir := ft.EmptyDirNode()
 	ndir.SetCidBuilder(d.GetCidBuilder())
 
-	err = d.dserv.Add(d.ctx, ndir)
+	err = d.dagService.Add(d.ctx, ndir)
 	if err != nil {
 		return nil, err
 	}
 
-	err = d.AddUnixFSChild(name, ndir)
+	err = d.addUnixFSChild(child{name, ndir})
 	if err != nil {
 		return nil, err
 	}
 
-	dirobj, err := NewDirectory(d.ctx, name, ndir, d, d.dserv)
+	dirobj, err := NewDirectory(d.ctx, name, ndir, d, d.dagService)
 	if err != nil {
 		return nil, err
 	}
 
-	d.childDirs[name] = dirobj
+	d.entriesCache[name] = dirobj
 	return dirobj, nil
 }
 
@@ -331,8 +331,7 @@ func (d *Directory) Unlink(name string) error {
 	d.lock.Lock()
 	defer d.lock.Unlock()
 
-	delete(d.childDirs, name)
-	delete(d.files, name)
+	delete(d.entriesCache, name)
 
 	return d.unixfsDir.RemoveChild(d.ctx, name)
 }
@@ -343,7 +342,7 @@ func (d *Directory) Flush() error {
 		return err
 	}
 
-	return d.parent.closeChild(d.name, nd, true)
+	return d.parent.updateChildEntry(child{d.name, nd})
 }
 
 // AddChild adds the node 'nd' under this directory giving it the name 'name'
@@ -356,12 +355,12 @@ func (d *Directory) AddChild(name string, nd ipld.Node) error {
 		return ErrDirExists
 	}
 
-	err = d.dserv.Add(d.ctx, nd)
+	err = d.dagService.Add(d.ctx, nd)
 	if err != nil {
 		return err
 	}
 
-	err = d.AddUnixFSChild(name, nd)
+	err = d.addUnixFSChild(child{name, nd})
 	if err != nil {
 		return err
 	}
@@ -370,9 +369,9 @@ func (d *Directory) AddChild(name string, nd ipld.Node) error {
 	return nil
 }
 
-// AddUnixFSChild adds a child to the inner UnixFS directory
+// addUnixFSChild adds a child to the inner UnixFS directory
 // and transitions to a HAMT implementation if needed.
-func (d *Directory) AddUnixFSChild(name string, node ipld.Node) error {
+func (d *Directory) addUnixFSChild(c child) error {
 	if uio.UseHAMTSharding {
 		// If the directory HAMT implementation is being used and this
 		// directory is actually a basic implementation switch it to HAMT.
@@ -385,7 +384,7 @@ func (d *Directory) AddUnixFSChild(name string, node ipld.Node) error {
 		}
 	}
 
-	err := d.unixfsDir.AddChild(d.ctx, name, node)
+	err := d.unixfsDir.AddChild(d.ctx, c.Name, c.Node)
 	if err != nil {
 		return err
 	}
@@ -394,29 +393,19 @@ func (d *Directory) AddUnixFSChild(name string, node ipld.Node) error {
 }
 
 func (d *Directory) sync() error {
-	for name, dir := range d.childDirs {
-		nd, err := dir.GetNode()
+	for name, entry := range d.entriesCache {
+		nd, err := entry.GetNode()
 		if err != nil {
 			return err
 		}
 
-		err = d.updateChild(name, nd)
+		err = d.updateChild(child{name, nd})
 		if err != nil {
 			return err
 		}
 	}
 
-	for name, file := range d.files {
-		nd, err := file.GetNode()
-		if err != nil {
-			return err
-		}
-
-		err = d.updateChild(name, nd)
-		if err != nil {
-			return err
-		}
-	}
+	// TODO: Should we clean the cache here?
 
 	return nil
 }
@@ -452,7 +441,7 @@ func (d *Directory) GetNode() (ipld.Node, error) {
 		return nil, err
 	}
 
-	err = d.dserv.Add(d.ctx, nd)
+	err = d.dagService.Add(d.ctx, nd)
 	if err != nil {
 		return nil, err
 	}

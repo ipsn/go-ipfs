@@ -9,13 +9,19 @@ import (
 	"sync/atomic"
 	"time"
 
+	bssrs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/sessionrequestsplitter"
+
 	decision "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/decision"
+	bsgetter "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/getter"
 	bsmsg "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/message"
+	bsmq "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/messagequeue"
 	bsnet "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/network"
 	notifications "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/notifications"
+	bspm "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/peermanager"
+	bssession "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/session"
 	bssm "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/sessionmanager"
+	bsspm "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/sessionpeermanager"
 	bswm "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/wantmanager"
-
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
@@ -85,11 +91,29 @@ func New(parent context.Context, network bsnet.BitSwapNetwork,
 	allHist := metrics.NewCtx(ctx, "recv_all_blocks_bytes", "Summary of all"+
 		" data blocks recived").Histogram(metricsBuckets)
 
+	sentHistogram := metrics.NewCtx(ctx, "sent_all_blocks_bytes", "Histogram of blocks sent by"+
+		" this bitswap").Histogram(metricsBuckets)
+
 	notif := notifications.New()
 	px := process.WithTeardown(func() error {
 		notif.Shutdown()
 		return nil
 	})
+
+	peerQueueFactory := func(p peer.ID) bspm.PeerQueue {
+		return bsmq.New(p, network)
+	}
+
+	wm := bswm.New(ctx)
+	sessionFactory := func(ctx context.Context, id uint64, pm bssession.PeerManager, srs bssession.RequestSplitter) bssm.Session {
+		return bssession.New(ctx, id, wm, pm, srs)
+	}
+	sessionPeerManagerFactory := func(ctx context.Context, id uint64) bssession.PeerManager {
+		return bsspm.New(ctx, id, network)
+	}
+	sessionRequestSplitterFactory := func(ctx context.Context) bssession.RequestSplitter {
+		return bssrs.New(ctx)
+	}
 
 	bs := &Bitswap{
 		blockstore:    bstore,
@@ -100,14 +124,18 @@ func New(parent context.Context, network bsnet.BitSwapNetwork,
 		process:       px,
 		newBlocks:     make(chan cid.Cid, HasBlockBufferSize),
 		provideKeys:   make(chan cid.Cid, provideKeysBufferSize),
-		wm:            bswm.New(ctx, network),
-		sm:            bssm.New(),
+		wm:            wm,
+		pm:            bspm.New(ctx, peerQueueFactory),
+		sm:            bssm.New(ctx, sessionFactory, sessionPeerManagerFactory, sessionRequestSplitterFactory),
 		counters:      new(counters),
-
-		dupMetric: dupHist,
-		allMetric: allHist,
+		dupMetric:     dupHist,
+		allMetric:     allHist,
+		sentHistogram: sentHistogram,
 	}
-	go bs.wm.Run()
+
+	bs.wm.SetDelegate(bs.pm)
+	bs.pm.Startup()
+	bs.wm.Startup()
 	network.SetDelegate(bs)
 
 	// Start up bitswaps async worker routines
@@ -128,6 +156,9 @@ func New(parent context.Context, network bsnet.BitSwapNetwork,
 type Bitswap struct {
 	// the peermanager manages sending messages to peers in a way that
 	// wont block bitswap operation
+	pm *bspm.PeerManager
+
+	// the wantlist tracks global wants for bitswap
 	wm *bswm.WantManager
 
 	// the engine is the bit of logic that decides who to send which blocks to
@@ -160,8 +191,9 @@ type Bitswap struct {
 	counters  *counters
 
 	// Metrics interface metrics
-	dupMetric metrics.Histogram
-	allMetric metrics.Histogram
+	dupMetric     metrics.Histogram
+	allMetric     metrics.Histogram
+	sentHistogram metrics.Histogram
 
 	// the sessionmanager manages tracking sessions
 	sm *bssm.SessionManager
@@ -185,7 +217,7 @@ type blockRequest struct {
 // GetBlock attempts to retrieve a particular block from peers within the
 // deadline enforced by the context.
 func (bs *Bitswap) GetBlock(parent context.Context, k cid.Cid) (blocks.Block, error) {
-	return getBlock(parent, k, bs.GetBlocks)
+	return bsgetter.SyncGetBlock(parent, k, bs.GetBlocks)
 }
 
 func (bs *Bitswap) WantlistForPeer(p peer.ID) []cid.Cid {
@@ -290,7 +322,7 @@ func (bs *Bitswap) GetBlocks(ctx context.Context, keys []cid.Cid) (<-chan blocks
 	return out, nil
 }
 
-// CancelWant removes a given key from the wantlist
+// CancelWants removes a given key from the wantlist.
 func (bs *Bitswap) CancelWants(cids []cid.Cid, ses uint64) {
 	if len(cids) == 0 {
 		return
@@ -328,12 +360,7 @@ func (bs *Bitswap) receiveBlockFrom(blk blocks.Block, from peer.ID) error {
 	// it now as it requires more thought and isnt causing immediate problems.
 	bs.notifications.Publish(blk)
 
-	k := blk.Cid()
-	ks := []cid.Cid{k}
-	for _, s := range bs.SessionsForBlock(k) {
-		s.receiveBlockFrom(from, blk)
-		bs.CancelWants(ks, s.id)
-	}
+	bs.sm.ReceiveBlockFrom(from, blk)
 
 	bs.engine.AddBlock(blk)
 
@@ -344,18 +371,6 @@ func (bs *Bitswap) receiveBlockFrom(blk blocks.Block, from peer.ID) error {
 		return bs.process.Close()
 	}
 	return nil
-}
-
-// SessionsForBlock returns a slice of all sessions that may be interested in the given cid
-func (bs *Bitswap) SessionsForBlock(c cid.Cid) []*Session {
-	var out []*Session
-	bs.sm.IterateSessions(func(session exchange.Fetcher) {
-		s := session.(*Session)
-		if s.interestedIn(c) {
-			out = append(out, s)
-		}
-	})
-	return out
 }
 
 func (bs *Bitswap) ReceiveMessage(ctx context.Context, p peer.ID, incoming bsmsg.BitSwapMessage) {
@@ -381,7 +396,7 @@ func (bs *Bitswap) ReceiveMessage(ctx context.Context, p peer.ID, incoming bsmsg
 			defer wg.Done()
 
 			bs.updateReceiveCounters(b)
-
+			bs.sm.UpdateReceiveCounters(b)
 			log.Debugf("got block %s from %s", b, p)
 
 			// skip received blocks that are not in the wantlist
@@ -425,15 +440,16 @@ func (bs *Bitswap) updateReceiveCounters(b blocks.Block) {
 	}
 }
 
-// Connected/Disconnected warns bitswap about peer connections
+// Connected/Disconnected warns bitswap about peer connections.
 func (bs *Bitswap) PeerConnected(p peer.ID) {
-	bs.wm.Connected(p)
+	initialWants := bs.wm.CurrentBroadcastWants()
+	bs.pm.Connected(p, initialWants)
 	bs.engine.PeerConnected(p)
 }
 
-// Connected/Disconnected warns bitswap about peer connections
+// Connected/Disconnected warns bitswap about peer connections.
 func (bs *Bitswap) PeerDisconnected(p peer.ID) {
-	bs.wm.Disconnected(p)
+	bs.pm.Disconnected(p)
 	bs.engine.PeerDisconnected(p)
 }
 
@@ -458,4 +474,8 @@ func (bs *Bitswap) GetWantlist() []cid.Cid {
 
 func (bs *Bitswap) IsOnline() bool {
 	return true
+}
+
+func (bs *Bitswap) NewSession(ctx context.Context) exchange.Fetcher {
+	return bs.sm.NewSession(ctx)
 }

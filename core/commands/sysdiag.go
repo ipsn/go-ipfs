@@ -8,8 +8,8 @@ import (
 	version "github.com/ipsn/go-ipfs"
 	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
 
-	manet "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
 	sysi "github.com/whyrusleeping/go-sysinfo"
+	manet "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )

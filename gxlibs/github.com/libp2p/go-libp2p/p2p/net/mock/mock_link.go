@@ -16,7 +16,7 @@ type link struct {
 	mock        *mocknet
 	nets        []*peernet
 	opts        LinkOptions
-	ratelimiter *ratelimiter
+	ratelimiter *RateLimiter
 	// this could have addresses on both sides.
 
 	sync.RWMutex
@@ -25,7 +25,7 @@ type link struct {
 func newLink(mn *mocknet, opts LinkOptions) *link {
 	l := &link{mock: mn,
 		opts:        opts,
-		ratelimiter: NewRatelimiter(opts.Bandwidth)}
+		ratelimiter: NewRateLimiter(opts.Bandwidth)}
 	return l
 }
 

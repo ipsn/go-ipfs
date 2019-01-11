@@ -36,21 +36,21 @@
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmWHq17GUcxRuXL7duPuQPuVM8adyRoMfP8TGfy1MK9N5r",
+      "hash": "QmQLbY1oKd4eHrikizXXwYkxn6yujUNSUMimv3UCaWTSWX",
       "name": "go-libp2p-blankhost",
-      "version": "0.3.20"
+      "version": "0.3.21"
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmfD51tKgJiTMnW9JEiDiPwsCY4mqUoxkhKhBfyW12spTC",
+      "hash": "QmaoXrM4Z41PD48JY36YqQGKQpLGjyLA2cKcLsES7YddAq",
       "name": "go-libp2p-host",
-      "version": "3.0.20"
+      "version": "3.0.21"
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmZ9zH2FnLcxv1xyzFeUpDUeo55xEhZQHgveZijcxr7TLj",
+      "hash": "QmPiemjiKBC9VA7vZF82m4x1oygtg2c2YVqag8PX7dN1BD",
       "name": "go-libp2p-peerstore",
-      "version": "2.0.12"
+      "version": "2.0.13"
     },
     {
       "hash": "QmfARXVCzpwFXQdepAJZuqyNDgV9doEsMnVCo1ssmuSe1U",
@@ -58,27 +58,27 @@
       "version": "4.1.12"
     },
     {
-      "hash": "QmRASJXJUFygM5qU4YrH7k7jD6S4Hg8nJmgqJ4bYJvLatd",
+      "hash": "QmTiRqrF5zkdZyrdsL5qndG1UbeWi8k8N2pYxCtXWrahR2",
       "name": "go-libp2p-routing",
-      "version": "2.7.6"
+      "version": "2.7.7"
     },
     {
       "author": "Stebalien",
-      "hash": "QmQQM81YhDT7TYQkSqNmDrfMWzBG6J5KqJ8VueFWqfYPA7",
+      "hash": "QmbYV2PXQVQnqerMBfuoNtzvBYnfzTRn9FZMGw6r3MHLDE",
       "name": "go-libp2p-routing-helpers",
-      "version": "0.3.13"
+      "version": "0.3.14"
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmQdLXW5JTSsrVb3ZpnpbASRwyM8CcE4XcM5nPbN19dWLr",
+      "hash": "QmegQFxhr1J6yZ1vDQuDmJi5jntmj6BL96S11HVtXNCaHb",
       "name": "go-libp2p-swarm",
-      "version": "3.0.27"
+      "version": "3.0.28"
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmaqGyUhWLsJbVo1QAujSu13mxNjFJ98Kt2VWGSnShGE1Q",
+      "hash": "QmVRxA4J3UPQpw74dLrQ6NJkfysCA1H4GU28gVpXQt9zMU",
       "name": "go-libp2p-pubsub",
-      "version": "0.11.9"
+      "version": "0.11.10"
     }
   ],
   "gxVersion": "0.12.1",
@@ -86,6 +86,6 @@
   "license": "",
   "name": "go-libp2p-pubsub-router",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.5.9"
+  "version": "0.5.10"
 }
 

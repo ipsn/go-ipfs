@@ -15,21 +15,21 @@
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmRKLtwMw131aK7ugC3G7ybpumMz78YrJe5dzneyindvG1",
+      "hash": "QmNTCey11oxhb1AxDnQBRHtdhap6Ctud872NjAYPYYXPuc",
       "name": "go-multiaddr",
-      "version": "1.3.6"
+      "version": "1.4.0"
     },
     {
       "author": "jbenet",
-      "hash": "QmQVUtnrNGtCRkCMpXgpApfzQjc8FDaDVxHqWH8cnZQeh5",
+      "hash": "QmZcLBXKaFe8ND5YHPkJRAwmhJGrVsi1JqDZNyJ4nRK5Mj",
       "name": "go-multiaddr-net",
-      "version": "1.6.6"
+      "version": "1.7.1"
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmRBaUEQEeFWywfrZJ64QgsmvcqgLSK3VbvGMR2NM2Edpf",
+      "hash": "QmYxivS34F2M2n44WQQnRHGAKS8aoRUxwGpi9wk4Cdn4Jf",
       "name": "go-libp2p",
-      "version": "6.0.28"
+      "version": "6.0.30"
     },
     {
       "author": "whyrusleeping",
@@ -39,9 +39,9 @@
     },
     {
       "author": "magik6k",
-      "hash": "QmRd5T3VmYoX6jaNoZovFRQcwWHJqHgTVQTs1Qz92ELJ7C",
+      "hash": "QmcRKBUqc2p3L1ZraoJjbXfs9E6xzvEuyK9iypb5RGwfsr",
       "name": "go-ipfs-config",
-      "version": "0.2.23"
+      "version": "0.2.24"
     },
     {
       "author": "whyrusleeping",
@@ -56,9 +56,9 @@
       "version": "2.0.0"
     },
     {
-      "hash": "QmdoKBy1K7Dm59KyuFE6Gsmcq73zS9dscrzVwaoSGDyxF7",
+      "hash": "QmUJEK79y9eLpKWxFTTsBy7osD1ESF7aHyiMkez4pxLE8U",
       "name": "go-libp2p-daemon",
-      "version": "0.0.4"
+      "version": "0.0.5"
     }
   ],
   "gxVersion": "0.6.0",
@@ -67,6 +67,6 @@
   "license": "",
   "name": "iptb-plugins",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "1.0.9"
+  "version": "1.0.10"
 }
 

@@ -21,15 +21,15 @@
     },
     {
       "author": "why",
-      "hash": "QmSzEdVLaPMQGAKKGo4mKjsbWcfz6w8CoDjhRPxdk7xYdn",
+      "hash": "QmYDzHj9xwKN8gCXVJYxYBKxCwCwJURNkwgkvuPP69p3bX",
       "name": "go-ipfs-addr",
-      "version": "0.1.29"
+      "version": "0.1.30"
     },
     {
       "author": "lgierth",
-      "hash": "QmT4zgnKCyZBpRyxzsvZqUjzUkMWLJ2pZCw7uk6M6Kto5m",
+      "hash": "QmQc7jbDUsxUJZyFJzxVrnrWeECCct6fErEpMqtjyWvCX8",
       "name": "go-multiaddr-dns",
-      "version": "0.2.6"
+      "version": "0.3.0"
     },
     {
       "author": "mitchellh",
@@ -55,6 +55,6 @@
   "license": "",
   "name": "go-ipfs-config",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.2.23"
+  "version": "0.2.24"
 }
 

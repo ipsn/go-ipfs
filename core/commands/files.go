@@ -14,16 +14,16 @@ import (
 	"github.com/ipsn/go-ipfs/core/commands/cmdenv"
 	"github.com/ipsn/go-ipfs/core/coreapi/interface"
 
-	"github.com/dustin/go-humanize"
-	bservice "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-mfs"
+	"github.com/dustin/go-humanize"
+	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	bservice "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
-	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
-	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
 )
@@ -551,7 +551,7 @@ Examples:
 			return fmt.Errorf("%s was not a file", path)
 		}
 
-		rfd, err := fi.Open(mfs.OpenReadOnly, false)
+		rfd, err := fi.Open(mfs.Flags{Read: true})
 		if err != nil {
 			return err
 		}
@@ -736,7 +736,7 @@ stat' on the file or any of its ancestors.
 			fi.RawLeaves = rawLeaves
 		}
 
-		wfd, err := fi.Open(mfs.OpenWriteOnly, flush)
+		wfd, err := fi.Open(mfs.Flags{Write: true, Sync: flush})
 		if err != nil {
 			return err
 		}
