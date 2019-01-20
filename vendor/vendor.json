@@ -37,6 +37,12 @@
 			"path": "golang.org/x/crypto/curve25519",
 			"revision": "ff983b9c42bc9fbf91556e191cc8efb585c16908",
 			"revisionTime": "2018-07-25T11:53:45Z"
+		},
+		{
+			"checksumSHA1": "GyJO23KIK26BOFakPDOno2A6+iM=",
+			"path": "golang.org/x/crypto/hkdf",
+			"revision": "ff983b9c42bc9fbf91556e191cc8efb585c16908",
+			"revisionTime": "2018-07-25T11:53:45Z"
 		}
 	],
 	"rootPath": "github.com/ipsn/go-ipfs"
