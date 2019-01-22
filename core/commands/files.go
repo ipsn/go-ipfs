@@ -17,13 +17,14 @@ import (
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-mfs"
 	"github.com/dustin/go-humanize"
 	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	bservice "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	cidenc "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cidutil/cidenc"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
 )
@@ -136,6 +137,11 @@ var filesStatCmd = &cmds.Command{
 
 		withLocal, _ := req.Options[filesWithLocalOptionName].(bool)
 
+		enc, err := cmdenv.GetCidEncoder(req)
+		if err != nil {
+			return err
+		}
+
 		var dagserv ipld.DAGService
 		if withLocal {
 			// an offline DAGService will not fetch from the network
@@ -152,7 +158,7 @@ var filesStatCmd = &cmds.Command{
 			return err
 		}
 
-		o, err := statNode(nd)
+		o, err := statNode(nd, enc)
 		if err != nil {
 			return err
 		}
@@ -217,7 +223,7 @@ func statGetFormatOptions(req *cmds.Request) (string, error) {
 	}
 }
 
-func statNode(nd ipld.Node) (*statOutput, error) {
+func statNode(nd ipld.Node, enc cidenc.Encoder) (*statOutput, error) {
 	c := nd.Cid()
 
 	cumulsize, err := nd.Size()
@@ -243,7 +249,7 @@ func statNode(nd ipld.Node) (*statOutput, error) {
 		}
 
 		return &statOutput{
-			Hash:           c.String(),
+			Hash:           enc.Encode(c),
 			Blocks:         len(nd.Links()),
 			Size:           d.FileSize(),
 			CumulativeSize: cumulsize,
@@ -251,7 +257,7 @@ func statNode(nd ipld.Node) (*statOutput, error) {
 		}, nil
 	case *dag.RawNode:
 		return &statOutput{
-			Hash:           c.String(),
+			Hash:           enc.Encode(c),
 			Blocks:         0,
 			Size:           cumulsize,
 			CumulativeSize: cumulsize,
@@ -433,6 +439,11 @@ Examples:
 
 		long, _ := req.Options[longOptionName].(bool)
 
+		enc, err := cmdenv.GetCidEncoder(req)
+		if err != nil {
+			return err
+		}
+
 		switch fsn := fsn.(type) {
 		case *mfs.Directory:
 			if !long {
@@ -470,7 +481,7 @@ Examples:
 				if err != nil {
 					return err
 				}
-				out.Entries[0].Hash = nd.Cid().String()
+				out.Entries[0].Hash = enc.Encode(nd.Cid())
 			}
 			return cmds.EmitOnce(res, out)
 		default:
@@ -625,6 +636,8 @@ Example:
 			return err
 		}
 
+		flush, _ := req.Options[filesFlushOptionName].(bool)
+
 		src, err := checkPath(req.Arguments[0])
 		if err != nil {
 			return err
@@ -634,7 +647,11 @@ Example:
 			return err
 		}
 
-		return mfs.Mv(nd.FilesRoot, src, dst)
+		err = mfs.Mv(nd.FilesRoot, src, dst)
+		if err == nil && flush {
+			err = mfs.FlushPath(nd.FilesRoot, "/")
+		}
+		return err
 	},
 }
 
@@ -897,11 +914,15 @@ Change the cid version or hash function of the root node of a given path.
 			return err
 		}
 
-		return updatePath(nd.FilesRoot, path, prefix, flush)
+		err = updatePath(nd.FilesRoot, path, prefix)
+		if err == nil && flush {
+			err = mfs.FlushPath(nd.FilesRoot, path)
+		}
+		return err
 	},
 }
 
-func updatePath(rt *mfs.Root, pth string, builder cid.Builder, flush bool) error {
+func updatePath(rt *mfs.Root, pth string, builder cid.Builder) error {
 	if builder == nil {
 		return nil
 	}
@@ -916,10 +937,6 @@ func updatePath(rt *mfs.Root, pth string, builder cid.Builder, flush bool) error
 		n.SetCidBuilder(builder)
 	default:
 		return fmt.Errorf("can only update directories")
-	}
-
-	if flush {
-		nd.Flush()
 	}
 
 	return nil

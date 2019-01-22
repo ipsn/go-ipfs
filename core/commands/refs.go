@@ -14,6 +14,7 @@ import (
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	cidenc "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cidutil/cidenc"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
@@ -79,6 +80,11 @@ NOTE: List all references recursively by using the flag '-r'.
 			return err
 		}
 
+		enc, err := cmdenv.GetCidEncoder(req)
+		if err != nil {
+			return err
+		}
+
 		unique, _ := req.Options[refsUniqueOptionName].(bool)
 		recursive, _ := req.Options[refsRecursiveOptionName].(bool)
 		maxDepth, _ := req.Options[refsMaxDepthOptionName].(int)
@@ -112,7 +118,7 @@ NOTE: List all references recursively by using the flag '-r'.
 		}
 
 		for _, o := range objs {
-			if _, err := rw.WriteRefs(o); err != nil {
+			if _, err := rw.WriteRefs(o, enc); err != nil {
 				if err := res.Emit(&RefWrapper{Err: err.Error()}); err != nil {
 					return err
 				}
@@ -194,11 +200,11 @@ type RefWriter struct {
 }
 
 // WriteRefs writes refs of the given object to the underlying writer.
-func (rw *RefWriter) WriteRefs(n ipld.Node) (int, error) {
-	return rw.writeRefsRecursive(n, 0)
+func (rw *RefWriter) WriteRefs(n ipld.Node, enc cidenc.Encoder) (int, error) {
+	return rw.writeRefsRecursive(n, 0, enc)
 }
 
-func (rw *RefWriter) writeRefsRecursive(n ipld.Node, depth int) (int, error) {
+func (rw *RefWriter) writeRefsRecursive(n ipld.Node, depth int, enc cidenc.Encoder) (int, error) {
 	nc := n.Cid()
 
 	var count int
@@ -228,7 +234,7 @@ func (rw *RefWriter) writeRefsRecursive(n ipld.Node, depth int) (int, error) {
 
 		// Write this node if not done before (or !Unique)
 		if shouldWrite {
-			if err := rw.WriteEdge(nc, lc, n.Links()[i].Name); err != nil {
+			if err := rw.WriteEdge(nc, lc, n.Links()[i].Name, enc); err != nil {
 				return count, err
 			}
 			count++
@@ -240,7 +246,7 @@ func (rw *RefWriter) writeRefsRecursive(n ipld.Node, depth int) (int, error) {
 		// Note when !Unique, branches are always considered
 		// unexplored and only depth limits apply.
 		if goDeeper {
-			c, err := rw.writeRefsRecursive(nd, depth+1)
+			c, err := rw.writeRefsRecursive(nd, depth+1, enc)
 			count += c
 			if err != nil {
 				return count, err
@@ -309,7 +315,7 @@ func (rw *RefWriter) visit(c cid.Cid, depth int) (bool, bool) {
 }
 
 // Write one edge
-func (rw *RefWriter) WriteEdge(from, to cid.Cid, linkname string) error {
+func (rw *RefWriter) WriteEdge(from, to cid.Cid, linkname string, enc cidenc.Encoder) error {
 	if rw.Ctx != nil {
 		select {
 		case <-rw.Ctx.Done(): // just in case.
@@ -322,11 +328,11 @@ func (rw *RefWriter) WriteEdge(from, to cid.Cid, linkname string) error {
 	switch {
 	case rw.PrintFmt != "":
 		s = rw.PrintFmt
-		s = strings.Replace(s, "<src>", from.String(), -1)
-		s = strings.Replace(s, "<dst>", to.String(), -1)
+		s = strings.Replace(s, "<src>", enc.Encode(from), -1)
+		s = strings.Replace(s, "<dst>", enc.Encode(to), -1)
 		s = strings.Replace(s, "<linkname>", linkname, -1)
 	default:
-		s += to.String()
+		s += enc.Encode(to)
 	}
 
 	return rw.res.Emit(&RefWrapper{Ref: s})
