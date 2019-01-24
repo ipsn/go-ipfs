@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"context"
+	"errors"
 	"io"
 	"os"
 
@@ -16,6 +17,8 @@ import (
 	pi "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-posinfo"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
+
+var ErrMissingFsRef = errors.New("missing file path or URL, can't create filestore reference")
 
 // DagBuilderHelper wraps together a bunch of objects needed to
 // efficiently create unixfs dag trees
@@ -71,7 +74,7 @@ type DagBuilderParams struct {
 
 // New generates a new DagBuilderHelper from the given params and a given
 // chunker.Splitter as data source.
-func (dbp *DagBuilderParams) New(spl chunker.Splitter) *DagBuilderHelper {
+func (dbp *DagBuilderParams) New(spl chunker.Splitter) (*DagBuilderHelper, error) {
 	db := &DagBuilderHelper{
 		dserv:      dbp.Dagserv,
 		spl:        spl,
@@ -87,7 +90,12 @@ func (dbp *DagBuilderParams) New(spl chunker.Splitter) *DagBuilderHelper {
 	if dbp.URL != "" && dbp.NoCopy {
 		db.fullPath = dbp.URL
 	}
-	return db
+
+	if dbp.NoCopy && db.fullPath == "" { // Enforce NoCopy
+		return nil, ErrMissingFsRef
+	}
+
+	return db, nil
 }
 
 // prepareNext consumes the next item from the splitter and puts it
@@ -134,59 +142,15 @@ func (db *DagBuilderHelper) GetDagServ() ipld.DAGService {
 	return db.dserv
 }
 
-// NewUnixfsNode creates a new Unixfs node to represent a file.
-func (db *DagBuilderHelper) NewUnixfsNode() *UnixfsNode {
-	n := &UnixfsNode{
-		node: new(dag.ProtoNode),
-		ufmt: ft.NewFSNode(ft.TFile),
-	}
-	n.SetCidBuilder(db.cidBuilder)
-	return n
-}
-
 // GetCidBuilder returns the internal `cid.CidBuilder` set in the builder.
 func (db *DagBuilderHelper) GetCidBuilder() cid.Builder {
 	return db.cidBuilder
 }
 
-// NewLeaf creates a leaf node filled with data.  If rawLeaves is
-// defined than a raw leaf will be returned.  Otherwise, if data is
-// nil the type field will be TRaw (for backwards compatibility), if
-// data is defined (but possibly empty) the type field will be TRaw.
-func (db *DagBuilderHelper) NewLeaf(data []byte) (*UnixfsNode, error) {
-	if len(data) > BlockSizeLimit {
-		return nil, ErrSizeLimitExceeded
-	}
-
-	if db.rawLeaves {
-		if db.cidBuilder == nil {
-			return &UnixfsNode{
-				rawnode: dag.NewRawNode(data),
-				raw:     true,
-			}, nil
-		}
-		rawnode, err := dag.NewRawNodeWPrefix(data, db.cidBuilder)
-		if err != nil {
-			return nil, err
-		}
-		return &UnixfsNode{
-			rawnode: rawnode,
-			raw:     true,
-		}, nil
-	}
-
-	if data == nil {
-		return db.NewUnixfsNode(), nil
-	}
-
-	blk := db.newUnixfsBlock()
-	blk.SetData(data)
-	return blk, nil
-}
-
-// NewLeafNode is a variation from `NewLeaf` (see its description) that
-// returns an `ipld.Node` instead.
-func (db *DagBuilderHelper) NewLeafNode(data []byte) (ipld.Node, error) {
+// NewLeafNode creates a leaf node filled with data.  If rawLeaves is
+// defined then a raw leaf will be returned.  Otherwise, it will create
+// and return `FSNodeOverDag` with `fsNodeType`.
+func (db *DagBuilderHelper) NewLeafNode(data []byte, fsNodeType pb.Data_DataType) (ipld.Node, error) {
 	if len(data) > BlockSizeLimit {
 		return nil, ErrSizeLimitExceeded
 	}
@@ -204,7 +168,7 @@ func (db *DagBuilderHelper) NewLeafNode(data []byte) (ipld.Node, error) {
 	}
 
 	// Encapsulate the data in UnixFS node (instead of a raw node).
-	fsNodeOverDag := db.NewFSNodeOverDag(ft.TFile)
+	fsNodeOverDag := db.NewFSNodeOverDag(fsNodeType)
 	fsNodeOverDag.SetFileData(data)
 	node, err := fsNodeOverDag.Commit()
 	if err != nil {
@@ -213,67 +177,42 @@ func (db *DagBuilderHelper) NewLeafNode(data []byte) (ipld.Node, error) {
 	// TODO: Encapsulate this sequence of calls into a function that
 	// just returns the final `ipld.Node` avoiding going through
 	// `FSNodeOverDag`.
-	// TODO: Using `TFile` for backwards-compatibility, a bug in the
-	// balanced builder was causing the leaf nodes to be generated
-	// with this type instead of `TRaw`, the one that should be used
-	// (like the trickle builder does).
-	// (See https://github.com/ipfs/go-ipfs/pull/5120.)
 
 	return node, nil
 }
 
-// newUnixfsBlock creates a new Unixfs node to represent a raw data block
-func (db *DagBuilderHelper) newUnixfsBlock() *UnixfsNode {
-	n := &UnixfsNode{
-		node: new(dag.ProtoNode),
-		ufmt: ft.NewFSNode(ft.TRaw),
-	}
-	n.SetCidBuilder(db.cidBuilder)
-	return n
-}
-
 // FillNodeLayer will add datanodes as children to the give node until
-// at most db.indirSize nodes are added.
-func (db *DagBuilderHelper) FillNodeLayer(node *UnixfsNode) error {
+// it is full in this layer or no more data.
+// NOTE: This function creates raw data nodes so it only works
+// for the `trickle.Layout`.
+func (db *DagBuilderHelper) FillNodeLayer(node *FSNodeOverDag) error {
 
 	// while we have room AND we're not done
 	for node.NumChildren() < db.maxlinks && !db.Done() {
-		child, err := db.GetNextDataNode()
+		child, childFileSize, err := db.NewLeafDataNode(ft.TRaw)
 		if err != nil {
 			return err
 		}
 
-		if err := node.AddChild(child, db); err != nil {
+		if err := node.AddChild(child, childFileSize, db); err != nil {
 			return err
 		}
 	}
+	node.Commit()
+	// TODO: Do we need to commit here? The caller who created the
+	// `FSNodeOverDag` should be in charge of that.
 
 	return nil
 }
 
-// GetNextDataNode builds a UnixFsNode with the data obtained from the
-// Splitter, given the constraints (BlockSizeLimit, RawLeaves) specified
-// when creating the DagBuilderHelper.
-func (db *DagBuilderHelper) GetNextDataNode() (*UnixfsNode, error) {
-	data, err := db.Next()
-	if err != nil {
-		return nil, err
-	}
-
-	if data == nil { // we're done!
-		return nil, nil
-	}
-
-	return db.NewLeaf(data)
-}
-
-// NewLeafDataNode is a variation of `GetNextDataNode` that returns
-// an `ipld.Node` instead. It builds the `node` with the data obtained
-// from the Splitter and returns it with the `dataSize` (that will be
-// used to keep track of the DAG file size). The size of the data is
-// computed here because after that it will be hidden by `NewLeafNode`
-// inside a generic `ipld.Node` representation.
-func (db *DagBuilderHelper) NewLeafDataNode() (node ipld.Node, dataSize uint64, err error) {
+// NewLeafDataNode builds the `node` with the data obtained from the
+// Splitter with the given constraints (BlockSizeLimit, RawLeaves)
+// specified when creating the DagBuilderHelper. It returns
+// `ipld.Node` with the `dataSize` (that will be used to keep track of
+// the DAG file size). The size of the data is computed here because
+// after that it will be hidden by `NewLeafNode` inside a generic
+// `ipld.Node` representation.
+func (db *DagBuilderHelper) NewLeafDataNode(fsNodeType pb.Data_DataType) (node ipld.Node, dataSize uint64, err error) {
 	fileData, err := db.Next()
 	if err != nil {
 		return nil, 0, err
@@ -281,7 +220,7 @@ func (db *DagBuilderHelper) NewLeafDataNode() (node ipld.Node, dataSize uint64, 
 	dataSize = uint64(len(fileData))
 
 	// Create a new leaf node containing the file chunk data.
-	node, err = db.NewLeafNode(fileData)
+	node, err = db.NewLeafNode(fileData, fsNodeType)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -324,21 +263,6 @@ func (db *DagBuilderHelper) ProcessFileStore(node ipld.Node, dataSize uint64) ip
 
 	// Filestore is not used, return the same `node` argument.
 	return node
-}
-
-// AddUnixfsNode sends a node to the DAGService, and returns it as ipld.Node.
-func (db *DagBuilderHelper) AddUnixfsNode(node *UnixfsNode) (ipld.Node, error) {
-	dn, err := node.GetDagNode()
-	if err != nil {
-		return nil, err
-	}
-
-	err = db.dserv.Add(context.TODO(), dn)
-	if err != nil {
-		return nil, err
-	}
-
-	return dn, nil
 }
 
 // Add inserts the given node in the DAGService.
@@ -388,6 +312,24 @@ func (db *DagBuilderHelper) NewFSNodeOverDag(fsNodeType pb.Data_DataType) *FSNod
 	return node
 }
 
+// NewFSNFromDag reconstructs a FSNodeOverDag node from a given dag node
+func (db *DagBuilderHelper) NewFSNFromDag(nd *dag.ProtoNode) (*FSNodeOverDag, error) {
+	return NewFSNFromDag(nd)
+}
+
+// NewFSNFromDag reconstructs a FSNodeOverDag node from a given dag node
+func NewFSNFromDag(nd *dag.ProtoNode) (*FSNodeOverDag, error) {
+	mb, err := ft.FSNodeFromBytes(nd.Data())
+	if err != nil {
+		return nil, err
+	}
+
+	return &FSNodeOverDag{
+		dag:  nd,
+		file: mb,
+	}, nil
+}
+
 // AddChild adds a `child` `ipld.Node` to both node layers. The
 // `dag.ProtoNode` creates a link to the child node while the
 // `ft.FSNode` stores its file size (that is, not the size of the
@@ -404,11 +346,17 @@ func (n *FSNodeOverDag) AddChild(child ipld.Node, fileSize uint64, db *DagBuilde
 	return db.Add(child)
 }
 
+// RemoveChild deletes the child node at the given index.
+func (n *FSNodeOverDag) RemoveChild(index int, dbh *DagBuilderHelper) {
+	n.file.RemoveBlockSize(index)
+	n.dag.SetLinks(append(n.dag.Links()[:index], n.dag.Links()[index+1:]...))
+}
+
 // Commit unifies (resolves) the cache nodes into a single `ipld.Node`
 // that represents them: the `ft.FSNode` is encoded inside the
 // `dag.ProtoNode`.
 //
-// TODO: Evaluate making it read-only after committing.
+// TODO: Make it read-only after committing, allow to commit only once.
 func (n *FSNodeOverDag) Commit() (ipld.Node, error) {
 	fileData, err := n.file.GetBytes()
 	if err != nil {
@@ -435,4 +383,27 @@ func (n *FSNodeOverDag) FileSize() uint64 {
 // node (internal nodes don't carry data, just file sizes).
 func (n *FSNodeOverDag) SetFileData(fileData []byte) {
 	n.file.SetData(fileData)
+}
+
+// GetDagNode fills out the proper formatting for the FSNodeOverDag node
+// inside of a DAG node and returns the dag node.
+// TODO: Check if we have committed (passed the UnixFS information
+// to the DAG layer) before returning this.
+func (n *FSNodeOverDag) GetDagNode() (ipld.Node, error) {
+	return n.dag, nil
+}
+
+// GetChild gets the ith child of this node from the given DAGService.
+func (n *FSNodeOverDag) GetChild(ctx context.Context, i int, ds ipld.DAGService) (*FSNodeOverDag, error) {
+	nd, err := n.dag.Links()[i].GetNode(ctx, ds)
+	if err != nil {
+		return nil, err
+	}
+
+	pbn, ok := nd.(*dag.ProtoNode)
+	if !ok {
+		return nil, dag.ErrNotProtobuf
+	}
+
+	return NewFSNFromDag(pbn)
 }

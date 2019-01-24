@@ -8,11 +8,11 @@ import (
 	"github.com/ipsn/go-ipfs/core"
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
 
-	ipfspath "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
-	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
+	ipfspath "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
 )
 
 // ResolveNode resolves the path `p` using Unixfs resolver, gets and returns the

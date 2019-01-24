@@ -18,9 +18,14 @@ func TestPathParsing(t *testing.T) {
 		"QmdfTbBqBPQ7VNxZEYEj14VmRuZBkqFbiwReogJgS1zR1n":                   true,
 		"/QmdfTbBqBPQ7VNxZEYEj14VmRuZBkqFbiwReogJgS1zR1n":                  false,
 		"/QmdfTbBqBPQ7VNxZEYEj14VmRuZBkqFbiwReogJgS1zR1n/a":                false,
-		"/ipfs/": false,
-		"ipfs/":  false,
+		"/ipfs/foo": false,
+		"/ipfs/":    false,
+		"ipfs/":     false,
 		"ipfs/QmdfTbBqBPQ7VNxZEYEj14VmRuZBkqFbiwReogJgS1zR1n": false,
+		"/ipld/foo": false,
+		"/ipld/":    false,
+		"ipld/":     false,
+		"ipld/QmdfTbBqBPQ7VNxZEYEj14VmRuZBkqFbiwReogJgS1zR1n": false,
 	}
 
 	for p, expected := range cases {
@@ -28,6 +33,19 @@ func TestPathParsing(t *testing.T) {
 		valid := err == nil
 		if valid != expected {
 			t.Fatalf("expected %s to have valid == %t", p, expected)
+		}
+	}
+}
+
+func TestNoComponents(t *testing.T) {
+	for _, s := range []string{
+		"/ipfs/",
+		"/ipns/",
+		"/ipld/",
+	} {
+		_, err := ParsePath(s)
+		if err != ErrNoComponents {
+			t.Errorf("expected ErrNoComponents, got %s", err)
 		}
 	}
 }

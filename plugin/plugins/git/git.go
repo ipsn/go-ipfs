@@ -10,8 +10,8 @@ import (
 	"github.com/ipsn/go-ipfs/plugin"
 
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	git "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-git"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	git "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-git"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
 )
 

@@ -16,6 +16,15 @@
 // mentioned. This is the only scenario where the root can be of a type different
 // that the UnixFS node.
 //
+// Notes:
+// 1. In the implementation. `FSNodeOverDag` structure is used for representing
+//    the UnixFS node encoded inside the DAG node.
+//    (see https://github.com/ipfs/go-ipfs/pull/5118.)
+// 2. `TFile` is used for backwards-compatibility. It was a bug causing the leaf
+//    nodes to be generated with this type instead of `TRaw`. The former one
+//    should be used (like the trickle builder does).
+//    (See https://github.com/ipfs/go-ipfs/pull/5120.)
+//
 //                                                 +-------------+
 //                                                 |   Root 4    |
 //                                                 +-------------+
@@ -123,7 +132,7 @@ import (
 func Layout(db *h.DagBuilderHelper) (ipld.Node, error) {
 	if db.Done() {
 		// No data, return just an empty node.
-		root, err := db.NewLeafNode(nil)
+		root, err := db.NewLeafNode(nil, ft.TFile)
 		if err != nil {
 			return nil, err
 		}
@@ -137,7 +146,7 @@ func Layout(db *h.DagBuilderHelper) (ipld.Node, error) {
 	// (corner case), after that subsequent `root` nodes will
 	// always be internal nodes (with a depth > 0) that can
 	// be handled by the loop.
-	root, fileSize, err := db.NewLeafDataNode()
+	root, fileSize, err := db.NewLeafDataNode(ft.TFile)
 	if err != nil {
 		return nil, err
 	}
@@ -224,7 +233,7 @@ func fillNodeRec(db *h.DagBuilderHelper, node *h.FSNodeOverDag, depth int) (fill
 
 		if depth == 1 {
 			// Base case: add leaf node with data.
-			childNode, childFileSize, err = db.NewLeafDataNode()
+			childNode, childFileSize, err = db.NewLeafDataNode(ft.TFile)
 			if err != nil {
 				return nil, 0, err
 			}

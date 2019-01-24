@@ -18,25 +18,26 @@ import (
 	"errors"
 	"fmt"
 	"github.com/ipsn/go-ipfs/core"
-	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
-	"github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 	"github.com/ipsn/go-ipfs/namesys"
 	"github.com/ipsn/go-ipfs/pin"
 	"github.com/ipsn/go-ipfs/repo"
 
+	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
+	"github.com/ipsn/go-ipfs/core/coreapi/interface/options"
+
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-interface"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
-	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
+	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 	pubsub "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-pubsub"
 	offlineroute "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
-	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 	offlinexch "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	p2phost "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	record "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record"
 )
@@ -96,8 +97,11 @@ func (api *CoreAPI) Block() coreiface.BlockAPI {
 }
 
 // Dag returns the DagAPI interface implementation backed by the go-ipfs node
-func (api *CoreAPI) Dag() ipld.DAGService {
-	return api.dag
+func (api *CoreAPI) Dag() coreiface.APIDagService {
+	return &dagAPI{
+		api.dag,
+		api,
+	}
 }
 
 // Name returns the NameAPI interface implementation backed by the go-ipfs node

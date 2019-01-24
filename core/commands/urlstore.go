@@ -9,11 +9,11 @@ import (
 	filestore "github.com/ipsn/go-ipfs/filestore"
 	pin "github.com/ipsn/go-ipfs/pin"
 
+	chunk "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	balanced "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer/balanced"
 	ihelper "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer/helpers"
 	trickle "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer/trickle"
-	chunk "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
@@ -116,7 +116,11 @@ time.
 			layout = trickle.Layout
 		}
 
-		root, err := layout(dbp.New(chk))
+		db, err := dbp.New(chk)
+		if err != nil {
+			return err
+		}
+		root, err := layout(db)
 		if err != nil {
 			return err
 		}

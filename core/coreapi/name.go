@@ -11,9 +11,9 @@ import (
 	"github.com/ipsn/go-ipfs/keystore"
 	"github.com/ipsn/go-ipfs/namesys"
 
-	ipath "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
+	ipath "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 )
 

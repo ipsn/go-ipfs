@@ -13,14 +13,13 @@ import (
 
 	"github.com/ipsn/go-ipfs/core"
 	"github.com/ipsn/go-ipfs/core/coreapi"
-	"github.com/ipsn/go-ipfs/core/coreapi/interface"
-	coreunix "github.com/ipsn/go-ipfs/core/coreunix"
 	mock "github.com/ipsn/go-ipfs/core/mock"
 	"github.com/ipsn/go-ipfs/thirdparty/unit"
 
 	testutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	random "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/go-random"
+	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
 	mocknet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/net/mock"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 )
@@ -120,6 +119,11 @@ func DirectAddCat(data []byte, conf testutil.LatencyConfig) error {
 	}
 	defer catter.Close()
 
+	adderApi, err := coreapi.NewCoreAPI(adder)
+	if err != nil {
+		return err
+	}
+
 	catterApi, err := coreapi.NewCoreAPI(catter)
 	if err != nil {
 		return err
@@ -140,17 +144,12 @@ func DirectAddCat(data []byte, conf testutil.LatencyConfig) error {
 		return err
 	}
 
-	added, err := coreunix.Add(adder, bytes.NewReader(data))
+	added, err := adderApi.Unixfs().Add(ctx, files.NewBytesFile(data))
 	if err != nil {
 		return err
 	}
 
-	ap, err := iface.ParsePath(added)
-	if err != nil {
-		return err
-	}
-
-	readerCatted, err := catterApi.Unixfs().Get(ctx, ap)
+	readerCatted, err := catterApi.Unixfs().Get(ctx, added)
 	if err != nil {
 		return err
 	}

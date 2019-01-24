@@ -16,39 +16,19 @@ import (
 	"github.com/ipsn/go-ipfs/pin/gc"
 	"github.com/ipsn/go-ipfs/repo"
 
-	pi "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-posinfo"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
-	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	pi "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-posinfo"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	datastore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	syncds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
 )
 
 const testPeerID = "QmTFauExutTsy4XP6JbMFcw2Wa9645HJt2bTqL6qYDCKfe"
-
-func TestAddRecursive(t *testing.T) {
-	r := &repo.Mock{
-		C: config.Config{
-			Identity: config.Identity{
-				PeerID: testPeerID, // required by offline node
-			},
-		},
-		D: syncds.MutexWrap(datastore.NewMapDatastore()),
-	}
-	node, err := core.NewNode(context.Background(), &core.BuildCfg{Repo: r})
-	if err != nil {
-		t.Fatal(err)
-	}
-	if k, err := AddR(node, "test/data"); err != nil {
-		t.Fatal(err)
-	} else if k != "QmWCCga8AbTyfAQ7pTnGT6JgmRMAB3Qp8ZmTEFi5q5o8jC" {
-		t.Fatal("keys do not match: ", k)
-	}
-}
 
 func TestAddGCLive(t *testing.T) {
 	r := &repo.Mock{

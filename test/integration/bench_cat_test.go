@@ -10,13 +10,12 @@ import (
 
 	"github.com/ipsn/go-ipfs/core"
 	"github.com/ipsn/go-ipfs/core/coreapi"
-	"github.com/ipsn/go-ipfs/core/coreapi/interface"
-	coreunix "github.com/ipsn/go-ipfs/core/coreunix"
 	mock "github.com/ipsn/go-ipfs/core/mock"
 	"github.com/ipsn/go-ipfs/thirdparty/unit"
 
 	testutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
+	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
 	mocknet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/net/mock"
 )
 
@@ -66,6 +65,11 @@ func benchCat(b *testing.B, data []byte, conf testutil.LatencyConfig) error {
 	}
 	defer catter.Close()
 
+	adderApi, err := coreapi.NewCoreAPI(adder)
+	if err != nil {
+		return err
+	}
+
 	catterApi, err := coreapi.NewCoreAPI(catter)
 	if err != nil {
 		return err
@@ -86,18 +90,13 @@ func benchCat(b *testing.B, data []byte, conf testutil.LatencyConfig) error {
 		return err
 	}
 
-	added, err := coreunix.Add(adder, bytes.NewReader(data))
-	if err != nil {
-		return err
-	}
-
-	ap, err := iface.ParsePath(added)
+	added, err := adderApi.Unixfs().Add(ctx, files.NewBytesFile(data))
 	if err != nil {
 		return err
 	}
 
 	b.StartTimer()
-	readerCatted, err := catterApi.Unixfs().Get(ctx, ap)
+	readerCatted, err := catterApi.Unixfs().Get(ctx, added)
 	if err != nil {
 		return err
 	}

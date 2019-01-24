@@ -7,8 +7,8 @@ import (
 	"time"
 
 	pin "github.com/ipsn/go-ipfs/pin"
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"

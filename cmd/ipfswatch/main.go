@@ -11,11 +11,12 @@ import (
 
 	commands "github.com/ipsn/go-ipfs/commands"
 	core "github.com/ipsn/go-ipfs/core"
+	coreapi "github.com/ipsn/go-ipfs/core/coreapi"
 	corehttp "github.com/ipsn/go-ipfs/core/corehttp"
-	coreunix "github.com/ipsn/go-ipfs/core/coreunix"
 	fsrepo "github.com/ipsn/go-ipfs/repo/fsrepo"
 
 	process "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
+	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
 	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	homedir "github.com/mitchellh/go-homedir"
 	fsnotify "github.com/fsnotify/fsnotify"
@@ -83,6 +84,11 @@ func run(ipfsPath, watchPath string) error {
 	}
 	defer node.Close()
 
+	api, err := coreapi.NewCoreAPI(node)
+	if err != nil {
+		return err
+	}
+
 	if *http {
 		addr := "/ip4/127.0.0.1/tcp/5001"
 		var opts = []corehttp.ServeOption{
@@ -130,9 +136,23 @@ func run(ipfsPath, watchPath string) error {
 					file, err := os.Open(e.Name)
 					if err != nil {
 						log.Println(err)
+						return
 					}
 					defer file.Close()
-					k, err := coreunix.Add(node, file)
+
+					st, err := file.Stat()
+					if err != nil {
+						log.Println(err)
+						return
+					}
+
+					f, err := files.NewReaderPathFile(e.Name, file, st)
+					if err != nil {
+						log.Println(err)
+						return
+					}
+
+					k, err := api.Unixfs().Add(node.Context(), f)
 					if err != nil {
 						log.Println(err)
 					}

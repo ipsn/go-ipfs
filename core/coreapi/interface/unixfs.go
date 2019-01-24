@@ -5,8 +5,8 @@ import (
 
 	"github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 
-	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
 )
 
 type AddEvent struct {

@@ -8,14 +8,14 @@ import (
 	"strings"
 
 	pin "github.com/ipsn/go-ipfs/pin"
-	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-verifcid"
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	dstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 )

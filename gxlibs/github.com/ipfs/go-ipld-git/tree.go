@@ -3,24 +3,27 @@ package ipldgit
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
+	"sync"
 
-	"errors"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	node "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
 
 type Tree struct {
-	entries map[string]*TreeEntry
-	size    int
-	order   []string
-	cid     cid.Cid
+	entries     map[string]*TreeEntry
+	size        int
+	order       []string
+	cid         cid.Cid
+	rawData     []byte
+	rawDataOnce sync.Once
 }
 
 type TreeEntry struct {
 	name string
-	Mode string   `json:"mode"`
+	Mode string  `json:"mode"`
 	Hash cid.Cid `json:"hash"`
 }
 
@@ -95,13 +98,17 @@ func (t *Tree) Loggable() map[string]interface{} {
 }
 
 func (t *Tree) RawData() []byte {
-	buf := new(bytes.Buffer)
+	t.rawDataOnce.Do(func() {
+		buf := new(bytes.Buffer)
 
-	fmt.Fprintf(buf, "tree %d\x00", t.size)
-	for _, s := range t.order {
-		t.entries[s].WriteTo(buf)
-	}
-	return buf.Bytes()
+		fmt.Fprintf(buf, "tree %d\x00", t.size)
+		for _, s := range t.order {
+			t.entries[s].WriteTo(buf)
+		}
+		t.rawData = buf.Bytes()
+	})
+
+	return t.rawData
 }
 
 func (t *Tree) Resolve(p []string) (interface{}, []string, error) {
@@ -139,8 +146,7 @@ func (t Tree) ResolveLink(path []string) (*node.Link, []string, error) {
 }
 
 func (t *Tree) Size() (uint64, error) {
-	fmt.Println("size isnt implemented")
-	return 13, nil // trees are probably smaller than commits, so 13 seems like a good number
+	return uint64(len(t.RawData())), nil
 }
 
 func (t *Tree) Stat() (*node.NodeStat, error) {

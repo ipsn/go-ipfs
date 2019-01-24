@@ -5,10 +5,14 @@ import (
 	"fmt"
 	"math/rand"
 
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ifconnmgr "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-interface-connmgr"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 )
+
+var log = logging.Logger("bitswap")
 
 const (
 	maxOptimizedPeers = 32
@@ -18,6 +22,7 @@ const (
 // PeerNetwork is an interface for finding providers and managing connections
 type PeerNetwork interface {
 	ConnectionManager() ifconnmgr.ConnManager
+	ConnectTo(context.Context, peer.ID) error
 	FindProvidersAsync(context.Context, cid.Cid, int) <-chan peer.ID
 }
 
@@ -77,7 +82,7 @@ func (spm *SessionPeerManager) RecordPeerRequests(p []peer.ID, ks []cid.Cid) {
 func (spm *SessionPeerManager) GetOptimizedPeers() []peer.ID {
 	// right now this just returns all peers, but soon we might return peers
 	// ordered by optimization, or only a subset
-	resp := make(chan []peer.ID)
+	resp := make(chan []peer.ID, 1)
 	select {
 	case spm.peerMessages <- &peerReqMessage{resp}:
 	case <-spm.ctx.Done():
@@ -102,7 +107,18 @@ func (spm *SessionPeerManager) FindMorePeers(ctx context.Context, c cid.Cid) {
 		// - ensure two 'findprovs' calls for the same block don't run concurrently
 		// - share peers between sessions based on interest set
 		for p := range spm.network.FindProvidersAsync(ctx, k, 10) {
-			spm.peerMessages <- &peerFoundMessage{p}
+			go func(p peer.ID) {
+				// TODO: Also use context from spm.
+				err := spm.network.ConnectTo(ctx, p)
+				if err != nil {
+					log.Debugf("failed to connect to provider %s: %s", p, err)
+				}
+				select {
+				case spm.peerMessages <- &peerFoundMessage{p}:
+				case <-ctx.Done():
+				case <-spm.ctx.Done():
+				}
+			}(p)
 		}
 	}(c)
 }

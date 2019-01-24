@@ -30,7 +30,6 @@ import (
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	format "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
-	"github.com/spaolacci/murmur3"
 )
 
 const (
@@ -44,11 +43,9 @@ func (ds *Shard) isValueNode() bool {
 
 // A Shard represents the HAMT. It should be initialized with NewShard().
 type Shard struct {
-	nd *dag.ProtoNode
+	cid cid.Cid
 
-	bitfield bitfield.Bitfield
-
-	children []*Shard
+	childer *childer
 
 	tableSize    int
 	tableSizeLg2 int
@@ -73,7 +70,6 @@ func NewShard(dserv ipld.DAGService, size int) (*Shard, error) {
 		return nil, err
 	}
 
-	ds.nd = new(dag.ProtoNode)
 	ds.hashFunc = HashMurmur3
 	return ds, nil
 }
@@ -84,14 +80,18 @@ func makeShard(ds ipld.DAGService, size int) (*Shard, error) {
 		return nil, err
 	}
 	maxpadding := fmt.Sprintf("%X", size-1)
-	return &Shard{
+	s := &Shard{
 		tableSizeLg2: lg2s,
 		prefixPadStr: fmt.Sprintf("%%0%dX", len(maxpadding)),
 		maxpadlen:    len(maxpadding),
-		bitfield:     bitfield.NewBitfield(size),
+		childer:      newChilder(ds, size),
 		tableSize:    size,
 		dserv:        ds,
-	}, nil
+	}
+
+	s.childer.sd = s
+
+	return s, nil
 }
 
 // NewHamtFromDag creates new a HAMT shard from the given DAG.
@@ -114,16 +114,18 @@ func NewHamtFromDag(dserv ipld.DAGService, nd ipld.Node) (*Shard, error) {
 		return nil, fmt.Errorf("only murmur3 supported as hash function")
 	}
 
-	ds, err := makeShard(dserv, int(fsn.Fanout()))
+	size := int(fsn.Fanout())
+
+	ds, err := makeShard(dserv, size)
 	if err != nil {
 		return nil, err
 	}
 
-	ds.nd = pbnd.Copy().(*dag.ProtoNode)
-	ds.children = make([]*Shard, len(pbnd.Links()))
-	ds.bitfield.SetBytes(fsn.Data())
+	ds.childer.makeChilder(fsn.Data(), pbnd.Links())
+
+	ds.cid = pbnd.Cid()
 	ds.hashFunc = fsn.HashType()
-	ds.builder = ds.nd.CidBuilder()
+	ds.builder = pbnd.CidBuilder()
 
 	return ds, nil
 }
@@ -143,38 +145,38 @@ func (ds *Shard) Node() (ipld.Node, error) {
 	out := new(dag.ProtoNode)
 	out.SetCidBuilder(ds.builder)
 
-	cindex := 0
+	sliceIndex := 0
 	// TODO: optimized 'for each set bit'
-	for i := 0; i < ds.tableSize; i++ {
-		if !ds.bitfield.Bit(i) {
+	for childIndex := 0; childIndex < ds.tableSize; childIndex++ {
+		if !ds.childer.has(childIndex) {
 			continue
 		}
 
-		ch := ds.children[cindex]
+		ch := ds.childer.child(sliceIndex)
 		if ch != nil {
 			clnk, err := ch.Link()
 			if err != nil {
 				return nil, err
 			}
 
-			err = out.AddRawLink(ds.linkNamePrefix(i)+ch.key, clnk)
+			err = out.AddRawLink(ds.linkNamePrefix(childIndex)+ch.key, clnk)
 			if err != nil {
 				return nil, err
 			}
 		} else {
 			// child unloaded, just copy in link with updated name
-			lnk := ds.nd.Links()[cindex]
+			lnk := ds.childer.link(sliceIndex)
 			label := lnk.Name[ds.maxpadlen:]
 
-			err := out.AddRawLink(ds.linkNamePrefix(i)+label, lnk)
+			err := out.AddRawLink(ds.linkNamePrefix(childIndex)+label, lnk)
 			if err != nil {
 				return nil, err
 			}
 		}
-		cindex++
+		sliceIndex++
 	}
 
-	data, err := format.HAMTShardData(ds.bitfield.Bytes(), uint64(ds.tableSize), HashMurmur3)
+	data, err := format.HAMTShardData(ds.childer.bitfield.Bytes(), uint64(ds.tableSize), HashMurmur3)
 	if err != nil {
 		return nil, err
 	}
@@ -200,12 +202,6 @@ func (ds *Shard) makeShardValue(lnk *ipld.Link) (*Shard, error) {
 	s.val = &lnk2
 
 	return s, nil
-}
-
-func hash(val []byte) []byte {
-	h := murmur3.New128()
-	h.Write(val)
-	return h.Sum(make([]byte, 0, 128/8))
 }
 
 // Set sets 'name' = nd in the HAMT
@@ -265,63 +261,6 @@ func (ds *Shard) childLinkType(lnk *ipld.Link) (linkType, error) {
 	return shardValueLink, nil
 }
 
-// getChild returns the i'th child of this shard. If it is cached in the
-// children array, it will return it from there. Otherwise, it loads the child
-// node from disk.
-func (ds *Shard) getChild(ctx context.Context, i int) (*Shard, error) {
-	if i >= len(ds.children) || i < 0 {
-		return nil, fmt.Errorf("invalid index passed to getChild (likely corrupt bitfield)")
-	}
-
-	if len(ds.children) != len(ds.nd.Links()) {
-		return nil, fmt.Errorf("inconsistent lengths between children array and Links array")
-	}
-
-	c := ds.children[i]
-	if c != nil {
-		return c, nil
-	}
-
-	return ds.loadChild(ctx, i)
-}
-
-// loadChild reads the i'th child node of this shard from disk and returns it
-// as a 'child' interface
-func (ds *Shard) loadChild(ctx context.Context, i int) (*Shard, error) {
-	lnk := ds.nd.Links()[i]
-	lnkLinkType, err := ds.childLinkType(lnk)
-	if err != nil {
-		return nil, err
-	}
-
-	var c *Shard
-	if lnkLinkType == shardLink {
-		nd, err := lnk.GetNode(ctx, ds.dserv)
-		if err != nil {
-			return nil, err
-		}
-		cds, err := NewHamtFromDag(ds.dserv, nd)
-		if err != nil {
-			return nil, err
-		}
-
-		c = cds
-	} else {
-		s, err := ds.makeShardValue(lnk)
-		if err != nil {
-			return nil, err
-		}
-		c = s
-	}
-
-	ds.children[i] = c
-	return c, nil
-}
-
-func (ds *Shard) setChild(i int, c *Shard) {
-	ds.children[i] = c
-}
-
 // Link returns a merklelink to this shard node
 func (ds *Shard) Link() (*ipld.Link, error) {
 	if ds.isValueNode() {
@@ -341,48 +280,14 @@ func (ds *Shard) Link() (*ipld.Link, error) {
 	return ipld.MakeLink(nd)
 }
 
-func (ds *Shard) insertChild(idx int, key string, lnk *ipld.Link) error {
-	if lnk == nil {
-		return os.ErrNotExist
-	}
-
-	i := ds.indexForBitPos(idx)
-	ds.bitfield.SetBit(idx)
-
-	lnk.Name = ds.linkNamePrefix(idx) + key
-	sv := &Shard{
-		key: key,
-		val: lnk,
-	}
-
-	ds.children = append(ds.children[:i], append([]*Shard{sv}, ds.children[i:]...)...)
-	ds.nd.SetLinks(append(ds.nd.Links()[:i], append([]*ipld.Link{nil}, ds.nd.Links()[i:]...)...))
-	return nil
-}
-
-func (ds *Shard) rmChild(i int) error {
-	if i < 0 || i >= len(ds.children) || i >= len(ds.nd.Links()) {
-		return fmt.Errorf("hamt: attempted to remove child with out of range index")
-	}
-
-	copy(ds.children[i:], ds.children[i+1:])
-	ds.children = ds.children[:len(ds.children)-1]
-
-	copy(ds.nd.Links()[i:], ds.nd.Links()[i+1:])
-	ds.nd.SetLinks(ds.nd.Links()[:len(ds.nd.Links())-1])
-
-	return nil
-}
-
 func (ds *Shard) getValue(ctx context.Context, hv *hashBits, key string, cb func(*Shard) error) error {
-	idx, err := hv.Next(ds.tableSizeLg2)
+	childIndex, err := hv.Next(ds.tableSizeLg2)
 	if err != nil {
 		return err
 	}
-	if ds.bitfield.Bit(int(idx)) {
-		cindex := ds.indexForBitPos(idx)
 
-		child, err := ds.getChild(ctx, cindex)
+	if ds.childer.has(childIndex) {
+		child, err := ds.childer.get(ctx, ds.childer.sliceIndex(childIndex))
 		if err != nil {
 			return err
 		}
@@ -434,7 +339,7 @@ func (ds *Shard) EnumLinksAsync(ctx context.Context) <-chan format.LinkResult {
 		defer cancel()
 		getLinks := makeAsyncTrieGetLinks(ds.dserv, linkResults)
 		cset := cid.NewSet()
-		err := dag.EnumerateChildrenAsync(ctx, getLinks, ds.nd.Cid(), cset.Visit)
+		err := dag.EnumerateChildrenAsync(ctx, getLinks, ds.cid, cset.Visit)
 		if err != nil {
 			emitResult(ctx, linkResults, format.LinkResult{Link: nil, Err: err})
 		}
@@ -457,9 +362,9 @@ func makeAsyncTrieGetLinks(dagService ipld.DAGService, linkResults chan<- format
 			return nil, err
 		}
 
-		childShards := make([]*ipld.Link, 0, len(directoryShard.children))
-		links := directoryShard.nd.Links()
-		for idx := range directoryShard.children {
+		childShards := make([]*ipld.Link, 0, directoryShard.childer.length())
+		links := directoryShard.childer.links
+		for idx := range directoryShard.childer.children {
 			lnk := links[idx]
 			lnkLinkType, err := directoryShard.childLinkType(lnk)
 
@@ -499,23 +404,18 @@ func emitResult(ctx context.Context, linkResults chan<- format.LinkResult, r for
 }
 
 func (ds *Shard) walkTrie(ctx context.Context, cb func(*Shard) error) error {
-	for idx := range ds.children {
-		c, err := ds.getChild(ctx, idx)
-		if err != nil {
-			return err
-		}
-
-		if c.isValueNode() {
-			if err := cb(c); err != nil {
+	return ds.childer.each(ctx, func(s *Shard) error {
+		if s.isValueNode() {
+			if err := cb(s); err != nil {
 				return err
 			}
 		} else {
-			if err := c.walkTrie(ctx, cb); err != nil {
+			if err := s.walkTrie(ctx, cb); err != nil {
 				return err
 			}
 		}
-	}
-	return nil
+		return nil
+	})
 }
 
 func (ds *Shard) modifyValue(ctx context.Context, hv *hashBits, key string, val *ipld.Link) error {
@@ -523,13 +423,14 @@ func (ds *Shard) modifyValue(ctx context.Context, hv *hashBits, key string, val 
 	if err != nil {
 		return err
 	}
-	if !ds.bitfield.Bit(idx) {
-		return ds.insertChild(idx, key, val)
+
+	if !ds.childer.has(idx) {
+		return ds.childer.insert(key, val, idx)
 	}
 
-	cindex := ds.indexForBitPos(idx)
+	i := ds.childer.sliceIndex(idx)
 
-	child, err := ds.getChild(ctx, cindex)
+	child, err := ds.childer.get(ctx, i)
 	if err != nil {
 		return err
 	}
@@ -538,8 +439,7 @@ func (ds *Shard) modifyValue(ctx context.Context, hv *hashBits, key string, val 
 		if child.key == key {
 			// value modification
 			if val == nil {
-				ds.bitfield.UnsetBit(idx)
-				return ds.rmChild(cindex)
+				return ds.childer.rm(idx)
 			}
 
 			child.val = val
@@ -571,7 +471,7 @@ func (ds *Shard) modifyValue(ctx context.Context, hv *hashBits, key string, val 
 			return err
 		}
 
-		ds.setChild(cindex, ns)
+		ds.childer.set(ns, i)
 		return nil
 	} else {
 		err := child.modifyValue(ctx, hv, key, val)
@@ -580,19 +480,18 @@ func (ds *Shard) modifyValue(ctx context.Context, hv *hashBits, key string, val 
 		}
 
 		if val == nil {
-			switch len(child.children) {
+			switch child.childer.length() {
 			case 0:
 				// empty sub-shard, prune it
 				// Note: this shouldnt normally ever happen
 				//       in the event of another implementation creates flawed
 				//       structures, this will help to normalize them.
-				ds.bitfield.UnsetBit(idx)
-				return ds.rmChild(cindex)
+				return ds.childer.rm(idx)
 			case 1:
-				nchild := child.children[0]
+				nchild := child.childer.children[0]
 				if nchild.isValueNode() {
 					// sub-shard with a single value element, collapse it
-					ds.setChild(cindex, nchild)
+					ds.childer.set(nchild, i)
 				}
 				return nil
 			}
@@ -602,14 +501,177 @@ func (ds *Shard) modifyValue(ctx context.Context, hv *hashBits, key string, val 
 	}
 }
 
-// indexForBitPos returns the index within the collapsed array corresponding to
-// the given bit in the bitset.  The collapsed array contains only one entry
-// per bit set in the bitfield, and this function is used to map the indices.
-func (ds *Shard) indexForBitPos(bp int) int {
-	return ds.bitfield.OnesBefore(bp)
-}
-
 // linkNamePrefix takes in the bitfield index of an entry and returns its hex prefix
 func (ds *Shard) linkNamePrefix(idx int) string {
 	return fmt.Sprintf(ds.prefixPadStr, idx)
+}
+
+// childer wraps the links, children and bitfield
+// and provides basic operation (get, rm, insert and set) of manipulating children.
+// The slices `links` and `children` are always coordinated to have the entries
+// in the same index. A `childIndex` belonging to one of the original `Shard.size`
+// entries corresponds to a `sliceIndex` in `links` and `children` (the conversion
+// is done through `bitfield`).
+type childer struct {
+	sd       *Shard
+	dserv    ipld.DAGService
+	bitfield bitfield.Bitfield
+	links    []*ipld.Link
+	children []*Shard
+}
+
+func newChilder(ds ipld.DAGService, size int) *childer {
+	return &childer{
+		dserv:    ds,
+		bitfield: bitfield.NewBitfield(size),
+	}
+}
+
+func (s *childer) makeChilder(data []byte, links []*ipld.Link) *childer {
+	s.children = make([]*Shard, len(links))
+	s.bitfield.SetBytes(data)
+	if len(links) > 0 {
+		s.links = make([]*ipld.Link, len(links))
+		copy(s.links, links)
+	}
+
+	return s
+}
+
+// Return the `sliceIndex` associated with a child.
+func (s *childer) sliceIndex(childIndex int) (sliceIndex int) {
+	return s.bitfield.OnesBefore(childIndex)
+}
+
+func (s *childer) child(sliceIndex int) *Shard {
+	return s.children[sliceIndex]
+}
+
+func (s *childer) link(sliceIndex int) *ipld.Link {
+	return s.links[sliceIndex]
+}
+
+func (s *childer) insert(key string, lnk *ipld.Link, idx int) error {
+	if lnk == nil {
+		return os.ErrNotExist
+	}
+
+	lnk.Name = s.sd.linkNamePrefix(idx) + key
+	i := s.sliceIndex(idx)
+	sd := &Shard{key: key, val: lnk}
+
+	s.children = append(s.children[:i], append([]*Shard{sd}, s.children[i:]...)...)
+	s.links = append(s.links[:i], append([]*ipld.Link{nil}, s.links[i:]...)...)
+	// Add a `nil` placeholder in `links` so the rest of the entries keep the same
+	// index as `children`.
+	s.bitfield.SetBit(idx)
+
+	return nil
+}
+
+func (s *childer) set(sd *Shard, i int) {
+	s.children[i] = sd
+}
+
+func (s *childer) rm(childIndex int) error {
+	i := s.sliceIndex(childIndex)
+
+	if err := s.check(i); err != nil {
+		return err
+	}
+
+	copy(s.children[i:], s.children[i+1:])
+	s.children = s.children[:len(s.children)-1]
+
+	copy(s.links[i:], s.links[i+1:])
+	s.links = s.links[:len(s.links)-1]
+
+	s.bitfield.UnsetBit(childIndex)
+
+	return nil
+}
+
+// get returns the i'th child of this shard. If it is cached in the
+// children array, it will return it from there. Otherwise, it loads the child
+// node from disk.
+func (s *childer) get(ctx context.Context, sliceIndex int) (*Shard, error) {
+	if err := s.check(sliceIndex); err != nil {
+		return nil, err
+	}
+
+	c := s.child(sliceIndex)
+	if c != nil {
+		return c, nil
+	}
+
+	return s.loadChild(ctx, sliceIndex)
+}
+
+// loadChild reads the i'th child node of this shard from disk and returns it
+// as a 'child' interface
+func (s *childer) loadChild(ctx context.Context, sliceIndex int) (*Shard, error) {
+	lnk := s.link(sliceIndex)
+	lnkLinkType, err := s.sd.childLinkType(lnk)
+	if err != nil {
+		return nil, err
+	}
+
+	var c *Shard
+	if lnkLinkType == shardLink {
+		nd, err := lnk.GetNode(ctx, s.dserv)
+		if err != nil {
+			return nil, err
+		}
+		cds, err := NewHamtFromDag(s.dserv, nd)
+		if err != nil {
+			return nil, err
+		}
+
+		c = cds
+	} else {
+		s, err := s.sd.makeShardValue(lnk)
+		if err != nil {
+			return nil, err
+		}
+		c = s
+	}
+
+	s.set(c, sliceIndex)
+
+	return c, nil
+}
+
+func (s *childer) has(childIndex int) bool {
+	return s.bitfield.Bit(childIndex)
+}
+
+func (s *childer) length() int {
+	return len(s.children)
+}
+
+func (s *childer) each(ctx context.Context, cb func(*Shard) error) error {
+	for i := range s.children {
+		c, err := s.get(ctx, i)
+		if err != nil {
+			return err
+		}
+
+		if err := cb(c); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (s *childer) check(sliceIndex int) error {
+	if sliceIndex >= len(s.children) || sliceIndex < 0 {
+		return fmt.Errorf("invalid index passed to operate children (likely corrupt bitfield)")
+	}
+
+	if len(s.children) != len(s.links) {
+		return fmt.Errorf("inconsistent lengths between children array and Links array")
+	}
+
+	return nil
 }

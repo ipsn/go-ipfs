@@ -9,16 +9,16 @@ import (
 
 	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
 
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
 	notif "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing/notifications"
 	b58 "github.com/mr-tron/base58/base58"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
@@ -44,7 +44,7 @@ var DhtCmd = &cmds.Command{
 }
 
 const (
-	dhtVerboseOptionName = "v"
+	dhtVerboseOptionName = "verbose"
 )
 
 var queryDhtCmd = &cmds.Command{
@@ -57,7 +57,7 @@ var queryDhtCmd = &cmds.Command{
 		cmdkit.StringArg("peerID", true, true, "The peerID to run the query against."),
 	},
 	Options: []cmdkit.Option{
-		cmdkit.BoolOption("verbose", dhtVerboseOptionName, "Print extra information."),
+		cmdkit.BoolOption(dhtVerboseOptionName, "v", "Print extra information."),
 	},
 	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) error {
 		nd, err := cmdenv.GetNode(env)
@@ -132,7 +132,7 @@ var findProvidersDhtCmd = &cmds.Command{
 		cmdkit.StringArg("key", true, true, "The key to find providers for."),
 	},
 	Options: []cmdkit.Option{
-		cmdkit.BoolOption("verbose", dhtVerboseOptionName, "Print extra information."),
+		cmdkit.BoolOption(dhtVerboseOptionName, "v", "Print extra information."),
 		cmdkit.IntOption(numProvidersOptionName, "n", "The number of providers to find.").WithDefault(20),
 	},
 	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) error {
@@ -226,7 +226,7 @@ var provideRefDhtCmd = &cmds.Command{
 		cmdkit.StringArg("key", true, true, "The key[s] to send provide records for.").EnableStdin(),
 	},
 	Options: []cmdkit.Option{
-		cmdkit.BoolOption("verbose", dhtVerboseOptionName, "Print extra information."),
+		cmdkit.BoolOption(dhtVerboseOptionName, "v", "Print extra information."),
 		cmdkit.BoolOption(recursiveOptionName, "r", "Recursively provide entire graph."),
 	},
 	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) error {
@@ -356,7 +356,7 @@ var findPeerDhtCmd = &cmds.Command{
 		cmdkit.StringArg("peerID", true, true, "The ID of the peer to search for."),
 	},
 	Options: []cmdkit.Option{
-		cmdkit.BoolOption("verbose", dhtVerboseOptionName, "Print extra information."),
+		cmdkit.BoolOption(dhtVerboseOptionName, "v", "Print extra information."),
 	},
 	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) error {
 		nd, err := cmdenv.GetNode(env)
@@ -438,7 +438,7 @@ Different key types can specify other 'best' rules.
 		cmdkit.StringArg("key", true, true, "The key to find a value for."),
 	},
 	Options: []cmdkit.Option{
-		cmdkit.BoolOption("verbose", dhtVerboseOptionName, "Print extra information."),
+		cmdkit.BoolOption(dhtVerboseOptionName, "v", "Print extra information."),
 	},
 	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) error {
 		nd, err := cmdenv.GetNode(env)
@@ -530,7 +530,7 @@ NOTE: A value may not exceed 2048 bytes.
 		cmdkit.StringArg("value", true, false, "The value to store.").EnableStdin(),
 	},
 	Options: []cmdkit.Option{
-		cmdkit.BoolOption("verbose", dhtVerboseOptionName, "Print extra information."),
+		cmdkit.BoolOption(dhtVerboseOptionName, "v", "Print extra information."),
 	},
 	Run: func(req *cmds.Request, res cmds.ResponseEmitter, env cmds.Environment) error {
 		nd, err := cmdenv.GetNode(env)
