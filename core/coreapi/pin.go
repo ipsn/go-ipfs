@@ -6,7 +6,6 @@ import (
 
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
 	caopts "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
-	corerepo "github.com/ipsn/go-ipfs/core/corerepo"
 	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 	merkledag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 
@@ -17,21 +16,21 @@ import (
 type PinAPI CoreAPI
 
 func (api *PinAPI) Add(ctx context.Context, p coreiface.Path, opts ...caopts.PinAddOption) error {
-	settings, err := caopts.PinAddOptions(opts...)
+	dagNode, err := api.core().ResolveNode(ctx, p)
 	if err != nil {
-		return err
+		return fmt.Errorf("pin: %s", err)
 	}
 
-	rp, err := api.core().ResolvePath(ctx, p)
+	settings, err := caopts.PinAddOptions(opts...)
 	if err != nil {
 		return err
 	}
 
 	defer api.blockstore.PinLock().Unlock()
 
-	_, err = corerepo.Pin(api.pinning, api.core(), ctx, []string{rp.Cid().String()}, settings.Recursive)
+	err = api.pinning.Pin(ctx, dagNode, settings.Recursive)
 	if err != nil {
-		return err
+		return fmt.Errorf("pin: %s", err)
 	}
 
 	return api.pinning.Flush()
@@ -52,9 +51,19 @@ func (api *PinAPI) Ls(ctx context.Context, opts ...caopts.PinLsOption) ([]coreif
 	return api.pinLsAll(settings.Type, ctx)
 }
 
-func (api *PinAPI) Rm(ctx context.Context, p coreiface.Path) error {
-	_, err := corerepo.Unpin(api.pinning, api.core(), ctx, []string{p.String()}, true)
+// Rm pin rm api
+func (api *PinAPI) Rm(ctx context.Context, p coreiface.Path, opts ...caopts.PinRmOption) error {
+	rp, err := api.core().ResolvePath(ctx, p)
 	if err != nil {
+		return err
+	}
+
+	settings, err := caopts.PinRmOptions(opts...)
+	if err != nil {
+		return err
+	}
+
+	if err = api.pinning.Unpin(ctx, rp.Cid(), settings.Recursive); err != nil {
 		return err
 	}
 

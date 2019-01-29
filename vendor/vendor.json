@@ -3,16 +3,16 @@
 	"ignore": "",
 	"package": [
 		{
-			"checksumSHA1": "y9Q5q+r3mmAZ2b5BEqOMFzrbsV4=",
+			"checksumSHA1": "CmMuh0ApTy1SVH7EQIIAbaKchgY=",
 			"path": "github.com/bifurcation/mint",
-			"revision": "a14404e9a861605b3bc889790cbc303435876d6b",
-			"revisionTime": "2018-11-05T07:19:58Z"
+			"revision": "83ba9bc2ead9cdf8b0c8bd94e8a41243e5f6ed88",
+			"revisionTime": "2019-01-29T14:10:59Z"
 		},
 		{
 			"checksumSHA1": "HnzrrCx9iVd9h4ItB3YKZMrkO2g=",
 			"path": "github.com/bifurcation/mint/syntax",
-			"revision": "a14404e9a861605b3bc889790cbc303435876d6b",
-			"revisionTime": "2018-11-05T07:19:58Z"
+			"revision": "83ba9bc2ead9cdf8b0c8bd94e8a41243e5f6ed88",
+			"revisionTime": "2019-01-29T14:10:59Z"
 		},
 		{
 			"checksumSHA1": "PYXuf7wvcj492uWhjvmXlyyQUYc=",
@@ -35,14 +35,14 @@
 		{
 			"checksumSHA1": "Tn+LgLsuYTzoCnQPai6TdiPw4ZQ=",
 			"path": "golang.org/x/crypto/curve25519",
-			"revision": "c7b33c32a30bae9ba07d37eb4d86f1f8b0f644fb",
-			"revisionTime": "2016-11-29T22:27:05Z"
+			"revision": "ccddf3741a0cfcee0a62d34c18c2c5417a3761af",
+			"revisionTime": "2019-01-29T19:53:33Z"
 		},
 		{
 			"checksumSHA1": "GyJO23KIK26BOFakPDOno2A6+iM=",
 			"path": "golang.org/x/crypto/hkdf",
-			"revision": "c7b33c32a30bae9ba07d37eb4d86f1f8b0f644fb",
-			"revisionTime": "2016-11-29T22:27:05Z"
+			"revision": "ccddf3741a0cfcee0a62d34c18c2c5417a3761af",
+			"revisionTime": "2019-01-29T19:53:33Z"
 		}
 	],
 	"rootPath": "github.com/ipsn/go-ipfs"
