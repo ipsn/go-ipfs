@@ -17,6 +17,7 @@ import (
 	oldcmds "github.com/ipsn/go-ipfs/commands"
 	"github.com/ipsn/go-ipfs/core"
 	commands "github.com/ipsn/go-ipfs/core/commands"
+	coreapi "github.com/ipsn/go-ipfs/core/coreapi"
 	corehttp "github.com/ipsn/go-ipfs/core/corehttp"
 	corerepo "github.com/ipsn/go-ipfs/core/corerepo"
 	nodeMount "github.com/ipsn/go-ipfs/fuse/node"
@@ -24,9 +25,10 @@ import (
 	migrate "github.com/ipsn/go-ipfs/repo/fsrepo/migrations"
 
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	goprocess "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
 	"github.com/prometheus/client_golang/prometheus"
 	mprome "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-metrics-prometheus"
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
@@ -355,6 +357,18 @@ func daemonFunc(req *cmds.Request, re cmds.ResponseEmitter, env cmds.Environment
 		return node, nil
 	}
 
+	// Start "core" plugins. We want to do this *before* starting the HTTP
+	// API as the user may be relying on these plugins.
+	api, err := coreapi.NewCoreAPI(node)
+	if err != nil {
+		return err
+	}
+	err = cctx.Plugins.Start(api)
+	if err != nil {
+		return err
+	}
+	node.Process().AddChild(goprocess.WithTeardown(cctx.Plugins.Close))
+
 	// construct api endpoint - every time
 	apiErrc, err := serveHTTPApi(req, cctx)
 	if err != nil {
@@ -391,6 +405,7 @@ func daemonFunc(req *cmds.Request, re cmds.ResponseEmitter, env cmds.Environment
 	// initialize metrics collector
 	prometheus.MustRegister(&corehttp.IpfsNodeCollector{Node: node})
 
+	// The daemon is *finally* ready.
 	fmt.Printf("Daemon is ready\n")
 
 	// Give the user some immediate feedback when they hit C-c

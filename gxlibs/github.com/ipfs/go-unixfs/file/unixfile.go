@@ -1,13 +1,14 @@
-package coreapi
+package unixfile
 
 import (
 	"context"
 	"errors"
 
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
+
 	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 )
 
@@ -15,12 +16,11 @@ import (
 // TODO: should we allow setting this via context hint?
 const prefetchFiles = 4
 
-// TODO: this probably belongs in go-unixfs (and could probably replace a chunk of it's interface in the long run)
-
 type ufsDirectory struct {
 	ctx   context.Context
 	dserv ipld.DAGService
 	dir   uio.Directory
+	size  int64
 }
 
 type ufsIterator struct {
@@ -78,7 +78,7 @@ func (it *ufsIterator) Next() bool {
 	}
 
 	it.curName = l.Name
-	it.curFile, it.err = newUnixfsFile(it.ctx, it.dserv, nd)
+	it.curFile, it.err = NewUnixfsFile(it.ctx, it.dserv, nd)
 	return it.err == nil
 }
 
@@ -119,12 +119,7 @@ func (d *ufsDirectory) Entries() files.DirIterator {
 }
 
 func (d *ufsDirectory) Size() (int64, error) {
-	n, err := d.dir.GetNode()
-	if err != nil {
-		return 0, err
-	}
-	s, err := n.Size()
-	return int64(s), err
+	return d.size, nil
 }
 
 type ufsFile struct {
@@ -135,8 +130,13 @@ func (f *ufsFile) Size() (int64, error) {
 	return int64(f.DagReader.Size()), nil
 }
 
-func newUnixfsDir(ctx context.Context, dserv ipld.DAGService, nd ipld.Node) (files.Directory, error) {
+func newUnixfsDir(ctx context.Context, dserv ipld.DAGService, nd *dag.ProtoNode) (files.Directory, error) {
 	dir, err := uio.NewDirectoryFromNode(dserv, nd)
+	if err != nil {
+		return nil, err
+	}
+
+	size, err := nd.Size()
 	if err != nil {
 		return nil, err
 	}
@@ -145,11 +145,12 @@ func newUnixfsDir(ctx context.Context, dserv ipld.DAGService, nd ipld.Node) (fil
 		ctx:   ctx,
 		dserv: dserv,
 
-		dir: dir,
+		dir:  dir,
+		size: int64(size),
 	}, nil
 }
 
-func newUnixfsFile(ctx context.Context, dserv ipld.DAGService, nd ipld.Node) (files.Node, error) {
+func NewUnixfsFile(ctx context.Context, dserv ipld.DAGService, nd ipld.Node) (files.Node, error) {
 	switch dn := nd.(type) {
 	case *dag.ProtoNode:
 		fsn, err := ft.FSNodeFromBytes(dn.Data())
@@ -157,7 +158,10 @@ func newUnixfsFile(ctx context.Context, dserv ipld.DAGService, nd ipld.Node) (fi
 			return nil, err
 		}
 		if fsn.IsDir() {
-			return newUnixfsDir(ctx, dserv, nd)
+			return newUnixfsDir(ctx, dserv, dn)
+		}
+		if fsn.Type() == ft.TSymlink {
+			return files.NewLinkFile(string(fsn.Data()), nil), nil
 		}
 
 	case *dag.RawNode:

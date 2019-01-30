@@ -17,11 +17,11 @@ import (
 	"github.com/ipsn/go-ipfs/dagutils"
 
 	"github.com/dustin/go-humanize"
+	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer"
 	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
-	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
