@@ -2,11 +2,11 @@ package iface
 
 import (
 	"context"
-
 	"github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
-	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
 )
 
 type AddEvent struct {
@@ -14,6 +14,25 @@ type AddEvent struct {
 	Path  ResolvedPath `json:",omitempty"`
 	Bytes int64        `json:",omitempty"`
 	Size  string       `json:",omitempty"`
+}
+
+type FileType int32
+
+const (
+	TRaw       = FileType(unixfs.TRaw)
+	TFile      = FileType(unixfs.TFile)
+	TDirectory = FileType(unixfs.TDirectory)
+	TMetadata  = FileType(unixfs.TMetadata)
+	TSymlink   = FileType(unixfs.TSymlink)
+	THAMTShard = FileType(unixfs.THAMTShard)
+)
+
+type LsLink struct {
+	Link *ipld.Link
+	Size uint64
+	Type FileType
+
+	Err error
 }
 
 // UnixfsAPI is the basic interface to immutable files in IPFS
@@ -30,6 +49,7 @@ type UnixfsAPI interface {
 	// to operations performed on the returned file
 	Get(context.Context, Path) (files.Node, error)
 
-	// Ls returns the list of links in a directory
-	Ls(context.Context, Path) ([]*ipld.Link, error)
+	// Ls returns the list of links in a directory. Links aren't guaranteed to be
+	// returned in order
+	Ls(context.Context, Path, ...options.UnixfsLsOption) (<-chan LsLink, error)
 }
