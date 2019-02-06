@@ -10,6 +10,7 @@ import (
 	util "github.com/ipsn/go-ipfs/blocks/blockstoreutil"
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
 	caopts "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
+	pin "github.com/ipsn/go-ipfs/pin"
 
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
@@ -23,7 +24,7 @@ type BlockStat struct {
 }
 
 func (api *BlockAPI) Put(ctx context.Context, src io.Reader, opts ...caopts.BlockPutOption) (coreiface.BlockStat, error) {
-	_, pref, err := caopts.BlockPutOptions(opts...)
+	settings, pref, err := caopts.BlockPutOptions(opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -43,9 +44,17 @@ func (api *BlockAPI) Put(ctx context.Context, src io.Reader, opts ...caopts.Bloc
 		return nil, err
 	}
 
+	if settings.Pin {
+		defer api.blockstore.PinLock().Unlock()
+	}
+
 	err = api.blocks.AddBlock(b)
 	if err != nil {
 		return nil, err
+	}
+
+	if settings.Pin {
+		api.pinning.PinWithMode(b.Cid(), pin.Recursive)
 	}
 
 	return &BlockStat{path: coreiface.IpldPath(b.Cid()), size: len(data)}, nil
