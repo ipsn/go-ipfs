@@ -20,9 +20,9 @@
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmNgLg1NTw37iWbYPKcyK85YJ9Whs1MkPtJwhfqbNYAyKg",
+      "hash": "QmZ7cBWUXkyWTMN4qH6NGoyMVs7JugyFChBNP4ZUp5rJHH",
       "name": "go-libp2p-net",
-      "version": "3.0.22"
+      "version": "3.0.23"
     },
     {
       "author": "whyrusleeping",
@@ -32,9 +32,9 @@
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmY5Grm8pJdiSSVsYxx4uNRgweY72EmYwuSDbRnbFok3iY",
+      "hash": "QmPJxxDsX2UbchSHobbYuvz7qnyJTFKvaKMzE2rZWJ4x5B",
       "name": "go-libp2p-peer",
-      "version": "3.0.0"
+      "version": "3.1.0"
     }
   ],
   "gxVersion": "0.4.0",
@@ -42,6 +42,6 @@
   "license": "MIT",
   "name": "go-libp2p-transport",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "3.0.21"
+  "version": "3.0.22"
 }
 

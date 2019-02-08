@@ -27,10 +27,10 @@ import (
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds/cli"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds/http"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	loggables "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-loggables"
 	osh "github.com/ipsn/go-ipfs/gxlibs/github.com/Kubuxu/go-os-helper"
 	manet "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 )
 

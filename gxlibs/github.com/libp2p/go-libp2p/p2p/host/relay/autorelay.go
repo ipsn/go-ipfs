@@ -203,36 +203,12 @@ func (h *AutoRelayHost) doUpdateAddrs() {
 	addrs := h.baseAddrs()
 	raddrs := make([]ma.Multiaddr, 0, len(addrs)+len(h.relays))
 
-	// remove our public addresses from the list and replace them by just the public IP
+	// remove our public addresses from the list
 	for _, addr := range addrs {
 		if manet.IsPublicAddr(addr) {
-			ip, err := addr.ValueForProtocol(ma.P_IP4)
-			if err == nil {
-				pub, err := ma.NewMultiaddr(fmt.Sprintf("/ip4/%s", ip))
-				if err != nil {
-					panic(err)
-				}
-
-				if !containsAddr(raddrs, pub) {
-					raddrs = append(raddrs, pub)
-				}
-				continue
-			}
-
-			ip, err = addr.ValueForProtocol(ma.P_IP6)
-			if err == nil {
-				pub, err := ma.NewMultiaddr(fmt.Sprintf("/ip6/%s", ip))
-				if err != nil {
-					panic(err)
-				}
-				if !containsAddr(raddrs, pub) {
-					raddrs = append(raddrs, pub)
-				}
-				continue
-			}
-		} else {
-			raddrs = append(raddrs, addr)
+			continue
 		}
+		raddrs = append(raddrs, addr)
 	}
 
 	// add relay specific addrs to the list

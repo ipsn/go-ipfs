@@ -13,16 +13,16 @@ import (
 
 	core "github.com/ipsn/go-ipfs/core"
 	namesys "github.com/ipsn/go-ipfs/namesys"
-	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
-	mfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-mfs"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	fuse "bazil.org/fuse"
 	fs "bazil.org/fuse/fs"
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
+	mfs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-mfs"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 )
 

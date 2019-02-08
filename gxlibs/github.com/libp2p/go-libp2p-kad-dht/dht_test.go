@@ -5,6 +5,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"math/rand"
 	"sort"
 	"strings"
@@ -155,7 +157,7 @@ func bootstrap(t *testing.T, ctx context.Context, dhts []*IpfsDHT) {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	log.Debugf("Bootstrapping DHTs...")
+	logger.Debugf("Bootstrapping DHTs...")
 
 	// tried async. sequential fares much better. compare:
 	// 100 async https://gist.github.com/jbenet/56d12f0578d5f34810b2
@@ -492,7 +494,7 @@ func TestProvides(t *testing.T) {
 	connect(t, ctx, dhts[1], dhts[3])
 
 	for _, k := range testCaseCids {
-		log.Debugf("announcing provider for %s", k)
+		logger.Debugf("announcing provider for %s", k)
 		if err := dhts[3].Provide(ctx, k, true); err != nil {
 			t.Fatal(err)
 		}
@@ -505,7 +507,7 @@ func TestProvides(t *testing.T) {
 	for _, c := range testCaseCids {
 		n = (n + 1) % 3
 
-		log.Debugf("getting providers for %s from %d", c, n)
+		logger.Debugf("getting providers for %s from %d", c, n)
 		ctxT, cancel := context.WithTimeout(ctx, time.Second)
 		defer cancel()
 		provchan := dhts[n].FindProvidersAsync(ctxT, c, 1)
@@ -542,7 +544,7 @@ func TestLocalProvides(t *testing.T) {
 	connect(t, ctx, dhts[1], dhts[3])
 
 	for _, k := range testCaseCids {
-		log.Debugf("announcing provider for %s", k)
+		logger.Debugf("announcing provider for %s", k)
 		if err := dhts[3].Provide(ctx, k, false); err != nil {
 			t.Fatal(err)
 		}
@@ -570,7 +572,7 @@ func waitForWellFormedTables(t *testing.T, dhts []*IpfsDHT, minPeers, avgPeers i
 			rtlen := dht.routingTable.Size()
 			totalPeers += rtlen
 			if minPeers > 0 && rtlen < minPeers {
-				t.Logf("routing table for %s only has %d peers (should have >%d)", dht.self, rtlen, minPeers)
+				//t.Logf("routing table for %s only has %d peers (should have >%d)", dht.self, rtlen, minPeers)
 				return false
 			}
 		}
@@ -587,7 +589,7 @@ func waitForWellFormedTables(t *testing.T, dhts []*IpfsDHT, minPeers, avgPeers i
 	for {
 		select {
 		case <-timeoutA:
-			log.Debugf("did not reach well-formed routing tables by %s", timeout)
+			logger.Debugf("did not reach well-formed routing tables by %s", timeout)
 			return false // failed
 		case <-time.After(5 * time.Millisecond):
 			if checkTables() {
@@ -608,7 +610,6 @@ func printRoutingTables(dhts []*IpfsDHT) {
 }
 
 func TestBootstrap(t *testing.T) {
-	// t.Skip("skipping test to debug another")
 	if testing.Short() {
 		t.SkipNow()
 	}
@@ -659,7 +660,6 @@ func TestBootstrap(t *testing.T) {
 }
 
 func TestPeriodicBootstrap(t *testing.T) {
-	// t.Skip("skipping test to debug another")
 	if ci.IsRunning() {
 		t.Skip("skipping on CI. highly timing dependent")
 	}
@@ -679,22 +679,9 @@ func TestPeriodicBootstrap(t *testing.T) {
 		}
 	}()
 
-	signals := []chan time.Time{}
-
 	var cfg BootstrapConfig
 	cfg = DefaultBootstrapConfig
 	cfg.Queries = 5
-
-	// kick off periodic bootstrappers with instrumented signals.
-	for _, dht := range dhts {
-		s := make(chan time.Time)
-		signals = append(signals, s)
-		proc, err := dht.BootstrapOnSignal(cfg, s)
-		if err != nil {
-			t.Fatal(err)
-		}
-		defer proc.Close()
-	}
 
 	t.Logf("dhts are not connected. %d", nDHTs)
 	for _, dht := range dhts {
@@ -721,9 +708,8 @@ func TestPeriodicBootstrap(t *testing.T) {
 	}
 
 	t.Logf("bootstrapping them so they find each other. %d", nDHTs)
-	now := time.Now()
-	for _, signal := range signals {
-		go func(s chan time.Time) { s <- now }(signal)
+	for _, dht := range dhts {
+		go dht.BootstrapOnce(ctx, cfg)
 	}
 
 	// this is async, and we dont know when it's finished with one cycle, so keep checking
@@ -737,7 +723,6 @@ func TestPeriodicBootstrap(t *testing.T) {
 
 func TestProvidesMany(t *testing.T) {
 	t.Skip("this test doesn't work")
-	// t.Skip("skipping test to debug another")
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -817,7 +802,7 @@ func TestProvidesMany(t *testing.T) {
 	for _, c := range testCaseCids {
 		// everyone should be able to find it...
 		for _, dht := range dhts {
-			log.Debugf("getting providers for %s at %s", c, dht.self)
+			logger.Debugf("getting providers for %s at %s", c, dht.self)
 			wg.Add(1)
 			go getProvider(dht, c)
 		}
@@ -1002,7 +987,7 @@ func TestFindPeersConnectedToPeer(t *testing.T) {
 
 	// testPeerListsMatch(t, shouldFind, found)
 
-	log.Warning("TestFindPeersConnectedToPeer is not quite correct")
+	logger.Warning("TestFindPeersConnectedToPeer is not quite correct")
 	if len(found) == 0 {
 		t.Fatal("didn't find any peers.")
 	}
@@ -1047,7 +1032,7 @@ func TestConnectCollision(t *testing.T) {
 	runTimes := 10
 
 	for rtime := 0; rtime < runTimes; rtime++ {
-		log.Info("Running Time: ", rtime)
+		logger.Info("Running Time: ", rtime)
 
 		ctx, cancel := context.WithCancel(context.Background())
 
@@ -1175,101 +1160,91 @@ func TestClientModeFindPeer(t *testing.T) {
 	}
 }
 
+func minInt(a, b int) int {
+	if a < b {
+		return a
+	} else {
+		return b
+	}
+}
+
+func TestFindPeerQueryMinimal(t *testing.T) {
+	testFindPeerQuery(t, 2, 22, 11)
+}
+
 func TestFindPeerQuery(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping test in short mode")
+	}
+	if curFileLimit() < 1024 {
+		t.Skip("insufficient file descriptors available")
+	}
+	testFindPeerQuery(t, 20, 80, 16)
+}
+
+func testFindPeerQuery(t *testing.T,
+	bootstrappers, // Number of nodes connected to the querying node
+	leafs, // Number of nodes that might be connected to from the bootstrappers
+	bootstrapperLeafConns int, // Number of connections each bootstrapper has to the leaf nodes
+) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	nDHTs := 101
-	_, allpeers, dhts := setupDHTS(ctx, nDHTs, t)
+	_, allpeers, dhts := setupDHTS(ctx, 1+bootstrappers+leafs, t)
 	defer func() {
-		for i := 0; i < nDHTs; i++ {
-			dhts[i].Close()
-			defer dhts[i].host.Close()
+		for _, d := range dhts {
+			d.Close()
+			d.host.Close()
 		}
 	}()
 
 	mrand := rand.New(rand.NewSource(42))
 	guy := dhts[0]
 	others := dhts[1:]
-	for i := 0; i < 20; i++ {
-		for j := 0; j < 16; j++ { // 16, high enough to probably not have any partitions
-			v := mrand.Intn(80)
-			connect(t, ctx, others[i], others[20+v])
+	for i := 0; i < bootstrappers; i++ {
+		for j := 0; j < bootstrapperLeafConns; j++ {
+			v := mrand.Intn(leafs)
+			connect(t, ctx, others[i], others[bootstrappers+v])
 		}
 	}
 
-	for i := 0; i < 20; i++ {
+	for i := 0; i < bootstrappers; i++ {
 		connect(t, ctx, guy, others[i])
 	}
+
+	var reachableIds []peer.ID
+	for i, d := range dhts {
+		lp := len(d.host.Network().Peers())
+		//t.Log(i, lp)
+		if i != 0 && lp > 0 {
+			reachableIds = append(reachableIds, allpeers[i])
+		}
+	}
+	t.Logf("%d reachable ids", len(reachableIds))
 
 	val := "foobar"
 	rtval := kb.ConvertKey(val)
 
 	rtablePeers := guy.routingTable.NearestPeers(rtval, AlphaValue)
-	if len(rtablePeers) != 3 {
-		t.Fatalf("expected 3 peers back from routing table, got %d", len(rtablePeers))
-	}
+	assert.Len(t, rtablePeers, minInt(bootstrappers, AlphaValue))
 
-	netpeers := guy.host.Network().Peers()
-	if len(netpeers) != 20 {
-		t.Fatalf("expected 20 peers to be connected, got %d", len(netpeers))
-	}
-
-	rtableset := make(map[peer.ID]bool)
-	for _, p := range rtablePeers {
-		rtableset[p] = true
-	}
+	assert.Len(t, guy.host.Network().Peers(), bootstrappers)
 
 	out, err := guy.GetClosestPeers(ctx, val)
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 
-	var notfromrtable int
-	var count int
 	var outpeers []peer.ID
 	for p := range out {
-		count++
-		if !rtableset[p] {
-			notfromrtable++
-		}
 		outpeers = append(outpeers, p)
 	}
 
-	if notfromrtable == 0 {
-		t.Fatal("got entirely peers from our routing table")
-	}
-
-	if count != 20 {
-		t.Fatal("should have only gotten 20 peers from getclosestpeers call")
-	}
-
-	sort.Sort(peer.IDSlice(allpeers[1:]))
 	sort.Sort(peer.IDSlice(outpeers))
 
-	actualclosest := kb.SortClosestPeers(allpeers[1:], rtval)
-	exp := actualclosest[:20]
+	exp := kb.SortClosestPeers(reachableIds, rtval)[:minInt(KValue, len(reachableIds))]
+	t.Logf("got %d peers", len(outpeers))
 	got := kb.SortClosestPeers(outpeers, rtval)
 
-	diffp := countDiffPeers(exp, got)
-	if diffp > 0 {
-		// could be a partition created during setup
-		t.Fatal("didnt get expected closest peers")
-	}
-}
-
-func countDiffPeers(a, b []peer.ID) int {
-	s := make(map[peer.ID]bool)
-	for _, p := range a {
-		s[p] = true
-	}
-	var out int
-	for _, p := range b {
-		if !s[p] {
-			out++
-		}
-	}
-	return out
+	assert.EqualValues(t, exp, got)
 }
 
 func TestFindClosestPeers(t *testing.T) {

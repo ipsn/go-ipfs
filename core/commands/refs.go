@@ -10,10 +10,10 @@ import (
 	core "github.com/ipsn/go-ipfs/core"
 	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
 
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	cidenc "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cidutil/cidenc"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )

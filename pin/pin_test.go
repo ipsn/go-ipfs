@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	bs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 	mdag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	bs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 
 	util "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"

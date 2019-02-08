@@ -9,10 +9,10 @@ import (
 
 	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
 	options "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
-	nsopts "github.com/ipsn/go-ipfs/namesys/opts"
+	nsopts "github.com/ipsn/go-ipfs/core/coreapi/interface/options/namesys"
 
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )

@@ -7,7 +7,7 @@ import (
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	proquint "github.com/bren2010/proquint"
 
-	opts "github.com/ipsn/go-ipfs/namesys/opts"
+	opts "github.com/ipsn/go-ipfs/core/coreapi/interface/options/namesys"
 )
 
 type ProquintResolver struct{}

@@ -11,8 +11,8 @@ import (
 	ncmd "github.com/ipsn/go-ipfs/core/commands/name"
 	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
 	options "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
+	nsopts "github.com/ipsn/go-ipfs/core/coreapi/interface/options/namesys"
 	ns "github.com/ipsn/go-ipfs/namesys"
-	nsopts "github.com/ipsn/go-ipfs/namesys/opts"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"

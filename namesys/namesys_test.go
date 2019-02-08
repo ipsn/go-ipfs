@@ -5,15 +5,15 @@ import (
 	"fmt"
 	"testing"
 
-	opts "github.com/ipsn/go-ipfs/namesys/opts"
+	opts "github.com/ipsn/go-ipfs/core/coreapi/interface/options/namesys"
 
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	pstoremem "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore/pstoremem"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	offroute "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
 	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	dssync "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
 )

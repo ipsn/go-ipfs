@@ -16,15 +16,15 @@ import (
 	"github.com/ipsn/go-ipfs/core/coreapi"
 	"github.com/ipsn/go-ipfs/core/coreapi/interface"
 	"github.com/ipsn/go-ipfs/core/coreapi/interface/options"
+	nsopts "github.com/ipsn/go-ipfs/core/coreapi/interface/options/namesys"
 	namesys "github.com/ipsn/go-ipfs/namesys"
-	nsopts "github.com/ipsn/go-ipfs/namesys/opts"
 	repo "github.com/ipsn/go-ipfs/repo"
 
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	id "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/protocol/identify"
-	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
 	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
+	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
 	datastore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	syncds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
 )

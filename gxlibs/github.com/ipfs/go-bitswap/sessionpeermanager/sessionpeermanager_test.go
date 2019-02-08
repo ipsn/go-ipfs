@@ -10,82 +10,82 @@ import (
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/testutil"
 
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	ifconnmgr "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-interface-connmgr"
-	inet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 )
 
-type fakePeerNetwork struct {
-	peers       []peer.ID
-	connManager ifconnmgr.ConnManager
+type fakePeerProviderFinder struct {
+	peers     []peer.ID
+	completed chan struct{}
 }
 
-func (fpn *fakePeerNetwork) ConnectionManager() ifconnmgr.ConnManager {
-	return fpn.connManager
-}
-
-func (fpn *fakePeerNetwork) ConnectTo(context.Context, peer.ID) error {
-	return nil
-}
-
-func (fpn *fakePeerNetwork) FindProvidersAsync(ctx context.Context, c cid.Cid, num int) <-chan peer.ID {
+func (fppf *fakePeerProviderFinder) FindProvidersAsync(ctx context.Context, c cid.Cid) <-chan peer.ID {
 	peerCh := make(chan peer.ID)
 	go func() {
-		defer close(peerCh)
-		for _, p := range fpn.peers {
+
+		for _, p := range fppf.peers {
 			select {
 			case peerCh <- p:
 			case <-ctx.Done():
+				close(peerCh)
 				return
 			}
+		}
+		close(peerCh)
+
+		select {
+		case fppf.completed <- struct{}{}:
+		case <-ctx.Done():
 		}
 	}()
 	return peerCh
 }
 
-type fakeConnManager struct {
+type fakePeerTagger struct {
 	taggedPeers []peer.ID
 	wait        sync.WaitGroup
 }
 
-func (fcm *fakeConnManager) TagPeer(p peer.ID, tag string, n int) {
-	fcm.wait.Add(1)
-	fcm.taggedPeers = append(fcm.taggedPeers, p)
+func (fpt *fakePeerTagger) TagPeer(p peer.ID, tag string, n int) {
+	fpt.wait.Add(1)
+	fpt.taggedPeers = append(fpt.taggedPeers, p)
 }
 
-func (fcm *fakeConnManager) UntagPeer(p peer.ID, tag string) {
-	defer fcm.wait.Done()
+func (fpt *fakePeerTagger) UntagPeer(p peer.ID, tag string) {
+	defer fpt.wait.Done()
 
-	for i := 0; i < len(fcm.taggedPeers); i++ {
-		if fcm.taggedPeers[i] == p {
-			fcm.taggedPeers[i] = fcm.taggedPeers[len(fcm.taggedPeers)-1]
-			fcm.taggedPeers = fcm.taggedPeers[:len(fcm.taggedPeers)-1]
+	for i := 0; i < len(fpt.taggedPeers); i++ {
+		if fpt.taggedPeers[i] == p {
+			fpt.taggedPeers[i] = fpt.taggedPeers[len(fpt.taggedPeers)-1]
+			fpt.taggedPeers = fpt.taggedPeers[:len(fpt.taggedPeers)-1]
 			return
 		}
 	}
-
 }
-
-func (*fakeConnManager) GetTagInfo(p peer.ID) *ifconnmgr.TagInfo { return nil }
-func (*fakeConnManager) TrimOpenConns(ctx context.Context)       {}
-func (*fakeConnManager) Notifee() inet.Notifiee                  { return nil }
 
 func TestFindingMorePeers(t *testing.T) {
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
+	completed := make(chan struct{})
+
 	peers := testutil.GeneratePeers(5)
-	fcm := &fakeConnManager{}
-	fpn := &fakePeerNetwork{peers, fcm}
+	fpt := &fakePeerTagger{}
+	fppf := &fakePeerProviderFinder{peers, completed}
 	c := testutil.GenerateCids(1)[0]
 	id := testutil.GenerateSessionID()
 
-	sessionPeerManager := New(ctx, id, fpn)
+	sessionPeerManager := New(ctx, id, fpt, fppf)
 
 	findCtx, findCancel := context.WithTimeout(ctx, 10*time.Millisecond)
 	defer findCancel()
 	sessionPeerManager.FindMorePeers(ctx, c)
-	<-findCtx.Done()
+	select {
+	case <-completed:
+	case <-findCtx.Done():
+		t.Fatal("Did not finish finding providers")
+	}
+	time.Sleep(2 * time.Millisecond)
+
 	sessionPeers := sessionPeerManager.GetOptimizedPeers()
 	if len(sessionPeers) != len(peers) {
 		t.Fatal("incorrect number of peers found")
@@ -95,7 +95,7 @@ func TestFindingMorePeers(t *testing.T) {
 			t.Fatal("incorrect peer found through finding providers")
 		}
 	}
-	if len(fcm.taggedPeers) != len(peers) {
+	if len(fpt.taggedPeers) != len(peers) {
 		t.Fatal("Peers were not tagged!")
 	}
 }
@@ -105,12 +105,12 @@ func TestRecordingReceivedBlocks(t *testing.T) {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 	p := testutil.GeneratePeers(1)[0]
-	fcm := &fakeConnManager{}
-	fpn := &fakePeerNetwork{nil, fcm}
+	fpt := &fakePeerTagger{}
+	fppf := &fakePeerProviderFinder{}
 	c := testutil.GenerateCids(1)[0]
 	id := testutil.GenerateSessionID()
 
-	sessionPeerManager := New(ctx, id, fpn)
+	sessionPeerManager := New(ctx, id, fpt, fppf)
 	sessionPeerManager.RecordPeerResponse(p, c)
 	time.Sleep(10 * time.Millisecond)
 	sessionPeers := sessionPeerManager.GetOptimizedPeers()
@@ -120,24 +120,31 @@ func TestRecordingReceivedBlocks(t *testing.T) {
 	if sessionPeers[0] != p {
 		t.Fatal("incorrect peer added on receive")
 	}
-	if len(fcm.taggedPeers) != 1 {
+	if len(fpt.taggedPeers) != 1 {
 		t.Fatal("Peers was not tagged!")
 	}
 }
 
 func TestOrderingPeers(t *testing.T) {
 	ctx := context.Background()
-	ctx, cancel := context.WithCancel(ctx)
+	ctx, cancel := context.WithTimeout(ctx, 30*time.Millisecond)
 	defer cancel()
 	peers := testutil.GeneratePeers(100)
-	fcm := &fakeConnManager{}
-	fpn := &fakePeerNetwork{peers, fcm}
+	completed := make(chan struct{})
+	fpt := &fakePeerTagger{}
+	fppf := &fakePeerProviderFinder{peers, completed}
 	c := testutil.GenerateCids(1)
 	id := testutil.GenerateSessionID()
-	sessionPeerManager := New(ctx, id, fpn)
+	sessionPeerManager := New(ctx, id, fpt, fppf)
 
 	// add all peers to session
 	sessionPeerManager.FindMorePeers(ctx, c[0])
+	select {
+	case <-completed:
+	case <-ctx.Done():
+		t.Fatal("Did not finish finding providers")
+	}
+	time.Sleep(2 * time.Millisecond)
 
 	// record broadcast
 	sessionPeerManager.RecordPeerRequests(nil, c)
@@ -193,22 +200,29 @@ func TestUntaggingPeers(t *testing.T) {
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Millisecond)
 	defer cancel()
 	peers := testutil.GeneratePeers(5)
-	fcm := &fakeConnManager{}
-	fpn := &fakePeerNetwork{peers, fcm}
+	completed := make(chan struct{})
+	fpt := &fakePeerTagger{}
+	fppf := &fakePeerProviderFinder{peers, completed}
 	c := testutil.GenerateCids(1)[0]
 	id := testutil.GenerateSessionID()
 
-	sessionPeerManager := New(ctx, id, fpn)
+	sessionPeerManager := New(ctx, id, fpt, fppf)
 
 	sessionPeerManager.FindMorePeers(ctx, c)
-	time.Sleep(5 * time.Millisecond)
-	if len(fcm.taggedPeers) != len(peers) {
+	select {
+	case <-completed:
+	case <-ctx.Done():
+		t.Fatal("Did not finish finding providers")
+	}
+	time.Sleep(2 * time.Millisecond)
+
+	if len(fpt.taggedPeers) != len(peers) {
 		t.Fatal("Peers were not tagged!")
 	}
 	<-ctx.Done()
-	fcm.wait.Wait()
+	fpt.wait.Wait()
 
-	if len(fcm.taggedPeers) != 0 {
+	if len(fpt.taggedPeers) != 0 {
 		t.Fatal("Peers were not untagged!")
 	}
 }

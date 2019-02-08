@@ -21,7 +21,7 @@ const MessageSizeMax = 1 << 22 // 4 MB
 type Client struct {
 	controlMaddr multiaddr.Multiaddr
 	listenMaddr  multiaddr.Multiaddr
-	listener    manet.Listener
+	listener     manet.Listener
 
 	mhandlers sync.Mutex
 	handlers  map[string]StreamHandlerFunc
@@ -33,11 +33,10 @@ type Client struct {
 func NewClient(controlMaddr, listenMaddr multiaddr.Multiaddr) (*Client, error) {
 	client := &Client{
 		controlMaddr: controlMaddr,
-		listenMaddr:  listenMaddr,
 		handlers:     make(map[string]StreamHandlerFunc),
 	}
 
-	if err := client.listen(); err != nil {
+	if err := client.listen(listenMaddr); err != nil {
 		return nil, err
 	}
 

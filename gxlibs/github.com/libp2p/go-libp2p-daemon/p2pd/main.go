@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	libp2p "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p"
+	relay "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-circuit"
 	connmgr "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-connmgr"
 	p2pd "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-daemon"
 	ps "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-pubsub"
@@ -38,6 +39,13 @@ func main() {
 	pubsubSignStrict := flag.Bool("pubsubSignStrict", false, "Enables pubsub strict signature verification")
 	gossipsubHeartbeatInterval := flag.Duration("gossipsubHeartbeatInterval", 0, "Specifies the gossipsub heartbeat interval")
 	gossipsubHeartbeatInitialDelay := flag.Duration("gossipsubHeartbeatInitialDelay", 0, "Specifies the gossipsub initial heartbeat delay")
+	relayEnabled := flag.Bool("relay", true, "Enables circuit relay")
+	relayActive := flag.Bool("relayActive", false, "Enables active mode for relay")
+	relayHop := flag.Bool("relayHop", false, "Enables hop for relay")
+	relayDiscovery := flag.Bool("relayDiscovery", false, "Enables passive discovery for relay")
+	autoRelay := flag.Bool("autoRelay", false, "Enables autorelay")
+	autonat := flag.Bool("autonat", false, "Enables the AutoNAT service")
+	hostAddrs := flag.String("hostAddrs", "", "comma separated list of multiaddrs the host should listen on")
 	flag.Parse()
 
 	var opts []libp2p.Option
@@ -56,6 +64,11 @@ func main() {
 		opts = append(opts, libp2p.Identity(key))
 	}
 
+	if *hostAddrs != "" {
+		addrs := strings.Split(*hostAddrs, ",")
+		opts = append(opts, libp2p.ListenAddrStrings(addrs...))
+	}
+
 	if *connMgr {
 		cm := connmgr.NewConnManager(*connMgrLo, *connMgrHi, *connMgrGrace)
 		opts = append(opts, libp2p.ConnectionManager(cm))
@@ -65,21 +78,66 @@ func main() {
 		opts = append(opts,
 			libp2p.DefaultTransports,
 			libp2p.Transport(quic.NewTransport),
-			libp2p.ListenAddrStrings(
-				"/ip4/0.0.0.0/tcp/0",
-				"/ip4/0.0.0.0/udp/0/quic",
-				"/ip6/::1/tcp/0",
-				"/ip6/::1/udp/0/quic",
-			))
+		)
+
+		// if we explicitly specify a transport, we must also explicitly specify the listen addrs
+		if *hostAddrs == "" {
+			opts = append(opts,
+				libp2p.ListenAddrStrings(
+					"/ip4/0.0.0.0/tcp/0",
+					"/ip4/0.0.0.0/udp/0/quic",
+					"/ip6/::1/tcp/0",
+					"/ip6/::1/udp/0/quic",
+				))
+		}
 	}
 
 	if *natPortMap {
 		opts = append(opts, libp2p.NATPortMap())
 	}
 
-	d, err := p2pd.NewDaemon(context.Background(), maddr, opts...)
+	if *relayEnabled {
+		var relayOpts []relay.RelayOpt
+		if *relayActive {
+			relayOpts = append(relayOpts, relay.OptActive)
+		}
+		if *relayHop {
+			relayOpts = append(relayOpts, relay.OptHop)
+		}
+		if *relayDiscovery {
+			relayOpts = append(relayOpts, relay.OptDiscovery)
+		}
+		opts = append(opts, libp2p.EnableRelay(relayOpts...))
+	}
+
+	if *autoRelay {
+		if !(*dht || *dhtClient) {
+			log.Fatal("DHT must be enabled in order to enable autorelay")
+		}
+		if !*relayEnabled {
+			log.Fatal("Relay must be enabled to enable autorelay")
+		}
+		opts = append(opts, libp2p.EnableAutoRelay())
+	}
+
+	d, err := p2pd.NewDaemon(context.Background(), maddr, *dht, *dhtClient, opts...)
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	if *autonat {
+		var opts []libp2p.Option
+		// allow the AutoNAT service to dial back quic addrs.
+		if *QUIC {
+			opts = append(opts,
+				libp2p.DefaultTransports,
+				libp2p.Transport(quic.NewTransport),
+			)
+		}
+		err := d.EnableAutoNAT(opts...)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	if *pubsub {
@@ -97,15 +155,14 @@ func main() {
 		}
 	}
 
-	if *dht || *dhtClient {
-		err = d.EnableDHT(*dhtClient)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-
 	if *bootstrapPeers != "" {
-		p2pd.BootstrapPeers = strings.Split(*bootstrapPeers, ",")
+		for _, s := range strings.Split(*bootstrapPeers, ",") {
+			ma, err := multiaddr.NewMultiaddr(s)
+			if err != nil {
+				log.Fatalf("error parsing bootstrap peer %q: %v", s, err)
+			}
+			p2pd.BootstrapPeers = append(p2pd.BootstrapPeers, ma)
+		}
 	}
 
 	if *bootstrap {

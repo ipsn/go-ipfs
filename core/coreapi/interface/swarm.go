@@ -6,9 +6,9 @@ import (
 	"time"
 
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
-	net "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
-	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
+	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
+	net "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-protocol"
 )
 
