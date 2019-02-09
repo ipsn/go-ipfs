@@ -21,18 +21,6 @@
 			"revisionTime": "2018-08-30T15:03:46Z"
 		},
 		{
-			"checksumSHA1": "Qw/xVnd5ry32U0mZOiCj+o2GZa8=",
-			"path": "github.com/hashicorp/golang-lru",
-			"revision": "20f1fb78b0740ba8c3cb143a61e86ba5c8669768",
-			"revisionTime": "2018-08-30T03:29:55Z"
-		},
-		{
-			"checksumSHA1": "Qf2I7riZlexFkNuUM0v165VZ/iU=",
-			"path": "github.com/hashicorp/golang-lru/simplelru",
-			"revision": "20f1fb78b0740ba8c3cb143a61e86ba5c8669768",
-			"revisionTime": "2018-08-30T03:29:55Z"
-		},
-		{
 			"checksumSHA1": "ITlVkWmRdYmxG1xsYBy0D8+nC0Q=",
 			"path": "github.com/lucas-clemente/aes12",
 			"revision": "cd47fb39b79f867c6e4e5cd39cf7abd799f71670",
@@ -47,6 +35,12 @@
 		{
 			"checksumSHA1": "y+9Eo8h/+q1Q2CggdPk2iHEjSEU=",
 			"path": "golang.org/x/crypto/curve25519",
+			"revision": "193df9c0f06f8bb35fba505183eaf0acc0136505",
+			"revisionTime": "2019-02-05T19:42:15Z"
+		},
+		{
+			"checksumSHA1": "GyJO23KIK26BOFakPDOno2A6+iM=",
+			"path": "golang.org/x/crypto/hkdf",
 			"revision": "193df9c0f06f8bb35fba505183eaf0acc0136505",
 			"revisionTime": "2019-02-05T19:42:15Z"
 		}
