@@ -8,11 +8,11 @@ import (
 	"io/ioutil"
 
 	util "github.com/ipsn/go-ipfs/blocks/blockstoreutil"
-	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
-	caopts "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 	pin "github.com/ipsn/go-ipfs/pin"
 
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	coreiface "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core"
+	caopts "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options"
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 )
 

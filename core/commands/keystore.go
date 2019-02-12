@@ -6,9 +6,9 @@ import (
 	"text/tabwriter"
 
 	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
-	options "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	options "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 

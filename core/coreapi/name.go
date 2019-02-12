@@ -6,8 +6,6 @@ import (
 	"strings"
 	"time"
 
-	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
-	caopts "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 	"github.com/ipsn/go-ipfs/keystore"
 	"github.com/ipsn/go-ipfs/namesys"
 
@@ -15,6 +13,8 @@ import (
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	ipath "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	coreiface "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core"
+	caopts "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options"
 )
 
 type NameAPI CoreAPI

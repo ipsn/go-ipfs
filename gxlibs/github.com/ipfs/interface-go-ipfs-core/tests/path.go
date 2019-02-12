@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
-	"github.com/ipsn/go-ipfs/core/coreapi/interface/options"
+	coreiface "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options"
 
 	ipldcbor "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-cbor"
 )
@@ -38,7 +38,7 @@ func (tp *provider) TestMutablePath(t *testing.T) {
 		t.Error("expected /ipld path to be immutable")
 	}
 
-	// get self /ipns path	ipldcbor "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-cbor"
+	// get self /ipns path
 
 	if api.Key() == nil {
 		t.Fatal(".Key not implemented")

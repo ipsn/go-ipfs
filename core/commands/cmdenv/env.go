@@ -6,11 +6,11 @@ import (
 
 	"github.com/ipsn/go-ipfs/commands"
 	"github.com/ipsn/go-ipfs/core"
-	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
-	options "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
+	coreiface "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core"
+	options "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 )
 

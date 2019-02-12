@@ -3,7 +3,7 @@ package iface
 import (
 	"context"
 
-	options "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
+	options "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options"
 )
 
 // Pin holds information about pinned resource

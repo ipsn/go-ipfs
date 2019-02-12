@@ -6,11 +6,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ipsn/go-ipfs/core/coreapi/interface"
-	opt "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core"
+	opt "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options"
 
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	ipldcbor "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-cbor"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 )
 
 func (tp *provider) TestPin(t *testing.T) {

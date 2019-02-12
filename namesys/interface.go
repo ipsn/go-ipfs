@@ -35,10 +35,9 @@ import (
 
 	context "context"
 
-	opts "github.com/ipsn/go-ipfs/core/coreapi/interface/options/namesys"
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
-
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	opts "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options/namesys"
 )
 
 // ErrResolveFailed signals an error when attempting to resolve.

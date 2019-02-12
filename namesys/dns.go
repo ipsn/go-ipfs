@@ -6,9 +6,8 @@ import (
 	"net"
 	"strings"
 
-	opts "github.com/ipsn/go-ipfs/core/coreapi/interface/options/namesys"
-
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	opts "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options/namesys"
 	isd "github.com/jbenet/go-is-domain"
 )
 

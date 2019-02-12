@@ -9,13 +9,13 @@ import (
 
 	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
 	ncmd "github.com/ipsn/go-ipfs/core/commands/name"
-	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
-	options "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
-	nsopts "github.com/ipsn/go-ipfs/core/coreapi/interface/options/namesys"
 	ns "github.com/ipsn/go-ipfs/namesys"
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	coreiface "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core"
+	options "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options"
+	nsopts "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options/namesys"
 	cidenc "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cidutil/cidenc"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )

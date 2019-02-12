@@ -8,11 +8,11 @@ import (
 	"testing"
 	"time"
 
-	ipath "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
+	ipath "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
-	coreiface "github.com/ipsn/go-ipfs/core/coreapi/interface"
-	opt "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
+	coreiface "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core"
+	opt "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options"
 )
 
 func (tp *provider) TestName(t *testing.T) {

@@ -4,7 +4,7 @@ import (
 	"context"
 	"io"
 
-	options "github.com/ipsn/go-ipfs/core/coreapi/interface/options"
+	options "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options"
 
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 )

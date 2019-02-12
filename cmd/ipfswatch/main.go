@@ -15,9 +15,9 @@ import (
 	corehttp "github.com/ipsn/go-ipfs/core/corehttp"
 	fsrepo "github.com/ipsn/go-ipfs/repo/fsrepo"
 
+	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
 	process "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
 	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
-	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
 	homedir "github.com/mitchellh/go-homedir"
 	fsnotify "github.com/fsnotify/fsnotify"
 )

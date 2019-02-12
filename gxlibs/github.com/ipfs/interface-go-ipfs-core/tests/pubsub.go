@@ -2,10 +2,11 @@ package tests
 
 import (
 	"context"
-	"github.com/ipsn/go-ipfs/core/coreapi/interface"
-	"github.com/ipsn/go-ipfs/core/coreapi/interface/options"
 	"testing"
 	"time"
+
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options"
 )
 
 func (tp *provider) TestPubSub(t *testing.T) {
