@@ -22,7 +22,7 @@ require (
 	github.com/jbenet/goprocess v0.0.0-20160826012719-b497e2f366b8
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/libp2p/go-addr-util v2.0.7+incompatible // indirect
-	github.com/libp2p/go-buffer-pool v0.1.1 // indirect
+	github.com/libp2p/go-buffer-pool v0.1.3 // indirect
 	github.com/libp2p/go-conn-security v0.1.15 // indirect
 	github.com/libp2p/go-conn-security-multistream v0.1.15 // indirect
 	github.com/libp2p/go-flow-metrics v0.2.0 // indirect
@@ -70,6 +70,6 @@ require (
 	github.com/whyrusleeping/go-smux-yamux v2.0.8+incompatible // indirect
 	github.com/whyrusleeping/mafmt v1.2.8 // indirect
 	github.com/whyrusleeping/multiaddr-filter v0.0.0-20160516205228-e903e4adabd7 // indirect
-	github.com/whyrusleeping/yamux v1.1.2 // indirect
+	github.com/whyrusleeping/yamux v1.1.5 // indirect
 	golang.org/x/net v0.0.0-20190119204137-ed066c81e75e // indirect
 )

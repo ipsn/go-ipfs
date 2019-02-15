@@ -5,16 +5,16 @@ import (
 	"strings"
 	"time"
 
+	opts "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options/namesys"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
-	opts "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options/namesys"
+	dht "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kad-dht"
 	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
 	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns/pb"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	proto "github.com/gogo/protobuf/proto"
-	dht "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kad-dht"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
 )
 

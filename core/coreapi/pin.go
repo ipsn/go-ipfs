@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	merkledag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	coreiface "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core"
 	caopts "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options"
+	merkledag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 )

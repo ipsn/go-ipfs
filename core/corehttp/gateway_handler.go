@@ -15,19 +15,19 @@ import (
 	"github.com/ipsn/go-ipfs/core"
 	"github.com/ipsn/go-ipfs/dagutils"
 
+	coreiface "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core"
 	"github.com/dustin/go-humanize"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
-	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
-	coreiface "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multibase"
 	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multibase"
 )
 
 const (

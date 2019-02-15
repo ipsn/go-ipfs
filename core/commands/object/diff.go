@@ -7,8 +7,8 @@ import (
 	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
 	"github.com/ipsn/go-ipfs/dagutils"
 
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	coreiface "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 

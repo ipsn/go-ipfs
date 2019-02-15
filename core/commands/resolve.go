@@ -11,11 +11,11 @@ import (
 	ncmd "github.com/ipsn/go-ipfs/core/commands/name"
 	ns "github.com/ipsn/go-ipfs/namesys"
 
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	coreiface "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core"
 	options "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options"
 	nsopts "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options/namesys"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	cidenc "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cidutil/cidenc"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )

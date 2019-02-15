@@ -9,10 +9,10 @@ import (
 
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
-	libp2p "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p"
-	mocknet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/net/mock"
 	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	testutil "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil"
+	libp2p "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p"
+	mocknet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/net/mock"
 	datastore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	syncds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
 	host "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"

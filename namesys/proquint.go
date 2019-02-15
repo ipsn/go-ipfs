@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	opts "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options/namesys"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	proquint "github.com/bren2010/proquint"
 )
 

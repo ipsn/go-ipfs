@@ -9,8 +9,8 @@ import (
 	plugin "github.com/ipsn/go-ipfs/plugin"
 	fsrepo "github.com/ipsn/go-ipfs/repo/fsrepo"
 
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	coreiface "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	opentracing "github.com/opentracing/opentracing-go"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 )

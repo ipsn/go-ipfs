@@ -229,9 +229,9 @@
     },
     {
       "author": "vyzo",
-      "hash": "QmZttrZ34Aw74CwgGFmaSExBBhECHZfNGMiYpDvTQLCAhM",
+      "hash": "Qmezr13Pzko3pxYz4EYMk6mQpJem72TsTVhwR3jGBDEoo7",
       "name": "go-libp2p-discovery",
-      "version": "1.0.6"
+      "version": "1.0.8"
     },
     {
       "author": "vyzo",
@@ -250,6 +250,5 @@
   "license": "MIT",
   "name": "go-libp2p",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "6.0.31"
+  "version": "6.0.33"
 }
-

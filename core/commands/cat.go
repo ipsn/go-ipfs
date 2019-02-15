@@ -8,9 +8,9 @@ import (
 
 	"github.com/ipsn/go-ipfs/core/commands/cmdenv"
 
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 

@@ -16,6 +16,7 @@ import (
 	inet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
+	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	manet "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
 )
@@ -44,6 +45,7 @@ func init() {
 type AutoRelayHost struct {
 	*basic.BasicHost
 	discover discovery.Discoverer
+	router   routing.PeerRouting
 	autonat  autonat.AutoNAT
 	addrsF   basic.AddrsFactory
 
@@ -54,10 +56,11 @@ type AutoRelayHost struct {
 	addrs  []ma.Multiaddr
 }
 
-func NewAutoRelayHost(ctx context.Context, bhost *basic.BasicHost, discover discovery.Discoverer) *AutoRelayHost {
+func NewAutoRelayHost(ctx context.Context, bhost *basic.BasicHost, discover discovery.Discoverer, router routing.PeerRouting) *AutoRelayHost {
 	h := &AutoRelayHost{
 		BasicHost:  bhost,
 		discover:   discover,
+		router:     router,
 		addrsF:     bhost.AddrsFactory,
 		relays:     make(map[peer.ID]pstore.PeerInfo),
 		disconnect: make(chan struct{}, 1),
@@ -148,6 +151,16 @@ func (h *AutoRelayHost) findRelays(ctx context.Context) {
 		h.mx.Unlock()
 
 		cctx, cancel := context.WithTimeout(ctx, 60*time.Second)
+
+		if len(pi.Addrs) == 0 {
+			pi, err = h.router.FindPeer(cctx, pi.ID)
+			if err != nil {
+				log.Debugf("error finding relay peer %s: %s", pi.ID, err.Error())
+				cancel()
+				continue
+			}
+		}
+
 		err = h.Connect(cctx, pi)
 		cancel()
 		if err != nil {

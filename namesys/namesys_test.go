@@ -6,13 +6,13 @@ import (
 	"testing"
 
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
-	pstoremem "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore/pstoremem"
-	offroute "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
 	opts "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options/namesys"
-	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
+	pstoremem "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore/pstoremem"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	offroute "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
+	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	dssync "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
 )

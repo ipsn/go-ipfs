@@ -9,12 +9,12 @@ import (
 	"github.com/ipsn/go-ipfs/core/commands/cmdenv"
 	"github.com/ipsn/go-ipfs/core/coredag"
 
+	iface "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
-	iface "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core"
 	cidenc "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cidutil/cidenc"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	mh "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multihash"
