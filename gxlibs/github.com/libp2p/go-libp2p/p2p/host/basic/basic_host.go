@@ -413,7 +413,7 @@ func (h *BasicHost) Connect(ctx context.Context, pi pstore.PeerInfo) error {
 }
 
 func (h *BasicHost) resolveAddrs(ctx context.Context, pi pstore.PeerInfo) ([]ma.Multiaddr, error) {
-	proto := ma.ProtocolWithCode(ma.P_IPFS).Name
+	proto := ma.ProtocolWithCode(ma.P_P2P).Name
 	p2paddr, err := ma.NewMultiaddr("/" + proto + "/" + pi.ID.Pretty())
 	if err != nil {
 		return nil, err

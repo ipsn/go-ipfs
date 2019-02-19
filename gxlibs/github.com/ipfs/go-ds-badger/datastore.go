@@ -202,6 +202,9 @@ func (d *Datastore) CollectGarbage() error {
 	return err
 }
 
+var _ ds.Datastore = (*txn)(nil)
+var _ ds.TTLDatastore = (*txn)(nil)
+
 func (t *txn) Put(key ds.Key, value []byte) error {
 	return t.txn.Set(key.Bytes(), value)
 }
@@ -274,10 +277,23 @@ func (t *txn) Query(q dsq.Query) (dsq.Results, error) {
 	opt := badger.DefaultIteratorOptions
 	opt.PrefetchValues = !q.KeysOnly
 
+	// Special case order by key.
+	orders := q.Orders
+	if len(orders) > 0 {
+		switch q.Orders[0].(type) {
+		case dsq.OrderByKey, *dsq.OrderByKey:
+			// Already ordered by key.
+			orders = nil
+		case dsq.OrderByKeyDescending, *dsq.OrderByKeyDescending:
+			orders = nil
+			opt.Reverse = true
+		}
+	}
+
 	txn := t.txn
 
 	it := txn.NewIterator(opt)
-	it.Seek([]byte(q.Prefix))
+	it.Seek(prefix)
 	if q.Offset > 0 {
 		for j := 0; j < q.Offset; j++ {
 			it.Next()
@@ -339,14 +355,19 @@ func (t *txn) Query(q dsq.Query) (dsq.Results, error) {
 	for _, f := range q.Filters {
 		qr = dsq.NaiveFilter(qr, f)
 	}
-	for _, o := range q.Orders {
-		qr = dsq.NaiveOrder(qr, o)
+	if len(orders) > 0 {
+		qr = dsq.NaiveOrder(qr, orders...)
 	}
 
 	return qr, nil
 }
 
 func (t *txn) Commit() error {
+	return t.txn.Commit()
+}
+
+// Alias to commit
+func (t *txn) Close() error {
 	return t.txn.Commit()
 }
 

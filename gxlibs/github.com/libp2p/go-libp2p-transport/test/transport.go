@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"sync"
 	"testing"
@@ -63,38 +62,57 @@ func SubtestBasic(t *testing.T, ta, tb tpt.Transport, maddr ma.Multiaddr, peerA 
 	}
 	defer list.Close()
 
-	done := make(chan struct{})
+	var (
+		connA, connB tpt.Conn
+		done         = make(chan struct{})
+	)
+	defer func() {
+		<-done
+		if connA != nil {
+			connA.Close()
+		}
+		if connB != nil {
+			connB.Close()
+		}
+	}()
+
 	go func() {
 		defer close(done)
-		c, err := list.Accept()
+		var err error
+		connB, err = list.Accept()
 		if err != nil {
-			t.Fatal(err)
+			t.Error(err)
 			return
 		}
-		s, err := c.AcceptStream()
+		s, err := connB.AcceptStream()
 		if err != nil {
-			c.Close()
-			t.Fatal(err)
+			t.Error(err)
 			return
 		}
 
-		buf := make([]byte, len(testData))
-		_, err = io.ReadFull(s, buf)
+		buf, err := ioutil.ReadAll(s)
 		if err != nil {
-			t.Fatal(err)
+			t.Error(err)
 			return
+		}
+
+		if !bytes.Equal(testData, buf) {
+			t.Errorf("expected %s, got %s", testData, buf)
 		}
 
 		n, err := s.Write(testData)
 		if err != nil {
-			t.Fatal(err)
+			t.Error(err)
 			return
 		}
-		s.Close()
-
 		if n != len(testData) {
-			t.Fatal(err)
+			t.Error(err)
 			return
+		}
+
+		err = s.Close()
+		if err != nil {
+			t.Error(err)
 		}
 	}()
 
@@ -102,13 +120,12 @@ func SubtestBasic(t *testing.T, ta, tb tpt.Transport, maddr ma.Multiaddr, peerA 
 		t.Error("CanDial should have returned true")
 	}
 
-	c, err := tb.Dial(ctx, list.Multiaddr(), peerA)
+	connA, err = tb.Dial(ctx, list.Multiaddr(), peerA)
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer c.Close()
 
-	s, err := c.OpenStream()
+	s, err := connA.OpenStream()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -123,12 +140,19 @@ func SubtestBasic(t *testing.T, ta, tb tpt.Transport, maddr ma.Multiaddr, peerA 
 		t.Fatalf("failed to write enough data (a->b)")
 		return
 	}
-
-	buf := make([]byte, len(testData))
-	_, err = io.ReadFull(s, buf)
+	err = s.Close()
 	if err != nil {
 		t.Fatal(err)
 		return
+	}
+
+	buf, err := ioutil.ReadAll(s)
+	if err != nil {
+		t.Fatal(err)
+		return
+	}
+	if !bytes.Equal(testData, buf) {
+		t.Errorf("expected %s, got %s", testData, buf)
 	}
 }
 

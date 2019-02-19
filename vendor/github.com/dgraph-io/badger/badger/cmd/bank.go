@@ -153,10 +153,7 @@ func moveMoney(db *badger.DB, from, to int) error {
 		if err = putBalance(txn, from, balf); err != nil {
 			return err
 		}
-		if err = putBalance(txn, to, balt); err != nil {
-			return err
-		}
-		return nil
+		return putBalance(txn, to, balt)
 	})
 }
 
@@ -179,41 +176,6 @@ func diff(a, b []account) string {
 }
 
 var errFailure = errors.New("Found an balance mismatch. Test failed.")
-
-// // iterateTotal retrives the total of all accounts by iterating over the DB.
-// func iterateTotal(db *badger.DB) ([]account, error) {
-// 	expected := uint64(numAccounts) * uint64(initialBal)
-// 	var accounts []account
-// 	err := db.View(func(txn *badger.Txn) error {
-// 		// start := time.Now()
-// 		itr := txn.NewIterator(badger.DefaultIteratorOptions)
-// 		defer itr.Close()
-
-// 		var total uint64
-// 		for itr.Seek([]byte(keyPrefix)); itr.ValidForPrefix([]byte(keyPrefix)); itr.Next() {
-// 			item := itr.Item()
-// 			val, err := item.ValueCopy(nil)
-// 			if err != nil {
-// 				return err
-// 			}
-// 			acc := account{
-// 				Id:  toAccount(item.Key()),
-// 				Bal: toUint64(val),
-// 			}
-// 			accounts = append(accounts, acc)
-// 			total += acc.Bal
-// 		}
-// 		if total != expected {
-// 			log.Printf("Balance did NOT match up. Expected: %d. Received: %d",
-// 				expected, total)
-// 			atomic.AddInt32(&stopAll, 1)
-// 			return errFailure
-// 		}
-// 		// log.Printf("totalMoney took: %s\n", time.Since(start).String())
-// 		return nil
-// 	})
-// 	return accounts, err
-// }
 
 // seekTotal retrives the total of all accounts by seeking for each account key.
 func seekTotal(txn *badger.Txn) ([]account, error) {
@@ -277,10 +239,9 @@ func findFirstInvalidTxn(db *badger.DB, lowTs, highTs uint64) uint64 {
 	if err == badger.ErrKeyNotFound || err == nil {
 		// If no failure, move to higher ts.
 		return findFirstInvalidTxn(db, midTs+1, highTs)
-	} else {
-		// Found an error.
-		return findFirstInvalidTxn(db, lowTs, midTs)
 	}
+	// Found an error.
+	return findFirstInvalidTxn(db, lowTs, midTs)
 }
 
 func compareTwo(db *badger.DB, before, after uint64) {
@@ -484,8 +445,7 @@ func runTest(cmd *cobra.Command, args []string) error {
 	if atomic.LoadInt32(&stopAll) == 0 {
 		log.Println("Test OK")
 		return nil
-	} else {
-		log.Println("Test FAILED")
-		return fmt.Errorf("Test FAILED")
 	}
+	log.Println("Test FAILED")
+	return fmt.Errorf("Test FAILED")
 }

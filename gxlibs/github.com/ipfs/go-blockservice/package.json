@@ -9,27 +9,27 @@
   "gxDependencies": [
     {
       "author": "why",
-      "hash": "Qmf9HEDC317JbdByx7jUzDzcG8HtfEPYDaf8QRmovweuLT",
+      "hash": "QmXixGGfd98hN2dA5YiPHWANY3sjmHfZBQk3mLiQUo6NLJ",
       "name": "go-bitswap",
-      "version": "1.1.23"
+      "version": "1.1.24"
     },
     {
       "author": "hsanjuan",
-      "hash": "QmYZwey1thDTynSrvd6qQkX24UpTka6TFhQ2v569UpoqxD",
+      "hash": "QmSz8kAe2JCKp2dWSG8gHSWnwSmne8YfRXTeK5HBmc9L7t",
       "name": "go-ipfs-exchange-offline",
-      "version": "0.1.5"
+      "version": "0.1.6"
     },
     {
       "author": "jbenet",
-      "hash": "Qmf4xQhNomPNhrtZc67qSnfJSjxjXs9LWvknJtSXwimPrM",
+      "hash": "QmUadX5EcvrBmxAV9sE7wUWtWSqxns5K84qKJBixmcT1w9",
       "name": "go-datastore",
-      "version": "3.4.1"
+      "version": "3.6.1"
     },
     {
       "author": "hsanjuan",
-      "hash": "QmS2aqUZLJp8kF1ihE5rvDGE5LvmKDPnx32w9Z1BW9xLV5",
+      "hash": "QmRu7tiRnFk9mMPpVECQTBQJqXtmG132jJxA1w9A7TtpBz",
       "name": "go-ipfs-blockstore",
-      "version": "0.1.6"
+      "version": "0.1.7"
     },
     {
       "author": "stebalien",
@@ -49,6 +49,6 @@
   "license": "",
   "name": "go-blockservice",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "1.1.23"
+  "version": "1.1.25"
 }
 

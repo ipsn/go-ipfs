@@ -1,10 +1,9 @@
 package addrutil
 
 import (
-	"testing"
-
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	manet "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
+	"testing"
 )
 
 func newMultiaddr(t *testing.T, s string) ma.Multiaddr {
@@ -17,10 +16,10 @@ func newMultiaddr(t *testing.T, s string) ma.Multiaddr {
 }
 
 func TestFilterAddrs(t *testing.T) {
-
 	bad := []ma.Multiaddr{
 		newMultiaddr(t, "/ip6/fe80::1/tcp/1234"),   // link local
 		newMultiaddr(t, "/ip6/fe80::100/tcp/1234"), // link local
+		newMultiaddr(t, ""),
 	}
 
 	good := []ma.Multiaddr{
@@ -210,4 +209,27 @@ func TestSubtract(t *testing.T) {
 			t.Error("should be the same", ca, c2[i])
 		}
 	}
+}
+
+func TestAddrInList(t *testing.T) {
+	addrs := []ma.Multiaddr{
+		newMultiaddr(t, "/ip4/0.0.0.0/tcp/1234"),
+		newMultiaddr(t, "/ip6/::/tcp/1234"),
+		newMultiaddr(t, "/ip6/fe80::/tcp/1234"),
+	}
+	if in := AddrInList(newMultiaddr(t, "/ip6/fe80::1/tcp/1234"), addrs); in {
+		t.Errorf("Expected address %s to not be in list", "/ip6/fe80::1/tcp/1234")
+	}
+	if in := AddrInList(newMultiaddr(t, "/ip4/0.0.0.0/tcp/1234"), addrs); !in {
+		t.Errorf("Expected address %s to be in list", "/ip4/0.0.0.0/tcp/1234")
+	}
+}
+
+func TestCheckNATWarning(t *testing.T) {
+	multiAddr := newMultiaddr(t, "/ip4/0.0.0.0/tcp/1234")
+	listen := []ma.Multiaddr{
+		multiAddr,
+	}
+	CheckNATWarning(multiAddr, multiAddr, listen)
+	CheckNATWarning(newMultiaddr(t, "/ip6/fe80::/tcp/1234"), multiAddr, listen)
 }

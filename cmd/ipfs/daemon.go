@@ -28,9 +28,9 @@ import (
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	goprocess "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
 	"github.com/prometheus/client_golang/prometheus"
-	mprome "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-metrics-prometheus"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	mprome "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-metrics-prometheus"
 )
 
 const (

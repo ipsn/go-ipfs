@@ -44,16 +44,19 @@ type oracle struct {
 	nextTxnTs   uint64
 
 	// Used to block NewTransaction, so all previous commits are visible to a new read.
-	txnMark y.WaterMark
+	txnMark *y.WaterMark
 
 	// Either of these is used to determine which versions can be permanently
 	// discarded during compaction.
-	discardTs uint64      // Used by ManagedDB.
-	readMark  y.WaterMark // Used by DB.
+	discardTs uint64       // Used by ManagedDB.
+	readMark  *y.WaterMark // Used by DB.
 
 	// commits stores a key fingerprint and latest commit counter for it.
 	// refCount is used to clear out commits map to avoid a memory blowup.
 	commits map[uint64]uint64
+
+	// closer is used to stop watermarks.
+	closer *y.Closer
 }
 
 func newOracle(opt Options) *oracle {
@@ -61,12 +64,20 @@ func newOracle(opt Options) *oracle {
 		isManaged: opt.managedTxns,
 		commits:   make(map[uint64]uint64),
 		// We're not initializing nextTxnTs and readOnlyTs. It would be done after replay in Open.
-		readMark: y.WaterMark{Name: "badger.PendingReads"},
-		txnMark:  y.WaterMark{Name: "badger.TxnTimestamp"},
+		//
+		// WaterMarks must be 64-bit aligned for atomic package, hence we must use pointers here.
+		// See https://golang.org/pkg/sync/atomic/#pkg-note-BUG.
+		readMark: &y.WaterMark{Name: "badger.PendingReads"},
+		txnMark:  &y.WaterMark{Name: "badger.TxnTimestamp"},
+		closer:   y.NewCloser(2),
 	}
-	orc.readMark.Init()
-	orc.txnMark.Init()
+	orc.readMark.Init(orc.closer)
+	orc.txnMark.Init(orc.closer)
 	return orc
+}
+
+func (o *oracle) Stop() {
+	o.closer.SignalAndWait()
 }
 
 func (o *oracle) addRef() {
@@ -601,31 +612,19 @@ type txnCb struct {
 	err    error
 }
 
-func (db *DB) runTxnCallbacks(closer *y.Closer) {
-	defer closer.Done()
-
-	run := func(cb *txnCb) {
-		switch {
-		case cb == nil:
-			panic("txn callback is nil")
-		case cb.err != nil:
-			cb.user(cb.err)
-		case cb.commit != nil:
-			err := cb.commit()
-			cb.user(err)
-		case cb.user == nil:
-			panic("Must have caught a nil callback for txn.CommitWith")
-		default:
-			cb.user(nil)
-		}
-	}
-
-	// We don't check closer.HasBeenClosed because we must empty out the txnCallbackCh completely
-	// before exiting here. During db.Close, txnCallbackCh is closed, so this loop below would
-	// automatically exit. We do still need the closer, so we can block until all these callbacks
-	// are finished running.
-	for cb := range db.txnCallbackCh {
-		run(cb)
+func runTxnCallback(cb *txnCb) {
+	switch {
+	case cb == nil:
+		panic("txn callback is nil")
+	case cb.user == nil:
+		panic("Must have caught a nil callback for txn.CommitWith")
+	case cb.err != nil:
+		cb.user(cb.err)
+	case cb.commit != nil:
+		err := cb.commit()
+		cb.user(err)
+	default:
+		cb.user(nil)
 	}
 }
 
@@ -645,16 +644,17 @@ func (txn *Txn) CommitWith(cb func(error)) {
 		// Do not run these callbacks from here, because the CommitWith and the
 		// callback might be acquiring the same locks. Instead run the callback
 		// from another goroutine.
-		txn.db.txnCallbackCh <- &txnCb{user: cb, err: nil}
+		go runTxnCallback(&txnCb{user: cb, err: nil})
 		return
 	}
 
 	commitCb, err := txn.commitAndSend()
 	if err != nil {
-		txn.db.txnCallbackCh <- &txnCb{user: cb, err: err}
+		go runTxnCallback(&txnCb{user: cb, err: err})
 		return
 	}
-	txn.db.txnCallbackCh <- &txnCb{user: cb, commit: commitCb}
+
+	go runTxnCallback(&txnCb{user: cb, commit: commitCb})
 }
 
 // ReadTs returns the read timestamp of the transaction.

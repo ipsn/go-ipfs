@@ -11,6 +11,7 @@ import (
 	"reflect"
 	"runtime"
 	"runtime/debug"
+	"strings"
 	"sync"
 	"testing"
 	"time"
@@ -150,7 +151,7 @@ func SubtestSimpleWrite(t *testing.T, tr smux.Transport) {
 	checkErr(t, err)
 
 	if string(buf2) != string(buf1) {
-		t.Error("buf1 and buf2 not equal: %s != %s", string(buf1), string(buf2))
+		t.Errorf("buf1 and buf2 not equal: %s != %s", string(buf1), string(buf2))
 	}
 	log("done")
 }
@@ -417,6 +418,30 @@ func SubtestStreamReset(t *testing.T, tr smux.Transport) {
 	<-done
 }
 
+// check that Close also closes the underlying net.Conn
+func SubtestWriteAfterClose(t *testing.T, tr smux.Transport) {
+	a, b := tcpPipe(t)
+
+	muxa, err := tr.NewConn(a, true)
+	checkErr(t, err)
+
+	muxb, err := tr.NewConn(b, false)
+	checkErr(t, err)
+
+	err = muxa.Close()
+	checkErr(t, err)
+	err = muxb.Close()
+	checkErr(t, err)
+
+	// make sure the underlying net.Conn was closed
+	if _, err := a.Write([]byte("foobar")); err == nil || !strings.Contains(err.Error(), "use of closed network connection") {
+		t.Fatal("write should have failed")
+	}
+	if _, err := b.Write([]byte("foobar")); err == nil || !strings.Contains(err.Error(), "use of closed network connection") {
+		t.Fatal("write should have failed")
+	}
+}
+
 func SubtestStress1Conn1Stream1Msg(t *testing.T, tr smux.Transport) {
 	SubtestStress(t, Options{
 		tr:        tr,
@@ -483,32 +508,33 @@ func SubtestStress1Conn100Stream100Msg10MB(t *testing.T, tr smux.Transport) {
 	})
 }
 
-func SubtestAll(t *testing.T, tr smux.Transport) {
-
-	tests := []TransportTest{
-		SubtestSimpleWrite,
-		SubtestStress1Conn1Stream1Msg,
-		SubtestStress1Conn1Stream100Msg,
-		SubtestStress1Conn100Stream100Msg,
-		SubtestStress50Conn10Stream50Msg,
-		SubtestStress1Conn1000Stream10Msg,
-		SubtestStress1Conn100Stream100Msg10MB,
-		SubtestStreamOpenStress,
-		SubtestStreamReset,
-	}
-
-	for _, f := range tests {
-		if testing.Verbose() {
-			fmt.Fprintf(os.Stderr, "==== RUN %s\n", GetFunctionName(f))
-		}
-		f(t, tr)
-	}
+// Subtests are all the subtests run by SubtestAll
+var Subtests = []TransportTest{
+	SubtestSimpleWrite,
+	SubtestWriteAfterClose,
+	SubtestStress1Conn1Stream1Msg,
+	SubtestStress1Conn1Stream100Msg,
+	SubtestStress1Conn100Stream100Msg,
+	SubtestStress50Conn10Stream50Msg,
+	SubtestStress1Conn1000Stream10Msg,
+	SubtestStress1Conn100Stream100Msg10MB,
+	SubtestStreamOpenStress,
+	SubtestStreamReset,
 }
 
-type TransportTest func(t *testing.T, tr smux.Transport)
-
-func TestNoOp(t *testing.T) {}
-
-func GetFunctionName(i interface{}) string {
+func getFunctionName(i interface{}) string {
 	return runtime.FuncForPC(reflect.ValueOf(i).Pointer()).Name()
 }
+
+// SubtestAll runs all the stream multiplexer tests against the target
+// transport.
+func SubtestAll(t *testing.T, tr smux.Transport) {
+	for _, f := range Subtests {
+		t.Run(getFunctionName(f), func(t *testing.T) {
+			f(t, tr)
+		})
+	}
+}
+
+// TransportTest is a stream multiplex transport test case
+type TransportTest func(t *testing.T, tr smux.Transport)

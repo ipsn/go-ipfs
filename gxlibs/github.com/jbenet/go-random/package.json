@@ -9,9 +9,9 @@
   "gxDependencies": [
     {
       "author": "dustin",
-      "hash": "QmPSBJL4momYnE7DcUyk2DVhD6rH488ZmHBGLbxNdhU44K",
+      "hash": "QmQMxG9D52TirZd9eLA37nxiNspnMRkKbyPWrVAa1gvtSy",
       "name": "go-humanize",
-      "version": "0.0.0"
+      "version": "1.0.1"
     }
   ],
   "gxVersion": "0.12.1",
@@ -19,6 +19,6 @@
   "license": "MIT",
   "name": "go-random",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "1.0.0"
+  "version": "1.0.1"
 }
 

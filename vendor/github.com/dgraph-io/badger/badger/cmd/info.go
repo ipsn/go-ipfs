@@ -26,6 +26,7 @@ import (
 	"time"
 
 	"github.com/dgraph-io/badger"
+	"github.com/dgraph-io/badger/options"
 	"github.com/dgraph-io/badger/table"
 	"github.com/dgraph-io/badger/y"
 	humanize "github.com/dustin/go-humanize"
@@ -47,6 +48,9 @@ to the Dgraph team.
 			fmt.Println("Error:", err.Error())
 			os.Exit(1)
 		}
+		if !showTables {
+			return
+		}
 		err = tableInfo(sstDir, vlogDir)
 		if err != nil {
 			fmt.Println("Error:", err.Error())
@@ -55,8 +59,12 @@ to the Dgraph team.
 	},
 }
 
+var showTables bool
+
 func init() {
 	RootCmd.AddCommand(infoCmd)
+	infoCmd.Flags().BoolVarP(&showTables, "show-tables", "s", false,
+		"If set to true, show tables as well.")
 }
 
 func hbytes(sz int64) string {
@@ -70,6 +78,7 @@ func dur(src, dst time.Time) string {
 func tableInfo(dir, valueDir string) error {
 	// Open DB
 	opts := badger.DefaultOptions
+	opts.TableLoadingMode = options.MemoryMap
 	opts.Dir = sstDir
 	opts.ValueDir = vlogDir
 	opts.ReadOnly = true
@@ -160,8 +169,9 @@ func printInfo(dir, valueDir string) error {
 		})
 		for _, tableID := range tableIDs {
 			tableFile := table.IDToFilename(tableID)
-			file, ok := fileinfoByName[tableFile]
-			if ok {
+			tm, ok1 := manifest.Tables[tableID]
+			file, ok2 := fileinfoByName[tableFile]
+			if ok1 && ok2 {
 				fileinfoMarked[tableFile] = true
 				emptyString := ""
 				fileSize := file.Size()
@@ -171,8 +181,8 @@ func printInfo(dir, valueDir string) error {
 				}
 				levelSizes[level] += fileSize
 				// (Put level on every line to make easier to process with sed/perl.)
-				fmt.Printf("[%25s] %-12s %6s L%d%s\n", dur(baseTime, file.ModTime()),
-					tableFile, hbytes(fileSize), level, emptyString)
+				fmt.Printf("[%25s] %-12s %6s L%d %x%s\n", dur(baseTime, file.ModTime()),
+					tableFile, hbytes(fileSize), level, tm.Checksum, emptyString)
 			} else {
 				fmt.Printf("%s [MISSING]\n", tableFile)
 				numMissing++

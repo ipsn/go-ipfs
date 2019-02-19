@@ -10,14 +10,14 @@ import (
 
 	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
+	dsquery "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/query"
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
 	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns/pb"
 	proto "github.com/gogo/protobuf/proto"
-	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
-	dsquery "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/query"
 	base32 "github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/base32"
 )
 

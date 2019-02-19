@@ -14,15 +14,15 @@
       "version": "1.4.0"
     },
     {
-      "hash": "QmcuXC5cxs79ro2cUuHs4HQ2bkDLJUYokwL8aivcX6HW3C",
+      "hash": "QmbkT7eMTyXfpeyB3ZMxxcxg7XH8t6uXp49jqzz4HB7BGF",
       "name": "go-log",
-      "version": "1.5.8"
+      "version": "1.5.9"
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmPJxxDsX2UbchSHobbYuvz7qnyJTFKvaKMzE2rZWJ4x5B",
+      "hash": "QmTu65MVbemtUxJEWgsTtzv9Zv9P8rvmqNA4eG9TrTRGYc",
       "name": "go-libp2p-peer",
-      "version": "3.1.0"
+      "version": "3.1.1"
     }
   ],
   "gxVersion": "0.11.0",
@@ -30,6 +30,6 @@
   "license": "",
   "name": "go-ipfs-addr",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.1.31"
+  "version": "0.1.32"
 }
 

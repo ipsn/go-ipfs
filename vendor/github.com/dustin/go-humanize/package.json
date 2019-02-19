@@ -1,14 +1,16 @@
 {
-  "author": "dustin",
+  "author": "magik6k",
   "bugs": {
-    "url": "https://github.com/dustin/go-humanize/issues"
+    "url": "https://github.com/gxed/go-humanize"
   },
   "gx": {
     "dvcsimport": "github.com/dustin/go-humanize"
   },
-  "gxVersion": "0.7.0",
+  "gxVersion": "0.14.0",
   "language": "go",
   "license": "",
   "name": "go-humanize",
-  "version": "0.0.0"
+  "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
+  "version": "1.0.1"
 }
+

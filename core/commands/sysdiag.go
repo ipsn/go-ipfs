@@ -9,8 +9,8 @@ import (
 	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
 
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
-	sysi "github.com/whyrusleeping/go-sysinfo"
 	manet "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
+	sysi "github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/go-sysinfo"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 

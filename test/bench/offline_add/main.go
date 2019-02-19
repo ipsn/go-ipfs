@@ -11,8 +11,8 @@ import (
 
 	"github.com/ipsn/go-ipfs/thirdparty/unit"
 
-	random "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/go-random"
 	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
+	random "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/go-random"
 )
 
 func main() {

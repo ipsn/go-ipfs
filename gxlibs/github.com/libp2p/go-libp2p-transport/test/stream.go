@@ -277,52 +277,83 @@ func SubtestStreamOpenStress(t *testing.T, ta, tb tpt.Transport, maddr ma.Multia
 	defer l.Close()
 
 	count := 10000
-	go func() {
-		c, err := l.Accept()
-		checkErr(t, err)
-		stress := func() {
-			for i := 0; i < count; i++ {
-				s, err := c.OpenStream()
-				if err != nil {
-					panic(err)
-				}
-				fullClose(t, s)
-			}
-		}
+	workers := 5
 
-		go stress()
-		go stress()
-		go stress()
-		go stress()
-		go stress()
+	var (
+		connA, connB tpt.Conn
+	)
+
+	accepted := make(chan error, 1)
+	go func() {
+		var err error
+		connA, err = l.Accept()
+		accepted <- err
+	}()
+	connB, err = tb.Dial(context.Background(), l.Multiaddr(), peerA)
+	checkErr(t, err)
+	checkErr(t, <-accepted)
+
+	defer func() {
+		if connA != nil {
+			connA.Close()
+		}
+		if connB != nil {
+			connB.Close()
+		}
 	}()
 
-	b, err := tb.Dial(context.Background(), l.Multiaddr(), peerA)
-	checkErr(t, err)
-
-	time.Sleep(time.Millisecond * 50)
-
-	recv := make(chan struct{})
+	var wg sync.WaitGroup
+	wg.Add(1)
 	go func() {
-		for {
-			str, err := b.AcceptStream()
+		defer wg.Done()
+		for j := 0; j < workers; j++ {
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+				for i := 0; i < count; i++ {
+					s, err := connA.OpenStream()
+					if err != nil {
+						t.Error(err)
+						return
+					}
+					wg.Add(1)
+					go func() {
+						defer wg.Done()
+						fullClose(t, s)
+					}()
+				}
+			}()
+		}
+	}()
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		for i := 0; i < count*workers; i++ {
+			str, err := connB.AcceptStream()
 			if err != nil {
 				break
 			}
+			wg.Add(1)
 			go func() {
-				recv <- struct{}{}
+				defer wg.Done()
 				fullClose(t, str)
 			}()
 		}
 	}()
 
-	limit := time.After(time.Second * 10)
-	for i := 0; i < count*5; i++ {
-		select {
-		case <-recv:
-		case <-limit:
-			t.Fatal("timed out receiving streams")
-		}
+	timeout := time.After(time.Second * 10)
+	done := make(chan struct{})
+
+	go func() {
+		wg.Wait()
+		close(done)
+	}()
+
+	select {
+	case <-timeout:
+		t.Fatal("timed out receiving streams")
+	case <-done:
 	}
 }
 
@@ -339,9 +370,14 @@ func SubtestStreamReset(t *testing.T, ta, tb tpt.Transport, maddr ma.Multiaddr, 
 		if err != nil {
 			panic(err)
 		}
+
+		// Some transports won't open the stream until we write. That's
+		// fine.
+		s.Write([]byte("foo"))
+
 		time.Sleep(time.Millisecond * 50)
 
-		_, err = s.Write([]byte("foo"))
+		_, err = s.Write([]byte("bar"))
 		if err == nil {
 			t.Error("should have failed to write")
 		}

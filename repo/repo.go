@@ -60,5 +60,4 @@ type Repo interface {
 // acceptable to FSRepo.
 type Datastore interface {
 	ds.Batching // should be threadsafe, just be careful
-	io.Closer
 }

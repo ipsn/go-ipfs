@@ -3,9 +3,11 @@
 
 package test
 
-import proto "github.com/gogo/protobuf/proto"
-import fmt "fmt"
-import math "math"
+import (
+	fmt "fmt"
+	proto "github.com/gogo/protobuf/proto"
+	math "math"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -32,7 +34,7 @@ func (m *Foo) Reset()         { *m = Foo{} }
 func (m *Foo) String() string { return proto.CompactTextString(m) }
 func (*Foo) ProtoMessage()    {}
 func (*Foo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_test_9a5750de5bb74f08, []int{0}
+	return fileDescriptor_c161fcfdc0c3ff1e, []int{0}
 }
 func (m *Foo) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Foo.Unmarshal(m, b)
@@ -40,8 +42,8 @@ func (m *Foo) XXX_Unmarshal(b []byte) error {
 func (m *Foo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Foo.Marshal(b, m, deterministic)
 }
-func (dst *Foo) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Foo.Merge(dst, src)
+func (m *Foo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Foo.Merge(m, src)
 }
 func (m *Foo) XXX_Size() int {
 	return xxx_messageInfo_Foo.Size(m)
@@ -93,7 +95,7 @@ func (m *Bar) Reset()         { *m = Bar{} }
 func (m *Bar) String() string { return proto.CompactTextString(m) }
 func (*Bar) ProtoMessage()    {}
 func (*Bar) Descriptor() ([]byte, []int) {
-	return fileDescriptor_test_9a5750de5bb74f08, []int{1}
+	return fileDescriptor_c161fcfdc0c3ff1e, []int{1}
 }
 func (m *Bar) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Bar.Unmarshal(m, b)
@@ -101,8 +103,8 @@ func (m *Bar) XXX_Unmarshal(b []byte) error {
 func (m *Bar) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Bar.Marshal(b, m, deterministic)
 }
-func (dst *Bar) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Bar.Merge(dst, src)
+func (m *Bar) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Bar.Merge(m, src)
 }
 func (m *Bar) XXX_Size() int {
 	return xxx_messageInfo_Bar.Size(m)
@@ -139,9 +141,9 @@ func init() {
 	proto.RegisterType((*Bar)(nil), "test.Bar")
 }
 
-func init() { proto.RegisterFile("test.proto", fileDescriptor_test_9a5750de5bb74f08) }
+func init() { proto.RegisterFile("test.proto", fileDescriptor_c161fcfdc0c3ff1e) }
 
-var fileDescriptor_test_9a5750de5bb74f08 = []byte{
+var fileDescriptor_c161fcfdc0c3ff1e = []byte{
 	// 142 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x24, 0xcd, 0x21, 0x0e, 0xc3, 0x30,
 	0x0c, 0x85, 0x61, 0xa5, 0xce, 0x40, 0xbd, 0xa2, 0x20, 0x93, 0x49, 0x51, 0x51, 0x50, 0xc1, 0xf8,

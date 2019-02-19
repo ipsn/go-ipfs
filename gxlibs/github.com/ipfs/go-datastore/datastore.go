@@ -2,6 +2,7 @@ package datastore
 
 import (
 	"errors"
+	"io"
 	"time"
 
 	query "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/query"
@@ -31,6 +32,13 @@ proper error reporting. Thus, all Datastore calls may return errors, which
 should be checked by callers.
 */
 type Datastore interface {
+	Read
+	Write
+	io.Closer
+}
+
+// Write is the write-side of the Datastore interface.
+type Write interface {
 	// Put stores the object `value` named by `key`.
 	//
 	// The generalized Datastore interface does not impose a value type,
@@ -42,6 +50,12 @@ type Datastore interface {
 	// type-safe interface to your application, and do the checking up-front.
 	Put(key Key, value []byte) error
 
+	// Delete removes the value for given `key`.
+	Delete(key Key) error
+}
+
+// Read is the read-side of the Datastore interface.
+type Read interface {
 	// Get retrieves the object `value` named by `key`.
 	// Get will return ErrNotFound if the key is not mapped to a value.
 	Get(key Key) (value []byte, err error)
@@ -56,9 +70,6 @@ type Datastore interface {
 	// In some contexts, it may be much cheaper to only get the size of the
 	// value rather than retrieving the value itself.
 	GetSize(key Key) (size int, err error)
-
-	// Delete removes the value for given `key`.
-	Delete(key Key) error
 
 	// Query searches the datastore and returns a query result. This function
 	// may return before the query actually runs. To wait for the query:
@@ -87,6 +98,8 @@ type Batching interface {
 	Batch() (Batch, error)
 }
 
+// ErrBatchUnsupported is returned if the by Batch if the Datastore doesn't
+// actually support batching.
 var ErrBatchUnsupported = errors.New("this datastore does not support batching")
 
 // ThreadSafeDatastore is an interface that all threadsafe datastore should
@@ -146,7 +159,11 @@ func DiskUsage(d Datastore) (uint64, error) {
 // support expiring entries.
 type TTLDatastore interface {
 	Datastore
+	TTL
+}
 
+// TTL encapulates the methods that deal with entries with time-to-live.
+type TTL interface {
 	PutWithTTL(key Key, value []byte, ttl time.Duration) error
 	SetTTL(key Key, ttl time.Duration) error
 	GetExpiration(key Key) (time.Time, error)
@@ -158,7 +175,8 @@ type TTLDatastore interface {
 // Commit has been made. Likewise, transactions can be aborted by calling
 // Discard before a successful Commit has been made.
 type Txn interface {
-	Datastore
+	Read
+	Write
 
 	// Commit finalizes a transaction, attempting to commit it to the Datastore.
 	// May return an error if the transaction has gone stale. The presence of an
@@ -196,7 +214,7 @@ var ErrInvalidType = errors.New("datastore: invalid type error")
 // func (*d SomeDatastore) Has(key Key) (exists bool, err error) {
 //   return GetBackedHas(d, key)
 // }
-func GetBackedHas(ds Datastore, key Key) (bool, error) {
+func GetBackedHas(ds Read, key Key) (bool, error) {
 	_, err := ds.Get(key)
 	switch err {
 	case nil:
@@ -214,7 +232,7 @@ func GetBackedHas(ds Datastore, key Key) (bool, error) {
 // func (*d SomeDatastore) GetSize(key Key) (size int, err error) {
 //   return GetBackedSize(d, key)
 // }
-func GetBackedSize(ds Datastore, key Key) (int, error) {
+func GetBackedSize(ds Read, key Key) (int, error) {
 	value, err := ds.Get(key)
 	if err == nil {
 		return len(value), nil
@@ -223,9 +241,7 @@ func GetBackedSize(ds Datastore, key Key) (int, error) {
 }
 
 type Batch interface {
-	Put(key Key, val []byte) error
-
-	Delete(key Key) error
+	Write
 
 	Commit() error
 }

@@ -8,8 +8,8 @@ import (
 	"github.com/ipsn/go-ipfs/repo"
 	"github.com/ipsn/go-ipfs/repo/fsrepo"
 
-	levelds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ds-leveldb"
 	ldbopts "github.com/syndtr/goleveldb/leveldb/opt"
+	levelds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ds-leveldb"
 )
 
 // Plugins is exported list of plugins that will be loaded

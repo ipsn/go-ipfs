@@ -9,8 +9,8 @@ import (
 	"github.com/ipsn/go-ipfs/core/commands/cmdenv"
 
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core"
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
@@ -128,9 +128,14 @@ func cat(ctx context.Context, api iface.CoreAPI, paths []string, offset int64, m
 			return nil, 0, err
 		}
 
-		file, ok := f.(files.File)
-		if !ok {
-			return nil, 0, iface.ErrNotFile
+		var file files.File
+		switch f := f.(type) {
+		case files.File:
+			file = f
+		case files.Directory:
+			return nil, 0, iface.ErrIsDir
+		default:
+			return nil, 0, iface.ErrNotSupported
 		}
 
 		fsize, err := file.Size()

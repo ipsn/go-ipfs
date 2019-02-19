@@ -15,9 +15,9 @@
     },
     {
       "author": "jbenet",
-      "hash": "Qmf4xQhNomPNhrtZc67qSnfJSjxjXs9LWvknJtSXwimPrM",
+      "hash": "QmUadX5EcvrBmxAV9sE7wUWtWSqxns5K84qKJBixmcT1w9",
       "name": "go-datastore",
-      "version": "3.4.1"
+      "version": "3.6.1"
     }
   ],
   "gxVersion": "0.8.0",
@@ -25,6 +25,6 @@
   "license": "",
   "name": "go-ds-measure",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "1.4.4"
+  "version": "1.4.5"
 }
 

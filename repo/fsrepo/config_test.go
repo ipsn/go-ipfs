@@ -154,7 +154,7 @@ func TestLevelDbConfig(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if typ := reflect.TypeOf(ds).String(); typ != "*leveldb.datastore" {
+	if typ := reflect.TypeOf(ds).String(); typ != "*leveldb.Datastore" {
 		t.Errorf("expected '*leveldb.datastore' got '%s'", typ)
 	}
 }

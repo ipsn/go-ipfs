@@ -9,9 +9,9 @@
   "gxDependencies": [
     {
       "author": "why",
-      "hash": "QmQvMsV5aPyd7eMd3U1hvAUhZEupG3rXbVZn7ppU5RE6bt",
+      "hash": "Qmccmovpo9isKeaaDzcxvT7mVJN1uKwn2xzSs1y8hb6PEs",
       "name": "go-merkledag",
-      "version": "1.1.30"
+      "version": "1.1.32"
     },
     {
       "author": "whyrusleeping",
@@ -26,9 +26,9 @@
       "version": "0.9.1"
     },
     {
-      "hash": "QmcuXC5cxs79ro2cUuHs4HQ2bkDLJUYokwL8aivcX6HW3C",
+      "hash": "QmbkT7eMTyXfpeyB3ZMxxcxg7XH8t6uXp49jqzz4HB7BGF",
       "name": "go-log",
-      "version": "1.5.8"
+      "version": "1.5.9"
     }
   ],
   "gxVersion": "0.12.1",
@@ -36,6 +36,6 @@
   "license": "",
   "name": "go-path",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "1.1.32"
+  "version": "1.1.34"
 }
 
