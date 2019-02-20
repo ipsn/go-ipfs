@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"golang.org/x/net/ipv4"
-	"golang.org/x/net/ipv6"
+	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/ipv4"
+	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/ipv6"
 )
 
 func TestSetUDPSocketOptions(t *testing.T) {

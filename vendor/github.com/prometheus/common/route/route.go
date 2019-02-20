@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
-	"golang.org/x/net/context"
+	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/context"
 )
 
 type param string

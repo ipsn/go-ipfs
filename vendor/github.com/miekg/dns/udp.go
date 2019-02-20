@@ -5,8 +5,8 @@ package dns
 import (
 	"net"
 
-	"golang.org/x/net/ipv4"
-	"golang.org/x/net/ipv6"
+	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/ipv4"
+	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/ipv6"
 )
 
 // This is the required size of the OOB buffer to pass to ReadMsgUDP.

@@ -10,8 +10,8 @@ import (
 	quic "github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/internal/protocol"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/internal/utils"
-	"golang.org/x/net/http2"
-	"golang.org/x/net/http2/hpack"
+	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/http2"
+	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/http2/hpack"
 )
 
 type responseWriter struct {

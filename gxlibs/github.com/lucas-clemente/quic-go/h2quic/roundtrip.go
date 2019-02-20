@@ -11,7 +11,7 @@ import (
 
 	quic "github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go"
 
-	"golang.org/x/net/http/httpguts"
+	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/http/httpguts"
 )
 
 type roundTripCloser interface {

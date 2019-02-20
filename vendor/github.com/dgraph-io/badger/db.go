@@ -35,7 +35,7 @@ import (
 	"github.com/dgraph-io/badger/y"
 	humanize "github.com/dustin/go-humanize"
 	"github.com/pkg/errors"
-	"golang.org/x/net/trace"
+	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/trace"
 )
 
 var (

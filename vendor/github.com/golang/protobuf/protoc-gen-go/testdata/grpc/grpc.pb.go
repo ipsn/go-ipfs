@@ -8,7 +8,7 @@ import fmt "fmt"
 import math "math"
 
 import (
-	context "golang.org/x/net/context"
+	context "github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/context"
 	grpc "google.golang.org/grpc"
 )
 

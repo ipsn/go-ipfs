@@ -13,7 +13,7 @@ import (
 	"time"
 
 	"github.com/prometheus/common/model"
-	"golang.org/x/net/context"
+	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/context"
 
 	"github.com/prometheus/client_golang/prometheus"
 )
