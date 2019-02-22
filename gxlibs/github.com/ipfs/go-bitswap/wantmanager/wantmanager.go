@@ -20,9 +20,11 @@ const (
 	maxPriority = math.MaxInt32
 )
 
-// WantSender sends changes out to the network as they get added to the wantlist
+// PeerHandler sends changes out to the network as they get added to the wantlist
 // managed by the WantManager.
-type WantSender interface {
+type PeerHandler interface {
+	Disconnected(p peer.ID)
+	Connected(p peer.ID, initialWants *wantlist.SessionTrackedWantlist)
 	SendMessage(entries []*bsmsg.Entry, targets []peer.ID, from uint64)
 }
 
@@ -40,13 +42,13 @@ type WantManager struct {
 	wantMessages chan wantMessage
 
 	// synchronized by Run loop, only touch inside there
-	wl   *wantlist.ThreadSafe
-	bcwl *wantlist.ThreadSafe
+	wl   *wantlist.SessionTrackedWantlist
+	bcwl *wantlist.SessionTrackedWantlist
 
 	ctx    context.Context
 	cancel func()
 
-	wantSender    WantSender
+	peerHandler   PeerHandler
 	wantlistGauge metrics.Gauge
 }
 
@@ -57,8 +59,8 @@ func New(ctx context.Context) *WantManager {
 		"Number of items in wantlist.").Gauge()
 	return &WantManager{
 		wantMessages:  make(chan wantMessage, 10),
-		wl:            wantlist.NewThreadSafe(),
-		bcwl:          wantlist.NewThreadSafe(),
+		wl:            wantlist.NewSessionTrackedWantlist(),
+		bcwl:          wantlist.NewSessionTrackedWantlist(),
 		ctx:           ctx,
 		cancel:        cancel,
 		wantlistGauge: wantlistGauge,
@@ -66,8 +68,8 @@ func New(ctx context.Context) *WantManager {
 }
 
 // SetDelegate specifies who will send want changes out to the internet.
-func (wm *WantManager) SetDelegate(wantSender WantSender) {
-	wm.wantSender = wantSender
+func (wm *WantManager) SetDelegate(peerHandler PeerHandler) {
+	wm.peerHandler = peerHandler
 }
 
 // WantBlocks adds the given cids to the wantlist, tracked by the given session.
@@ -98,8 +100,8 @@ func (wm *WantManager) IsWanted(c cid.Cid) bool {
 }
 
 // CurrentWants returns the list of current wants.
-func (wm *WantManager) CurrentWants() []*wantlist.Entry {
-	resp := make(chan []*wantlist.Entry, 1)
+func (wm *WantManager) CurrentWants() []wantlist.Entry {
+	resp := make(chan []wantlist.Entry, 1)
 	select {
 	case wm.wantMessages <- &currentWantsMessage{resp}:
 	case <-wm.ctx.Done():
@@ -114,8 +116,8 @@ func (wm *WantManager) CurrentWants() []*wantlist.Entry {
 }
 
 // CurrentBroadcastWants returns the current list of wants that are broadcasts.
-func (wm *WantManager) CurrentBroadcastWants() []*wantlist.Entry {
-	resp := make(chan []*wantlist.Entry, 1)
+func (wm *WantManager) CurrentBroadcastWants() []wantlist.Entry {
+	resp := make(chan []wantlist.Entry, 1)
 	select {
 	case wm.wantMessages <- &currentBroadcastWantsMessage{resp}:
 	case <-wm.ctx.Done():
@@ -142,6 +144,22 @@ func (wm *WantManager) WantCount() int {
 		return count
 	case <-wm.ctx.Done():
 		return 0
+	}
+}
+
+// Connected is called when a new peer is connected
+func (wm *WantManager) Connected(p peer.ID) {
+	select {
+	case wm.wantMessages <- &connectedMessage{p}:
+	case <-wm.ctx.Done():
+	}
+}
+
+// Disconnected is called when a peer is disconnected
+func (wm *WantManager) Disconnected(p peer.ID) {
+	select {
+	case wm.wantMessages <- &disconnectedMessage{p}:
+	case <-wm.ctx.Done():
 	}
 }
 
@@ -214,7 +232,7 @@ func (ws *wantSet) handle(wm *WantManager) {
 	}
 
 	// broadcast those wantlist changes
-	wm.wantSender.SendMessage(ws.entries, ws.targets, ws.from)
+	wm.peerHandler.SendMessage(ws.entries, ws.targets, ws.from)
 }
 
 type isWantedMessage struct {
@@ -228,7 +246,7 @@ func (iwm *isWantedMessage) handle(wm *WantManager) {
 }
 
 type currentWantsMessage struct {
-	resp chan<- []*wantlist.Entry
+	resp chan<- []wantlist.Entry
 }
 
 func (cwm *currentWantsMessage) handle(wm *WantManager) {
@@ -236,7 +254,7 @@ func (cwm *currentWantsMessage) handle(wm *WantManager) {
 }
 
 type currentBroadcastWantsMessage struct {
-	resp chan<- []*wantlist.Entry
+	resp chan<- []wantlist.Entry
 }
 
 func (cbcwm *currentBroadcastWantsMessage) handle(wm *WantManager) {
@@ -249,4 +267,20 @@ type wantCountMessage struct {
 
 func (wcm *wantCountMessage) handle(wm *WantManager) {
 	wcm.resp <- wm.wl.Len()
+}
+
+type connectedMessage struct {
+	p peer.ID
+}
+
+func (cm *connectedMessage) handle(wm *WantManager) {
+	wm.peerHandler.Connected(cm.p, wm.bcwl)
+}
+
+type disconnectedMessage struct {
+	p peer.ID
+}
+
+func (dm *disconnectedMessage) handle(wm *WantManager) {
+	wm.peerHandler.Disconnected(dm.p)
 }

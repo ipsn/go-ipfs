@@ -27,7 +27,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/trace"
+	"golang.org/x/net/trace"
 
 	"github.com/dgraph-io/badger/pb"
 	"github.com/dgraph-io/badger/table"

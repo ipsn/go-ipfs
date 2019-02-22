@@ -135,7 +135,7 @@ pkg unicode, var <new script or property> *RangeTable
 	all.Wait()
 
 	// Copy exported packages to the destination golang.org repo.
-	copyExported("github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/idna")
+	copyExported("golang.org/x/net/idna")
 
 	if updateCore {
 		copyVendored()

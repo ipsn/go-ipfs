@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/miekg/dns"
-	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/ipv4"
-	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/ipv6"
+	"golang.org/x/net/ipv4"
+	"golang.org/x/net/ipv6"
 )
 
 // ServiceEntry is returned after we query for a service

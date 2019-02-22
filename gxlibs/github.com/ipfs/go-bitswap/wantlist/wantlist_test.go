@@ -25,7 +25,7 @@ func init() {
 }
 
 type wli interface {
-	Contains(cid.Cid) (*Entry, bool)
+	Contains(cid.Cid) (Entry, bool)
 }
 
 func assertHasCid(t *testing.T, w wli, c cid.Cid) {
@@ -82,8 +82,8 @@ func TestBasicWantlist(t *testing.T) {
 	}
 }
 
-func TestSesRefWantlist(t *testing.T) {
-	wl := NewThreadSafe()
+func TestSessionTrackedWantlist(t *testing.T) {
+	wl := NewSessionTrackedWantlist()
 
 	if !wl.Add(testcids[0], 5, 1) {
 		t.Fatal("should have added")

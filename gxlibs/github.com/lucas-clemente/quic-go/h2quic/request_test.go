@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/http2/hpack"
+	"golang.org/x/net/http2/hpack"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

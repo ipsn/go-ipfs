@@ -25,9 +25,8 @@ func (fmn *fakeMessageNetwork) ConnectTo(context.Context, peer.ID) error {
 func (fmn *fakeMessageNetwork) NewMessageSender(context.Context, peer.ID) (bsnet.MessageSender, error) {
 	if fmn.messageSenderError == nil {
 		return fmn.messageSender, nil
-	} else {
-		return nil, fmn.messageSenderError
 	}
+	return nil, fmn.messageSenderError
 }
 
 type fakeMessageSender struct {
@@ -77,12 +76,12 @@ func TestStartupAndShutdown(t *testing.T) {
 	fakeSender := &fakeMessageSender{nil, fullClosedChan, resetChan, messagesSent}
 	fakenet := &fakeMessageNetwork{nil, nil, fakeSender}
 	peerID := testutil.GeneratePeers(1)[0]
-	messageQueue := New(peerID, fakenet)
+	messageQueue := New(ctx, peerID, fakenet)
 	ses := testutil.GenerateSessionID()
 	wl := testutil.GenerateWantlist(10, ses)
 
-	messageQueue.Startup(ctx, wl.Entries())
-
+	messageQueue.Startup()
+	messageQueue.AddWantlist(wl)
 	messages := collectMessages(ctx, t, messagesSent, 10*time.Millisecond)
 	if len(messages) != 1 {
 		t.Fatal("wrong number of messages were sent for initial wants")
@@ -119,11 +118,11 @@ func TestSendingMessagesDeduped(t *testing.T) {
 	fakeSender := &fakeMessageSender{nil, fullClosedChan, resetChan, messagesSent}
 	fakenet := &fakeMessageNetwork{nil, nil, fakeSender}
 	peerID := testutil.GeneratePeers(1)[0]
-	messageQueue := New(peerID, fakenet)
+	messageQueue := New(ctx, peerID, fakenet)
 	ses1 := testutil.GenerateSessionID()
 	ses2 := testutil.GenerateSessionID()
 	entries := testutil.GenerateMessageEntries(10, false)
-	messageQueue.Startup(ctx, nil)
+	messageQueue.Startup()
 
 	messageQueue.AddMessage(entries, ses1)
 	messageQueue.AddMessage(entries, ses2)
@@ -142,13 +141,13 @@ func TestSendingMessagesPartialDupe(t *testing.T) {
 	fakeSender := &fakeMessageSender{nil, fullClosedChan, resetChan, messagesSent}
 	fakenet := &fakeMessageNetwork{nil, nil, fakeSender}
 	peerID := testutil.GeneratePeers(1)[0]
-	messageQueue := New(peerID, fakenet)
+	messageQueue := New(ctx, peerID, fakenet)
 	ses1 := testutil.GenerateSessionID()
 	ses2 := testutil.GenerateSessionID()
 	entries := testutil.GenerateMessageEntries(10, false)
 	moreEntries := testutil.GenerateMessageEntries(5, false)
 	secondEntries := append(entries[5:], moreEntries...)
-	messageQueue.Startup(ctx, nil)
+	messageQueue.Startup()
 
 	messageQueue.AddMessage(entries, ses1)
 	messageQueue.AddMessage(secondEntries, ses2)

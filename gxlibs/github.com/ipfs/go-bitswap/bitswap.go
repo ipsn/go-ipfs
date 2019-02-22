@@ -6,7 +6,6 @@ import (
 	"context"
 	"errors"
 	"sync"
-	"sync/atomic"
 	"time"
 
 	bssrs "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-bitswap/sessionrequestsplitter"
@@ -98,8 +97,8 @@ func New(parent context.Context, network bsnet.BitSwapNetwork,
 		return nil
 	})
 
-	peerQueueFactory := func(p peer.ID) bspm.PeerQueue {
-		return bsmq.New(p, network)
+	peerQueueFactory := func(ctx context.Context, p peer.ID) bspm.PeerQueue {
+		return bsmq.New(ctx, p, network)
 	}
 
 	wm := bswm.New(ctx)
@@ -133,7 +132,6 @@ func New(parent context.Context, network bsnet.BitSwapNetwork,
 	}
 
 	bs.wm.SetDelegate(bs.pm)
-	bs.pm.Startup()
 	bs.wm.Startup()
 	bs.pqm.Startup()
 	network.SetDelegate(bs)
@@ -241,14 +239,6 @@ func (bs *Bitswap) GetBlocks(ctx context.Context, keys []cid.Cid) (<-chan blocks
 	return session.GetBlocks(ctx, keys)
 }
 
-// CancelWants removes a given key from the wantlist.
-func (bs *Bitswap) CancelWants(cids []cid.Cid, ses uint64) {
-	if len(cids) == 0 {
-		return
-	}
-	bs.wm.CancelWants(context.Background(), cids, nil, ses)
-}
-
 // HasBlock announces the existence of a block to this bitswap service. The
 // service will potentially notify its peers.
 func (bs *Bitswap) HasBlock(blk blocks.Block) error {
@@ -292,7 +282,9 @@ func (bs *Bitswap) receiveBlockFrom(blk blocks.Block, from peer.ID) error {
 }
 
 func (bs *Bitswap) ReceiveMessage(ctx context.Context, p peer.ID, incoming bsmsg.BitSwapMessage) {
-	atomic.AddUint64(&bs.counters.messagesRecvd, 1)
+	bs.counterLk.Lock()
+	bs.counters.messagesRecvd++
+	bs.counterLk.Unlock()
 
 	// This call records changes to wantlists, blocks received,
 	// and number of bytes transfered.
@@ -360,14 +352,13 @@ func (bs *Bitswap) updateReceiveCounters(b blocks.Block) {
 
 // Connected/Disconnected warns bitswap about peer connections.
 func (bs *Bitswap) PeerConnected(p peer.ID) {
-	initialWants := bs.wm.CurrentBroadcastWants()
-	bs.pm.Connected(p, initialWants)
+	bs.wm.Connected(p)
 	bs.engine.PeerConnected(p)
 }
 
 // Connected/Disconnected warns bitswap about peer connections.
 func (bs *Bitswap) PeerDisconnected(p peer.ID) {
-	bs.pm.Disconnected(p)
+	bs.wm.Disconnected(p)
 	bs.engine.PeerDisconnected(p)
 }
 

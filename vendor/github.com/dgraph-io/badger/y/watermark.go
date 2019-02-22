@@ -21,7 +21,7 @@ import (
 	"context"
 	"sync/atomic"
 
-	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/trace"
+	"golang.org/x/net/trace"
 )
 
 type uint64Heap []uint64

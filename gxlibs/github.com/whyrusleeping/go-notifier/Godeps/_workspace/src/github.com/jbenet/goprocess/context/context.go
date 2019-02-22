@@ -2,7 +2,7 @@ package goprocessctx
 
 import (
 	goprocess "github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/go-notifier/Godeps/_workspace/src/github.com/jbenet/goprocess"
-	context "github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/context"
+	context "golang.org/x/net/context"
 )
 
 // WithContext constructs and returns a Process that respects

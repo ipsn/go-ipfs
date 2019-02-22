@@ -229,9 +229,9 @@
     },
     {
       "author": "vyzo",
-      "hash": "QmNaJjRsgYQCfmUSZYyk7Jv3Bh78TzKxX4ZwAPKAHfKR4n",
+      "hash": "QmRgyf3SX5gWEvGRjAgBhUhH6ago2pFRGbML2XWCZuH4mf",
       "name": "go-libp2p-discovery",
-      "version": "1.0.10"
+      "version": "1.0.11"
     },
     {
       "author": "vyzo",
@@ -240,9 +240,9 @@
       "version": "1.0.9"
     },
     {
-      "hash": "QmWaDSNoSdSXU9b6udyaq9T8y6LkzMwqWxECznFqvtcTsk",
+      "hash": "QmcxZXMqFu4vjLQRfG2tAcg6DPQNurgZ2SQ5iQVk6dXQjn",
       "name": "go-libp2p-routing",
-      "version": "2.7.10"
+      "version": "2.7.11"
     }
   ],
   "gxVersion": "0.4.0",
@@ -250,6 +250,6 @@
   "license": "MIT",
   "name": "go-libp2p",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "6.0.35"
+  "version": "6.0.36"
 }
 

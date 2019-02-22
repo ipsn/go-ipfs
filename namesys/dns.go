@@ -6,9 +6,9 @@ import (
 	"net"
 	"strings"
 
-	opts "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options/namesys"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	isd "github.com/jbenet/go-is-domain"
+	opts "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options/namesys"
 )
 
 type LookupTXTFunc func(name string) (txt []string, err error)

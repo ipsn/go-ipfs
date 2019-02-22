@@ -1,8 +1,6 @@
 {
   "author": "why",
-  "bugs": {
-    "url": "https://github.com/polydawn/refmt"
-  },
+  "bugs": {},
   "gx": {
     "dvcsimport": "github.com/polydawn/refmt"
   },
@@ -11,6 +9,6 @@
   "license": "",
   "name": "refmt",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "1.1.3"
+  "version": "1.2.1"
 }
 

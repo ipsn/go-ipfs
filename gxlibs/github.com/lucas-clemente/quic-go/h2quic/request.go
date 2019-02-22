@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ipsn/go-ipfs/gxlibs/golang.org/x/net/http2/hpack"
+	"golang.org/x/net/http2/hpack"
 )
 
 func requestFromHeaders(headers []hpack.HeaderField) (*http.Request, error) {
