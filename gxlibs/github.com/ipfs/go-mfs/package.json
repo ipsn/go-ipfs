@@ -9,15 +9,15 @@
   "gxDependencies": [
     {
       "author": "why",
-      "hash": "QmScf5hnTEK8fDpRJAbcdMnKXpKUp1ytdymzXUbXDCFssp",
+      "hash": "QmPJNbVw8o3ohC43ppSXyNXwYKsWShG4zygnirHptfbHri",
       "name": "go-merkledag",
-      "version": "1.1.35"
+      "version": "1.1.37"
     },
     {
       "author": "why",
-      "hash": "QmVytt7Vtb9jbGN2uNfEm15t78pBUjw1SS72nkJFcWYZwe",
+      "hash": "QmcYUTQ7tBZeH1CLsZM2S3xhMEZdvUgXvbjhpMsLDpk3oJ",
       "name": "go-unixfs",
-      "version": "1.3.10"
+      "version": "1.3.12"
     },
     {
       "author": "whyrusleeping",
@@ -33,9 +33,9 @@
     },
     {
       "author": "why",
-      "hash": "QmR3bNAtBoTN6xZ2HQNqpRQARcDoazH9jU6zKUNjFyQKWS",
+      "hash": "QmQAgv6Gaoe2tQpcabqwKXKChp2MZ7i3UXv9DqTTaxCaTR",
       "name": "go-path",
-      "version": "1.1.37"
+      "version": "1.1.39"
     }
   ],
   "gxVersion": "0.12.1",
@@ -43,6 +43,6 @@
   "license": "MIT",
   "name": "go-mfs",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.1.47"
+  "version": "0.1.49"
 }
 

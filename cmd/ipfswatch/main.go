@@ -16,8 +16,8 @@ import (
 	fsrepo "github.com/ipsn/go-ipfs/repo/fsrepo"
 
 	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
-	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	process "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
+	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	homedir "github.com/mitchellh/go-homedir"
 	fsnotify "github.com/fsnotify/fsnotify"
 )

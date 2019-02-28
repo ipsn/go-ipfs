@@ -1,9 +1,9 @@
 go-libp2p-blankhost
 ==================
 
-[![](https://img.shields.io/badge/made%20by-Protocol%20Labs-blue.svg?style=flat-square)](http://ipn.io)
-[![](https://img.shields.io/badge/project-IPFS-blue.svg?style=flat-square)](http://libp2p.io/)
-[![](https://img.shields.io/badge/freenode-%23ipfs-blue.svg?style=flat-square)](http://webchat.freenode.net/?channels=%23ipfs)
+[![](https://img.shields.io/badge/made%20by-Protocol%20Labs-blue.svg?style=flat-square)](http://protocol.ai)
+[![](https://img.shields.io/badge/project-libp2p-yellow.svg?style=flat-square)](http://libp2p.io/)
+[![](https://img.shields.io/badge/freenode-%23libp2p-yellow.svg?style=flat-square)](http://webchat.freenode.net/?channels=%23libp2p)
 [![Coverage Status](https://coveralls.io/repos/github/libp2p/go-libp2p-blankhost/badge.svg?branch=master)](https://coveralls.io/github/libp2p/go-libp2p-blankhost?branch=master)
 [![Travis CI](https://travis-ci.org/libp2p/go-libp2p-blankhost.svg?branch=master)](https://travis-ci.org/libp2p/go-libp2p-blankhost)
 

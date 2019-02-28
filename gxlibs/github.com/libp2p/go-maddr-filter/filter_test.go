@@ -9,6 +9,15 @@ import (
 
 func TestFilter(t *testing.T) {
 	f := NewFilters()
+
+	_, ipnet, _ := net.ParseCIDR("0.1.2.3/24")
+	f.AddDialFilter(ipnet)
+	filters := f.Filters()
+	if len(filters) != 1 {
+		t.Fatal("Expected only 1 filter")
+	}
+	f.Remove(filters[0])
+
 	for _, cidr := range []string{
 		"1.2.3.0/24",
 		"4.3.2.1/32",
@@ -39,6 +48,7 @@ func TestFilter(t *testing.T) {
 		"/ip4/4.3.2.2/udp/123",
 		"/ip6/fe00::1/tcp/321",
 		"/ip6/fc00::2/udp/321",
+		"",
 	} {
 		maddr, err := ma.NewMultiaddr(notBlocked)
 		if err != nil {

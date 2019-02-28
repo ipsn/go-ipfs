@@ -33,10 +33,10 @@
 			"revisionTime": "2016-08-23T09:51:56Z"
 		},
 		{
-			"checksumSHA1": "y+9Eo8h/+q1Q2CggdPk2iHEjSEU=",
-			"path": "golang.org/x/crypto/curve25519",
-			"revision": "7f87c0fbb88b590338857bcb720678c2583d4dea",
-			"revisionTime": "2019-01-29T19:25:17Z"
+			"checksumSHA1": "GyJO23KIK26BOFakPDOno2A6+iM=",
+			"path": "golang.org/x/crypto/hkdf",
+			"revision": "8dd112bcdc25174059e45e07517d9fc663123347",
+			"revisionTime": "2019-02-28T09:13:53Z"
 		}
 	],
 	"rootPath": "github.com/ipsn/go-ipfs"
