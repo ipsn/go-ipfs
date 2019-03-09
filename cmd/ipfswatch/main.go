@@ -15,11 +15,11 @@ import (
 	corehttp "github.com/ipsn/go-ipfs/core/corehttp"
 	fsrepo "github.com/ipsn/go-ipfs/repo/fsrepo"
 
+	fsnotify "github.com/fsnotify/fsnotify"
+	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
 	process "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
-	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	homedir "github.com/mitchellh/go-homedir"
-	fsnotify "github.com/fsnotify/fsnotify"
 )
 
 var http = flag.Bool("http", false, "expose IPFS HTTP API")
@@ -207,7 +207,6 @@ func IsHidden(path string) bool {
 
 func cmdCtx(node *core.IpfsNode, repoPath string) commands.Context {
 	return commands.Context{
-		Online:     true,
 		ConfigRoot: repoPath,
 		LoadConfig: func(path string) (*config.Config, error) {
 			return node.Repo.Config()

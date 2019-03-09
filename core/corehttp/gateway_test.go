@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"io/ioutil"
-	"math"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -17,16 +16,16 @@ import (
 	namesys "github.com/ipsn/go-ipfs/namesys"
 	repo "github.com/ipsn/go-ipfs/repo"
 
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
-	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
-	id "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/protocol/identify"
-	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
-	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	datastore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	syncds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core"
+	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
+	files "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	iface "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options"
 	nsopts "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options/namesys"
+	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
+	id "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p/p2p/protocol/identify"
 )
 
 // `ipfs object new unixfs-dir`
@@ -41,7 +40,8 @@ func (m mockNamesys) Resolve(ctx context.Context, name string, opts ...nsopts.Re
 	}
 	depth := cfg.Depth
 	if depth == nsopts.UnlimitedDepth {
-		depth = math.MaxUint64
+		// max uint
+		depth = ^uint(0)
 	}
 	for strings.HasPrefix(name, "/ipns/") {
 		if depth <= 0 {
@@ -219,11 +219,12 @@ func TestGatewayGet(t *testing.T) {
 		if contentType != "text/plain; charset=utf-8" {
 			t.Errorf("expected content type to be text/plain, got %s", contentType)
 		}
+		body, err := ioutil.ReadAll(resp.Body)
 		if resp.StatusCode != test.status {
 			t.Errorf("(%d) got %d, expected %d from %s", i, resp.StatusCode, test.status, urlstr)
+			t.Errorf("Body: %s", body)
 			continue
 		}
-		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
 			t.Fatalf("error reading response from %s: %s", urlstr, err)
 		}

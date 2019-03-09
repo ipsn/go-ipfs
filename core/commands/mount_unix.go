@@ -9,9 +9,9 @@ import (
 	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
 	nodeMount "github.com/ipsn/go-ipfs/fuse/node"
 
-	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 )
 
 const (
@@ -92,7 +92,7 @@ baz
 		}
 
 		// error if we aren't running node in online mode
-		if nd.LocalMode() {
+		if !nd.IsOnline {
 			return ErrNotOnline
 		}
 

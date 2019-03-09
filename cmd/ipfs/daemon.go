@@ -24,13 +24,13 @@ import (
 	fsrepo "github.com/ipsn/go-ipfs/repo/fsrepo"
 	migrate "github.com/ipsn/go-ipfs/repo/fsrepo/migrations"
 
-	goprocess "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
-	"github.com/prometheus/client_golang/prometheus"
-	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	mprome "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-metrics-prometheus"
+	goprocess "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
+	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 const (
@@ -332,7 +332,7 @@ func daemonFunc(req *cmds.Request, re cmds.ResponseEmitter, env cmds.Environment
 		log.Error("error from node construction: ", err)
 		return err
 	}
-	node.SetLocal(false)
+	node.IsDaemon = true
 
 	if node.PNetFingerprint != nil {
 		fmt.Println("Swarm is limited to private network of peers with the swarm key")
@@ -517,7 +517,7 @@ func serveHTTPApi(req *cmds.Request, cctx *oldcmds.Context) (<-chan error, error
 
 // printSwarmAddrs prints the addresses of the host
 func printSwarmAddrs(node *core.IpfsNode) {
-	if !node.OnlineMode() {
+	if !node.IsOnline {
 		fmt.Println("Swarm not listening, running in offline mode.")
 		return
 	}

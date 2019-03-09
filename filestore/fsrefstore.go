@@ -10,14 +10,14 @@ import (
 
 	pb "github.com/ipsn/go-ipfs/filestore/pb"
 
+	proto "github.com/gogo/protobuf/proto"
+	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	dsns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/namespace"
 	dsq "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/query"
-	dshelp "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-ds-help"
 	blockstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
-	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
-	proto "github.com/gogo/protobuf/proto"
+	dshelp "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-ds-help"
 	posinfo "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-posinfo"
 )
 

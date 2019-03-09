@@ -7,10 +7,10 @@ import (
 
 	namesys "github.com/ipsn/go-ipfs/namesys"
 
-	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
-	resolver "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
+	resolver "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
 )
 
 // ErrNoNamesys is an explicit error for when an IPFS node doesn't

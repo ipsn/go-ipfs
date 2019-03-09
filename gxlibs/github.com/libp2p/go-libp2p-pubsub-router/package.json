@@ -64,9 +64,9 @@
     },
     {
       "author": "Stebalien",
-      "hash": "QmRCrPXk2oUwpK1Cj2FXrUotRpddUxz56setkny2gz13Cx",
+      "hash": "QmXwV9RskR8vpoYWu9bvKAeAWaBKyxEsEiM9yy6ezbpNBm",
       "name": "go-libp2p-routing-helpers",
-      "version": "0.3.19"
+      "version": "0.4.0"
     },
     {
       "author": "whyrusleeping",
@@ -92,6 +92,6 @@
   "license": "",
   "name": "go-libp2p-pubsub-router",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "0.5.16"
+  "version": "0.5.17"
 }
 

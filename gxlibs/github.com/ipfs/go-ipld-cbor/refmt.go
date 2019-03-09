@@ -7,7 +7,7 @@ import (
 
 	encoding "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-cbor/encoding"
 
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/polydawn/refmt/obj/atlas"
+	"github.com/polydawn/refmt/obj/atlas"
 )
 
 // This atlas describes the CBOR Tag (42) for IPLD links, such that refmt can marshal and unmarshal them

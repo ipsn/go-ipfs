@@ -3,8 +3,8 @@ package cmdenv
 import (
 	"testing"
 
-	mbase "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multibase"
 	cidenc "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cidutil/cidenc"
+	mbase "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multibase"
 )
 
 func TestEncoderFromPath(t *testing.T) {

@@ -21,16 +21,16 @@ import (
 	repo "github.com/ipsn/go-ipfs/repo"
 	fsrepo "github.com/ipsn/go-ipfs/repo/fsrepo"
 
-	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
-	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
-	madns "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-dns"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
-	loggables "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-loggables"
+	osh "github.com/ipsn/go-ipfs/gxlibs/github.com/Kubuxu/go-os-helper"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds/cli"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds/http"
-	osh "github.com/ipsn/go-ipfs/gxlibs/github.com/Kubuxu/go-os-helper"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
+	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	loggables "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-loggables"
+	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
+	madns "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-dns"
 	manet "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
 )
 
@@ -171,7 +171,6 @@ func mainRet() int {
 					return nil, err
 				}
 
-				n.SetLocal(true)
 				return n, nil
 			},
 		}, nil

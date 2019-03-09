@@ -8,8 +8,8 @@ import (
 	version "github.com/ipsn/go-ipfs"
 	fsrepo "github.com/ipsn/go-ipfs/repo/fsrepo"
 
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 )
 
 type VersionOutput struct {

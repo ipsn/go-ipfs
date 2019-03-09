@@ -13,6 +13,21 @@ import (
 	ropts "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing/options"
 )
 
+type failValueStore struct{}
+
+var failValueErr = errors.New("fail valuestore error")
+
+func (f failValueStore) PutValue(ctx context.Context, key string, value []byte, opts ...ropts.Option) error {
+	return failValueErr
+}
+func (f failValueStore) GetValue(ctx context.Context, key string, opts ...ropts.Option) ([]byte, error) {
+	return nil, failValueErr
+}
+
+func (f failValueStore) SearchValue(ctx context.Context, key string, opts ...ropts.Option) (<-chan []byte, error) {
+	return nil, failValueErr
+}
+
 type dummyValueStore sync.Map
 
 func (d *dummyValueStore) PutValue(ctx context.Context, key string, value []byte, opts ...ropts.Option) error {

@@ -136,9 +136,9 @@
     },
     {
       "author": "whyrusleeping",
-      "hash": "QmP7duPBaJLxZuVmKDmhRuqrfUsVN9vF8aF8FRPRdTwYEi",
+      "hash": "QmcjM6sfVtgGFBCCJaZo33HNi7K4rPkrUQAzLewgWTNkeg",
       "name": "go-ds-flatfs",
-      "version": "1.3.6"
+      "version": "1.3.7"
     },
     {
       "author": "whyrusleeping",
@@ -295,9 +295,9 @@
       "version": "3.0.34"
     },
     {
-      "hash": "QmX6AchyJgso1WNamTJMdxfzGiWuYu94K6tF9MJ66rRhAu",
+      "hash": "QmQkW9fnCsg9SLHdViiAh6qfBppodsPZVpU92dZLqYtEfs",
       "name": "go-ipfs-cmds",
-      "version": "2.0.17"
+      "version": "2.0.18"
     },
     {
       "hash": "Qmde5VP1qUkyQXKCfmEUA7bP64V2HAptbJ7phuPp7jXWwg",
@@ -459,15 +459,15 @@
     },
     {
       "author": "stebalien",
-      "hash": "QmRj3VMHa484MktgWaWr4KYys9AtxBBiFUhhEFKs9EvPiw",
+      "hash": "QmQtcp7emCLDbJqfn5YnXJQxmP2n7EqiwCHTx4DMKZSBuw",
       "name": "go-libp2p-pubsub-router",
-      "version": "0.5.16"
+      "version": "0.5.17"
     },
     {
       "author": "Stebalien",
-      "hash": "QmRCrPXk2oUwpK1Cj2FXrUotRpddUxz56setkny2gz13Cx",
+      "hash": "QmXwV9RskR8vpoYWu9bvKAeAWaBKyxEsEiM9yy6ezbpNBm",
       "name": "go-libp2p-routing-helpers",
-      "version": "0.3.19"
+      "version": "0.4.0"
     },
     {
       "author": "fsnotify",
@@ -608,15 +608,15 @@
     },
     {
       "author": "magik6k",
-      "hash": "QmXLwxifxwfc2bAwq6rdjbYqAsGzWsDE9RM5TWMGtykyj6",
+      "hash": "QmY1veddRDFZZBUFp2Mysw7mf2sSmbx1ZGH5v11tTMCYN5",
       "name": "interface-go-ipfs-core",
-      "version": "0.1.11"
+      "version": "0.1.12"
     }
   ],
   "gxVersion": "0.10.0",
   "language": "go",
   "license": "MIT",
   "name": "go-ipfs",
-  "version": "0.4.19-rc2"
+  "version": "0.4.19"
 }
 

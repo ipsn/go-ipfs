@@ -9,9 +9,9 @@ import (
 	ocmd "github.com/ipsn/go-ipfs/core/commands/object"
 	unixfs "github.com/ipsn/go-ipfs/core/commands/unixfs"
 
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
 var log = logging.Logger("core/commands")
@@ -29,7 +29,7 @@ const (
 var Root = &cmds.Command{
 	Helptext: cmdkit.HelpText{
 		Tagline:  "Global p2p merkle-dag filesystem.",
-		Synopsis: "ipfs [--config=<config> | -c] [--debug=<debug> | -D] [--help=<help>] [-h=<h>] [--local=<local> | -L] [--api=<api>] <command> ...",
+		Synopsis: "ipfs [--config=<config> | -c] [--debug | -D] [--help] [-h] [--api=<api>] [--offline] [--cid-base=<base>] [--upgrade-cidv0-in-output] [--encoding=<encoding> | --enc] [--timeout=<timeout>] <command> ...",
 		Subcommands: `
 BASIC COMMANDS
   init          Initialize ipfs local configuration
@@ -72,6 +72,7 @@ TOOL COMMANDS
   update        Download and apply go-ipfs updates
   commands      List all available commands
   cid           Convert and discover properties of CIDs
+  log           Manage and show logs of running daemon
 
 Use 'ipfs <command> --help' to learn more about each command.
 

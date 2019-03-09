@@ -9,11 +9,11 @@ import (
 	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
 
 	humanize "github.com/dustin/go-humanize"
-	metrics "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-metrics"
+	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	metrics "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-metrics"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	protocol "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-protocol"
-	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
 var StatsCmd = &cmds.Command{
@@ -94,7 +94,7 @@ Example:
 		}
 
 		// Must be online!
-		if !nd.OnlineMode() {
+		if !nd.IsOnline {
 			return cmdkit.Errorf(cmdkit.ErrClient, ErrNotOnline.Error())
 		}
 

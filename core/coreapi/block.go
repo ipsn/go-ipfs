@@ -10,10 +10,10 @@ import (
 	util "github.com/ipsn/go-ipfs/blocks/blockstoreutil"
 	pin "github.com/ipsn/go-ipfs/pin"
 
+	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 	coreiface "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core"
 	caopts "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options"
-	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 )
 
 type BlockAPI CoreAPI

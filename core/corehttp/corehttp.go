@@ -12,10 +12,10 @@ import (
 	"time"
 
 	core "github.com/ipsn/go-ipfs/core"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
 	periodicproc "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess/periodic"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
-	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	manet "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
 )
 

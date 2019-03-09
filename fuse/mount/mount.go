@@ -8,8 +8,8 @@ import (
 	"runtime"
 	"time"
 
-	goprocess "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	goprocess "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
 )
 
 var log = logging.Logger("mount")

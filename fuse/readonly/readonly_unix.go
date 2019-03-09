@@ -18,9 +18,9 @@ import (
 
 	fuse "bazil.org/fuse"
 	fs "bazil.org/fuse/fs"
-	lgbl "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-loggables"
 	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
+	lgbl "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-loggables"
 )
 
 var log = logging.Logger("fuse/ipfs")

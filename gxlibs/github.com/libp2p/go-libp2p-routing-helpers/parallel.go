@@ -130,12 +130,15 @@ func (r Parallel) put(do func(routing.IpfsRouting) error) error {
 	}
 	wg.Wait()
 
-	var errs []error
+	var (
+		errs    []error
+		success bool
+	)
 	for _, err := range results {
 		switch err {
 		case nil:
-			// Success!
-			return nil
+			// at least one router supports this.
+			success = true
 		case routing.ErrNotSupported:
 		default:
 			errs = append(errs, err)
@@ -144,6 +147,11 @@ func (r Parallel) put(do func(routing.IpfsRouting) error) error {
 
 	switch len(errs) {
 	case 0:
+		if success {
+			// No errors and at least one router succeeded.
+			return nil
+		}
+		// No routers supported this operation.
 		return routing.ErrNotSupported
 	case 1:
 		return errs[0]

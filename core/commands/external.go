@@ -8,10 +8,8 @@ import (
 	"os/exec"
 	"strings"
 
-	commands "github.com/ipsn/go-ipfs/commands"
-
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 )
 
 func ExternalBinary() *cmds.Command {
@@ -50,15 +48,6 @@ func ExternalBinary() *cmds.Command {
 
 			// setup env of child program
 			osenv := os.Environ()
-
-			// Get the node iff already defined.
-			if cctx, ok := env.(*commands.Context); ok && cctx.Online {
-				nd, err := cctx.GetNode()
-				if err != nil {
-					return fmt.Errorf("failed to start ipfs node: %s", err)
-				}
-				osenv = append(osenv, fmt.Sprintf("IPFS_ONLINE=%t", nd.OnlineMode()))
-			}
 
 			cmd.Env = osenv
 

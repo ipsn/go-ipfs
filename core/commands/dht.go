@@ -9,17 +9,17 @@ import (
 
 	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
 
+	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
-	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	b58 "github.com/mr-tron/base58/base58"
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
+	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	routing "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
 	notif "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing/notifications"
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
-	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
-	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	b58 "github.com/mr-tron/base58/base58"
 )
 
 var ErrNotDHT = errors.New("routing service is not a DHT")
@@ -141,14 +141,11 @@ var findProvidersDhtCmd = &cmds.Command{
 			return err
 		}
 
-		if !n.OnlineMode() {
+		if !n.IsOnline {
 			return ErrNotOnline
 		}
 
 		numProviders, _ := req.Options[numProvidersOptionName].(int)
-		if err != nil {
-			return err
-		}
 		if numProviders < 1 {
 			return fmt.Errorf("number of providers must be greater than 0")
 		}
@@ -235,7 +232,7 @@ var provideRefDhtCmd = &cmds.Command{
 			return err
 		}
 
-		if !nd.OnlineMode() {
+		if !nd.IsOnline {
 			return ErrNotOnline
 		}
 
@@ -267,18 +264,18 @@ var provideRefDhtCmd = &cmds.Command{
 		ctx, cancel := context.WithCancel(req.Context)
 		ctx, events := notif.RegisterForQueryEvents(ctx)
 
+		var provideErr error
 		go func() {
 			defer cancel()
-			var err error
 			if rec {
-				err = provideKeysRec(ctx, nd.Routing, nd.DAG, cids)
+				provideErr = provideKeysRec(ctx, nd.Routing, nd.DAG, cids)
 			} else {
-				err = provideKeys(ctx, nd.Routing, cids)
+				provideErr = provideKeys(ctx, nd.Routing, cids)
 			}
-			if err != nil {
+			if provideErr != nil {
 				notif.PublishQueryEvent(ctx, &notif.QueryEvent{
 					Type:  notif.QueryError,
-					Extra: err.Error(),
+					Extra: provideErr.Error(),
 				})
 			}
 		}()
@@ -289,7 +286,7 @@ var provideRefDhtCmd = &cmds.Command{
 			}
 		}
 
-		return nil
+		return provideErr
 	},
 	Encoders: cmds.EncoderMap{
 		cmds.Text: cmds.MakeTypedEncoder(func(req *cmds.Request, w io.Writer, out *notif.QueryEvent) error {
@@ -364,7 +361,7 @@ var findPeerDhtCmd = &cmds.Command{
 			return err
 		}
 
-		if !nd.OnlineMode() {
+		if !nd.IsOnline {
 			return ErrNotOnline
 		}
 
@@ -376,13 +373,15 @@ var findPeerDhtCmd = &cmds.Command{
 		ctx, cancel := context.WithCancel(req.Context)
 		ctx, events := notif.RegisterForQueryEvents(ctx)
 
+		var findPeerErr error
 		go func() {
 			defer cancel()
-			pi, err := nd.Routing.FindPeer(ctx, pid)
-			if err != nil {
+			var pi pstore.PeerInfo
+			pi, findPeerErr = nd.Routing.FindPeer(ctx, pid)
+			if findPeerErr != nil {
 				notif.PublishQueryEvent(ctx, &notif.QueryEvent{
 					Type:  notif.QueryError,
-					Extra: err.Error(),
+					Extra: findPeerErr.Error(),
 				})
 				return
 			}
@@ -399,7 +398,7 @@ var findPeerDhtCmd = &cmds.Command{
 			}
 		}
 
-		return nil
+		return findPeerErr
 	},
 	Encoders: cmds.EncoderMap{
 		cmds.Text: cmds.MakeTypedEncoder(func(req *cmds.Request, w io.Writer, out *notif.QueryEvent) error {
@@ -446,7 +445,7 @@ Different key types can specify other 'best' rules.
 			return err
 		}
 
-		if !nd.OnlineMode() {
+		if !nd.IsOnline {
 			return ErrNotOnline
 		}
 
@@ -458,13 +457,15 @@ Different key types can specify other 'best' rules.
 		ctx, cancel := context.WithCancel(req.Context)
 		ctx, events := notif.RegisterForQueryEvents(ctx)
 
+		var getErr error
 		go func() {
 			defer cancel()
-			val, err := nd.Routing.GetValue(ctx, dhtkey)
-			if err != nil {
+			var val []byte
+			val, getErr = nd.Routing.GetValue(ctx, dhtkey)
+			if getErr != nil {
 				notif.PublishQueryEvent(ctx, &notif.QueryEvent{
 					Type:  notif.QueryError,
-					Extra: err.Error(),
+					Extra: getErr.Error(),
 				})
 			} else {
 				notif.PublishQueryEvent(ctx, &notif.QueryEvent{
@@ -480,7 +481,7 @@ Different key types can specify other 'best' rules.
 			}
 		}
 
-		return nil
+		return getErr
 	},
 	Encoders: cmds.EncoderMap{
 		cmds.Text: cmds.MakeTypedEncoder(func(req *cmds.Request, w io.Writer, out *notif.QueryEvent) error {
@@ -538,7 +539,7 @@ NOTE: A value may not exceed 2048 bytes.
 			return err
 		}
 
-		if !nd.OnlineMode() {
+		if !nd.IsOnline {
 			return ErrNotOnline
 		}
 
@@ -552,13 +553,14 @@ NOTE: A value may not exceed 2048 bytes.
 		ctx, cancel := context.WithCancel(req.Context)
 		ctx, events := notif.RegisterForQueryEvents(ctx)
 
+		var putErr error
 		go func() {
 			defer cancel()
-			err := nd.Routing.PutValue(ctx, key, []byte(data))
-			if err != nil {
+			putErr = nd.Routing.PutValue(ctx, key, []byte(data))
+			if putErr != nil {
 				notif.PublishQueryEvent(ctx, &notif.QueryEvent{
 					Type:  notif.QueryError,
-					Extra: err.Error(),
+					Extra: putErr.Error(),
 				})
 			}
 		}()
@@ -569,7 +571,7 @@ NOTE: A value may not exceed 2048 bytes.
 			}
 		}
 
-		return nil
+		return putErr
 	},
 	Encoders: cmds.EncoderMap{
 		cmds.Text: cmds.MakeTypedEncoder(func(req *cmds.Request, w io.Writer, out *notif.QueryEvent) error {

@@ -8,10 +8,10 @@ import (
 	version "github.com/ipsn/go-ipfs"
 	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
 
+	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
 	manet "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-net"
 	sysi "github.com/ipsn/go-ipfs/gxlibs/github.com/whyrusleeping/go-sysinfo"
-	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
 )
 
 var sysDiagCmd = &cmds.Command{
@@ -47,7 +47,7 @@ Prints out information about your computer to aid in easier debugging.
 			return err
 		}
 
-		err = netInfo(nd.OnlineMode(), info)
+		err = netInfo(nd.IsOnline, info)
 		if err != nil {
 			return err
 		}

@@ -14,10 +14,10 @@ import (
 
 	core "github.com/ipsn/go-ipfs/core"
 
-	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
 	fstest "bazil.org/fuse/fs/fstestutil"
-	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil/ci"
 	racedet "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-detect-race"
+	u "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-util"
+	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-testutil/ci"
 )
 
 func maybeSkipFuseTests(t *testing.T) {

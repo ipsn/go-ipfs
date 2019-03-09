@@ -14,13 +14,13 @@ import (
 	cmdenv "github.com/ipsn/go-ipfs/core/commands/cmdenv"
 	p2p "github.com/ipsn/go-ipfs/p2p"
 
+	ipfsaddr "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-addr"
+	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
+	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
+	protocol "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-protocol"
 	ma "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr"
 	madns "github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multiaddr-dns"
-	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
-	protocol "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-protocol"
-	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
-	cmdkit "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmdkit"
-	ipfsaddr "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-addr"
 )
 
 // P2PProtoPrefix is the default required prefix for protocol names
@@ -535,7 +535,7 @@ func p2pGetNode(env cmds.Environment) (*core.IpfsNode, error) {
 		return nil, errors.New("libp2p stream mounting not enabled")
 	}
 
-	if !nd.OnlineMode() {
+	if !nd.IsOnline {
 		return nil, ErrNotOnline
 	}
 

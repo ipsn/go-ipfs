@@ -9,14 +9,14 @@ import (
 	namesys "github.com/ipsn/go-ipfs/namesys"
 	path "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 
+	proto "github.com/gogo/protobuf/proto"
+	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
+	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns/pb"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	goprocess "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
 	gpctx "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess/context"
 	ic "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
-	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
-	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns/pb"
 	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
-	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
-	proto "github.com/gogo/protobuf/proto"
 )
 
 var errNoEntry = errors.New("no previous entry")

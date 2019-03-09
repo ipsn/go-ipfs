@@ -129,6 +129,24 @@ func TestParallelPutGet(t *testing.T) {
 	cancel()
 }
 
+func TestParallelPutFailure(t *testing.T) {
+	ctx := context.Background()
+	router := Parallel{
+		Routers: []routing.IpfsRouting{
+			&Compose{
+				ValueStore: new(failValueStore),
+			},
+			&Compose{
+				ValueStore: new(dummyValueStore),
+			},
+		},
+	}
+	err := router.PutValue(ctx, "/some/thing", []byte("thing"))
+	if err != failValueErr {
+		t.Fatalf("exected put to fail with %q, got %q", failValueErr, err)
+	}
+}
+
 func TestBasicParallelFindProviders(t *testing.T) {
 	prefix := cid.NewPrefixV1(cid.Raw, mh.SHA2_256)
 	c, _ := prefix.Sum([]byte("foo"))

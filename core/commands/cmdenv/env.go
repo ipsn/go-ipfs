@@ -7,11 +7,11 @@ import (
 	"github.com/ipsn/go-ipfs/commands"
 	"github.com/ipsn/go-ipfs/core"
 
-	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	cmds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-cmds"
+	config "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
+	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	coreiface "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core"
 	options "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core/options"
-	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 )
 
 var log = logging.Logger("core/commands/cmdenv")

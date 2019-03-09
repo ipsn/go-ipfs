@@ -16,27 +16,27 @@ import (
 	cidv0v1 "github.com/ipsn/go-ipfs/thirdparty/cidv0v1"
 	"github.com/ipsn/go-ipfs/thirdparty/verifbs"
 
-	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
-	resolver "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
-	libp2p "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p"
-	goprocessctx "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess/context"
-	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
-	cfg "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
 	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
 	ds "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore"
 	retry "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/retrystore"
 	dsync "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-datastore/sync"
-	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
 	bstore "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-blockstore"
-	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
-	p2phost "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
+	cfg "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-config"
+	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	offroute "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-routing/offline"
+	ipns "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipns"
+	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
+	metrics "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-metrics-interface"
+	resolver "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
+	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
+	goprocessctx "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess/context"
+	libp2p "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p"
+	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
+	p2phost "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
+	peer "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peer"
 	pstore "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore"
 	pstoremem "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-peerstore/pstoremem"
-	offline "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-exchange-offline"
 	record "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-record"
-	uio "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/io"
-	metrics "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-metrics-interface"
 )
 
 type BuildCfg struct {
@@ -142,7 +142,7 @@ func NewNode(ctx context.Context, cfg *BuildCfg) (*IpfsNode, error) {
 	ctx = metrics.CtxScope(ctx, "ipfs")
 
 	n := &IpfsNode{
-		mode:      offlineMode,
+		IsOnline:  cfg.Online,
 		Repo:      cfg.Repo,
 		ctx:       ctx,
 		Peerstore: pstoremem.NewPeerstore(),
@@ -151,10 +151,6 @@ func NewNode(ctx context.Context, cfg *BuildCfg) (*IpfsNode, error) {
 	n.RecordValidator = record.NamespacedValidator{
 		"pk":   record.PublicKeyValidator{},
 		"ipns": ipns.Validator{KeyBook: n.Peerstore},
-	}
-
-	if cfg.Online {
-		n.mode = onlineMode
 	}
 
 	// TODO: this is a weird circular-ish dependency, rework it

@@ -15,18 +15,18 @@ import (
 	"github.com/ipsn/go-ipfs/core"
 	"github.com/ipsn/go-ipfs/dagutils"
 
+	"github.com/dustin/go-humanize"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
+	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
+	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	dag "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-merkledag"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-path/resolver"
-	"github.com/dustin/go-humanize"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-files"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
-	coreiface "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core"
-	chunker "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipfs-chunker"
-	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
-	ipld "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-ipld-format"
 	ft "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-unixfs/importer"
+	coreiface "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/interface-go-ipfs-core"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-routing"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/multiformats/go-multibase"
 )
 
@@ -155,7 +155,7 @@ func (i *gatewayHandler) getOrHeadHandler(ctx context.Context, w http.ResponseWr
 
 	// Resolve path to the final DAG node for the ETag
 	resolvedPath, err := i.api.ResolvePath(ctx, parsedPath)
-	if err == coreiface.ErrOffline && !i.node.OnlineMode() {
+	if err == coreiface.ErrOffline && !i.node.IsOnline {
 		webError(w, "ipfs resolve -r "+escapedURLPath, err, http.StatusServiceUnavailable)
 		return
 	} else if err != nil {
