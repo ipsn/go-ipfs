@@ -20,11 +20,14 @@ before_script:
   # Install the necessary tools for ungx-ing and convert go-ipfs
   - go get github.com/whyrusleeping/gx
   - go get github.com/karalabe/ungx
-  - ungx --fork=github.com/ipsn/go-ipfs --embed=github.com/lucas-clemente/quic-go,github.com/polydawn/refmt
+  - ungx --fork=github.com/ipsn/go-ipfs --embed=github.com/lucas-clemente/quic-go
 
   # Save the latest commit hash and wipe all git history recursively
   - COMMIT=`git rev-parse HEAD`
   - find . -type d -name .git | xargs -d '\n' rm -rf
+
+  # Remove all remnants of the gx package manager
+  - find . -type d -name .gx | xargs -d '\n' rm -rf
 
   # Save the ungx-ed readme to update the master branch with
   - cd $GOPATH/src/github.com/ipsn/go-ipfs
@@ -37,9 +40,18 @@ before_script:
   - git rm -r '*'
   - mv $GOPATH/src/github.com/ipfs/go-ipfs/{.[!.],}* .
 
-  # Vendor in any dependencies missing in the first place
+  # Remove the test folder, it pulls in its own govendor, murdering this process
+  - rm -rf test
+
+  # Remove any executable and unused dependencies, we don't care about junk in our deps
   - go get github.com/kardianos/govendor
-  - govendor fetch +external
+
+  - govendor list | grep 'pl  ' | grep gxlibs | cut -d ' ' -f 3 | sed 's#^github.com/ipsn/go-ipfs/##g' | xargs -d '\n' rm -rf
+  - govendor remove +program +unused
+
+  - govendor remove +unused           # Govendor sucks, remove more unused dependencies
+  - govendor remove +unused           # Govendor still sucks, remove more unused dependencies
+  - govendor fetch +external +missing # Ok, now put everything back that's missing
 
   # Overwrite the reposiory readme and commit all the changes
   - cp -f ../README.md README.md
@@ -48,7 +60,7 @@ before_script:
   - if [ -n "$(git status --porcelain)" ]; then git commit --author="Péter Szilágyi <peterke@gmail.com>" -m "Ungx-ed commit $COMMIT"; fi
 
   # Sanity check that the repository can be built
-  - go install ./cmd/...
+  - go install ./...
 
 script:
   # Everything seems ok, push the ungx-ed master branch back to GitHub
