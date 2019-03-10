@@ -108,8 +108,8 @@ require (
 	github.com/whyrusleeping/multiaddr-filter v0.0.0-20160516205228-e903e4adabd7
 	github.com/whyrusleeping/tar-utils v0.0.0-20180509141711-8c6c8ba81d5c
 	golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2 // indirect
-	golang.org/x/net v0.0.0-20190301231341-16b79f2e4e95 // indirect
-	golang.org/x/sys v0.0.0-20190309122539-980fc434d28e
+	golang.org/x/net v0.0.0-20190310074541-c10a0554eabf // indirect
+	golang.org/x/sys v0.0.0-20190310054646-10058d7d4faa
 	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
 	gopkg.in/cheggaaa/pb.v1 v1.0.28
 	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect

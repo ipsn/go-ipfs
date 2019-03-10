@@ -3,24 +3,6 @@
 	"ignore": "",
 	"package": [
 		{
-			"checksumSHA1": "CmMuh0ApTy1SVH7EQIIAbaKchgY=",
-			"path": "github.com/bifurcation/mint",
-			"revision": "83ba9bc2ead9cdf8b0c8bd94e8a41243e5f6ed88",
-			"revisionTime": "2019-01-29T14:10:59Z"
-		},
-		{
-			"checksumSHA1": "HnzrrCx9iVd9h4ItB3YKZMrkO2g=",
-			"path": "github.com/bifurcation/mint/syntax",
-			"revision": "83ba9bc2ead9cdf8b0c8bd94e8a41243e5f6ed88",
-			"revisionTime": "2019-01-29T14:10:59Z"
-		},
-		{
-			"checksumSHA1": "PYXuf7wvcj492uWhjvmXlyyQUYc=",
-			"path": "github.com/cheekybits/genny/generic",
-			"revision": "d2cf3cdd35ce0d789056c4bc02a4d6349c947caf",
-			"revisionTime": "2018-08-30T15:03:46Z"
-		},
-		{
 			"checksumSHA1": "228kc9UPQ7Ez5u7JtAQsfdIfh5Q=",
 			"path": "github.com/cpuguy83/go-md2man/md2man",
 			"revision": "691ee98543af2f262f35fbb54bdd42f00b9b9cc5",
@@ -47,8 +29,8 @@
 		{
 			"checksumSHA1": "yIkYzW7bzAD81zHyuCNmEj4+oxQ=",
 			"path": "github.com/gopherjs/gopherjs/js",
-			"revision": "a7e14a8774c129df215490ba8d4f40bbda884e54",
-			"revisionTime": "2019-03-09T14:59:04Z"
+			"revision": "847fc94819f9d5a4e7154e2203b36f6dbace6f48",
+			"revisionTime": "2019-03-09T15:40:08Z"
 		},
 		{
 			"checksumSHA1": "bs7yI4BqAqKSGyl0pXFnnkqIK7c=",
@@ -61,18 +43,6 @@
 			"path": "github.com/inconshreveable/mousetrap",
 			"revision": "76626ae9c91c4f2a10f34cad8ce83ea42c93bb75",
 			"revisionTime": "2014-10-17T20:07:13Z"
-		},
-		{
-			"checksumSHA1": "gCE5GotIhYV+rnX7lXAbbUIMEPQ=",
-			"path": "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/iptb/testbed/interfaces",
-			"revision": "cd900e33002256aca1ab07247fc9170dee6e7ce2",
-			"revisionTime": "2019-02-28T23:54:30Z"
-		},
-		{
-			"checksumSHA1": "GsV3I7U4NvV0euPf37G48mA73g8=",
-			"path": "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/iptb/util",
-			"revision": "cd900e33002256aca1ab07247fc9170dee6e7ce2",
-			"revisionTime": "2019-02-28T23:54:30Z"
 		},
 		{
 			"checksumSHA1": "EIYigv3ZUQaBIJ011VCqrcB6nx4=",
@@ -111,22 +81,10 @@
 			"revisionTime": "2018-05-06T08:24:08Z"
 		},
 		{
-			"checksumSHA1": "ITlVkWmRdYmxG1xsYBy0D8+nC0Q=",
-			"path": "github.com/lucas-clemente/aes12",
-			"revision": "cd47fb39b79f867c6e4e5cd39cf7abd799f71670",
-			"revisionTime": "2017-10-27T16:34:21Z"
-		},
-		{
 			"checksumSHA1": "G3Jf3ZGgSksAMK5JeWwM1+J15cs=",
 			"path": "github.com/lucas-clemente/quic-clients",
 			"revision": "ebb2c1df52a935936791139f32f4138ed63ed87d",
 			"revisionTime": "2019-01-16T01:57:04Z"
-		},
-		{
-			"checksumSHA1": "OA9E+y7g05x/mWJJHmA7oPxWKQo=",
-			"path": "github.com/lucas-clemente/quic-go-certificates",
-			"revision": "d2f86524cced5186554df90d92529757d22c1cb6",
-			"revisionTime": "2016-08-23T09:51:56Z"
 		},
 		{
 			"checksumSHA1": "hat0u1ZzWR1gSp0x50cFVVMP2eo=",
@@ -289,12 +247,6 @@
 			"path": "github.com/warpfork/go-wish/difflib",
 			"revision": "5ad1f5abf4368a7f5ae616fdbf02821b6a93bf10",
 			"revisionTime": "2018-05-10T12:29:57Z"
-		},
-		{
-			"checksumSHA1": "GyJO23KIK26BOFakPDOno2A6+iM=",
-			"path": "golang.org/x/crypto/hkdf",
-			"revision": "c2843e01d9a2bc60bb26ad24e09734fdc2d9ec58",
-			"revisionTime": "2018-05-03T22:15:25Z"
 		},
 		{
 			"checksumSHA1": "ThFld47fsBZklOb0BK7HzSJGbJs=",
