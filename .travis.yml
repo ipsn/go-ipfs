@@ -17,9 +17,8 @@ before_script:
   - git clone --depth=1 https://github.com/ipfs/go-ipfs.git
   - cd go-ipfs
 
-  # Remove all concept of go modules, they are just breaking things more
-  - find . -type f -name go.mod | xargs -d '\n' rm
-  - find . -type f -name go.sum | xargs -d '\n' rm
+  # Remove go module support for the main ipfs repository
+  - rm go.mod go.sum
 
   # Install the necessary tools for ungx-ing and convert go-ipfs
   - go get github.com/whyrusleeping/gx
@@ -30,8 +29,10 @@ before_script:
   - COMMIT=`git rev-parse HEAD`
   - find . -type d -name .git | xargs -d '\n' rm -rf
 
-  # Remove all remnants of the gx package manager
+  # Remove all remnants of the gx package manager, and go modules in dependencies
   - find . -type d -name .gx | xargs -d '\n' rm -rf
+  - find . -type f -name go.mod | xargs -d '\n' rm
+  - find . -type f -name go.sum | xargs -d '\n' rm
 
   # Save the ungx-ed readme to update the master branch with
   - cd $GOPATH/src/github.com/ipsn/go-ipfs
