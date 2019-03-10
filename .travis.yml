@@ -17,6 +17,9 @@ before_script:
   - git clone --depth=1 https://github.com/ipfs/go-ipfs.git
   - cd go-ipfs
 
+  # Remove all concept of go modules, they are just breaking things more
+  - rm go.mod go.sum
+
   # Install the necessary tools for ungx-ing and convert go-ipfs
   - go get github.com/whyrusleeping/gx
   - go get github.com/karalabe/ungx
