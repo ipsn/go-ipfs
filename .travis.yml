@@ -64,10 +64,14 @@ before_script:
   - find . | egrep '[^.]/vendor$' | xargs -d '\n' rm -rf
   - govendor fetch +missing
 
-  # Embed github.com/bifurcation/mint, because reasons
+  # Embed a few dependencies that don't keep their own APIs
   - mv vendor/github.com/bifurcation gxlibs/github.com/bifurcation
   - find . | egrep '\.go$' | xargs -d '\n' sed -i 's#github.com/bifurcation/mint#github.com/ipsn/go-ipfs/gxlibs/github.com/bifurcation/mint#g'
   - govendor remove github.com/bifurcation/mint/...
+
+  - mv vendor/github.com/dgraph-io gxlibs/github.com/dgraph-io
+  - find . | egrep '\.go$' | xargs -d '\n' sed -i 's#github.com/dgraph-io/badger#github.com/ipsn/go-ipfs/gxlibs/github.com/dgraph-io/badger#g'
+  - govendor remove github.com/dgraph-io/badger/...
 
   # Overwrite the reposiory readme and commit all the changes
   - cp -f ../README.md README.md
