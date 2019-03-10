@@ -57,7 +57,17 @@ before_script:
   - govendor remove +program +unused
   - govendor remove +unused # Govendor sucks, remove more unused dependencies
   - govendor remove +unused # Govendor still sucks, remove more unused dependencies
-  - govendor fetch +missing # Ok, now put everything back that's missing
+  - govendor fetch +missing # Pull in anything that's missing
+
+  # Flatten internal vendor folders and get rid of nestings
+  - govendor add +external
+  - find . | egrep '[^.]/vendor$' | xargs -d '\n' rm -rf
+  - govendor fetch +missing
+
+  # Embed github.com/bifurcation/mint, because reasons
+  - mv vendor/github.com/bifurcation gxlibs/github.com/bifurcation
+  - find . | egrep '\.go$' | xargs -d '\n' sed -i 's#github.com/bifurcation/mint#github.com/ipsn/go-ipfs/gxlibs/github.com/bifurcation/mint#g'
+  - govendor remove github.com/bifurcation/mint/...
 
   # Overwrite the reposiory readme and commit all the changes
   - cp -f ../README.md README.md
