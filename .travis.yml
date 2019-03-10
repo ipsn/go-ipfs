@@ -1,6 +1,6 @@
 language: go
 
-go: 1.11.x
+go: 1.12.x
 
 # Don't grab any dependencies or whatnot, we're not building go-ipfs, rather
 # forking the upstream one.
@@ -46,12 +46,13 @@ before_script:
   # Remove any executable and unused dependencies, we don't care about junk in our deps
   - go get github.com/kardianos/govendor
 
-  - govendor list | grep 'pl  ' | grep gxlibs | cut -d ' ' -f 3 | sed 's#^github.com/ipsn/go-ipfs/##g' | xargs -d '\n' rm -rf
-  - govendor remove +program +unused
+  - BINARIES=`govendor list | grep 'pl  ' | grep gxlibs | cut -d ' ' -f 3 | sed 's#^github.com/ipsn/go-ipfs/##g'`
+  - for BIN in $BINARIES; do rm $BIN/*.go; done
 
-  - govendor remove +unused           # Govendor sucks, remove more unused dependencies
-  - govendor remove +unused           # Govendor still sucks, remove more unused dependencies
-  - govendor fetch +external +missing # Ok, now put everything back that's missing
+  - govendor remove +program +unused
+  - govendor remove +unused # Govendor sucks, remove more unused dependencies
+  - govendor remove +unused # Govendor still sucks, remove more unused dependencies
+  - govendor fetch +missing # Ok, now put everything back that's missing
 
   # Overwrite the reposiory readme and commit all the changes
   - cp -f ../README.md README.md
