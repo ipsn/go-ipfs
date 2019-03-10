@@ -171,7 +171,7 @@ func testUpdateTTLs(m pstore.AddrBook) func(t *testing.T) {
 
 			// Will only affect addrs1[0].
 			// Badger does not support subsecond TTLs.
-			// https://github.com/dgraph-io/badger/issues/339
+			// https://github.com/ipsn/go-ipfs/gxlibs/github.com/dgraph-io/badger/issues/339
 			m.UpdateAddrs(ids[0], time.Hour, 1*time.Second)
 
 			// No immediate effect.
