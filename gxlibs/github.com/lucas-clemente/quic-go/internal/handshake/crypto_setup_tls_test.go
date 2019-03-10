@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/bifurcation/mint"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/bifurcation/mint"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/internal/crypto"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/internal/mocks/crypto"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/internal/protocol"

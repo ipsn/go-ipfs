@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/bifurcation/mint"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/bifurcation/mint"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/internal/ackhandler"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/internal/congestion"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/internal/flowcontrol"

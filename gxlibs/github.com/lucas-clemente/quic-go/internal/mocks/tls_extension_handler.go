@@ -7,7 +7,7 @@ package mocks
 import (
 	reflect "reflect"
 
-	mint "github.com/bifurcation/mint"
+	mint "github.com/ipsn/go-ipfs/gxlibs/github.com/bifurcation/mint"
 	gomock "github.com/golang/mock/gomock"
 	handshake "github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/internal/handshake"
 )

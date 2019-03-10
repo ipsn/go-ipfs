@@ -4,7 +4,7 @@ import (
 	"crypto"
 	"encoding/binary"
 
-	"github.com/bifurcation/mint"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/bifurcation/mint"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/internal/protocol"
 )
 

@@ -3,10 +3,29 @@
 	"ignore": "",
 	"package": [
 		{
+			"checksumSHA1": "PYXuf7wvcj492uWhjvmXlyyQUYc=",
+			"origin": "github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/vendor/github.com/cheekybits/genny/generic",
+			"path": "github.com/cheekybits/genny/generic",
+			"revision": "4f6d5db17168aff81be4f1ff8e346f3aa133bb37",
+			"revisionTime": "2019-03-10T15:47:26Z"
+		},
+		{
 			"checksumSHA1": "228kc9UPQ7Ez5u7JtAQsfdIfh5Q=",
 			"path": "github.com/cpuguy83/go-md2man/md2man",
 			"revision": "691ee98543af2f262f35fbb54bdd42f00b9b9cc5",
 			"revisionTime": "2018-06-19T20:56:30Z"
+		},
+		{
+			"checksumSHA1": "3KhDEC5MM0iyN+FsLfxpnvFVeuY=",
+			"path": "github.com/davecgh/go-spew/spew",
+			"revision": "d8f796af33cc11cb798c1aaeb27a4ebc5099927d",
+			"revisionTime": "2018-08-30T19:11:22Z"
+		},
+		{
+			"checksumSHA1": "a2yC46a1qsJomgY6rb+FkTFiqmE=",
+			"path": "github.com/davecgh/go-spew/spew/testdata",
+			"revision": "d8f796af33cc11cb798c1aaeb27a4ebc5099927d",
+			"revisionTime": "2018-08-30T19:11:22Z"
 		},
 		{
 			"checksumSHA1": "SY56fjHVAKJngn3PrmkNeMDazfk=",
@@ -81,10 +100,24 @@
 			"revisionTime": "2018-05-06T08:24:08Z"
 		},
 		{
+			"checksumSHA1": "2RFzGcdTeQrFkkhT70WhQcMWF6c=",
+			"origin": "github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/vendor/github.com/lucas-clemente/aes12",
+			"path": "github.com/lucas-clemente/aes12",
+			"revision": "4f6d5db17168aff81be4f1ff8e346f3aa133bb37",
+			"revisionTime": "2019-03-10T15:47:26Z"
+		},
+		{
 			"checksumSHA1": "G3Jf3ZGgSksAMK5JeWwM1+J15cs=",
 			"path": "github.com/lucas-clemente/quic-clients",
 			"revision": "ebb2c1df52a935936791139f32f4138ed63ed87d",
 			"revisionTime": "2019-01-16T01:57:04Z"
+		},
+		{
+			"checksumSHA1": "OA9E+y7g05x/mWJJHmA7oPxWKQo=",
+			"origin": "github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/vendor/github.com/lucas-clemente/quic-go-certificates",
+			"path": "github.com/lucas-clemente/quic-go-certificates",
+			"revision": "4f6d5db17168aff81be4f1ff8e346f3aa133bb37",
+			"revisionTime": "2019-03-10T15:47:26Z"
 		},
 		{
 			"checksumSHA1": "hat0u1ZzWR1gSp0x50cFVVMP2eo=",
@@ -121,6 +154,12 @@
 			"path": "github.com/philhofer/fwd",
 			"revision": "bb6d471dc95d4fe11e432687f8b70ff496cf3136",
 			"revisionTime": "2017-09-05T21:21:22Z"
+		},
+		{
+			"checksumSHA1": "RZOdTSZN/PgcTqko5LzIAzw+UT4=",
+			"path": "github.com/pmezard/go-difflib/difflib",
+			"revision": "5d4384ee4fb2527b0a1256a821ebfc92f91efefc",
+			"revisionTime": "2018-12-26T10:54:42Z"
 		},
 		{
 			"checksumSHA1": "sLu2d9DEcqaat6Oqnx1xR8ow2vI=",

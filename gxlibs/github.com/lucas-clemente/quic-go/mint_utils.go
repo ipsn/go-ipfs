@@ -6,7 +6,7 @@ import (
 	"crypto/x509"
 	"errors"
 
-	"github.com/bifurcation/mint"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/bifurcation/mint"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/internal/protocol"
 )
 

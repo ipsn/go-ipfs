@@ -9,7 +9,7 @@ import (
 	"net"
 	"sync"
 
-	"github.com/bifurcation/mint"
+	"github.com/ipsn/go-ipfs/gxlibs/github.com/bifurcation/mint"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/internal/handshake"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/internal/protocol"
 	"github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/internal/utils"
