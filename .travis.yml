@@ -18,7 +18,8 @@ before_script:
   - cd go-ipfs
 
   # Remove all concept of go modules, they are just breaking things more
-  - rm go.mod go.sum
+  - find . -type f -name go.mod | xargs -d '\n' rm
+  - find . -type f -name go.sum | xargs -d '\n' rm
 
   # Install the necessary tools for ungx-ing and convert go-ipfs
   - go get github.com/whyrusleeping/gx
