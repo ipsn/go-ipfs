@@ -6,8 +6,8 @@
 			"checksumSHA1": "PYXuf7wvcj492uWhjvmXlyyQUYc=",
 			"origin": "github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/vendor/github.com/cheekybits/genny/generic",
 			"path": "github.com/cheekybits/genny/generic",
-			"revision": "a7a9c521b61f8e5b8f745a726551bd1f2fb31cf5",
-			"revisionTime": "2019-03-10T17:08:51Z"
+			"revision": "7046624f896bf67c3e7837b408008fdc09b20abe",
+			"revisionTime": "2019-03-10T23:59:55Z"
 		},
 		{
 			"checksumSHA1": "228kc9UPQ7Ez5u7JtAQsfdIfh5Q=",
@@ -36,14 +36,14 @@
 		{
 			"checksumSHA1": "30EVd5wPEQn08vJPMzjBih/0IHs=",
 			"path": "github.com/golang/mock/gomock",
-			"revision": "c20582278a829e4b3259747a3ce0eceb1763ee13",
-			"revisionTime": "2019-01-16T18:17:31Z"
+			"revision": "837231f7bb377b365da147e5ff6c031b12f0dfaa",
+			"revisionTime": "2018-12-12T20:40:38Z"
 		},
 		{
 			"checksumSHA1": "JtpN2sSTSKfXNYoypNeGdzY5fps=",
 			"path": "github.com/golang/mock/gomock/internal/mock_matcher",
-			"revision": "c20582278a829e4b3259747a3ce0eceb1763ee13",
-			"revisionTime": "2019-01-16T18:17:31Z"
+			"revision": "837231f7bb377b365da147e5ff6c031b12f0dfaa",
+			"revisionTime": "2018-12-12T20:40:38Z"
 		},
 		{
 			"checksumSHA1": "yIkYzW7bzAD81zHyuCNmEj4+oxQ=",
@@ -103,8 +103,8 @@
 			"checksumSHA1": "2RFzGcdTeQrFkkhT70WhQcMWF6c=",
 			"origin": "github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/vendor/github.com/lucas-clemente/aes12",
 			"path": "github.com/lucas-clemente/aes12",
-			"revision": "a7a9c521b61f8e5b8f745a726551bd1f2fb31cf5",
-			"revisionTime": "2019-03-10T17:08:51Z"
+			"revision": "7046624f896bf67c3e7837b408008fdc09b20abe",
+			"revisionTime": "2019-03-10T23:59:55Z"
 		},
 		{
 			"checksumSHA1": "G3Jf3ZGgSksAMK5JeWwM1+J15cs=",
@@ -116,8 +116,8 @@
 			"checksumSHA1": "OA9E+y7g05x/mWJJHmA7oPxWKQo=",
 			"origin": "github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/vendor/github.com/lucas-clemente/quic-go-certificates",
 			"path": "github.com/lucas-clemente/quic-go-certificates",
-			"revision": "a7a9c521b61f8e5b8f745a726551bd1f2fb31cf5",
-			"revisionTime": "2019-03-10T17:08:51Z"
+			"revision": "7046624f896bf67c3e7837b408008fdc09b20abe",
+			"revisionTime": "2019-03-10T23:59:55Z"
 		},
 		{
 			"checksumSHA1": "hat0u1ZzWR1gSp0x50cFVVMP2eo=",
