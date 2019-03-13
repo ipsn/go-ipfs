@@ -6,8 +6,8 @@
 			"checksumSHA1": "PYXuf7wvcj492uWhjvmXlyyQUYc=",
 			"origin": "github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/vendor/github.com/cheekybits/genny/generic",
 			"path": "github.com/cheekybits/genny/generic",
-			"revision": "7046624f896bf67c3e7837b408008fdc09b20abe",
-			"revisionTime": "2019-03-10T23:59:55Z"
+			"revision": "e1a475a5120d35669181e80213229956712ef337",
+			"revisionTime": "2019-03-12T00:00:55Z"
 		},
 		{
 			"checksumSHA1": "228kc9UPQ7Ez5u7JtAQsfdIfh5Q=",
@@ -103,8 +103,8 @@
 			"checksumSHA1": "2RFzGcdTeQrFkkhT70WhQcMWF6c=",
 			"origin": "github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/vendor/github.com/lucas-clemente/aes12",
 			"path": "github.com/lucas-clemente/aes12",
-			"revision": "7046624f896bf67c3e7837b408008fdc09b20abe",
-			"revisionTime": "2019-03-10T23:59:55Z"
+			"revision": "e1a475a5120d35669181e80213229956712ef337",
+			"revisionTime": "2019-03-12T00:00:55Z"
 		},
 		{
 			"checksumSHA1": "G3Jf3ZGgSksAMK5JeWwM1+J15cs=",
@@ -116,32 +116,32 @@
 			"checksumSHA1": "OA9E+y7g05x/mWJJHmA7oPxWKQo=",
 			"origin": "github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/vendor/github.com/lucas-clemente/quic-go-certificates",
 			"path": "github.com/lucas-clemente/quic-go-certificates",
-			"revision": "7046624f896bf67c3e7837b408008fdc09b20abe",
-			"revisionTime": "2019-03-10T23:59:55Z"
+			"revision": "e1a475a5120d35669181e80213229956712ef337",
+			"revisionTime": "2019-03-12T00:00:55Z"
 		},
 		{
 			"checksumSHA1": "hat0u1ZzWR1gSp0x50cFVVMP2eo=",
 			"path": "github.com/mailru/easyjson",
-			"revision": "6243d8e04c3f819e79757e8bc3faa15c3cb27003",
-			"revisionTime": "2019-02-21T07:54:03Z"
+			"revision": "1de009706dbeb9d05f18586f0735fcdb7c524481",
+			"revisionTime": "2019-03-12T14:32:42Z"
 		},
 		{
 			"checksumSHA1": "0knB+RWz+27jmYQ68FmteTorirg=",
 			"path": "github.com/mailru/easyjson/buffer",
-			"revision": "6243d8e04c3f819e79757e8bc3faa15c3cb27003",
-			"revisionTime": "2019-02-21T07:54:03Z"
+			"revision": "1de009706dbeb9d05f18586f0735fcdb7c524481",
+			"revisionTime": "2019-03-12T14:32:42Z"
 		},
 		{
-			"checksumSHA1": "6izOaQRWFmASfu8N8RxA9n6+HDI=",
+			"checksumSHA1": "ZdmWWs72R8i/P/o+mTCJKDRKRiI=",
 			"path": "github.com/mailru/easyjson/jlexer",
-			"revision": "6243d8e04c3f819e79757e8bc3faa15c3cb27003",
-			"revisionTime": "2019-02-21T07:54:03Z"
+			"revision": "1de009706dbeb9d05f18586f0735fcdb7c524481",
+			"revisionTime": "2019-03-12T14:32:42Z"
 		},
 		{
 			"checksumSHA1": "4BAeeJ7JywEQyR6GqRrxfSfN2/Q=",
 			"path": "github.com/mailru/easyjson/jwriter",
-			"revision": "6243d8e04c3f819e79757e8bc3faa15c3cb27003",
-			"revisionTime": "2019-02-21T07:54:03Z"
+			"revision": "1de009706dbeb9d05f18586f0735fcdb7c524481",
+			"revisionTime": "2019-03-12T14:32:42Z"
 		},
 		{
 			"checksumSHA1": "zsxkwSU0tjzbF/mIKZ2gxkJlfRQ=",
