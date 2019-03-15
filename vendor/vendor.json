@@ -6,14 +6,14 @@
 			"checksumSHA1": "PYXuf7wvcj492uWhjvmXlyyQUYc=",
 			"origin": "github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/vendor/github.com/cheekybits/genny/generic",
 			"path": "github.com/cheekybits/genny/generic",
-			"revision": "3bce9ab7c2404556a7ca2dc8974a336a34d6120c",
-			"revisionTime": "2019-03-13T00:00:59Z"
+			"revision": "e21902c6464401a7801517ee668699d36fd25814",
+			"revisionTime": "2019-03-14T00:01:46Z"
 		},
 		{
-			"checksumSHA1": "228kc9UPQ7Ez5u7JtAQsfdIfh5Q=",
+			"checksumSHA1": "YiwpJe+GcRkLszmLxtT+jKdSRVY=",
 			"path": "github.com/cpuguy83/go-md2man/md2man",
-			"revision": "691ee98543af2f262f35fbb54bdd42f00b9b9cc5",
-			"revisionTime": "2018-06-19T20:56:30Z"
+			"revision": "f79a8a8ca69da163eee19ab442bedad7a35bba5a",
+			"revisionTime": "2019-03-14T23:30:15Z"
 		},
 		{
 			"checksumSHA1": "3KhDEC5MM0iyN+FsLfxpnvFVeuY=",
@@ -103,8 +103,8 @@
 			"checksumSHA1": "2RFzGcdTeQrFkkhT70WhQcMWF6c=",
 			"origin": "github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/vendor/github.com/lucas-clemente/aes12",
 			"path": "github.com/lucas-clemente/aes12",
-			"revision": "3bce9ab7c2404556a7ca2dc8974a336a34d6120c",
-			"revisionTime": "2019-03-13T00:00:59Z"
+			"revision": "e21902c6464401a7801517ee668699d36fd25814",
+			"revisionTime": "2019-03-14T00:01:46Z"
 		},
 		{
 			"checksumSHA1": "G3Jf3ZGgSksAMK5JeWwM1+J15cs=",
@@ -116,8 +116,8 @@
 			"checksumSHA1": "OA9E+y7g05x/mWJJHmA7oPxWKQo=",
 			"origin": "github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/vendor/github.com/lucas-clemente/quic-go-certificates",
 			"path": "github.com/lucas-clemente/quic-go-certificates",
-			"revision": "3bce9ab7c2404556a7ca2dc8974a336a34d6120c",
-			"revisionTime": "2019-03-13T00:00:59Z"
+			"revision": "e21902c6464401a7801517ee668699d36fd25814",
+			"revisionTime": "2019-03-14T00:01:46Z"
 		},
 		{
 			"checksumSHA1": "hat0u1ZzWR1gSp0x50cFVVMP2eo=",
@@ -180,10 +180,8 @@
 			"revisionTime": "2018-10-28T06:43:49Z"
 		},
 		{
-			"checksumSHA1": "qWTbFa+6SzpVx8MhEWz3qWVX0mg=",
-			"path": "github.com/russross/blackfriday",
-			"revision": "a477dd1646916742841ed20379f941cfa6c5bb6f",
-			"revisionTime": "2019-01-24T08:23:35Z"
+			"path": "github.com/russross/blackfriday/v2",
+			"revision": ""
 		},
 		{
 			"checksumSHA1": "VbS9vyxnbU1W0Ygwb7EKtLm9dXM=",
