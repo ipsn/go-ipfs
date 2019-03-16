@@ -6,8 +6,8 @@
 			"checksumSHA1": "PYXuf7wvcj492uWhjvmXlyyQUYc=",
 			"origin": "github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/vendor/github.com/cheekybits/genny/generic",
 			"path": "github.com/cheekybits/genny/generic",
-			"revision": "e21902c6464401a7801517ee668699d36fd25814",
-			"revisionTime": "2019-03-14T00:01:46Z"
+			"revision": "3306203fe93c7db3adb843be194f6eec28dbaa01",
+			"revisionTime": "2019-03-15T00:06:47Z"
 		},
 		{
 			"checksumSHA1": "YiwpJe+GcRkLszmLxtT+jKdSRVY=",
@@ -103,8 +103,8 @@
 			"checksumSHA1": "2RFzGcdTeQrFkkhT70WhQcMWF6c=",
 			"origin": "github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/vendor/github.com/lucas-clemente/aes12",
 			"path": "github.com/lucas-clemente/aes12",
-			"revision": "e21902c6464401a7801517ee668699d36fd25814",
-			"revisionTime": "2019-03-14T00:01:46Z"
+			"revision": "3306203fe93c7db3adb843be194f6eec28dbaa01",
+			"revisionTime": "2019-03-15T00:06:47Z"
 		},
 		{
 			"checksumSHA1": "G3Jf3ZGgSksAMK5JeWwM1+J15cs=",
@@ -116,8 +116,8 @@
 			"checksumSHA1": "OA9E+y7g05x/mWJJHmA7oPxWKQo=",
 			"origin": "github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/vendor/github.com/lucas-clemente/quic-go-certificates",
 			"path": "github.com/lucas-clemente/quic-go-certificates",
-			"revision": "e21902c6464401a7801517ee668699d36fd25814",
-			"revisionTime": "2019-03-14T00:01:46Z"
+			"revision": "3306203fe93c7db3adb843be194f6eec28dbaa01",
+			"revisionTime": "2019-03-15T00:06:47Z"
 		},
 		{
 			"checksumSHA1": "hat0u1ZzWR1gSp0x50cFVVMP2eo=",
