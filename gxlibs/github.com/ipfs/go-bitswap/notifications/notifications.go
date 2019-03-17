@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 
-	pubsub "github.com/ipsn/go-ipfs/gxlibs/github.com/gxed/pubsub"
+	pubsub "github.com/cskr/pubsub"
 	blocks "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-block-format"
 	cid "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-cid"
 )

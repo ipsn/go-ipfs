@@ -1,16 +1,16 @@
 {
-  "author": "why",
+  "author": "cskr",
   "bugs": {
-    "url": "https://github.com/gxed/pubsub"
+    "url": "https://github.com/cskr/pubsub"
   },
   "gx": {
-    "dvcsimport": "github.com/gxed/pubsub"
+    "dvcsimport": "github.com/cskr/pubsub"
   },
   "gxVersion": "0.12.1",
   "language": "go",
   "license": "",
   "name": "pubsub",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "1.0.0"
+  "version": "1.0.2"
 }
 
