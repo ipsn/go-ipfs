@@ -4,9 +4,10 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"fmt"
 	"sync"
 	"time"
+
+	"golang.org/x/xerrors"
 
 	opts "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kad-dht/opts"
 	pb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kad-dht/pb"
@@ -18,7 +19,6 @@ import (
 	logging "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-log"
 	goprocess "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess"
 	goprocessctx "github.com/ipsn/go-ipfs/gxlibs/github.com/jbenet/goprocess/context"
-	ci "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-crypto"
 	host "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-host"
 	kb "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-kbucket"
 	inet "github.com/ipsn/go-ipfs/gxlibs/github.com/libp2p/go-libp2p-net"
@@ -251,17 +251,6 @@ func (dht *IpfsDHT) getLocal(key string) (*recpb.Record, error) {
 	return rec, nil
 }
 
-// getOwnPrivateKey attempts to load the local peers private
-// key from the peerstore.
-func (dht *IpfsDHT) getOwnPrivateKey() (ci.PrivKey, error) {
-	sk := dht.peerstore.PrivKey(dht.self)
-	if sk == nil {
-		logger.Warningf("%s dht cannot get own private key!", dht.self)
-		return nil, fmt.Errorf("cannot get private key to sign record!")
-	}
-	return sk, nil
-}
-
 // putLocal stores the key value pair in the datastore
 func (dht *IpfsDHT) putLocal(key string, rec *recpb.Record) error {
 	logger.Debugf("putLocal: %v %v", key, rec)
@@ -399,4 +388,28 @@ func (dht *IpfsDHT) protocolStrs() []string {
 
 func mkDsKey(s string) ds.Key {
 	return ds.NewKey(base32.RawStdEncoding.EncodeToString([]byte(s)))
+}
+
+func (dht *IpfsDHT) PeerID() peer.ID {
+	return dht.self
+}
+
+func (dht *IpfsDHT) PeerKey() []byte {
+	return kb.ConvertPeerID(dht.self)
+}
+
+func (dht *IpfsDHT) Host() host.Host {
+	return dht.host
+}
+
+func (dht *IpfsDHT) Ping(ctx context.Context, p peer.ID) error {
+	req := pb.NewMessage(pb.Message_PING, nil, 0)
+	resp, err := dht.sendRequest(ctx, p, req)
+	if err != nil {
+		return xerrors.Errorf("sending request: %w", err)
+	}
+	if resp.Type != pb.Message_PING {
+		return xerrors.Errorf("got unexpected response type: %v", resp.Type)
+	}
+	return nil
 }

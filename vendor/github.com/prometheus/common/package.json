@@ -1,40 +1,36 @@
 {
-  "author": "whyrusleeping",
-  "bugs": {},
+  "author": "hsanjuan",
+  "bugs": {
+    "url": "https://github.com/prometheus/common"
+  },
   "gx": {
     "dvcsimport": "github.com/prometheus/common"
   },
   "gxDependencies": [
     {
-      "hash": "QmNeSwALyTCrgtCTsPiF7tcDN6uLtdi8qCMtFm7nct1nm1",
-      "name": "httprouter",
-      "version": "0.0.0"
-    },
-    {
-      "hash": "QmZHU2gx42NPTYXzw6pJkuX6xCE7bKECp6e8QcPdoLx8sx",
-      "name": "protobuf",
-      "version": "0.0.0"
-    },
-    {
-      "hash": "QmQzJ5r1Ku82GvPwMEPtFhq3S3ZtC5LnEsS8zhTMPBPYw3",
-      "name": "golang_protobuf_extensions",
-      "version": "0.0.0"
-    },
-    {
-      "hash": "QmYaVovLzgcdBpCLEAnW41p8ujvCUxe3TFpfJxjK5qbzn7",
+      "author": "lanzafame",
+      "hash": "QmZCsCiFgoyxaG5tqCnfahNBQd6uhoqYqH64aNxF5vqvQp",
       "name": "client_model",
-      "version": "0.0.0"
+      "version": "2019.1.30"
     },
     {
-      "hash": "QmRvYNctevGUW52urgmoFZscT6buMKqhHezLUS64WepGWn",
-      "name": "go-net",
-      "version": "0.0.0"
+      "author": "hsanjuan",
+      "hash": "QmcUuDu8FfWiUgZ8q3Rvvr4mwFTX5t1TKmVoWsB3FVHmhQ",
+      "name": "protobuf",
+      "version": "3.6.1"
+    },
+    {
+      "author": "hsanjuan",
+      "hash": "QmdgSqyESLM8Vffg8FMCL8Hk3hyR2zrtctMGZngQDGXjvU",
+      "name": "golang_protobuf_extensions",
+      "version": "1.0.1"
     }
   ],
-  "gxVersion": "0.4.0",
+  "gxVersion": "0.12.1",
   "language": "go",
-  "license": "",
+  "license": "Apache-2.0",
   "name": "common",
-  "version": "0.0.0"
+  "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
+  "version": "0.2.0"
 }
 

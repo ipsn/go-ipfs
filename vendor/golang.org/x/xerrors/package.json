@@ -1,0 +1,14 @@
+{
+  "author": "anacrolix",
+  "bugs": {},
+  "gx": {
+    "dvcsimport": "golang.org/x/xerrors"
+  },
+  "gxVersion": "0.14.0",
+  "language": "go",
+  "license": "",
+  "name": "xerrors",
+  "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
+  "version": "0.0.2"
+}
+

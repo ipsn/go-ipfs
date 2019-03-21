@@ -1,19 +1,21 @@
 {
   "author": "whyrusleeping",
-  "bugs": {},
+  "bugs": {
+    "url": "https://github.com/prometheus/client_golang"
+  },
   "gx": {
     "dvcsimport": "github.com/prometheus/client_golang"
   },
   "gxDependencies": [
     {
-      "hash": "QmZHU2gx42NPTYXzw6pJkuX6xCE7bKECp6e8QcPdoLx8sx",
+      "hash": "QmcUuDu8FfWiUgZ8q3Rvvr4mwFTX5t1TKmVoWsB3FVHmhQ",
       "name": "protobuf",
-      "version": "3.6.0"
+      "version": "3.6.1"
     },
     {
-      "hash": "QmYaVovLzgcdBpCLEAnW41p8ujvCUxe3TFpfJxjK5qbzn7",
+      "hash": "QmZCsCiFgoyxaG5tqCnfahNBQd6uhoqYqH64aNxF5vqvQp",
       "name": "client_model",
-      "version": "0.0.0"
+      "version": "2019.1.30"
     },
     {
       "hash": "QmdCgRBcahWLSq3a2xdbcPb4ksrRREAhisYdfAaGfJ8hWb",
@@ -21,9 +23,9 @@
       "version": "0.0.0"
     },
     {
-      "hash": "QmTWEDbLX2d4NiMgPks6J2crRz47BamBtP16WiFuTL6Ydm",
+      "hash": "QmUWsYPoyMsPqFbpMyXYPNQm9UJw7SBS58uy6QvAWGNjaW",
       "name": "common",
-      "version": "0.0.0"
+      "version": "0.2.0"
     },
     {
       "hash": "QmRvYNctevGUW52urgmoFZscT6buMKqhHezLUS64WepGWn",
@@ -36,10 +38,11 @@
       "version": "0.0.0"
     }
   ],
-  "gxVersion": "0.4.0",
+  "gxVersion": "0.14.0",
   "language": "go",
-  "license": "",
+  "license": "Apache-2.0",
   "name": "client_golang",
-  "version": "0.1.4"
+  "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
+  "version": "0.9.2"
 }
 

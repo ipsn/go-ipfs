@@ -1,20 +1,24 @@
 {
-  "author": "whyrusleeping",
-  "bugs": {},
+  "author": "hsanjuan",
+  "bugs": {
+    "url": "https://github.com/matttproud/golang_protobuf_extensions"
+  },
   "gx": {
     "dvcsimport": "github.com/matttproud/golang_protobuf_extensions"
   },
   "gxDependencies": [
     {
-      "hash": "QmZHU2gx42NPTYXzw6pJkuX6xCE7bKECp6e8QcPdoLx8sx",
+      "author": "hsanjuan",
+      "hash": "QmcUuDu8FfWiUgZ8q3Rvvr4mwFTX5t1TKmVoWsB3FVHmhQ",
       "name": "protobuf",
-      "version": "0.0.0"
+      "version": "3.6.1"
     }
   ],
-  "gxVersion": "0.4.0",
+  "gxVersion": "0.14.0",
   "language": "go",
-  "license": "",
+  "license": "Apache-2.0",
   "name": "golang_protobuf_extensions",
-  "version": "0.0.0"
+  "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
+  "version": "1.0.1"
 }
 

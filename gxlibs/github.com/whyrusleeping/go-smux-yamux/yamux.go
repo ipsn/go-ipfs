@@ -50,12 +50,12 @@ var DefaultTransport = (*Transport)(&yamux.Config{
 	EnableKeepAlive:        true,             // from yamux.DefaultConfig
 	KeepAliveInterval:      30 * time.Second, // from yamux.DefaultConfig
 	ConnectionWriteTimeout: 10 * time.Second, // from yamux.DefaultConfig
-	// We've bumped this to 1MiB as this critically limits throughput.
+	// We've bumped this to 16MiB as this critically limits throughput.
 	//
 	// 1MiB means a best case of 10MiB/s (83.89Mbps) on a connection with
 	// 100ms latency. The default gave us 2.4MiB *best case* which was
 	// totally unacceptable.
-	MaxStreamWindowSize: uint32(1024 * 1024),
+	MaxStreamWindowSize: uint32(16 * 1024 * 1024),
 	LogOutput:           ioutil.Discard,
 })
 

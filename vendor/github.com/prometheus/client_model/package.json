@@ -1,20 +1,24 @@
 {
-  "author": "whyrusleeping",
-  "bugs": {},
+  "author": "lanzafame",
+  "bugs": {
+    "url": "https://github.com/prometheus/client_model"
+  },
   "gx": {
     "dvcsimport": "github.com/prometheus/client_model"
   },
   "gxDependencies": [
     {
-      "hash": "QmZHU2gx42NPTYXzw6pJkuX6xCE7bKECp6e8QcPdoLx8sx",
+      "author": "golang",
+      "hash": "QmcUuDu8FfWiUgZ8q3Rvvr4mwFTX5t1TKmVoWsB3FVHmhQ",
       "name": "protobuf",
-      "version": "3.6.0"
+      "version": "3.6.1"
     }
   ],
-  "gxVersion": "0.4.0",
+  "gxVersion": "0.12.1",
   "language": "go",
-  "license": "",
+  "license": "Apache-2.0",
   "name": "client_model",
-  "version": "0.0.0"
+  "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
+  "version": "2019.1.30"
 }
 

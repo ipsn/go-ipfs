@@ -25,6 +25,6 @@
   "license": "",
   "name": "go-smux-yamux",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
-  "version": "2.0.9"
+  "version": "2.0.10"
 }
 

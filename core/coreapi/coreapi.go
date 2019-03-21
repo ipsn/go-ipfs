@@ -21,6 +21,7 @@ import (
 	"github.com/ipsn/go-ipfs/core"
 	"github.com/ipsn/go-ipfs/namesys"
 	"github.com/ipsn/go-ipfs/pin"
+	"github.com/ipsn/go-ipfs/provider"
 	"github.com/ipsn/go-ipfs/repo"
 
 	bserv "github.com/ipsn/go-ipfs/gxlibs/github.com/ipfs/go-blockservice"
@@ -65,6 +66,8 @@ type CoreAPI struct {
 
 	namesys namesys.NameSystem
 	routing routing.IpfsRouting
+
+	provider provider.Provider
 
 	pubSub *pubsub.PubSub
 
@@ -174,6 +177,8 @@ func (api *CoreAPI) WithOptions(opts ...options.ApiOption) (coreiface.CoreAPI, e
 		exchange:        n.Exchange,
 		routing:         n.Routing,
 
+		provider: n.Provider,
+
 		pubSub: n.PubSub,
 
 		nd:         n,
@@ -210,6 +215,7 @@ func (api *CoreAPI) WithOptions(opts ...options.ApiOption) (coreiface.CoreAPI, e
 
 		subApi.routing = offlineroute.NewOfflineRouter(subApi.repo.Datastore(), subApi.recordValidator)
 		subApi.namesys = namesys.NewNameSystem(subApi.routing, subApi.repo.Datastore(), cs)
+		subApi.provider = provider.NewOfflineProvider()
 
 		subApi.peerstore = nil
 		subApi.peerHost = nil
