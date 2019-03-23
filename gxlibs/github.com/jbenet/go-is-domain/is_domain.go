@@ -1,6 +1,8 @@
 package isdomain
 
-import "strings"
+import (
+	"strings"
+)
 
 //go:generate bash regenerate-tlds.sh
 
@@ -33,14 +35,20 @@ func IsDomain(s string) bool {
 	if strings.HasSuffix(s, ".") {
 		s = s[:len(s)-1]
 	}
-
 	split := strings.Split(s, ".")
-	tld := split[len(split)-1]
 
+	// Need a TLD and a domain.
+	if len(split) < 2 {
+		return false
+	}
+
+	// Check the TLD
+	tld := split[len(split)-1]
 	if !IsTLD(tld) {
 		return false
 	}
 
+	// Check the domain.
 	s = strings.ToLower(s)
 	return domainRegexp.MatchString(s)
 }

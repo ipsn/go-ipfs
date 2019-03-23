@@ -3,7 +3,7 @@ package isdomain
 import "regexp"
 
 // DomainRegexpStr is a regular expression string to validate domains.
-const DomainRegexpStr = "^([a-z0-9]+(-[a-z0-9]+)*\\.)+[a-z]{2,}$"
+const DomainRegexpStr = "^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])(\\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9]))*$"
 
 var domainRegexp *regexp.Regexp
 

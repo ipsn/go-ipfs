@@ -11,5 +11,6 @@
   "language": "go",
   "license": "MIT",
   "name": "go-is-domain",
-  "version": "1.0.1"
+  "version": "1.0.2"
 }
+

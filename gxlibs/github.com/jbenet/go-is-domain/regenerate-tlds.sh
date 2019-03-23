@@ -22,5 +22,3 @@ done >> $out
 echo '}' >> $out
 
 gofmt -w $out
-
-

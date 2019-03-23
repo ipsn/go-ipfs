@@ -6,8 +6,8 @@
 			"checksumSHA1": "PYXuf7wvcj492uWhjvmXlyyQUYc=",
 			"origin": "github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/vendor/github.com/cheekybits/genny/generic",
 			"path": "github.com/cheekybits/genny/generic",
-			"revision": "ae7ed0bb23f926273bcff17677c805fc9ac98ba3",
-			"revisionTime": "2019-03-21T00:06:49Z"
+			"revision": "f34757c124fbe584d86038269c3d28978fb5eb43",
+			"revisionTime": "2019-03-22T00:06:55Z"
 		},
 		{
 			"checksumSHA1": "YiwpJe+GcRkLszmLxtT+jKdSRVY=",
@@ -50,12 +50,6 @@
 			"path": "github.com/gopherjs/gopherjs/js",
 			"revision": "847fc94819f9d5a4e7154e2203b36f6dbace6f48",
 			"revisionTime": "2019-03-09T15:40:08Z"
-		},
-		{
-			"checksumSHA1": "bs7yI4BqAqKSGyl0pXFnnkqIK7c=",
-			"path": "github.com/gxed/go-is-domain",
-			"revision": "bcb935f9c56d002097c2cc89df1ca7b61a54913a",
-			"revisionTime": "2016-09-21T14:41:06Z"
 		},
 		{
 			"checksumSHA1": "40vJyUB4ezQSn/NSadsKEOrudMc=",
@@ -103,8 +97,8 @@
 			"checksumSHA1": "2RFzGcdTeQrFkkhT70WhQcMWF6c=",
 			"origin": "github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/vendor/github.com/lucas-clemente/aes12",
 			"path": "github.com/lucas-clemente/aes12",
-			"revision": "ae7ed0bb23f926273bcff17677c805fc9ac98ba3",
-			"revisionTime": "2019-03-21T00:06:49Z"
+			"revision": "f34757c124fbe584d86038269c3d28978fb5eb43",
+			"revisionTime": "2019-03-22T00:06:55Z"
 		},
 		{
 			"checksumSHA1": "G3Jf3ZGgSksAMK5JeWwM1+J15cs=",
@@ -116,8 +110,8 @@
 			"checksumSHA1": "OA9E+y7g05x/mWJJHmA7oPxWKQo=",
 			"origin": "github.com/ipsn/go-ipfs/gxlibs/github.com/lucas-clemente/quic-go/vendor/github.com/lucas-clemente/quic-go-certificates",
 			"path": "github.com/lucas-clemente/quic-go-certificates",
-			"revision": "ae7ed0bb23f926273bcff17677c805fc9ac98ba3",
-			"revisionTime": "2019-03-21T00:06:49Z"
+			"revision": "f34757c124fbe584d86038269c3d28978fb5eb43",
+			"revisionTime": "2019-03-22T00:06:55Z"
 		},
 		{
 			"checksumSHA1": "hat0u1ZzWR1gSp0x50cFVVMP2eo=",
