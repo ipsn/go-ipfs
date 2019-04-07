@@ -1,3 +1,11 @@
+# 🎉 Deprecated 🎉
+
+This repository has been archived and deprecated as the upstream IPFS switched over to Go modules, making it possible to finally use IPFS from Go in an officially supported way!
+
+Head over to https://github.com/ipfs/go-ipfs for the new code (minimum version of `v0.4.20-rc1` is needed for Go modules).
+
+---
+
 # Ungx-ed fork of go-ipfs
 
 [![GoDoc](https://godoc.org/github.com/ipsn/go-ipfs?status.svg)](https://godoc.org/github.com/ipsn/go-ipfs)
